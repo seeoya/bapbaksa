@@ -1,0 +1,80 @@
+/* reset */
+:root {
+    --text-color: #333;
+    --gray-color: #b3b3b3;
+    --gray-light-color: #eaeaea;
+    --gray-dark-color: #838383;
+    --green-gray-color: #d3dfce;
+    --main-color: #365a41;
+    --main-light-color: #60866b;
+    --main-dark-color: #243529;
+    --sub-color: #4e3b30;
+    --sub-light-color: #6f594c;
+    --sub-dark-color: #352a24;
+    --highlight-color: #e7bd53;
+    --highlight-light-color: #fad985;
+    --highlight-dark-color: #b9963c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    font-size: 62.5%;
+    line-height: 1.5;
+    scroll-behavior: smooth;
+}
+
+body, a, button, input, select, textarea {
+    color: var(--text-color);
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 400;
+    font-size: 1.4rem;
+    letter-spacing: -0.1rem;
+}
+
+div, h1, h2, h3, h4, h5, h6, a, p, ol, ul, li {
+    margin: 0;
+    padding: 0;
+    color: currentColor;
+    text-decoration: none;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+a, a:visited, a:link {
+    color: inherit;
+    text-decoration: none;
+}
+
+input[type="checkbox"], input[type="submit"], button, a, label {
+    cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.blind {
+    position: absolute;
+    width: 0;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+    overflow: hidden;
+}
+
+.ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+a, button {
+    border: none;
+}

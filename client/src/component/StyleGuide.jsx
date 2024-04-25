@@ -13,28 +13,34 @@ function StyleGuide () {
 
                 <div className="box-wrap">
                     <div className="main">
-                        <div className="box light">MAIN - LIGHT</div>                        
+                        <div className="box light">MAIN - LIGHT</div>                                                                
                         <div className="box">MAIN</div>                        
                         <div className="box dark">MAIN - DARK</div>                        
                     </div>                
 
-                    <div className="sub">
+                    <div className="sub">                      
                         <div className="box light">SUB - LIGHT</div>
                         <div className="box">SUB</div>
                         <div className="box dark">SUB - DARK</div>
                     </div>
 
                     <div className="highlight">
-                        <div className="box light1">HIGHLIGHT - LIGHT 1</div>
-                        <div className="box light2">HIGHLIGHT - LIGHT 2</div>
-                        <div className="box">HIGHLIGHT</div>
+                        <div className="box light">HIGHLIGHT - LIGHT</div>
+                        <div className="box">HIGHLIGHT</div>                       
                         <div className="box dark">HIGHLIGHT - DARK</div>
-                    </div>               
+                    </div>    
+
+                    <div className="highlight">
+                        <div className="box yellow">HIGHLIGHT - YELLOW</div>
+                        <div className="box blue">HIGHLIGHT - BLUE</div>
+                        <div className="box red">HIGHLIGHT - RED</div>                        
+                    </div>                  
 
                     <div className="gray">
-                         <div className="box light">GRAY - LIGHT</div>
+                        <div className="box light">GRAY - LIGHT</div>
                         <div className="box">GRAY</div>
                         <div className="box dark">GRAY - DARK</div>                        
+                        <div className="box green">GRAY - GREEN</div>                        
                     </div>
                 </div>
             </div>    

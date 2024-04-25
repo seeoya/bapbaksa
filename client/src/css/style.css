@@ -488,6 +488,7 @@ footer .join_footer a:nth-child(4) {
 #style_guide .box-wrap {
     display: flex;
     flex-direction: column;
+    font-size: 1.3rem;
 }
 
 #style_guide .box-wrap > div {
@@ -517,10 +518,6 @@ footer .join_footer a:nth-child(4) {
     background-color: var(--main-dark-color);
 }
 
-#style_guide .sub {    
-    margin-top: 10px;
-}
-
 #style_guide .sub .box {
     background-color: var(--sub-color);
 }
@@ -533,30 +530,28 @@ footer .join_footer a:nth-child(4) {
     background-color: var(--sub-dark-color);
 }
 
-#style_guide .highlight {    
-    margin-top: 10px;
-}
-
 #style_guide .highlight .box {
-    background-color: var(--highlight-color);
-    
+    background-color: var(--highlight-color);    
 }
 
-#style_guide .highlight .box.light1 {
-    background-color: var(--highlight-light-color1);
+#style_guide .highlight .box.light {
+    background-color: var(--highlight-light-color);
 }
-
-#style_guide .highlight .box.light2 {
-    background-color: var(--highlight-light-color2);
-}
-
 
 #style_guide .highlight .box.dark {
     background-color: var(--highlight-dark-color);
 }
 
-#style_guide .gray{    
-    margin-top: 10px;
+#style_guide .highlight .box.yellow {
+    background-color: var(--highlight-yellow-color);
+}
+
+#style_guide .highlight .box.blue {
+    background-color: var(--highlight-blue-color);
+}
+
+#style_guide .highlight .box.red {
+    background-color: var(--highlight-red-color);
 }
 
 #style_guide .gray .box {
@@ -570,6 +565,11 @@ footer .join_footer a:nth-child(4) {
 
 #style_guide .gray .box.dark {
     background-color: var(--gray-dark-color);
+}
+
+#style_guide .gray .box.green {
+    background-color: var(--gray-green-color);
+   color: #3c6300;
 }
 
 #style_guide .title{

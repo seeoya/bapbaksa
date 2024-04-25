@@ -1,19 +1,31 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@300;700&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 /* reset */
 :root {
     --text-color: #333;
-    --gray-color: #b3b3b3;
-    --gray-light-color: #eaeaea;
+    --gray-color: #b3b3b3;    
+    --gray-light-color: #f4f4f4;
     --gray-dark-color: #838383;
     --green-gray-color: #d3dfce;
-    --main-color: #365a41;
+    /* --main-color: #365a41;    
     --main-light-color: #60866b;
-    --main-dark-color: #243529;
-    --sub-color: #4e3b30;
+    --main-dark-color: #243529; */
+    --main-color: #6ba543;
+    --main-light-color: #f0f4e6;
+    --main-dark-color: #0C520A;
+    /* --sub-color: #4e3b30;
     --sub-light-color: #6f594c;
-    --sub-dark-color: #352a24;
-    --highlight-color: #e7bd53;
-    --highlight-light-color: #fad985;
-    --highlight-dark-color: #b9963c;
+    --sub-dark-color: #352a24; */
+    --sub-color: #e7bd53;    
+    --sub-light-color: #fad985;
+    --sub-dark-color: #b9963c;
+    --highlight-color: #ffb30b;
+    --highlight-light-color1: #ecee24;
+    --highlight-light-color2: #ff5e5e;  
+    --highlight-dark-color: #EA4329; 
+    
+    
+
 }
 
 * {

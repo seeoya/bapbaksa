@@ -367,6 +367,11 @@ header .logo img {
     font-size: 3rem;
 }
 
+.content-wrap .error-content p{
+    text-align: center;
+    font-size: 2rem;
+}
+
 .content-wrap .content {
     display: flex;
     flex-direction: column;

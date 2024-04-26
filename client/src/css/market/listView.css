@@ -1,0 +1,76 @@
+/* ListView.css */
+
+#list_view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ingredient-view-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ingredient-img-wrap {
+    margin-right: 20px;
+}
+
+.ingredient-img {
+    width: 100px; /* 이미지 크기 조절 */
+    height: 100px;
+    object-fit: cover; /* 이미지 비율 유지하면서 자르기 */
+    border-radius: 50%; /* 원형 이미지 모양 */
+}
+
+.ingredient-info-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.ingredient-top-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ingredient-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.ingredient-unit,
+.ingredient-price {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.ingredient-mid-wrap {
+    margin-bottom: 10px;
+}
+
+.ingredient-cart-wrap {
+    margin-bottom: 10px;
+}
+
+.ingredient-bottom-wrap {
+    display: flex;
+    align-items: center;
+}
+
+#result {
+    margin: 0 10px; /* 숫자와 버튼 사이의 간격 조절 */
+}
+
+button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+select {
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+}

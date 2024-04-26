@@ -9,6 +9,9 @@ import MartketLayout from "./market/MarketLayout";
 import MarketList from "./market/MarketList";
 import Payment from "./market/Payment";
 import ShoppingCart from "./market/ShoppingCart";
+import RecipeLayout from "./recipe/RecipeLayout";
+import RecipeList from "./recipe/RecipeList";
+import RecipeView from "./recipe/RecipeView";
 
 const Container = () => {
     return (
@@ -23,7 +26,10 @@ const Container = () => {
                     <Route path="payment" element={<Payment />}></Route>
                     <Route path="cart" element={<ShoppingCart />}></Route>
                 </Route>
-
+                <Route path="/recipe" element={<RecipeLayout />}>
+                    <Route path="list" element={<RecipeList />}></Route>
+                    <Route path="view/:no" element={<RecipeView />}></Route>
+                </Route>
                 {/* STYLE GUIDE */}
                 <Route path="/styleguide" element={<StyleGuide />}></Route>
                 {/* Error */}

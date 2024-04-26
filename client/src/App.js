@@ -11,10 +11,7 @@ function App() {
     return (
         <BrowserRouter>
             <div className="wrap">
-                &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/list'>list</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
-                &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/payment'>Payment</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
-                &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/view/:no'>view</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
-                &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/cart'>Shopping Cart</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
+   
 
                 <Header />
                 <Routes>

@@ -1,4 +1,6 @@
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter} from "react-router-dom";
+import Error from "./component/Error";
+import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import MarketList from "./component/market/MarketList";
 import ListView from "./component/market/ListView";
 import Payment from "./component/market/Payment";
@@ -6,18 +8,21 @@ import ShoppingCart from "./component/market/ShoppingCart";
 import PostCode from "./component/market/PostCode";
 import Header from "./component/include/Header";
 import MartketLayout from "./component/market/MarketLayout";
+import Footer from "./component/include/Footer";
+import Nav from './component/include/Nav';
+import Container from "./component/Container";
 
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <div className="wrap">
-                &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/list'>list</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
-                &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/payment'>Payment</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
-                &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/view/:no'>view</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
-                &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/cart'>Shopping Cart</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
+   
 
                 <Header />
+                <Nav />
+                <Container />
+                <Footer />
                 <Routes>
                     <Route path="/" element={<div>HOME</div>} />
                     <Route path="/user" element={<div>USER</div>} />

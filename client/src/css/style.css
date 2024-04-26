@@ -178,12 +178,45 @@ header {
     width: 100%;
 }
 
+header .header-wrap {
+    width: 100%;
+    display: flex;    
+    align-items: center;
+    gap: 30px;
+    padding: 10px 0;
+}
+
+header .header-wrap .header-menu {    
+    display: flex;
+    align-items: center;
+    gap: 20px;     
+    
+}
+
+header .header-wrap .member-menu { 
+    display: flex;
+    align-items: center;
+    gap: 20px;     
+       
+}
+
+header .member-menu nav {   
+    justify-content: right;
+    gap: 5px;
+}
+
+header .member-menu nav .link {
+    padding: 3px 5px;
+    font-size: 1.3rem;
+}
+
+
 header .logo {
     width: 200px;
     height: 80px;
 }
 
-header .logo a {
+header .logo .link {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -197,30 +230,20 @@ header .logo img {
     object-fit: contain;
 }
 
-.header-menu {
-    padding: 10px 0;
-}
-
-.header-menu .header-wrap {
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.header-menu .search {
+header .header-menu .search {
     width: 100%;
 }
 
-.header-menu .search form {
+header .header-menu .search form {
     display: flex;
     gap: 10px;
 }
 
-.header-menu .search input {
+header .header-menu .search input {
     width: 100%;
 }
 
-.header-menu .search .btn {
+header .header-menu .search .btn {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -228,12 +251,13 @@ header .logo img {
     height: 40px;
 }
 
-.header-category nav {
+.header-category {
     display: flex;
+    justify-content: center;
     gap: 5px;
 }
 
-.header-category .cate-link {
+.header-category .link {
     padding: 15px;
     background: none;
     font-size: 1.8rem;
@@ -241,9 +265,23 @@ header .logo img {
     cursor: pointer;
 }
 
-.header-category .cate-link:hover {
+.header-category .link_market {
+    padding: 15px;
+    background: none;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+.header-category .link:hover {
     color: #fff;
     background-color: var(--main-color);
+}
+
+.header-category .link_market:hover {
+    color: #fff;
+    background-color: var(--sub-color);
 }
 
 .header-category #usermenu_btn {
@@ -353,7 +391,7 @@ header .logo img {
 
 /* 페이지 */
 .container {
-    padding: 50px 0 90px;
+    padding: 30px 0 50px;
     min-height: 75vh;
 }
 
@@ -389,7 +427,22 @@ footer {
     padding: 20px 0;
 }
 
-footer div.logo img {
+footer .footer-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+footer .bottom_wrap, footer .info_link, footer .top_footer {
+    display: flex;
+    gap: 5px;
+}
+
+footer .bottom_wrap {
+    justify-content: space-between;
+    gap: 40px;
+}
+
+footer .bottom_wrap .logo img {
     min-width: 100px;
     max-width: 100px;
     min-height: 100px;
@@ -397,31 +450,59 @@ footer div.logo img {
     object-fit: contain;
 }
 
-footer .join_footer a {
+footer .info_footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 3px;
+}
+
+footer .info_txt {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 2px;
+}
+
+footer .name_addr {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+footer .join_footer {
+    display: flex;
+    width: 40%;
+    gap: 30px;
+    height: 40px;
+    padding: 10px 0 0 0;
+}
+
+footer .join_footer .link{
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 
-footer .footer-wrap {
-    display: flex;
-    flex-direction: column;
+footer .join_footer .link img {
+    min-width: 120px;
+    max-width: 120px;
+    min-height: 30px;
+    max-height: 30px;
+    object-fit: contain;
 }
 
-footer .bottom_wrap, footer .info_a, footer .info_txt, footer .top_footer {
-    display: flex;
-    gap: 5px;
+
+footer .join_footer .link:nth-child(1) {
+    position: relative;
+    top: -5px;
 }
 
-footer .call_footer {
-    font-size: 17px;
-    text-align: center;
-}
-
-footer .bottom_wrap {
-    justify-content: space-between;
-    gap: 40px;
+footer .join_footer .link:nth-child(2) {
+    position: relative;
+    top: -8px;
 }
 
 footer .btn_footer {
@@ -432,21 +513,6 @@ footer .btn_footer {
 
 footer .top_footer {
     justify-content: space-between;
-}
-
-footer .join_footer img {
-    min-width: 100px;
-    max-width: 100px;
-    min-height: 40px;
-    max-height: 40px;
-    object-fit: contain;
-}
-
-footer .info_footer {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 3px;
 }
 
 footer .util_footer {
@@ -460,28 +526,7 @@ footer .util_footer .btn {
     width: 100%;
 }
 
-footer .join_footer {
-    display: flex;
-    width: 40%;
-    gap: 20px;
-    height: 40px;
-    padding: 10px 0 0 0;
-}
 
-footer .join_footer a:nth-child(1) {
-    position: relative;
-    top: -8px
-}
-
-footer .join_footer a:nth-child(3) {
-    position: relative;
-    top: -7px;
-}
-
-footer .join_footer a:nth-child(4) {
-    position: relative;
-    top: -7px;
-}
 
 
 

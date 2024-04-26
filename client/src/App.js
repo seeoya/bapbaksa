@@ -1,22 +1,18 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import StyleGuide from "./component/StyleGuide";
+import { BrowserRouter} from "react-router-dom";
 import Error from "./component/Error";
 import Header from "./component/include/Header";
+import Footer from "./component/include/Footer";
+import Nav from './component/include/Nav';
+import Container from "./component/Container";
 
 function App() {
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <div className="wrap">
                 <Header />
-                <Routes>
-                    <Route path="/" element={<div>HOME</div>} />
-                    <Route path="/user" element={<div>USER</div>} />
-                    <Route path="/market" element={<div>MARKET</div>} />
-                    {/* STYLE GUIDE */}
-                    <Route path="/styleguide" element={<StyleGuide />}></Route>
-                    {/* Error */}
-                    <Route path="*" element={<Error />}></Route>
-                </Routes>
+                <Nav />
+                <Container />
+                <Footer />
             </div>
         </BrowserRouter>
     );

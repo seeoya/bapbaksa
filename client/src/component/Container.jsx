@@ -20,7 +20,7 @@ const Container = () => {
                 <Route path="/" element={<div><Home /></div>} />
                 <Route path="/user" element={<div>USER</div>} />
                 <Route path="/market" element={<MartketLayout />}>
-                    <Route path="" element={<div>Market</div>}></Route>
+                    <Route path="/" element={<div>Market</div>}></Route>
                     <Route path="list" element={<MarketList />}></Route>
                     <Route path="view/:no" element={<ListView />}></Route>
                     <Route path="payment" element={<Payment />}></Route>

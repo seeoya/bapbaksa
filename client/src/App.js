@@ -1,12 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import StyleGuide from "./component/StyleGuide";
 import Error from "./component/Error";
+import Header from "./component/include/Header";
 
 function App() {
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <div className="wrap">
-                1234
+                <Header />
                 <Routes>
                     <Route path="/" element={<div>HOME</div>} />
                     <Route path="/user" element={<div>USER</div>} />

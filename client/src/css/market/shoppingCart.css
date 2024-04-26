@@ -1,0 +1,38 @@
+.shpping_cart_wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.ingredient-cart-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ingredient-cart-wrap .ingredient-cart-item {
+    border: 1px solid #dadada;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.ingredient-cart-img {
+    max-width: 100px;
+    min-width: 100px;
+    max-height: 100px;
+    min-height: 100px;
+    border-radius: 50px;
+}
+
+.ingredient-cart-btn {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.all-select-btn {
+    display: flex;
+}

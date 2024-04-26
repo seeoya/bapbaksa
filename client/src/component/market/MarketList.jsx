@@ -31,6 +31,7 @@ const MarketList = () => {
 
     return (
         <div id="market_list">
+            <div className="title-wrap">판매 목록</div>
             <div className="search-wrap">
                 <input 
                     type="text" 

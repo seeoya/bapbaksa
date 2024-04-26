@@ -1,10 +1,11 @@
-import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import MarketList from "./component/market/MarketList";
 import ListView from "./component/market/ListView";
 import Payment from "./component/market/Payment";
 import ShoppingCart from "./component/market/ShoppingCart";
 import PostCode from "./component/market/PostCode";
 import Header from "./component/include/Header";
+import MartketLayout from "./component/market/MarketLayout";
 
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<div>HOME</div>} />
                     <Route path="/user" element={<div>USER</div>} />
-                    <Route path="/market" element={<div><Outlet/></div>} >
+                    <Route path="/market" element={<MartketLayout/>} >
                         <Route path="" element={<div>Market</div>}></Route>
                         <Route path="list" element={<MarketList/>}></Route>
                         <Route path="view/:no" element={<ListView/>}></Route>

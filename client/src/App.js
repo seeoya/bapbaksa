@@ -4,6 +4,8 @@ import ListView from "./component/market/ListView";
 import Payment from "./component/market/Payment";
 import ShoppingCart from "./component/market/ShoppingCart";
 import PostCode from "./component/market/PostCode";
+import Header from "./component/include/Header";
+
 
 function App() {
     return (
@@ -14,6 +16,7 @@ function App() {
                 &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/view/:no'>view</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
                 &nbsp;&nbsp;&nbsp;&nbsp;<Link to='market/cart'>Shopping Cart</Link>&nbsp;&nbsp;&nbsp;&nbsp;|
 
+                <Header />
                 <Routes>
                     <Route path="/" element={<div>HOME</div>} />
                     <Route path="/user" element={<div>USER</div>} />

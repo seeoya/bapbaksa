@@ -1,10 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Header from "./component/include/Header";
 
 function App() {
     return (
         <BrowserRouter>
             <div className="wrap">
-                1234
+                <Header />
                 <Routes>
                     <Route path="/" element={<div>HOME</div>} />
                     <Route path="/user" element={<div>USER</div>} />

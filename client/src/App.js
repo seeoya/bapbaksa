@@ -4,12 +4,14 @@ import Footer from "./component/include/Footer";
 import Header from "./component/include/Header";
 import Nav from "./component/include/Nav";
 
+
+
 function App() {
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <div className="wrap">
                 <Header />
-                <Nav />
+                <Nav />   
                 <Container />
                 <Footer />
             </div>

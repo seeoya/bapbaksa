@@ -161,29 +161,36 @@
 
 /* 레이아웃 */
 .wrap {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    position: relative;
+    flex-direction: column;    
 }
 
 .header-wrap, .category-wrap, .content-wrap, .footer-wrap {
-    display: flex;
-    margin: 0 auto;
+     
+    display: flex; 
     width: 100%;
     max-width: 1000px;
 }
 
 /* 헤더 */
-header {
-    width: 100%;
+header {   
+    width: 100%; 
+    position: relative; 
+    position: sticky;     
+    top: -10px;
+    z-index: 30;     
+    
 }
 
 header .header-wrap {
-    width: 100%;
-    display: flex;    
+    width: 100%;  
+    display: flex;
+    margin: 20px auto 5px;
     align-items: center;
     gap: 30px;
-    padding: 10px 0;
+    background-color: #fff;
+    
 }
 
 header .header-wrap .header-menu {    
@@ -193,27 +200,28 @@ header .header-wrap .header-menu {
     
 }
 
-header .header-wrap .member-menu { 
+header .header-wrap .user-menu { 
     display: flex;
-    align-items: center;
-    gap: 20px;     
+    justify-content:right;    
        
 }
 
-header .member-menu nav {   
-    justify-content: right;
-    gap: 5px;
+header .user-menu .nav {   
+    display: flex;        
+    align-items: center;
+    gap: 5px;     
+    
 }
 
-header .member-menu nav .link {
+header .user-menu .nav .link {  
     padding: 3px 5px;
     font-size: 1.3rem;
 }
 
 
 header .logo {
-    width: 200px;
-    height: 80px;
+    width: 100px;
+    height: 75px;
 }
 
 header .logo .link {
@@ -235,12 +243,13 @@ header .header-menu .search {
 }
 
 header .header-menu .search form {
+    
     display: flex;
     gap: 10px;
 }
 
 header .header-menu .search input {
-    width: 100%;
+    width: 500px;
 }
 
 header .header-menu .search .btn {
@@ -251,37 +260,76 @@ header .header-menu .search .btn {
     height: 40px;
 }
 
-.header-category {
+nav {  
+    position: relative;  
+    position: sticky; 
+    position: -webkit-sticky;
+    top: 75px;   
+    z-index: 30;       
+    
+}
+
+nav .category-wrap { 
+    width: 100%;  
     display: flex;
-    justify-content: center;
+    margin: 5px auto;  
+    align-items: center;
+    gap: 30px;
+    height: 60px;                    
+    background-color: #fff;
+}
+
+.category-wrap .header-category {        
+    width: 100%;    
+    display: flex;  
+    gap: 10px;
+    padding: 10px auto;
+    border-bottom: 2px solid var(--gray-green-color);
+    box-shadow: 0px 3px 0px 0px var(--gray-light-color);
+
+
+}
+
+.category-wrap .header-category .recipe {    
+    display: flex;
+    width: 85%;
+    justify-content: center; 
+    align-items: center;
     gap: 5px;
 }
 
-.header-category .link {
+.category-wrap .header-category .market {    
+    display: flex;
+    justify-content: right; 
+    align-items: center;
+    
+}
+
+.category-wrap .header-category .link {
     padding: 15px;
     background: none;
     font-size: 1.8rem;
     font-weight: 500;
+    color: var(--main-dark-color);
     cursor: pointer;
 }
 
-.header-category .link_market {
-    padding: 15px;
+.category-wrap .header-category .market .link {    
     background: none;
     font-size: 1.8rem;
-    font-weight: 700;
+    font-weight: 500;
     color: var(--main-color);
     cursor: pointer;
 }
 
-.header-category .link:hover {
-    color: #fff;
-    background-color: var(--main-color);
-}
-
-.header-category .link_market:hover {
+.category-wrap .header-category .recipe .link:hover {
     color: #fff;
     background-color: var(--sub-color);
+}
+
+.category-wrap .header-category .market .link:hover {
+    color: #fff;
+    background-color: var(--main-color);
 }
 
 .header-category #usermenu_btn {
@@ -391,11 +439,18 @@ header .header-menu .search .btn {
 
 /* 페이지 */
 .container {
+    position: relative;
+    top: 0px;     
+    width: 100%;
+    margin: 0 auto;
     padding: 30px 0 50px;
     min-height: 75vh;
+    max-width: 1000px;
+    z-index: 10;
+    backdrop-filter: blur;
 }
 
-.content-wrap {
+.content-wrap { 
     flex-direction: column;
     gap: 20px;
 }
@@ -410,7 +465,7 @@ header .header-menu .search .btn {
     font-size: 2rem;
 }
 
-.content-wrap .content {
+.content-wrap .content {   
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -423,12 +478,15 @@ header .header-menu .search .btn {
 /* 푸터 */
 footer {
     width: 100%;
-    background-color: var(--gray-light-color);
-    padding: 20px 0;
+    background-color: var(--gray-light-color);  
+    position: relative;
+    bottom: 0;
 }
 
 footer .footer-wrap {
     display: flex;
+    margin: 0 auto;  
+    padding: 20px 0;
     flex-direction: column;
 }
 

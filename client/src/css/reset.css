@@ -1,32 +1,25 @@
 /*@import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@300;700&display=swap');*/
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
 /* reset */
 :root {
     --text-color: #333;
-    --gray-color: #b3b3b3;    
+    --gray-color: #b3b3b3;
     --gray-light-color: #f4f4f4;
-    --gray-dark-color: #838383;  
+    --gray-dark-color: #838383;
     --gray-green-color: #d3dfce;
-   
     --main-color: #6ba543;
-    --main-light-color: #47ae50;    
+    --main-light-color: #47ae50;
     --main-dark-color: #0C520A;
-    
-    --sub-color: #ff9600cc;  
-    --sub-light-color: #ffb30b;       
+    --sub-color: #ff9600cc;
+    --sub-light-color: #ffb30b;
     --sub-dark-color: #b9963c;
-          
     --highlight-color: #f2644f;
-    --highlight-light-color: #ff5e5e;  
-    --highlight-dark-color: #EA4329; 
-    
-    
+    --highlight-light-color: #ff5e5e;
+    --highlight-dark-color: #EA4329;
     --highlight-yellow-color: #ecee24;
     --highlight-blue-color: #32abb2cc;
     --highlight-red-color: #be271d;
-    
-    
-
 }
 
 * {

@@ -840,3 +840,61 @@ footer .util_footer .btn {
     display: flex;
     justify-content: space-between;
 }
+
+#recipe #recipe_aside {
+    display: flex;
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 300px;
+    background-color: #ccc;
+    height: 600px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    cursor: all-scroll;
+}
+
+#recipe #recipe_aside::-webkit-scrollbar {
+    display: none;
+}
+
+#fridge {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+
+#fridge .fridge-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px
+}
+
+#fridge .fridge-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    font-style: 1.3rem;
+}
+
+#fridge .fridge-item img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 300px;
+}
+
+#fridge .fridge-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* #recipe .recipe-content-wrap {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    background-color: palegoldenrod;
+} */

@@ -4,9 +4,10 @@ import RecipeAside from './RecipeAside';
 
 const RecipeLayout = () => {
     return (<>
-        <RecipeAside />
 
         <div id="recipe" className='content-wrap'>
+            <RecipeAside />
+
             <Outlet />
         </div>
     </>

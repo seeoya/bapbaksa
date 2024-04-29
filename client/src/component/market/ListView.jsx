@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "../../css/market/market.css";
 import ApexCharts from 'apexcharts';
+import React, { useEffect, useState } from "react";
+import "../../css/market/market.css";
 
 const ListView = () => {
     const [quantityInt, setQuantityInt] = useState(0);
@@ -79,7 +79,7 @@ const ListView = () => {
     };
 
     return (
-        <div className='content-wrap' id="list_view">
+        <div className='content-wrap' id="market_list_view">
             <h2 className='title'>품목 상세</h2>
             <div className='content ingredient-view-wrap'>
                 <div className="ingredient-img-wrap">

@@ -184,20 +184,24 @@ header {
 }
 
 header .header-wrap {
+<<<<<<< HEAD
     width: 100%;  
     display: flex;
     margin: 20px auto 5px;
+=======
+    width: 100%;
+    display: flex;
+>>>>>>> 9609e34bad1722d6a106ab3f34bf914dc77ffa06
     align-items: center;
     gap: 30px;
     background-color: #fff;
     
 }
 
-header .header-wrap .header-menu {    
+header .header-wrap .header-menu {
     display: flex;
     align-items: center;
-    gap: 20px;     
-    
+    gap: 20px;
 }
 
 header .header-wrap .user-menu { 
@@ -217,7 +221,6 @@ header .user-menu .nav .link {
     padding: 3px 5px;
     font-size: 1.3rem;
 }
-
 
 header .logo {
     width: 100px;
@@ -455,12 +458,12 @@ nav .category-wrap {
     gap: 20px;
 }
 
-.content-wrap h2.title{
+.content-wrap h2.title {
     text-align: center;
     font-size: 3rem;
 }
 
-.content-wrap .error-content p{
+.content-wrap .error-content p {
     text-align: center;
     font-size: 2rem;
 }
@@ -473,7 +476,6 @@ nav .category-wrap {
     min-width: 400px;
     gap: 10px;
 }
-
 
 /* 푸터 */
 footer {
@@ -536,12 +538,11 @@ footer .join_footer {
     padding: 10px 0 0 0;
 }
 
-footer .join_footer .link{
+footer .join_footer .link {
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }
 
 footer .join_footer .link img {
@@ -551,7 +552,6 @@ footer .join_footer .link img {
     max-height: 30px;
     object-fit: contain;
 }
-
 
 footer .join_footer .link:nth-child(1) {
     position: relative;
@@ -584,11 +584,6 @@ footer .util_footer .btn {
     width: 100%;
 }
 
-
-
-
-
-
 /* 스타일가이드 */
 #style_guide {
 }
@@ -600,7 +595,7 @@ footer .util_footer .btn {
 }
 
 #style_guide .box-wrap > div {
-    display: flex;    
+    display: flex;
 }
 
 #style_guide .box {
@@ -610,7 +605,7 @@ footer .util_footer .btn {
     width: 100px;
     height: 100px;
     color: #fff;
-    text-align: center;   
+    text-align: center;
 }
 
 #style_guide .main .box {
@@ -639,7 +634,7 @@ footer .util_footer .btn {
 }
 
 #style_guide .highlight .box {
-    background-color: var(--highlight-color);    
+    background-color: var(--highlight-color);
 }
 
 #style_guide .highlight .box.light {
@@ -677,18 +672,235 @@ footer .util_footer .btn {
 
 #style_guide .gray .box.green {
     background-color: var(--gray-green-color);
-   color: #3c6300;
+    color: #3c6300;
 }
 
-#style_guide .title{
+#style_guide .title {
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
     font-size: 3rem;
 }
 
-#style_guide p{
+#style_guide p {
     margin-top: 10px;
     text-align: left;
     font-size: 2rem;
+}
+
+/* 마켓 */
+
+/* ListView.css */
+#market_list_view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#market_list_view .ingredient-view-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#market_list_view .ingredient-img-wrap {
+    margin-right: 20px;
+}
+
+#market_list_view .ingredient-img {
+    width: 100px;     /* 이미지 크기 조절 */
+    height: 100px;
+    object-fit: cover;     /* 이미지 비율 유지하면서 자르기 */
+    border-radius: 50%;     /* 원형 이미지 모양 */
+}
+
+#market_list_view .ingredient-info-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+#market_list_view .ingredient-top-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#market_list_view .ingredient-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#market_list_view .ingredient-unit, #market_list_view .ingredient-price {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+#market_list_view .ingredient-mid-wrap {
+    margin-bottom: 10px;
+}
+
+#market_list_view .ingredient-cart-wrap {
+    margin-bottom: 10px;
+}
+
+#market_list_view .ingredient-bottom-wrap {
+    display: flex;
+    align-items: center;
+}
+
+#market_list_view #result {
+    margin: 0 10px;     /* 숫자와 버튼 사이의 간격 조절 */
+}
+
+#market_list_view button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#market_list_view select {
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+/* market_list.css */
+#market_list {
+    font-family: Arial, sans-serif;
+}
+
+#market_list .search-wrap {
+    margin-bottom: 10px;
+}
+
+#market_list .search-wrap input[type="text"] {
+    padding: 5px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#market_list .search-wrap button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#market_list .ingredient-wrap ul {
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);     /* 각 항목을 3개씩 나열 */
+    gap: 10px;     /* 각 항목 사이의 간격 */
+}
+
+#market_list .ingredient-wrap li {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;     /* 가운데 정렬 */
+}
+
+/* payment.css */
+#payment_wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+#payment_wrap .title-wrap {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #dadada;
+    margin: 10px 0;
+}
+
+#payment_wrap .ingredient-cart-all-check-btn {
+    text-align: left;
+}
+
+#payment_wrap .payment-ingredient-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 500px;
+}
+
+#payment_wrap .payment-ingredient-wrap .flex-item {
+    border: 1px solid #dadada;
+    padding: 10px;
+}
+
+#payment_wrap .payment-price-wrap {
+    border: 1px solid #dadada;
+    display: flex;
+    flex-direction: column;
+    width: 700px;
+    gap: 20px;
+    padding: 20px;
+}
+
+#payment_wrap .payment-ingredient-wrap img {
+    width: 100px;     /* 이미지 크기 조절 */
+    height: 100px;     /* 이미지 비율 유지 */
+}
+
+#payment_wrap .flex-wrap {
+    display: flex;
+    gap: 10px;
+}
+
+/* cart css */
+#shpping_cart_wrap .shpping_cart_wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+#shpping_cart_wrap .ingredient-cart-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#shpping_cart_wrap .ingredient-cart-wrap .ingredient-cart-item {
+    border: 1px solid #dadada;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#shpping_cart_wrap .ingredient-cart-img {
+    max-width: 100px;
+    min-width: 100px;
+    max-height: 100px;
+    min-height: 100px;
+    border-radius: 50px;
+}
+
+#shpping_cart_wrap .ingredient-cart-btn {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+#shpping_cart_wrap .all-select-btn {
+    display: flex;
+}
+
+#shpping_cart_wrap .ingredient-payment-history {
+    display: flex;
+    justify-content: space-between;
+}
+
+#shpping_cart_wrap .select-btn-order-info {
+    display: flex;
+    justify-content: space-between;
 }

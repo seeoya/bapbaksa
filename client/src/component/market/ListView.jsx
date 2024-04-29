@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "../../css/market/market.css"
 import ApexCharts from 'apexcharts';
+import React, { useEffect, useState } from "react";
+import "../../css/market/market.css";
 
 const ListView = () => {
     const [quantityInt, setQuantityInt] = useState(0);
@@ -79,9 +79,9 @@ const ListView = () => {
     };
 
     return (
-        <div id="list_view">
-            <div className="title-wrap">품목 상세</div>
-            <div className="ingredient-view-wrap">
+        <div className='content-wrap' id="market_list_view">
+            <h2 className='title'>품목 상세</h2>
+            <div className='content ingredient-view-wrap'>
                 <div className="ingredient-img-wrap">
                     <img className="ingredient-img" src="/img/방울토마토.jpg" alt="ingredient" />
                 </div>
@@ -107,8 +107,8 @@ const ListView = () => {
                         &nbsp;&nbsp;&nbsp;<button type="button">바로 결제</button>
                     </div>
                 </div>
+                <div id="price-chart-wrap"></div>
             </div>
-            <div id="price-chart-wrap"></div>
         </div>
     );
 };

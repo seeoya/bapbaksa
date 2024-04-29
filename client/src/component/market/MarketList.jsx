@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../../css/market/market.css";
 
 const MarketList = () => {
     const [searchText, setSearchText] = useState("");

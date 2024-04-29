@@ -1,4 +1,3 @@
-import "../../css/market/market.css"
 import PostCode from "./PostCode";
 
 

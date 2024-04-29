@@ -1,6 +1,5 @@
 import ApexCharts from 'apexcharts';
 import React, { useEffect, useState } from "react";
-import "../../css/market/market.css";
 
 const ListView = () => {
     const [quantityInt, setQuantityInt] = useState(0);

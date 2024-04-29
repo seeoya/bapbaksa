@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import "../../css/market/market.css"
 
 const PaymentHistory = () => {
     const [selectedItems, setSelectedItems] = useState([]);

@@ -174,20 +174,22 @@
 
 /* 헤더 */
 header {
+    display: flex;
     width: 100%;
-    position: relative;
     position: sticky;
-    top: -10px;
-    z-index: 30;
+    top: 0;
+    z-index: 999;
+    background-color: #fff;
+    justify-content: center;
 }
 
 header .header-wrap {
     width: 100%;
     display: flex;
-    margin: 20px auto 5px;
+    padding: 20px 0 5px;
+    justify-content: space-between;
     align-items: center;
     gap: 30px;
-    background-color: #fff;
 }
 
 header .header-wrap .header-menu {
@@ -260,6 +262,22 @@ header .header-menu .search .btn {
     height: 40px;
 }
 
+header, .header-wrap, header .logo {
+    transition: all ease 0.3s;
+}
+
+.scrolled header {
+    height: 60px;
+}
+
+.scrolled header .header-wrap {
+    padding: 10px 0 0;
+}
+
+.scrolled header .logo {
+    height: 50px;
+}
+
 #market-header-wrap .btn.sub {
     background-color: var(--main-color);
     color: #fff;
@@ -270,41 +288,61 @@ header .header-menu .search .btn {
 }
 
 nav {
-    position: relative;
+    display: flex;
+    justify-content: center;
     position: sticky;
     position: -webkit-sticky;
-    top: 75px;
+    top: 60px;
     z-index: 30;
+    border-bottom: 2px solid var(--gray-green-color);
+    box-shadow: 0px 3px 0px 0px var(--gray-light-color);
+    transition: all ease 0.3s;
 }
 
 nav .category-wrap {
     width: 100%;
     display: flex;
-    margin: 5px auto;
     align-items: center;
     gap: 30px;
-    height: 60px;
     background-color: #fff;
+    transition: all ease 0.3s;
+}
+
+nav .link {
+    padding: 10px 15px;
+    transition: all ease 0.3s;
+    font-size: 1.6rem !important;
+    font-weight: 500;
+}
+
+.scrolled nav {
+
+    /* top: 60px; */
+}
+
+.scrolled nav .category-wrap {
+
+    /* height: 50px; */
+}
+
+.scrolled nav .link {
 }
 
 .category-wrap .header-category {
     width: 100%;
     display: flex;
     gap: 10px;
-    padding: 10px auto;
-    border-bottom: 2px solid var(--gray-green-color);
-    box-shadow: 0px 3px 0px 0px var(--gray-light-color);
 }
 
-#main-category-wrap .header-category .recipe {    
+#main-category-wrap .header-category .recipe {
     display: flex;
     width: 85%;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
     gap: 5px;
 }
 
-#main-category-wrap .header-category .market {    
+#main-category-wrap .header-category .market {
     display: flex;
     justify-content: right;
     align-items: center;
@@ -324,29 +362,19 @@ nav .category-wrap {
     align-items: center;
 }
 
-.category-wrap .header-category .link {
-    padding: 15px;
+.category-wrap .header-category {
     background: none;
-    font-size: 1.8rem;
-    font-weight: 500;
     color: var(--main-dark-color);
-    cursor: pointer;
 }
 
 .category-wrap .header-category .market .link {
     background: none;
-    font-size: 1.8rem;
-    font-weight: 500;
     color: var(--main-color);
-    cursor: pointer;
 }
 
 .category-wrap .header-category .recipe .link {
     background: none;
-    font-size: 1.8rem;
-    font-weight: 500;
     color: var(--sub-color);
-    cursor: pointer;
 }
 
 .category-wrap .header-category .recipe .link:hover {
@@ -981,8 +1009,8 @@ footer .util_footer .btn {
 }
 
 /* #recipe .recipe-content-wrap {
-    display: flex;
-    width: 100%;
-    max-width: 1000px;
-    background-color: palegoldenrod;
+display: flex;
+width: 100%;
+max-width: 1000px;
+background-color: palegoldenrod;
 } */

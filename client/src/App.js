@@ -1,19 +1,12 @@
 import { BrowserRouter } from "react-router-dom";
-import Container from "./component/Container";
-import Footer from "./component/include/Footer";
-import Header from "./component/include/Header";
-import Nav from "./component/include/Nav";
-
+import LayoutRouter from "./component/LayoutRouter";
 
 
 function App() {
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <div className="wrap">
-                <Header />
-                <Nav />   
-                <Container />
-                <Footer />
+                <LayoutRouter />               
             </div>
         </BrowserRouter>
     );

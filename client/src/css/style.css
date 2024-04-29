@@ -263,6 +263,25 @@ header .header-menu .search .btn {
     height: 40px;
 }
 
+header .header-menu .search .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 40px;
+}
+
+#market-header-wrap .btn.sub {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+#market-header-wrap .btn.sub:hover {
+    background-color: var(--main-light-color);
+}
+
+
+
 nav {  
     position: relative;  
     position: sticky; 
@@ -308,6 +327,21 @@ nav .category-wrap {
     
 }
 
+#market-category-wrap .header-category .market {    
+    display: flex;
+    width: 85%;
+    justify-content: center; 
+    align-items: center;
+    gap: 5px;
+}
+
+#market-category-wrap .header-category .recipe {    
+    display: flex;
+    justify-content: right; 
+    align-items: center;
+    
+}
+
 .category-wrap .header-category .link {
     padding: 15px;
     background: none;
@@ -322,6 +356,14 @@ nav .category-wrap {
     font-size: 1.8rem;
     font-weight: 500;
     color: var(--main-color);
+    cursor: pointer;
+}
+
+.category-wrap .header-category .recipe .link {    
+    background: none;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--sub-color);
     cursor: pointer;
 }
 

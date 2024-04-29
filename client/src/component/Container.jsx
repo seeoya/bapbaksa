@@ -12,6 +12,7 @@ import ShoppingCart from "./market/ShoppingCart";
 import RecipeLayout from "./recipe/RecipeLayout";
 import RecipeList from "./recipe/RecipeList";
 import RecipeView from "./recipe/RecipeView";
+import PaymentHistory from "./market/PaymentHistory";
 
 const Container = () => {
     return (
@@ -25,6 +26,7 @@ const Container = () => {
                     <Route path="view/:no" element={<ListView />}></Route>
                     <Route path="payment" element={<Payment />}></Route>
                     <Route path="cart" element={<ShoppingCart />}></Route>
+                    <Route path="pay-history" element={<PaymentHistory/>}></Route>
                 </Route>
                 <Route path="/recipe" element={<RecipeLayout />}>
                     <Route path="list" element={<RecipeList />}></Route>

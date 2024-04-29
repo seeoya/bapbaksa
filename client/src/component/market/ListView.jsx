@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../css/market/listView.css";
+import "../../css/market/market.css"
 import ApexCharts from 'apexcharts';
 
 const ListView = () => {

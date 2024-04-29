@@ -16,6 +16,7 @@ import SignUp from "./user/SignUp";
 import SignIn from "./user/SignIn";
 import Modify from "./user/Modify";
 import UserLayout from "./user/UserLayout";
+import PaymentHistory from "./market/PaymentHistory";
 
 const Container = () => {
     return (
@@ -36,6 +37,7 @@ const Container = () => {
                     <Route path="view/:no" element={<ListView />}></Route>
                     <Route path="payment" element={<Payment />}></Route>
                     <Route path="cart" element={<ShoppingCart />}></Route>
+                    <Route path="pay-history" element={<PaymentHistory/>}></Route>
                 </Route>
 
                 <Route path="/recipe" element={<RecipeLayout />}>

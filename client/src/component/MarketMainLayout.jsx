@@ -4,7 +4,7 @@ import MarketHeader from './include/MarketHeader';
 import MarketNav from './include/MarketNav';
 import Footer from './include/Footer';
 
-const MarketLayout = () => {
+const MarketMainLayout = () => {
   return (
         <>
           <MarketHeader />
@@ -18,4 +18,4 @@ const MarketLayout = () => {
   );
 };
 
-export default MarketLayout;
+export default MarketMainLayout;

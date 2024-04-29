@@ -1,10 +1,10 @@
 import React from 'react';
 
-const SignIn = () => {
+const SignUp = () => {
     return (
         <div className='content-wrap'>
 
-        <h2 className='title'>SignIn</h2>
+        <h2 className='title'>SignUp</h2>
 
         <div className='content'>
 
@@ -18,4 +18,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default SignUp;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../css/market/market.css"
+import "../../css/market/market.css";
 
 const MarketList = () => {
     const [searchText, setSearchText] = useState("");
@@ -30,41 +30,42 @@ const MarketList = () => {
     }
 
     return (
-        <div id="market_list">
-            <div className="title-wrap">판매 목록</div>
-            <div className="search-wrap">
-                <input 
-                    type="text" 
-                    value={searchText} 
-                    name="search_text" 
-                    data-search_text={searchText}
-                    onChange={(e) => searchValue(e)}
-                    placeholder="검색어를 입력해 주세요."
-                />
-                <button 
-                    type="button" 
-                    onClick={searchBtnClickHandler} 
-                >
-                    검색
-                </button>
-            </div>    
-
-            <div className="ingredient-wrap">
-                <ul>
-                    {banbokmunlist.slice(0, visibleCount).map((item, index) => (
-                        <li 
-                            key={index}
-                        >
-                            {item}
-                        </li>
-                    ))}
-                </ul>
-                {visibleCount < banbokmunlist.length && (
-                    <button onClick={handleMoreClick}>더 보기</button>
-                )}
+        <div className='content-wrap' id="market_list">
+            <h2 className='title'>제품 리스트</h2>
+            <div className='content'>
+                <div className="search-wrap">
+                    <input 
+                        type="text" 
+                        value={searchText} 
+                        name="search_text" 
+                        data-search_text={searchText}
+                        onChange={(e) => searchValue(e)}
+                        placeholder="검색어를 입력해 주세요."
+                    />
+                    <button 
+                        type="button" 
+                        onClick={searchBtnClickHandler} 
+                    >
+                        검색
+                    </button>
+                </div>    
+                <div className="ingredient-wrap">
+                    <ul>
+                        {banbokmunlist.slice(0, visibleCount).map((item, index) => (
+                            <li 
+                                key={index}
+                            >
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                    {visibleCount < banbokmunlist.length && (
+                        <button onClick={handleMoreClick}>더 보기</button>
+                    )}
+                </div>
             </div>
         </div>
     );
-}
+};
 
 export default MarketList;

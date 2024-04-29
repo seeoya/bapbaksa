@@ -17,21 +17,21 @@ const Header = () => {
                     <div className="search">
                         <form action="" name="search_form" method="get">
                             <input type="search" name="search" class="input" placeholder="검색어를 입력하세요." />
-                            <button type="submit" class="btn main">검색</button>
+                            <button type="submit" class="btn sub">검색</button>
                         </form>
                     </div>
                 </div>
 
-                <div className="member-menu">
-                    <nav>
+                <div className="user-menu">
+                    <div className="nav">
                         <Link to="/admin/qna" className="link">고객문의</Link>
 
-                        <Link to="/member/signup" className="link">회원가입</Link>
-                        <Link to="/member/signin" className="link">로그인</Link>
+                        <Link to="/user/signup" className="link">회원가입</Link>
+                        <Link to="/user/signin" className="link">로그인</Link>
 
-                        <Link to="/member/modify_form" className="link">정보수정</Link>
-                        <Link to="/member/signout" className="link">로그아웃</Link>
-                    </nav>
+                        <Link to="/user/modify" className="link">정보수정</Link>
+                        <Link to="/user/signout" className="link">로그아웃</Link>
+                    </div>
                 </div>
             </div>
         </header>

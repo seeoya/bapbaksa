@@ -3,9 +3,9 @@ import Main from "./main/Main";
 
 const Home = () => {
     return(
-            <div className="container">
-              Home
-            </div>
+            <>
+              <Main />
+            </>
 
 
     );

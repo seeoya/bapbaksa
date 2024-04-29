@@ -2,8 +2,9 @@ import React from 'react';
 
 const Fridge = () => {
     return (
-        <div>
+        <div className=''>
             냉장고
+
         </div>
     );
 };

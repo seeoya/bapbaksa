@@ -3,14 +3,13 @@ import { Outlet } from 'react-router-dom';
 import RecipeAside from './RecipeAside';
 
 const RecipeLayout = () => {
-    return (
-        <div id="recipe" className="">
-            <RecipeAside />
+    return (<>
+        <RecipeAside />
 
-            <div className="recipe-content">
-                <Outlet />
-            </div>
+        <div id="recipe" className='content-wrap'>
+            <Outlet />
         </div>
+    </>
     );
 };
 

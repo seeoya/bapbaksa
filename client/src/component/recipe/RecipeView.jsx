@@ -2,9 +2,13 @@ import React from 'react';
 
 const RecipeView = () => {
     return (
-        <div>
-            레시피 뷰
-        </div>
+        <>
+            <h2 className='title'>copy title</h2>
+
+            <div className='content'>
+                레시피 뷰
+            </div>
+        </>
     );
 };
 

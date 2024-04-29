@@ -52,8 +52,8 @@ const Footer = () => {
 
                 <div className="util_footer">
                     <div className="btn_footer">
-                        <Link to="#none" class="btn sub">고객센터&nbsp;:&nbsp;050-240428-1966</Link>
-                        <Link to="#none" class="btn sub">1&nbsp;:&nbsp;1 문의</Link>
+                        <Link to="#none" className="btn sub">고객센터&nbsp;:&nbsp;050-240428-1966</Link>
+                        <Link to="#none" className="btn sub">1&nbsp;:&nbsp;1 문의</Link>
                     </div>
                 </div>
             </div>

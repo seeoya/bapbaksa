@@ -16,8 +16,8 @@ const Header = () => {
 
                     <div className="search">
                         <form action="" name="search_form" method="get">
-                            <input type="search" name="search" class="input" placeholder="검색어를 입력하세요." />
-                            <button type="submit" class="btn main">검색</button>
+                            <input type="search" name="search" className="input" placeholder="검색어를 입력하세요." />
+                            <button type="submit" className="btn main">검색</button>
                         </form>
                     </div>
                 </div>

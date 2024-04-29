@@ -643,6 +643,7 @@ footer .util_footer .btn {
     margin-right: 20px;
 }
 
+#market_list .ingredient-img,
 #market_list_view .ingredient-img {
     width: 100px;     /* 이미지 크기 조절 */
     height: 100px;
@@ -704,6 +705,24 @@ footer .util_footer .btn {
 /* market_list.css */
 #market_list {
     font-family: Arial, sans-serif;
+    display: flex;
+    gap: 50px;
+}
+
+#market_list .btn_clicked {
+    background-color: red;
+}
+
+#market_list .ingredient-category {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: fixed;
+    top: 40%;
+    left: 90px;
+    width: 10%;
+    background-color: #fff; 
+    z-index: 1000; 
 }
 
 #market_list .search-wrap {
@@ -727,19 +746,25 @@ footer .util_footer .btn {
 }
 
 #market_list .ingredient-wrap ul {
+    width: 100%;
     list-style-type: none;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);     /* 각 항목을 3개씩 나열 */
-    gap: 10px;     /* 각 항목 사이의 간격 */
+    grid-template-columns: repeat(4, 1fr);     /* 각 항목을 3개씩 나열 */
+    gap: 30px;     /* 각 항목 사이의 간격 */
 }
 
 #market_list .ingredient-wrap li {
+    width: 100%;
     padding: 10px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 5px;
     text-align: center;     /* 가운데 정렬 */
+}
+
+#market_list .ingredient-wrap li:hover {
+    background-color: #dadada;
 }
 
 /* payment.css */

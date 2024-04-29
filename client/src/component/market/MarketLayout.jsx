@@ -1,11 +1,11 @@
 import React from "react";
-import { BrowserRouter, Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-const MartketLayout = () => {
+const MarketLayout = () => {
     return(
         <div><Outlet/></div>
         
     )
 }
 
-export default MartketLayout;
+export default MarketLayout;

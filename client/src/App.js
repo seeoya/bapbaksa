@@ -1,17 +1,33 @@
+import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import Container from "./component/Container";
-import Footer from "./component/include/Footer";
-import Header from "./component/include/Header";
-import Nav from "./component/include/Nav";
+import LayoutRouter from "./component/LayoutRouter";
 
 function App() {
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        setScrollClass();
+        scrollEvent();
+    }, []);
+
+    const scrollEvent = () => {
+        document.addEventListener("scroll", () => {
+            setScrollClass();
+        });
+    };
+
+    const setScrollClass = () => {
+        if (window.scrollY > 0) {
+            setIsScrolled(true);
+        } else {
+            setIsScrolled(false);
+        }
+    };
+
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
-            <div className="wrap">
-                <Header />
-                <Nav />
-                <Container />
-                <Footer />
+            <div className={`wrap${isScrolled ? " scrolled" : ""}`}>
+                <LayoutRouter />
             </div>
         </BrowserRouter>
     );

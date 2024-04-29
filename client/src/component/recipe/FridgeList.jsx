@@ -2,8 +2,10 @@ import React from 'react';
 
 const FridgeList = () => {
     return (
-        <div>
-            냉장고 리스트
+        <div className='fridge-list'>
+            <div className='item'>
+                asdasdasdasdasdasdas
+            </div>
         </div>
     );
 };

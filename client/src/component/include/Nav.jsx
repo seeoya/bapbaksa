@@ -5,19 +5,19 @@ const Nav = () => {
 
     return (
         <nav>
-            <div className="header-category">
-                <Link to="/recipe/list" className="link">레시피</Link>
-                <Link to="/styleguide" className="link">StyleGuide</Link>
-                <Link to="/market" className="link_market">Market 가기</Link>
-                <Link to="/market/list" className="link_market">리스트 가기</Link>
-                <Link to="/market/view/:no" className="link_market">제품 상세 페이지 가기</Link>
-                <Link to="/market/payment" className="link_market">결제 페이지 가기</Link>
-                <Link to="/market/cart" className="link_market">장바구니 가기</Link>
-                <Link to="/market/pay-history" className="link_market">결제 내역 가기</Link>
+            <div id="main-category-wrap" className="category-wrap">
+                <div className="header-category">
+                    <div className="recipe">
+                        <Link to="/recipe/list" className="link">레시피 리스트</Link>
+                        <Link to="/recipe/view/1" className="link">레시피 상세</Link>
+                        <Link to="/styleguide" className="link">StyleGuide</Link>
+                    </div>
+                    <div className="market">
+                        <Link to="/market" className="link">Market&nbsp;&nbsp;가기</Link>
+                    </div>
+                </div>
             </div>
         </nav>
-
     );
 };
-
 export default Nav;

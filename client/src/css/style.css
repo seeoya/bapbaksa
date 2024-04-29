@@ -161,29 +161,35 @@
 
 /* 레이아웃 */
 .wrap {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
 }
 
 .header-wrap, .category-wrap, .content-wrap, .footer-wrap {
     display: flex;
-    margin: 0 auto;
     width: 100%;
     max-width: 1000px;
 }
 
 /* 헤더 */
 header {
+    display: flex;
     width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: #fff;
+    justify-content: center;
 }
 
 header .header-wrap {
     width: 100%;
     display: flex;
+    padding: 20px 0 5px;
+    justify-content: space-between;
     align-items: center;
     gap: 30px;
-    padding: 10px 0;
 }
 
 header .header-wrap .header-menu {
@@ -192,25 +198,25 @@ header .header-wrap .header-menu {
     gap: 20px;
 }
 
-header .header-wrap .member-menu {
+header .header-wrap .user-menu {
     display: flex;
-    align-items: center;
-    gap: 20px;
+    justify-content: right;
 }
 
-header .member-menu nav {
-    justify-content: right;
+header .user-menu .nav {
+    display: flex;
+    align-items: center;
     gap: 5px;
 }
 
-header .member-menu nav .link {
+header .user-menu .nav .link {
     padding: 3px 5px;
     font-size: 1.3rem;
 }
 
 header .logo {
-    width: 200px;
-    height: 80px;
+    width: 100px;
+    height: 75px;
 }
 
 header .logo .link {
@@ -237,7 +243,7 @@ header .header-menu .search form {
 }
 
 header .header-menu .search input {
-    width: 100%;
+    width: 500px;
 }
 
 header .header-menu .search .btn {
@@ -248,37 +254,137 @@ header .header-menu .search .btn {
     height: 40px;
 }
 
-.header-category {
+header .header-menu .search .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 40px;
+}
+
+header, .header-wrap, header .logo {
+    transition: all ease 0.3s;
+}
+
+.scrolled header {
+    height: 60px;
+}
+
+.scrolled header .header-wrap {
+    padding: 10px 0 0;
+}
+
+.scrolled header .logo {
+    height: 50px;
+}
+
+#market-header-wrap .btn.sub {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+#market-header-wrap .btn.sub:hover {
+    background-color: var(--main-light-color);
+}
+
+nav {
     display: flex;
     justify-content: center;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 60px;
+    z-index: 30;
+    border-bottom: 2px solid var(--gray-green-color);
+    box-shadow: 0px 3px 0px 0px var(--gray-light-color);
+    transition: all ease 0.3s;
+    background-color: #fff;
+}
+
+nav .category-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    transition: all ease 0.3s;
+}
+
+nav .link {
+    padding: 10px 15px;
+    transition: all ease 0.3s;
+    font-size: 1.6rem !important;
+    font-weight: 500;
+}
+
+.scrolled nav {
+
+    /* top: 60px; */
+}
+
+.scrolled nav .category-wrap {
+
+    /* height: 50px; */
+}
+
+.scrolled nav .link {
+}
+
+.category-wrap .header-category {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+#main-category-wrap .header-category .recipe {
+    display: flex;
+    width: 85%;
+    justify-content: start;
+    align-items: center;
     gap: 5px;
 }
 
-.header-category .link {
-    padding: 15px;
-    background: none;
-    font-size: 1.8rem;
-    font-weight: 500;
-    cursor: pointer;
+#main-category-wrap .header-category .market {
+    display: flex;
+    justify-content: right;
+    align-items: center;
 }
 
-.header-category .link_market {
-    padding: 15px;
+#market-category-wrap .header-category .market {
+    display: flex;
+    width: 85%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+
+#market-category-wrap .header-category .recipe {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.category-wrap .header-category {
     background: none;
-    font-size: 1.8rem;
-    font-weight: 700;
+    color: var(--main-dark-color);
+}
+
+.category-wrap .header-category .market .link {
+    background: none;
     color: var(--main-color);
-    cursor: pointer;
 }
 
-.header-category .link:hover {
-    color: #fff;
-    background-color: var(--main-color);
+.category-wrap .header-category .recipe .link {
+    background: none;
+    color: var(--sub-color);
 }
 
-.header-category .link_market:hover {
+.category-wrap .header-category .recipe .link:hover {
     color: #fff;
     background-color: var(--sub-color);
+}
+
+.category-wrap .header-category .market .link:hover {
+    color: #fff;
+    background-color: var(--main-color);
 }
 
 .header-category #usermenu_btn {
@@ -388,8 +494,15 @@ header .header-menu .search .btn {
 
 /* 페이지 */
 .container {
+    position: relative;
+    top: 0px;
+    width: 100%;
+    margin: 0 auto;
     padding: 30px 0 50px;
     min-height: 75vh;
+    max-width: 1000px;
+    z-index: 10;
+    backdrop-filter: blur;
 }
 
 .content-wrap {
@@ -420,11 +533,14 @@ header .header-menu .search .btn {
 footer {
     width: 100%;
     background-color: var(--gray-light-color);
-    padding: 20px 0;
+    position: relative;
+    bottom: 0;
 }
 
 footer .footer-wrap {
     display: flex;
+    margin: 0 auto;
+    padding: 20px 0;
     flex-direction: column;
 }
 
@@ -865,3 +981,61 @@ footer .util_footer .btn {
     display: flex;
     justify-content: space-between;
 }
+
+#recipe #recipe_aside {
+    display: flex;
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 300px;
+    background-color: #ccc;
+    height: 600px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    cursor: all-scroll;
+}
+
+#recipe #recipe_aside::-webkit-scrollbar {
+    display: none;
+}
+
+#fridge {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+
+#fridge .fridge-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px
+}
+
+#fridge .fridge-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    font-style: 1.3rem;
+}
+
+#fridge .fridge-item img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 300px;
+}
+
+#fridge .fridge-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* #recipe .recipe-content-wrap {
+display: flex;
+width: 100%;
+max-width: 1000px;
+background-color: palegoldenrod;
+} */

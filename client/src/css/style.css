@@ -163,39 +163,31 @@
 .wrap {
     width: 100%;
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
 }
 
 .header-wrap, .category-wrap, .content-wrap, .footer-wrap {
-     
-    display: flex; 
+    display: flex;
     width: 100%;
     max-width: 1000px;
 }
 
 /* 헤더 */
-header {   
-    width: 100%; 
-    position: relative; 
-    position: sticky;     
+header {
+    width: 100%;
+    position: relative;
+    position: sticky;
     top: -10px;
-    z-index: 30;     
-    
+    z-index: 30;
 }
 
 header .header-wrap {
-<<<<<<< HEAD
-    width: 100%;  
-    display: flex;
-    margin: 20px auto 5px;
-=======
     width: 100%;
     display: flex;
->>>>>>> 9609e34bad1722d6a106ab3f34bf914dc77ffa06
+    margin: 20px auto 5px;
     align-items: center;
     gap: 30px;
     background-color: #fff;
-    
 }
 
 header .header-wrap .header-menu {
@@ -204,20 +196,18 @@ header .header-wrap .header-menu {
     gap: 20px;
 }
 
-header .header-wrap .user-menu { 
+header .header-wrap .user-menu {
     display: flex;
-    justify-content:right;    
-       
+    justify-content: right;
 }
 
-header .user-menu .nav {   
-    display: flex;        
+header .user-menu .nav {
+    display: flex;
     align-items: center;
-    gap: 5px;     
-    
+    gap: 5px;
 }
 
-header .user-menu .nav .link {  
+header .user-menu .nav .link {
     padding: 3px 5px;
     font-size: 1.3rem;
 }
@@ -246,7 +236,6 @@ header .header-menu .search {
 }
 
 header .header-menu .search form {
-    
     display: flex;
     gap: 10px;
 }
@@ -280,66 +269,59 @@ header .header-menu .search .btn {
     background-color: var(--main-light-color);
 }
 
-
-
-nav {  
-    position: relative;  
-    position: sticky; 
+nav {
+    position: relative;
+    position: sticky;
     position: -webkit-sticky;
-    top: 75px;   
-    z-index: 30;       
-    
+    top: 75px;
+    z-index: 30;
 }
 
-nav .category-wrap { 
-    width: 100%;  
+nav .category-wrap {
+    width: 100%;
     display: flex;
-    margin: 5px auto;  
+    margin: 5px auto;
     align-items: center;
     gap: 30px;
-    height: 60px;                    
+    height: 60px;
     background-color: #fff;
 }
 
-.category-wrap .header-category {        
-    width: 100%;    
-    display: flex;  
+.category-wrap .header-category {
+    width: 100%;
+    display: flex;
     gap: 10px;
     padding: 10px auto;
     border-bottom: 2px solid var(--gray-green-color);
     box-shadow: 0px 3px 0px 0px var(--gray-light-color);
-
-
 }
 
-.category-wrap .header-category .recipe {    
+.category-wrap .header-category .recipe {
     display: flex;
     width: 85%;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     gap: 5px;
 }
 
-.category-wrap .header-category .market {    
+.category-wrap .header-category .market {
     display: flex;
-    justify-content: right; 
+    justify-content: right;
     align-items: center;
-    
 }
 
-#market-category-wrap .header-category .market {    
+#market-category-wrap .header-category .market {
     display: flex;
     width: 85%;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     gap: 5px;
 }
 
-#market-category-wrap .header-category .recipe {    
+#market-category-wrap .header-category .recipe {
     display: flex;
-    justify-content: right; 
+    justify-content: right;
     align-items: center;
-    
 }
 
 .category-wrap .header-category .link {
@@ -351,7 +333,7 @@ nav .category-wrap {
     cursor: pointer;
 }
 
-.category-wrap .header-category .market .link {    
+.category-wrap .header-category .market .link {
     background: none;
     font-size: 1.8rem;
     font-weight: 500;
@@ -359,7 +341,7 @@ nav .category-wrap {
     cursor: pointer;
 }
 
-.category-wrap .header-category .recipe .link {    
+.category-wrap .header-category .recipe .link {
     background: none;
     font-size: 1.8rem;
     font-weight: 500;
@@ -485,7 +467,7 @@ nav .category-wrap {
 /* 페이지 */
 .container {
     position: relative;
-    top: 0px;     
+    top: 0px;
     width: 100%;
     margin: 0 auto;
     padding: 30px 0 50px;
@@ -495,7 +477,7 @@ nav .category-wrap {
     backdrop-filter: blur;
 }
 
-.content-wrap { 
+.content-wrap {
     flex-direction: column;
     gap: 20px;
 }
@@ -510,7 +492,7 @@ nav .category-wrap {
     font-size: 2rem;
 }
 
-.content-wrap .content {   
+.content-wrap .content {
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -522,14 +504,14 @@ nav .category-wrap {
 /* 푸터 */
 footer {
     width: 100%;
-    background-color: var(--gray-light-color);  
+    background-color: var(--gray-light-color);
     position: relative;
     bottom: 0;
 }
 
 footer .footer-wrap {
     display: flex;
-    margin: 0 auto;  
+    margin: 0 auto;
     padding: 20px 0;
     flex-direction: column;
 }

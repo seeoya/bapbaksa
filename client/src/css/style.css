@@ -297,6 +297,7 @@ nav {
     border-bottom: 2px solid var(--gray-green-color);
     box-shadow: 0px 3px 0px 0px var(--gray-light-color);
     transition: all ease 0.3s;
+    background-color: #fff;
 }
 
 nav .category-wrap {
@@ -304,7 +305,6 @@ nav .category-wrap {
     display: flex;
     align-items: center;
     gap: 30px;
-    background-color: #fff;
     transition: all ease 0.3s;
 }
 

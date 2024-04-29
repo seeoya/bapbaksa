@@ -5,7 +5,7 @@ const Nav = () => {
 
     return (
         <nav>            
-            <div className="category-wrap">
+            <div id="main-category-wrap" className="category-wrap">
                 <div className="header-category">            
                     <div className="recipe">
                         <Link to="/recipe/list" className="link">레시피</Link>

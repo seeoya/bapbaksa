@@ -309,15 +309,15 @@ nav .category-wrap {
 
 }
 
-.category-wrap .header-category .recipe {    
+#main-category-wrap .header-category .recipe {    
     display: flex;
     width: 85%;
-    justify-content: center; 
+    justify-content: space-between;
     align-items: center;
     gap: 5px;
 }
 
-.category-wrap .header-category .market {    
+#main-category-wrap .header-category .market {    
     display: flex;
     justify-content: right; 
     align-items: center;
@@ -327,7 +327,7 @@ nav .category-wrap {
 #market-category-wrap .header-category .market {    
     display: flex;
     width: 85%;
-    justify-content: center; 
+    justify-content: space-between;
     align-items: center;
     gap: 5px;
 }

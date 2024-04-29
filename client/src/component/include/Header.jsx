@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 
 const Header = () => {
-    
+
     return (
-        <header>            
+        <header>
             <div className="header-wrap">
-                <div className="header-menu">    
+                <div className="header-menu">
                     <div className="logo">
                         <Link to="/" className="link">
-                            <img src="./imgs/logo/logo_bapbaksa.jpg" alt="밥박사" />
+                            <img src="/imgs/logo/logo_bapbaksa.jpg" alt="밥박사" />
                         </Link>
                     </div>
 
@@ -20,8 +20,8 @@ const Header = () => {
                             <button type="submit" class="btn main">검색</button>
                         </form>
                     </div>
-                </div>    
-            
+                </div>
+
                 <div className="member-menu">
                     <nav>
                         <Link to="/admin/qna" className="link">고객문의</Link>
@@ -33,8 +33,8 @@ const Header = () => {
                         <Link to="/member/signout" className="link">로그아웃</Link>
                     </nav>
                 </div>
-            </div>    
-        </header>        
+            </div>
+        </header>
     );
 };
 export default Header;

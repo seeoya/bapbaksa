@@ -104,7 +104,7 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     background-color: var(--gray-light-color);
 }
 
@@ -243,13 +243,13 @@ header .header-menu .search form {
 }
 
 header .header-menu .search input {
-    width: 500px;
+    width: 500px; 
 }
 
 header .header-menu .search .btn {
     display: inline-flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; 
     width: 60px;
     height: 40px;
 }
@@ -331,34 +331,36 @@ nav .link {
 .category-wrap .header-category {
     width: 100%;
     display: flex;
+    justify-content: right;    
+    padding-left: 20px;
     gap: 10px;
 }
 
 #main-category-wrap .header-category .recipe {
     display: flex;
-    width: 85%;
+    width: 100%;  
     justify-content: start;
     align-items: center;
     gap: 5px;
 }
 
 #main-category-wrap .header-category .market {
-    display: flex;
-    justify-content: right;
+    display: flex;  
+    width: 80px;  
     align-items: center;
 }
 
 #market-category-wrap .header-category .market {
     display: flex;
-    width: 85%;
-    justify-content: space-between;
+    width: 100%;
+    justify-content: start;
     align-items: center;
     gap: 5px;
 }
 
 #market-category-wrap .header-category .recipe {
     display: flex;
-    justify-content: right;
+    width: 80px;    
     align-items: center;
 }
 
@@ -369,22 +371,41 @@ nav .link {
 
 .category-wrap .header-category .market .link {
     background: none;
-    color: var(--main-color);
+    color: var(--main-dark-color);
 }
 
 .category-wrap .header-category .recipe .link {
     background: none;
-    color: var(--sub-color);
+    
 }
 
 .category-wrap .header-category .recipe .link:hover {
-    color: #fff;
-    background-color: var(--sub-color);
+    color: var(--sub-dark-color);    
+   
 }
 
 .category-wrap .header-category .market .link:hover {
-    color: #fff;
-    background-color: var(--main-color);
+    color: var(--main-light-color);      
+}
+
+.category-wrap .header-category .market .link_market {
+    background: none;
+    color: var(--main-dark-color);
+   
+}
+
+.category-wrap .header-category .recipe .link_recipe {
+    background: none;
+    color: var(--sub-dark-color);
+}
+
+.category-wrap .header-category .recipe .link_recipe:hover {
+    color: var(--sub-light-color);    
+   
+}
+
+.category-wrap .header-category .market .link_market:hover {
+    color: var(--main-light-color);      
 }
 
 .header-category #usermenu_btn {
@@ -742,20 +763,39 @@ footer .util_footer .btn {
 /* 마켓 */
 
 /* ListView.css */
-#market_list_view {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+#market_list_view #price-chart-wrap {
+    width: 1000px;
 }
 
 #market_list_view .ingredient-view-wrap {
     display: flex;
+    flex-direction: row;
     align-items: center;
     margin-bottom: 20px;
+    width: 1000px;
+    justify-content: space-between;
+    border: 1px solid #dadada;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#market_list_view .ingredient-middle-wrap {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+#market_list_view input[type="number"] {
+    width: 40px;
+    text-align: right;
 }
 
 #market_list_view .ingredient-img-wrap {
     margin-right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 #market_list .ingredient-img, #market_list_view .ingredient-img {
@@ -767,13 +807,17 @@ footer .util_footer .btn {
 
 #market_list_view .ingredient-info-wrap {
     display: flex;
-    flex-direction: column;
 }
 
 #market_list_view .ingredient-top-wrap {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+}
+
+#market_list_view .ingredient-price-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 #market_list_view .ingredient-title {
@@ -798,6 +842,7 @@ footer .util_footer .btn {
 #market_list_view .ingredient-bottom-wrap {
     display: flex;
     align-items: center;
+    gap: 3px;
 }
 
 #market_list_view #result {
@@ -823,20 +868,29 @@ footer .util_footer .btn {
     gap: 50px;
 }
 
-#market_list .btn_clicked {
-    background-color: red;
+
+#market_list .ingredient-category-btn button{
+    background-color: #FEF4DC;
+    height: 35px;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-#market_list .ingredient-category {
+#market_list .ingredient-category-btn .btn_clicked{
+    background-color: #F7777C;
+}
+
+#market_list .ingredient-category-btn {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    position: fixed;
-    top: 40%;
-    left: 90px;
-    width: 10%;
-    background-color: #fff;
-    z-index: 999;
+    width: 100px;
+    top: 330px;
+}
+
+#market_list .ingredient-category .ingredient-category-btn {
+    position: sticky;
 }
 
 #market_list .search-wrap {
@@ -848,15 +902,6 @@ footer .util_footer .btn {
     margin-right: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-}
-
-#market_list .search-wrap button {
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
 }
 
 #market_list .ingredient-wrap ul {

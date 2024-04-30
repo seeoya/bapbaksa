@@ -10,7 +10,7 @@ const Header = () => {
                 <div className="header-menu">
                     <div className="logo">
                         <Link to="/" className="link">
-                            <img src="/imgs/logo/logo_bapbaksa.jpg" alt="밥박사" />
+                            <img src="/imgs/logo/logo.png" alt="밥박사" />
                         </Link>
                     </div>
 

@@ -9,18 +9,16 @@
     --gray-dark-color: #838383;
     --gray-green-color: #d3dfce;
     --main-color: #6ba543;
-    --main-light-color: #47ae50;
+    --main-light-color: #8fc769;
     --main-dark-color: #0C520A;
     
     --sub-color: #fe990ccc;  
-    --sub-light-color: #fec344;       
-    --sub-dark-color: #fa622f;
+    --sub-light-color: #fec344de;       
+    --sub-dark-color: #fa792f;
           
     --highlight-color: #f2644f;
-    --highlight-light-color: #ff5e5e;
-    --highlight-dark-color: #EA4329;
-    --highlight-yellow-color: #ecee24;
-    --highlight-blue-color: #32abb2cc;
+    --highlight-light-color: #f2644fba;
+    --highlight-dark-color: #EA4329;   
     --highlight-red-color: #be271d;
 }
 

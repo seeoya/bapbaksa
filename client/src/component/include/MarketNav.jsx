@@ -14,7 +14,7 @@ const MarketNav = () => {
                         <Link to="/market/pay-history" className="link">결제 내역 가기</Link>
                     </div>
                     <div className="recipe">
-                        <Link to="/" className="link">레시피&nbsp;&nbsp;가기</Link>
+                        <Link to="/" className="link_recipe">레시피&nbsp;&nbsp;가기</Link>
                     </div>
                 </div>
             </div>

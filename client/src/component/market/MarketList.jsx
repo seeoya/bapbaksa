@@ -189,13 +189,15 @@ const MarketList = () => {
     return (
         <div id="market_list">
             <div className="ingredient-category">
-                <button className={active === "all" ? "btn_clicked" : ""} type="button" onClick={() => handleCategoryClick("all")}>전체</button>
-                <button className={active === "carbohydrate" ? "btn_clicked" : "" } type="button" onClick={() => handleCategoryClick("carbohydrate")}>탄수화물</button>
-                <button className={active === "vegetable" ? "btn_clicked" : "" } type="button" onClick={() => handleCategoryClick("vegetable")}>채소</button>
-                <button className={active === "meat" ? "btn_clicked" : "" } type="button" onClick={() => handleCategoryClick("meat")}>육류</button>
-                <button className={active === "seaweed" ? "btn_clicked" : "" } type="button" onClick={() => handleCategoryClick("seaweed")}>해조류</button>
-                <button className={active === "processed_meet" ? "btn_clicked" : ""} type="button" onClick={() => handleCategoryClick("processed_meet")}>가공육류</button>
-                <button className={active === "processed_food" ? "btn_clicked" : ""} type="button" onClick={() => handleCategoryClick("processed_food")}>가공식품</button>
+                <div className="ingredient-category-btn">
+                    <button className={active === "all" ? "all btn_clicked" : "all"} type="button" onClick={() => handleCategoryClick("all")}>전체</button>
+                    <button className={active === "carbohydrate" ? "carbo btn_clicked" : "carbohydrate" } type="button" onClick={() => handleCategoryClick("carbohydrate")}>탄수화물</button>
+                    <button className={active === "vegetable" ? "vege btn_clicked" : "vegetable" } type="button" onClick={() => handleCategoryClick("vegetable")}>채소</button>
+                    <button className={active === "meat" ? "meat btn_clicked" : "meat" } type="button" onClick={() => handleCategoryClick("meat")}>육류</button>
+                    <button className={active === "seaweed" ? "seaweed btn_clicked" : "seaweed" } type="button" onClick={() => handleCategoryClick("seaweed")}>해조류</button>
+                    <button className={active === "processed_meet" ? "pro-meet btn_clicked" : "processed_meet"} type="button" onClick={() => handleCategoryClick("processed_meet")}>가공육류</button>
+                    <button className={active === "processed_food" ? "pro-food btn_clicked" : "processed_food"} type="button" onClick={() => handleCategoryClick("processed_food")}>가공식품</button>
+                </div>
             </div>
             <div className='content-wrap'>
                 <h2 className='title'>제품 리스트</h2>

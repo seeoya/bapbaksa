@@ -758,8 +758,7 @@ footer .util_footer .btn {
     margin-right: 20px;
 }
 
-#market_list .ingredient-img,
-#market_list_view .ingredient-img {
+#market_list .ingredient-img, #market_list_view .ingredient-img {
     width: 100px;     /* 이미지 크기 조절 */
     height: 100px;
     object-fit: cover;     /* 이미지 비율 유지하면서 자르기 */
@@ -836,8 +835,8 @@ footer .util_footer .btn {
     top: 40%;
     left: 90px;
     width: 10%;
-    background-color: #fff; 
-    z-index: 999; 
+    background-color: #fff;
+    z-index: 999;
 }
 
 #market_list .search-wrap {
@@ -989,8 +988,8 @@ footer .util_footer .btn {
     width: 300px;
     background-color: #ccc;
     height: 600px;
-    overflow-y: scroll;
-    /* -ms-overflow-style: none; */
+    overflow-y: scroll;     /* -ms-overflow-style: none; */
+
     /* scrollbar-width: none; */
     cursor: all-scroll;
     z-index: 9999;
@@ -1005,6 +1004,7 @@ footer .util_footer .btn {
     flex-direction: column;
     padding: 20px;
     gap: 20px;
+    width: 100%;
 }
 
 #fridge .fridge-content {
@@ -1031,11 +1031,60 @@ footer .util_footer .btn {
 #fridge .fridge-list {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
-/* #recipe .recipe-content-wrap {
-display: flex;
-width: 100%;
-max-width: 1000px;
-background-color: palegoldenrod;
-} */
+#fridge .fridge-btn-wrap {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#fridge #fridge_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#fridge #fridge_btn.close {
+}
+
+#recipe .recipe-filter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    background-color: #eee;
+    gap: 10px;
+}
+
+#recipe .filter-wrap {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#recipe .filter-wrap .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 7px;
+    border-radius: 30px;
+    background-color: var(--main-light-color);
+}
+
+#recipe .filter-wrap .btn.on {
+    background-color: black !important;
+    color: #fff;
+}
+
+#recipe .filter-wrap.ingre .btn {
+    background-color: var(--sub-light-color);
+}
+
+#recipe .filter-wrap.cate .btn {
+    background-color: var(--highlight-light-color);
+}

@@ -6,8 +6,6 @@ const RecipeAside = () => {
     const [windowY, setWindowY] = useState(120);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
-    const [endX, setEndX] = useState(0);
-    const [endY, setEndY] = useState(0);
 
     useEffect(() => {
         dragEvent()
@@ -43,7 +41,6 @@ const RecipeAside = () => {
             e.preventDefault();
             asideWindow.classList.remove("active");
         })
-
     }
 
 

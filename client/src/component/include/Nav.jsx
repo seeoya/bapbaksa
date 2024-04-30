@@ -13,7 +13,7 @@ const Nav = () => {
                         <Link to="/styleguide" className="link">StyleGuide</Link>
                     </div>
                     <div className="market">
-                        <Link to="/market" className="link">Market&nbsp;&nbsp;가기</Link>
+                        <Link to="/market" className="link_market">Market&nbsp;&nbsp;가기</Link>
                     </div>
                 </div>
             </div>

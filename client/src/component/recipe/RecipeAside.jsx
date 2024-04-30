@@ -43,6 +43,7 @@ const RecipeAside = () => {
         })
     }
 
+
     return (
         <aside id="recipe_aside" style={{ top: `${windowY}px`, left: `${windowX}px` }}>
             <Fridge />

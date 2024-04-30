@@ -7,7 +7,7 @@ const Footer = () => {
             <div className="bottom_wrap">
                 <div className="logo">
                     <Link to="/">
-                        <img src="/imgs/logo/logo_bapbaksa.jpg" alt="logo" />
+                        <img src="/imgs/logo/logo.png" alt="logo" />
                     </Link>
                 </div>
 

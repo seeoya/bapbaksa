@@ -45,37 +45,6 @@ const RecipeAside = () => {
         })
 
     }
-    // const dragEvent = () => {
-    //     console.log('dragEvent')
-
-
-
-    //     document.addEventListener("mousemove", mouseMoveEvent)
-    //     document.addEventListener("mouseup", mouseUpEvent)
-    // }
-
-    // const mouseUpEvent = () => {
-    //     const fridgeWindow = document.getElementById("fridge");
-
-    //     fridgeWindow.classList.remove("active");
-    //     // document.removeEventListener("mouseup", mouseUpEvent);
-    //     document.removeEventListener("mousemove", mouseMoveEvent);
-    // }
-
-    // const mouseMoveEvent = (e) => {
-    //     e.preventDefault();
-
-    //     const fridgeWindow = document.getElementById("fridge");
-
-    //     // setEndX(startX - e.clientX);
-    //     // setEndY(startY - e.clientY);
-
-    //     // setStartX(e.clientX);
-    //     // setStartY(e.clientY);
-
-    //     // fridgeWindow.style.top = endY;
-    //     // fridgeWindow.style.left = endX;
-    // }
 
 
     return (

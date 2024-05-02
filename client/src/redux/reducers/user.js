@@ -1,12 +1,9 @@
 import axios from 'axios';
-import $ from 'jquery';
 import {useNavigate} from 'react-router-dom';
 import {SERVER_URL} from '../../util/url';
 
 
 axios.defaults.withCredentials = true;
-
-
 
 export const userReducer = (state={}, action) => {
 
@@ -16,7 +13,7 @@ export const userReducer = (state={}, action) => {
             
             let formData = action.data;
 
-            const request = axios({
+            axios({
                 url: `${SERVER_URL.TARGET_URL()}/user/signup_confirm`,                
                 method: 'post',      
                 data: formData,
@@ -42,7 +39,13 @@ export const userReducer = (state={}, action) => {
             .finally(data => {
                 console.log('AXIOS SIGN_UP COMMUNICATION FINALLY');
         
-            })
+            });
+
+        return {...state};
+        break;
+
+        case 'USER_SIGNIN':
+             
 
         return {...state};
         break;

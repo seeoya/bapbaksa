@@ -6,7 +6,7 @@ const path = require("path");
 const session = require("express-session");
 const MemoryStore = require("memorystore")(session);
 const bcrypt = require("bcrypt");
-const pp = require("./lib/passport/passport");
+const pp = require("./lib/passport/passport"); 
 const cors = require('cors');
 const os = require("os");
 

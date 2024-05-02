@@ -15,12 +15,12 @@ app.use(passport.session());
 passport.serializeUser(function(user, done) {
     console.log('serializeUser: ', user);   
 
-    done(null, user.m_id);
+    done(null, user.u_id);
     
 });
 
 passport.deserializeUser(function(id, done) {
-    console.log('deserializeUser(user.m_id): ', id);    
+    console.log('deserializeUser(user.u_id): ', id);    
 
     done(null, id);
 
@@ -28,8 +28,8 @@ passport.deserializeUser(function(id, done) {
 
 passport.use(new LocalStrategy(
     {
-        usernameField: 'm_id',
-        passwordField: 'm_pw',
+        usernameField: 'u_id',
+        passwordField: 'u_pw',
 
     },
     function(username, password, done) {

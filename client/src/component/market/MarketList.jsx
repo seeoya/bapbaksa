@@ -12,14 +12,14 @@ const MarketList = () => {
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:3002/product/allProduct')
-            .then(res => {
-                console.log("_____", res.data);
-                setFilterCategory(res.data);
-            })
-            .catch(err => {
-                console.log('axios get product fail!!', err);
-            })
+        // axios.get('http://localhost:3002/product/allProduct')
+        //     .then(res => {
+        //         console.log("_____", res.data);
+        //         setFilterCategory(res.data);
+        //     })
+        //     .catch(err => {
+        //         console.log('axios get product fail!!', err);
+        //     })
     }, []);
     
     const handleCategoryClick = (category_name) => {

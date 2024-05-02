@@ -47,8 +47,10 @@ const Payment = () => {
                 <div className="payment-price-wrap">
                     <div className="payment-member-info">
                         <span className="ingredient-title">주문자 : 최희범</span>
-                        <button onClick={execDaumPostcode}>주소 찾기</button>
-                        <input type="text" defaultValue={postcode} placeholder="우편번호"></input>
+                        <div className='find-address-btn'>
+                            <button className='btn main' onClick={execDaumPostcode}>주소 찾기</button>
+                            <input type="text" defaultValue={postcode} placeholder="우편번호"></input>
+                        </div>
                         <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소"></input>
                         <input
                             type="text"

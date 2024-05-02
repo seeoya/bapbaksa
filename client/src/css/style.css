@@ -764,7 +764,24 @@ footer .util_footer .btn {
     width: 1000px;
 }
 
-#market_list_view .ingredient-view-wrap,
+#market_list_view .market-list-view-info-wrap {
+    border-top: 1px solid #dadada;
+    border-bottom: 1px solid #dadada;
+    border-radius: 10px;
+    padding: 30px 10px;
+    width: 630px;
+    height: 230px;
+}
+
+#market_list_view .ingredient-view-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 1000px;
+    justify-content: space-between;
+    padding: 20px;
+}
+
 #shopping_cart_wrap .ingredient-view-wrap {
     display: flex;
     flex-direction: row;
@@ -789,7 +806,15 @@ footer .util_footer .btn {
     text-align: right;
 }
 
-#market_list_view .ingredient-img-wrap,
+#market_list_view .ingredient-img-wrap img{
+    max-width: 300px;
+    min-width: 300px;
+    max-height: 230px;
+    min-height: 230px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
 #shopping_cart_wrap .ingredient-img-wrap {
     margin-right: 20px;
     display: flex;
@@ -798,7 +823,6 @@ footer .util_footer .btn {
 }
 
 #market_list .ingredient-img, 
-#market_list_view .ingredient-img,
 #shopping_cart_wrap .ingredient-img {
     width: 100px;    
     height: 100px;
@@ -806,7 +830,10 @@ footer .util_footer .btn {
     border-radius: 50%;     
 }
 
-#market_list_view .ingredient-info-wrap,
+#market_list_view .ingredient-info-wrap {
+    display: flex;
+    flex-direction: column;
+}
 #shopping_cart_wrap .ingredient-info-wrap {
     display: flex;
 }
@@ -849,12 +876,30 @@ footer .util_footer .btn {
     margin-bottom: 10px;
 }
 
-#market_list_view .ingredient-bottom-wrap,
+#market_list_view .ingredient-bottom-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#market_list_view .ingredient-bottom-wrap-price {
+    display: flex;
+    justify-content: end;
+    gap: 3px;
+    margin-top: 5px;
+}
+
+#market_list_view .ingredient-bottom-wrap-btn {
+    display: flex;
+    justify-content: end;
+    gap: 5px;
+    height: 49px;
+}
+
 #shopping_cart_wrap .ingredient-bottom-wrap {
     display: flex;
     align-items: center;
     gap: 3px;
-    
 }
 
 #market_list_view #result,
@@ -974,6 +1019,13 @@ footer .util_footer .btn {
 #payment_wrap {
     display: flex;
     flex-direction: column;
+}
+
+#payment_wrap .find-address-btn {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 #payment_wrap .title-wrap {

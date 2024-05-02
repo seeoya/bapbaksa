@@ -80,32 +80,35 @@ const ListView = () => {
     return (
         <div className='content-wrap' id="market_list_view">
             <h2 className='title'>품목 상세</h2>
-            
             <div className='content'>
                 <div className='ingredient-view-wrap'>
                     <div className="ingredient-img-wrap">
                         <img className="ingredient-img" src="/img/방울토마토.jpg" alt="ingredient" />
-                        <span className="ingredient-title">토마토</span>
                     </div>
-                    <div className="ingredient-info-wrap">
-                        <div className="ingredient-top-wrap">
-                            <span className="ingredient-unit">5kg</span>
-                            <span className="ingredient-price">10,000원</span>
+                    <div className='market-list-view-info-wrap'>
+                        <div className="ingredient-info-wrap">
+                            <span className="ingredient-title">토마토</span>
+                            <div className="ingredient-top-wrap">
+                                <span className="ingredient-unit">5kg</span>
+                                <span className="ingredient-price">10,000원</span>
+                            </div>
+                            <div className="ingredient-middle-wrap">
+                                <input type="button" onClick={() => handleCount("minus")} value="-" />
+                                <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
+                                <input type="button" onClick={() => handleCount("plus")} value="+" />
+                            </div>
+                        <div>
                         </div>
-                    </div>
-                    <div>
-                        <div className="ingredient-middle-wrap">
-                            <input type="button" onClick={() => handleCount("minus")} value="-" />
-                            <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
-                            <input type="button" onClick={() => handleCount("plus")} value="+" />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="ingredient-bottom-wrap">
-                            <span className="ingredient-info">총액 : </span>
-                            <span className="ingredient-price">10,000원</span>
-                            &nbsp;&nbsp;&nbsp;<button type="button" className='go-cart-btn'>장바구니</button>
-                            &nbsp;&nbsp;&nbsp;<button type="button" className='go-payment-btn'>바로 결제</button>
+                            <div className="ingredient-bottom-wrap">
+                                <div className="ingredient-bottom-wrap-price">
+                                    <span className="ingredient-info">총액 : </span>
+                                    <span className="ingredient-price">10,000원</span>
+                                </div>
+                                <div className='ingredient-bottom-wrap-btn'>
+                                    <button type="button" className='go-cart-btn'>장바구니</button>
+                                    <button type="button" className='go-payment-btn'>바로 결제</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     </div>

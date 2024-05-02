@@ -10,11 +10,10 @@ const os = require("os");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let origin_addr = 'http://52.62.249.221:3000';
+const origin_addr = 'http://52.62.249.221:3000';
 if (os.version().includes('Windows')) {
     origin_addr = 'http://localhost:3000';
-}
-
+} 
 app.use(cors({
     origin: origin_addr,
     credentials: true,
@@ -22,15 +21,14 @@ app.use(cors({
 
 app.get("/", (req, res) => {
     res.send("REST SERVER 3002");
-
 });
 
-app.get("/test", (req, res) => {
-    res.json({"abc": "red"})
-});
+// app.get("/test", (req, res) => {
+//     res.json({"abc": "red"})
+// });
 
-app.use('/product', require('./routes/productRouter'));
-app.use('/refrigeator', require('./routes/refrigeratorRouter'));
-app.use('/recipe', require('./routes/recipeRouter'));
+// app.use('/product', require('./routes/productRouter'));
+// app.use('/refrigeator', require('./routes/refrigeratorRouter'));
+// app.use('/recipe', require('./routes/recipeRouter'));
 
 app.listen(3002);

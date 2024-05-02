@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import LayoutRouter from "./component/LayoutRouter";
 import axios from "axios";
 
+
 function App() {
 
     useEffect(() => {
@@ -51,11 +52,13 @@ function App() {
     };
 
     return (
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
-            <div className={`wrap${isScrolled ? " scrolled" : ""}`}>
-                <LayoutRouter />
-            </div>
-        </BrowserRouter>
+        <>
+            <BrowserRouter basename={process.env.PUBLIC_URL}>
+                <div className="wrap">
+                    <LayoutRouter />               
+                </div>
+            </BrowserRouter>
+        </> 
     );
 }
 

@@ -104,13 +104,16 @@ const ListView = () => {
                         <div className="ingredient-bottom-wrap">
                             <span className="ingredient-info">총액 : </span>
                             <span className="ingredient-price">10,000원</span>
-                            &nbsp;&nbsp;&nbsp;<button type="button">장바구니</button>
-                            &nbsp;&nbsp;&nbsp;<button type="button">바로 결제</button>
+                            &nbsp;&nbsp;&nbsp;<button type="button" className='go-cart-btn'>장바구니</button>
+                            &nbsp;&nbsp;&nbsp;<button type="button" className='go-payment-btn'>바로 결제</button>
                         </div>
                     </div>
                     </div>
                 </div>
-                <div id="price-chart-wrap"></div>
+                <div>
+                    <h2 className='title'>품목 시세</h2>
+                    <div id="price-chart-wrap"></div>
+                </div>
             </div>
     );
 };

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Fridge from './Fridge';
 
 const RecipeAside = () => {
-    const [windowX, setWindowX] = useState(900);
-    const [windowY, setWindowY] = useState(120);
+    const [windowX, setWindowX] = useState(100);
+    const [windowY, setWindowY] = useState(300);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
 

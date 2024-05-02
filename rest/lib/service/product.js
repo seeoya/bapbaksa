@@ -3,7 +3,7 @@ const DB = require('../db/db');
 const product = {
     getAllProduct: (req, res) => {
         console.log("getAllProduct");
-        DB.query(`SELECT * FROM PRODUCT WHERE PROD_CODE = 110`, (error, result) => {
+        DB.query(`SELECT * FROM PRODUCT`, (error, result) => {
             if(error) {
                 console.log(error);
                 res.json({

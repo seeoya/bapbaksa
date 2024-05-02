@@ -6,7 +6,7 @@ const path = require("path");
 const session = require("express-session");
 const MemoryStore = require("memorystore")(session);
 const bcrypt = require("bcrypt");
-const pp = require("./lib/passport/passport");
+const pp = require("./lib/passport/passport"); 
 const cors = require('cors');
 const os = require("os");
 
@@ -14,46 +14,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
 app.use(express.static(path.join(__dirname, "public")));
-//app.use(express.static('/home/ubuntu/user/upload/profile_imgs/'));
-app.use(express.static('C:\\bapbaksa\\upload\\profile_imgs\\'));
-
-// CORS START
-app.use(cors({
-      origin: 'http://localhost:3000',
-    //  origin: 'http://54.206.156.100:3000',
-      credentials: true,
-  }));
-  // CORS END  
-
-// session setting START
-const maxAge = 1000 * 60 * 30;
-const sessionObj = {
-    secret: 'BAPBAKSA',
-    resave: false,
-    saveUninitialized: true,
-    store: new MemoryStore({checkPeriod: maxAge}),
-    cookie: {
-        maxAge: maxAge,
-    }
-};
-app.use(session(sessionObj));
-// session setting END
-
-// passportjs session START
-let passport = pp.passport(app);
-app.post('user/signin_confirm', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/user/signin_form?errMsg=INCORRECT USER ID OR PW',
-}));
-// passportjs session END 
 
 app.get("/", (req, res) => {
     res.send("SERVICE SERVER 3001");
 });
 
-let origin_addr = 'http://52.62.249.221:3000';
+let origin_addr = ['http://54.253.228.81:3000', 'http://52.62.249.221:3002'];
 if (os.version().includes('Windows')) {
-    origin_addr = 'http://localhost:3000';
+    origin_addr = ['http://localhost:3000', 'http://localhost:3002'];
 }
 
 app.use(cors({
@@ -65,7 +33,7 @@ app.use(cors({
 const userRouter = require("./routes/userRouter");
 const marketRouter = require("./routes/marketRouter");
 
-app.use("/api/user", userRouter);
+app.use("/user", userRouter);
 app.use("/market", marketRouter);
 
 app.listen(3001);

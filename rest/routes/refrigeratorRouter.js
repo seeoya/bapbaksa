@@ -4,7 +4,7 @@ const refrigeator = require("../lib/service/refrigeator");
 
 router.get("/", (req, res) => {
     console.log("/refrigeator");
-    refrigeator.getRefrigeator(req, res);
+    refrigeator.getAllRefrigeator(req, res);
 });
 
 module.exports = router;

@@ -1131,7 +1131,7 @@ footer .util_footer .btn {
 
 #recipe .recipe-list {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     justify-content: center;
     align-items: start;
     width: 100%;
@@ -1156,6 +1156,117 @@ footer .util_footer .btn {
 
 #recipe .recipe-view {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
+    gap: 30px;
+}
+
+#recipe .recipe-view > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#recipe .recipe-view .recipe-title {
+    font-size: 2rem;
+}
+
+#recipe .recipe-view .recipe-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#recipe .recipe-view .recipe-info .recipe-content {
+    flex-direction: row;
+    font-size: 1.6rem;
+    gap: 40px;
+}
+
+#recipe .recipe-view .recipe-info .info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+#recipe .recipe-view .recipe-info .info div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#recipe .recipe-view .recipe-info .info .sub {
+    display: flex;
+    flex-direction: row;
+}
+
+#recipe .recipe-view .recipe-info .info .sub > div {
+    width: 100%;
+}
+
+#recipe .recipe-view .recipe-info .info-title {
+    font-weight: 600;
+    font-size: 1.8rem;
+}
+
+#recipe .recipe-view .recipe-ingre .recipe-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#recipe .recipe-view .ingre-link {
+    padding: 5px 7px;
+    background-color: #eee;
+    border-radius: 30px;
+}
+
+#recipe .recipe-view .main-ingre:hover {
+    background-color: var(--main-light-color);
+}
+
+#recipe .recipe-view .sub-ingre:hover {
+    background-color: var(--sub-light-color);
+}
+
+#recipe .recipe-view .add-ingre:hover {
+    background-color: var(--highlight-light-color);
+}
+
+#recipe .recipe-view .progress-item {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+    gap: 20px;
+}
+
+#recipe .recipe-view .progress-item img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    min-width: 200px;
+    height: 150px;
+    object-fit: contain;
+}
+
+#recipe .recipe-view .progress-detail {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.8rem;
+    gap: 10px;
+}
+#recipe .recipe-view .progress-detail .no {
+    margin-right: 5px;
+    font-size: 2.3rem;
+    font-weight: 600;
+}
+
+#recipe .recipe-view .progress-detail .tip {
+    padding: 10px 15px;
+    font-size: 1.4rem;
+    border-radius: 10px;
+    background-color: #eee;
 }

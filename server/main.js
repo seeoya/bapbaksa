@@ -7,6 +7,7 @@ const session = require("express-session");
 const MemoryStore = require("memorystore")(session);
 const bcrypt = require("bcrypt");
 const pp = require("./lib/passport/passport");
+const cors = require('cors');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
@@ -16,8 +17,8 @@ app.use(express.static('C:\\bapbaksa\\upload\\profile_imgs\\'));
 
 // CORS START
 app.use(cors({
-    //  origin: 'http://localhost:3000',
-      origin: 'http://54.206.156.100:3000',
+      origin: 'http://localhost:3000',
+    //  origin: 'http://54.206.156.100:3000',
       credentials: true,
   }));
   // CORS END  

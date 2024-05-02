@@ -1294,15 +1294,21 @@ footer .util_footer .btn {
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    padding: 20px;
+    padding: 15px 10px;
     height: 100%;
     border: 1px solid var(--gray-color);
+    border-radius: 5px;
+}
+
+#recipe .recipe-item:hover .recipe-name {
+    text-decoration: underline;
 }
 
 #recipe .recipe-item img {
     width: 100%;
     height: 200px;
     object-fit: cover;
+    border-radius: 5px;
 }
 
 #recipe .recipe-view {
@@ -1326,6 +1332,28 @@ footer .util_footer .btn {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+#recipe .recipe-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#recipe .recipe-name {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+#recipe .recipe-sub-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#recipe .recipe-third-info {
+    display: flex;
+    gap: 3px;
 }
 
 #recipe .recipe-view .recipe-info .recipe-content {

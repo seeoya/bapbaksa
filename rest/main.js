@@ -10,9 +10,9 @@ const os = require("os");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let origin_addr = 'http://52.62.249.221:3000';
+let origin_addr = ['http://54.253.228.81:3000', 'http://3.105.139.117:3001'];
 if (os.version().includes('Windows')) {
-    origin_addr = 'http://localhost:3000';
+    origin_addr = ['http://localhost:3000', 'http://localhost:3001'];
 }
 
 app.use(cors({

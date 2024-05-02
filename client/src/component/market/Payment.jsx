@@ -1,4 +1,3 @@
-import "../../css/market/market.css"
 import PostCode from "./PostCode";
 
 
@@ -12,7 +11,7 @@ const Payment = () => {
             <div className="flex-wrap">
                 <div className="payment-ingredient-wrap">
                     <div className="flex-item">
-                    <a href="#none"><img className="ingredient-img" src="/img/방울토마토.jpg" alt="ingredient" /></a>
+                        <a href="#none"><img className="ingredient-img" src="/img/방울토마토.jpg" alt="ingredient" /></a>
                         <span className="ingredient-title">토마토</span>
                         <span className="ingredient-unit">5kg</span>
                         <span className="ingredient-price">25,000원</span>

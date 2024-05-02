@@ -1,11 +1,10 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
-  app.use(
+    app.use(
     createProxyMiddleware("*", {
-      target: "http://localhost:3001",
-    //  target: "http://52.65.6.27:3001",
-      changeOrigin: true,
+      target: process.env.REACT_APP_SERVER_URL,     // react server
+        changeOrigin: true,
     })
-  );
+    );
 };

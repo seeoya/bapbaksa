@@ -28,14 +28,9 @@ function StyleGuide () {
                         <div className="box light">HIGHLIGHT - LIGHT</div>
                         <div className="box">HIGHLIGHT</div>                       
                         <div className="box dark">HIGHLIGHT - DARK</div>
+                        <div className="box red">HIGHLIGHT - RED</div>    
                     </div>    
-
-                    <div className="highlight">
-                        <div className="box yellow">HIGHLIGHT - YELLOW</div>
-                        <div className="box blue">HIGHLIGHT - BLUE</div>
-                        <div className="box red">HIGHLIGHT - RED</div>                        
-                    </div>                  
-
+                                            
                     <div className="gray">
                         <div className="box light">GRAY - LIGHT</div>
                         <div className="box">GRAY</div>

@@ -10,14 +10,14 @@ const Header = () => {
                 <div className="header-menu">
                     <div className="logo">
                         <Link to="/" className="link">
-                            <img src="/imgs/logo/logo_bapbaksa.jpg" alt="밥박사" />
+                            <img src="/imgs/logo/logo.png" alt="밥박사" />
                         </Link>
                     </div>
 
                     <div className="search">
                         <form action="" name="search_form" method="get">
-                            <input type="search" name="search" class="input" placeholder="검색어를 입력하세요." />
-                            <button type="submit" class="btn sub">검색</button>
+                            <input type="search" name="search" className="input" placeholder="검색어를 입력하세요." />
+                            <button type="submit" className="btn main">검색</button>
                         </form>
                     </div>
                 </div>

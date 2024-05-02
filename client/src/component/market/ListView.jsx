@@ -1,6 +1,5 @@
 import ApexCharts from 'apexcharts';
 import React, { useEffect, useState } from "react";
-import "../../css/market/market.css";
 
 const ListView = () => {
     const [quantityInt, setQuantityInt] = useState(0);
@@ -81,35 +80,38 @@ const ListView = () => {
     return (
         <div className='content-wrap' id="market_list_view">
             <h2 className='title'>품목 상세</h2>
-            <div className='content ingredient-view-wrap'>
-                <div className="ingredient-img-wrap">
-                    <img className="ingredient-img" src="/img/방울토마토.jpg" alt="ingredient" />
-                </div>
-                <div className="ingredient-info-wrap">
-                    <div className="ingredient-top-wrap">
+            
+            <div className='content'>
+                <div className='ingredient-view-wrap'>
+                    <div className="ingredient-img-wrap">
+                        <img className="ingredient-img" src="/img/방울토마토.jpg" alt="ingredient" />
                         <span className="ingredient-title">토마토</span>
-                        <span className="ingredient-unit">5kg</span>
-                        <span className="ingredient-price">10,000원</span>
                     </div>
-                    <div className="ingredient-mid-wrap">
-                        <select>
-                            <option value={"방울토마토"}>방울토마토</option>
-                            <option value={"대추토마토"}>대추토마토</option>
-                        </select>
+                    <div className="ingredient-info-wrap">
+                        <div className="ingredient-top-wrap">
+                            <span className="ingredient-unit">5kg</span>
+                            <span className="ingredient-price">10,000원</span>
+                        </div>
                     </div>
-                    <div className="ingredient-cart-wrap">
-                        <button type="button">장바구니</button>
+                    <div>
+                        <div className="ingredient-middle-wrap">
+                            <input type="button" onClick={() => handleCount("minus")} value="-" />
+                            <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
+                            <input type="button" onClick={() => handleCount("plus")} value="+" />
+                        </div>
                     </div>
-                    <div className="ingredient-bottom-wrap">
-                        <input type="button" onClick={() => handleCount("plus")} value="+" />
-                        <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
-                        <input type="button" onClick={() => handleCount("minus")} value="-" />
-                        &nbsp;&nbsp;&nbsp;<button type="button">바로 결제</button>
+                    <div>
+                        <div className="ingredient-bottom-wrap">
+                            <span className="ingredient-info">총액 : </span>
+                            <span className="ingredient-price">10,000원</span>
+                            &nbsp;&nbsp;&nbsp;<button type="button">장바구니</button>
+                            &nbsp;&nbsp;&nbsp;<button type="button">바로 결제</button>
+                        </div>
+                    </div>
                     </div>
                 </div>
                 <div id="price-chart-wrap"></div>
             </div>
-        </div>
     );
 };
 

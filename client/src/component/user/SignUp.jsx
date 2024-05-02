@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import $ from 'jquery';
+import {getSignupAction} from '../../redux/actions/user';
 
-axios.defaults.withCredentials = true;
 
 
 const SignUp = () => {
@@ -34,6 +34,9 @@ const SignUp = () => {
         } else if (input_name === "u_pw") {
             setUPw(input_value);
 
+        } else if (input_name === "u_check_pw") {
+            setUCheckPw(input_value);
+
         } else if (input_name === "u_mail") {
             setUMail(input_value);
 
@@ -42,10 +45,13 @@ const SignUp = () => {
 
         } else if (input_name === "u_profile") {
             setUProfile(input_value);
+
         } else if (input_name === "u_zip_code") {
-            setZipCode(input_value);
+            setUZipCode(input_value);
+
         } else if (input_name === "u_first_address") {
             setUFirstAddr(input_value);
+
         } else if (input_name === "u_second_address") {
             setUSeconAddr(input_value);
         }
@@ -80,35 +86,25 @@ const SignUp = () => {
         } else {            
 
             let u_profiles = $('input[name="u_profile"]');
+            console.log('u_profiles: ', u_profiles);
             let files = u_profiles[0].files;   
-            
-            const body = {
-                u_id: uId,
-                u_pw: uPw,
-                u_mail: uMail,
-                u_phone: uPhone,
-                u_zip_code: uZipcode,
-                u_first_address: uFirstAddr,
-                u_second_address: uSecondAddr,
-                file: files[0],
-            }
-        
-            dispatch(getSignupAction(body)).then((res) => {
+            console.log('files: ', files);
 
-                if (res.data !== null && res.data > 0) {
-                    console.log('AXIOS SIGN_UP COMMUNICATION SUCCESS ==> ', res.data);
-                    alert('회원가입에 성공하였습니다.');
-                    navigate('/user/signin');
+            let formData = new FormData();
+            formData.append("u_id", uId);
+            formData.append("u_pw", uPw);            
+            formData.append("u_mail", uMail);
+            formData.append("u_phone", uPhone);
+            formData.append("u_zip_code", uZipcode);
+            formData.append("u_first_address", uFirstAddr);
+            formData.append("u_second_address", uSecondAddr);
+            formData.append("u_profile_img", files[0]);
         
-                } else {
-                    alert('회원가입에 실패하였습니다.');                
+            dispatch(getSignupAction(formData));
         
-                    setUId(''); setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
-                    setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');                    
-        
-                }
-
-            });
+            setUId(''); setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
+            setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');                    
+                    
         }
     }
 
@@ -122,7 +118,7 @@ const SignUp = () => {
             <div className='content'>
 
                 <div className='signup-wrap'>            
-                    <form name="input-wrap">
+                    <form name="signup_form">
                         <div>                    
                             <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요"/>    
                             {/* <button type="button" class="btn sub" onClick="isMember();">중복체크</button> */}
@@ -159,14 +155,14 @@ const SignUp = () => {
 
                         <div class='input-wrap'>
                             <div>
-                                <input type="text" id="postcode" name="u_zip_code" value={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readonly/>
+                                <input type="text" id="postcode" name="u_zip_code" value={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readOnly/>
                                 <button type="button" id="search_address_btn" onclick="searchAddress()" class="btn sub">
                                     <i class="fa-solid fa-location-crosshairs"></i>
                                 </button>
                             </div>
 
                             <div class='col'>
-                                <input type="text" id="address" name="u_first_address" value={uFirstAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="주소" readonly/>
+                                <input type="text" id="address" name="u_first_address" value={uFirstAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="주소" readOnly/>
                                 <input type="text" id="detailAddress" name="u_second_address" value={uSecondAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="상세주소"/>
 
                                 <span id="icon_u_detail_addr" class="input-icon"></span>
@@ -183,7 +179,7 @@ const SignUp = () => {
                         </div>
                     
                         <div class='btn-wrap'>
-                            <button type="button" onclick={signupBtnClickHandler} class="btn main full">회원가입</button>
+                            <button type="button" onClick={signupBtnClickHandler} class="btn main full">회원가입</button>
                         </div>
                         
 

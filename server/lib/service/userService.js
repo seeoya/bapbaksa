@@ -13,12 +13,12 @@ const userService = {
         let post = req.body;
         console.log('post:', post);
 
-        console.log("req.file: ", req.file);
-        console.log("req.file.filename: ", req.file.filename);        
+        console.log("req.file: ", req.file);     
+        console.log("post.u_id: ", post.u_id);     
 
             
         let sql = `INSERT INTO TBL_USER (u_id, u_pw, u_mail, u_phone, u_zip_code, u_first_address, u_second_address ${req.file !== undefined ? `, pi_name` : `` }) 
-        values(?, ?, ?, ? ${req.file !== undefined ? `, ?` : `` })`;
+        values(?, ?, ?, ?, ?, ?, ? ${req.file !== undefined ? `, ?` : `` })`;
 
         let state = [post.u_id, bcrypt.hashSync(post.u_pw, 10), post.u_mail, post.u_phone, post.u_zip_code, post.u_first_address, post.u_second_address];
         if(req.file !== undefined) state.push(req.file.filename);
@@ -33,7 +33,7 @@ const userService = {
                             
                         });
                 }
-                res.json({data:result});
+                res.json({'data':result});
 
             } else {
 
@@ -42,12 +42,12 @@ const userService = {
                     db.query(`INSERT INTO TBL_USER_PROFILE_IMG (pi_name, u_no) VALUES(?, ?)`,
                                 [req.file.filename, result.insertId], (error, result) => {
 
-                                    res.json({data:result});
+                                    res.json({'data':result});
 
                                 });
                 } else {
 
-                    res.json({data:result});
+                    res.json({'data':result});
 
                 }
 

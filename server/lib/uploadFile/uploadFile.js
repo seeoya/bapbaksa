@@ -1,15 +1,17 @@
-const multer = require("multer");
+const multer = require('multer');
 const fs = require('fs');
-const uuid4 = require("uuid4");
+const uuid4 = require('uuid4');
 const path = require('path');
 
 const upload = {
 
     UPLOAD_MIDDLEWARE : () => {
+        console.log("+++++++++++>>");
 
         const upload = multer({
             storage: multer.diskStorage({
                 destination(req, file, done) {
+                    console.log("file: ", file);
 
                     //let fileDir = `/home/ubuntu/user/upload/profile_imgs/${req.body.u_id}/`;
                     let fileDir = `C:\\bapbaksa\\upload\\profile_imgs\\${req.body.u_id}\\`;
@@ -33,7 +35,7 @@ const upload = {
             },
         });
 
-        return upload.single('profile_thum');
+        return upload.single('u_profile_img');
     },
 }
 module.exports = upload;

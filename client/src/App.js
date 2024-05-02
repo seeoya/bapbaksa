@@ -1,8 +1,24 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import LayoutRouter from "./component/LayoutRouter";
+import axios from "axios";
 
 function App() {
+
+    useEffect(() => {
+        console.log('useEffect()');
+        callingAxios();
+    });
+
+    const callingAxios = () => {
+        axios.get(process.env.REACT_APP_SERVER_URL)
+            .then((result) => {
+                console.log("result", result.data);
+            }).catch(error => {
+                console.log("error", error)
+            })
+    }
+
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {

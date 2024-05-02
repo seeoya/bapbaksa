@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const MarketList = () => {
 
@@ -8,7 +9,18 @@ const MarketList = () => {
     
     useEffect(() => {
         handleCategoryClick("all");
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:3002/product/allProduct')
+            .then(res => {
+                console.log("_____", res.data);
+                setFilterCategory(res.data);
+            })
+            .catch(err => {
+                console.log('axios get product fail!!', err);
+            })
+    }, []);
     
     const handleCategoryClick = (category_name) => {
         
@@ -209,14 +221,14 @@ const MarketList = () => {
                                     <div>
                                         {/* <img className="ingredient-img" src={`/img/${item.PROD_NAME}.jpg`} alt="ingredient" /> */}
                                         <img className="ingredient-img" src={`/img/상추.jpg`} alt="ingredient" />
-                                        <p>{item.PROD_NAME}</p>
-                                        <p>{item.AVRG_PRCE.toLocaleString()}원</p>
+                                        <p className="product-item-name">{item.PROD_NAME}</p>
+                                        <p className="product-item-price">{item.AVRG_PRCE.toLocaleString()}원</p>
                                     </div>
                                 </Link>
                             </li>
                         ))}
                 </ul>
-                    <button>더 보기</button>
+                    <button className="more-product-btn">더 보기</button>
                 </div>
             </div>
             </div>

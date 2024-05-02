@@ -4,9 +4,7 @@
 /node_modules
 /client/node_modules
 /publish/node_modules
-/rest/lib/db
 /rest/node_modules
-/server/lib/db
 /server/node_modules
 /.pnp
 .pnp.js

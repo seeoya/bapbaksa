@@ -309,6 +309,7 @@ const RecipeView = () => {
 
                                     return <Link to={"/market/list?seacrh=" + ingre[el].RECP_INGRD_NAME} className={'ingre-link ' + ingreClass}>
                                         {ingre[el].RECP_INGRD_NAME}{ingreText}
+                                        <span><i class="fa-solid fa-magnifying-glass"></i></span>
                                     </Link>
                                 })
                             }

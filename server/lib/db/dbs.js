@@ -4,11 +4,13 @@ const CONFIG = require("../config/config");
 const DBs = {
     DB_LOCAL: () => {
         return mysql.createConnection({
-            host: "14.42.124.125",
+           // host: "14.42.124.125",
+           host: "localhost",
+           // host: "192.168.56.1",
             port: "3306",
             user: "root",
             password: "1234",
-            database: DB_CONFIG.DB,
+            database: "DB_BAPBAKSA",
             dateStrings: true,
         });
     },
@@ -19,7 +21,7 @@ const DBs = {
             port: "3306",
             user: "root",
             password: "1234",
-            database: CONFIG.DB,
+            database: CONFIG.DB_NAME,
             dateStrings: true,
         });
     },
@@ -30,7 +32,7 @@ const DBs = {
             port: "3306",
             user: "root",
             password: "1234",
-            database: DB_CONFIG.DB,
+            database: CONFIG.DB_NAME,
             dateStrings: true,
         });
     },

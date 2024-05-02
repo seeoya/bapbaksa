@@ -1,4 +1,5 @@
 const DBs = require("./dbs");
+const CONFIG = require('../config/config');
 
 const DB = DBs.DB_LOCAL();
 

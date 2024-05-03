@@ -3,9 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 import LayoutRouter from "./component/LayoutRouter";
 
 function App() {
-    useEffect(() => {
-        console.log("useEffect()");
-    });
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {

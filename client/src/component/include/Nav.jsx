@@ -10,6 +10,7 @@ const Nav = () => {
                     <div className="recipe">
                         <Link to="/recipe/list" className="link">레시피 리스트</Link>
                         <Link to="/recipe/view/1" className="link">레시피 상세</Link>
+                        <Link to="/mypage/fridge" className="link">내 냉장고</Link>
                         <Link to="/styleguide" className="link">StyleGuide</Link>
                     </div>
                     <div className="market">

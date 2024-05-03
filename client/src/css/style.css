@@ -1166,6 +1166,14 @@ footer .util_footer .btn {
     overflow-y: scroll;
     cursor: all-scroll;
     z-index: 9999;
+    /* transition: width ease 0.3s; */
+    transition: width ease 0.3s;
+}
+
+#recipe #recipe_aside.close {
+    width: 35px;
+    left: 0 !important;
+    transition: left ease 0.1s, width ease 0.3s;
 }
 
 #recipe #recipe_aside::-webkit-scrollbar {
@@ -1185,14 +1193,21 @@ footer .util_footer .btn {
     font-size: 1.8rem;
 }
 
+#recipe #recipe_aside.close .title {
+    display: none;
+}
+
 #fridge .fridge-content {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
     padding: 10px;
-    min-height: 100%;
     border-radius: 10px;
     background-color: #FFF;
+}
+
+#recipe #recipe_aside.close .fridge-content {
+    display: none;
 }
 
 #fridge .fridge-item {
@@ -1203,6 +1218,7 @@ footer .util_footer .btn {
     font-size: 1.2rem;
     padding: 10px;
     border-radius: 10px;
+    background-color: #eaeaea;
 }
 
 #fridge .fridge-item img {

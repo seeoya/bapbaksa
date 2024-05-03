@@ -1166,7 +1166,6 @@ footer .util_footer .btn {
     overflow-y: scroll;
     cursor: all-scroll;
     z-index: 9999;
-    /* transition: width ease 0.3s; */
     transition: width ease 0.3s;
 }
 

@@ -5,7 +5,8 @@ import { loadMyFridgeAction } from '../../redux/actions/fridge_action';
 const MyFridge = () => {
     const dispatch = useDispatch();
 
-    const fridgeList = useSelector((state) => state.fridge.MyFridge);
+    const allFridgeList = useSelector((state) => state.fridge.allFridge);
+    const myFridgeList = useSelector((state) => state.fridge.MyFridge);
 
     useEffect(() => {
 
@@ -14,6 +15,7 @@ const MyFridge = () => {
     }, []);
 
     const initMyFridge = async () => {
+        // #TODO 로그인한 회원 u_no로 변경
         let uNo = 1;
         dispatch(await loadMyFridgeAction(uNo));
     }
@@ -25,9 +27,9 @@ const MyFridge = () => {
 
             <div className='content'>
                 {
-                    fridgeList ?
-                        fridgeList.map((el) => {
-                            return <div>{el}</div>
+                    allFridgeList ?
+                        allFridgeList.map((el, idx) => {
+                            return <div key={idx}>{el.RF_NO} : {el.RF_NAME}</div>
                         })
                         :
                         <div>냉장고에 재료가 없습니다.</div>

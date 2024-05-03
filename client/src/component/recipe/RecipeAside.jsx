@@ -11,7 +11,7 @@ const RecipeAside = () => {
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
 
-    const fridgeList = useSelector((state) => state.fridge.MyFridge);
+    const myFridgeList = useSelector((state) => state.fridge.MyFridge);
 
     useEffect(() => {
         initFridge();
@@ -22,6 +22,7 @@ const RecipeAside = () => {
     }, [windowX, windowY, startX, startY]);
 
     const initFridge = async () => {
+        // #TODO 로그인한 회원 u_no로 변경
         let uNo = 1;
         dispatch(await loadMyFridgeAction(uNo));
     }
@@ -83,8 +84,8 @@ const RecipeAside = () => {
                 <div className='fridge-content'>
 
                     {
-                        fridgeList ?
-                            fridgeList.map((el, idx) => {
+                        myFridgeList ?
+                            myFridgeList.map((el, idx) => {
                                 return <button className='fridge-item' key={idx}>
                                     <div className='item-img'>
                                         <img src="/img/방울토마토.jpg" alt="" />

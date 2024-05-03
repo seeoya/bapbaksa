@@ -6,9 +6,7 @@ const Fridge = () => {
     const [fridgeList, setFridgeList] = useState([]);
 
     useEffect(() => {
-
         setList();
-
     }, []);
 
     const setList = () => {

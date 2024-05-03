@@ -6,6 +6,8 @@
 /publish/node_modules
 /rest/node_modules
 /server/node_modules
+/rest/lib/db
+/server/lib/db
 /.pnp
 .pnp.js
 

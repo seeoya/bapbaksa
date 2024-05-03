@@ -37,7 +37,7 @@ const marketRouter = require("./routes/marketRouter");
 const recipeRouter = require("./routes/recipeRouter");
 const fridgeRouter = require("./routes/fridgeRouter");
 
-app.use("/user", userRouter);
+app.use("/api/user", userRouter);
 app.use("/market", marketRouter);
 app.use("/recipe", recipeRouter);
 app.use("/fridge", fridgeRouter);

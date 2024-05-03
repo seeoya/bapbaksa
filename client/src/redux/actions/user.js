@@ -6,5 +6,23 @@ export const getSignupAction = (formData) => {
         };
     
 }
+
+export const getSigninAction = (formData) => {
+        
+    return {
+        type: 'USER_SIGNIN',
+        data: formData,
+        };
     
+}
+    
+export const getModifyAction = (formData) => {
+        
+    return {
+        type: 'USER_MODIFY',
+        data: formData,
+        };
+    
+}
+   
     

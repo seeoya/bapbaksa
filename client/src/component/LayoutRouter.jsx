@@ -29,7 +29,7 @@ const LayoutRouter = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/user" element={<UserLayout />}>                
                     <Route path="signup" element={<SignUp />}></Route>
-                    <Route path="signin" element={<SignIn />}></Route>
+                    <Route path="signin" element={<SignIn />}></Route>                        
                     <Route path="modify" element={<Modify />}></Route>                
                     <Route path="signout" element={<div>로그아웃</div>}></Route>
                     <Route path="delete" element={<div>회원탈퇴</div>}></Route>

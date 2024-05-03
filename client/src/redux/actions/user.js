@@ -16,4 +16,13 @@ export const getSigninAction = (formData) => {
     
 }
     
+export const getModifyAction = (formData) => {
+        
+    return {
+        type: 'USER_MODIFY',
+        data: formData,
+        };
+    
+}
+   
     

@@ -50,6 +50,12 @@ export const userReducer = (state={}, action) => {
         return {...state};
         break;
       
+        case 'USER_MODIFY':
+             
+
+        return {...state};
+        break;
+
        default:
            return state;    
    }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {getSigninAction} from '../../redux/actions/user';
 
@@ -69,8 +69,23 @@ const SignIn = () => {
                         <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요"/>    
                         
                     </div>
-                    <div class='btn-wrap'>
+                    <div className='btn-wrap'>
                         <button type="button" onClick={signinBtnClickHandler} className="btn main full">로그인</button>
+                    </div>
+
+                    <div className='login-link'>
+                   
+                         <Link to={'/auth/google'}>
+                         <span className="google-link">GOOGLE</span>
+                         </Link>
+
+                         <Link to={'/auth/naver'}>
+                         <span className="naver-link">NAVER</span>
+                         </Link>
+
+                         <Link to={'/auth/kakao'}>
+                         <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" className='kakao-link'/>                         
+                         </Link>
                     </div>
                 </form>                
             </div>

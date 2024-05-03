@@ -1444,3 +1444,22 @@ footer .util_footer .btn {
 #recipe .recipe-view .progress-detail .tip i, #recipe .recipe-view .progress-detail .tip svg {
     margin-right: 5px;
 }
+
+.signin-wrap .login-link {
+    display: flex;    
+    width: 100%;
+    margin-top: 10px;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;    
+}
+
+.signin-wrap .login-link .google-link,
+.signin-wrap .login-link .naver-link {
+    font-size: 1.8rem;    
+}
+
+.signin-wrap .login-link .kakao-link {
+    max-width: 45px;
+    min-width: 45px;
+}

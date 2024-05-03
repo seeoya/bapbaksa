@@ -6,6 +6,8 @@ const path = require("path");
 const session = require("express-session");
 const MemoryStore = require("memorystore")(session);
 const bcrypt = require("bcrypt");
+const pp = require("./lib/passport/passport"); 
+const cors = require('cors');
 const os = require("os");
 
 app.use(bodyParser.json());
@@ -17,9 +19,9 @@ app.get("/", (req, res) => {
     res.send("SERVICE SERVER 3001");
 });
 
-let origin_addr = 'http://52.62.249.221:3000';
+let origin_addr = ['http://54.253.228.81:3000', 'http://52.62.249.221:3002'];
 if (os.version().includes('Windows')) {
-    origin_addr = 'http://localhost:3000';
+    origin_addr = ['http://localhost:3000', 'http://localhost:3002'];
 }
 
 app.use(cors({

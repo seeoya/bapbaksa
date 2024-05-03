@@ -490,16 +490,27 @@ const RecipeList = () => {
                                 <div className='recipe-info'>
                                     <div>{recipeBasicList[el].RECP_CODE}</div>
                                     <img src={recipeBasicList[el].RECP_MAIN_IMG} alt={recipeBasicList[el].RECP_NAME} />
-                                    <div>{recipeBasicList[el].RECP_NAME}</div>
+                                    <div className='recipe-name'>{recipeBasicList[el].RECP_NAME}</div>
 
-                                    <div className=''>
-                                        <div>{recipeBasicList[el].RECP_REGION_NAME}/{recipeBasicList[el].RECP_CATEGORY_NAME}</div>
-                                        <div>{recipeBasicList[el].RECP_KCAL}</div>
-                                        <div>{recipeBasicList[el].RECP_SERVIN}</div>
+                                    <div className='recipe-sub-info'>
+                                        <div className='recipe-third-info'>
+                                            <span>
+                                                {recipeBasicList[el].RECP_REGION_NAME}
+                                            </span>
+                                            <span>
+                                                {recipeBasicList[el].RECP_CATEGORY_NAME}
+                                            </span>
+                                            <span>
+                                                {recipeBasicList[el].RECP_KCAL}
+                                            </span>
+                                            <span>
+                                                {recipeBasicList[el].RECP_SERVIN}
+                                            </span>
+                                        </div>
                                         <div>{recipeBasicList[el].RECP_TIME}/{recipeBasicList[el].RECP_DIFFICULT} 난이도</div>
+                                        <div className='recipe-intro'>{recipeBasicList[el].RECP_INTRO}</div>
                                     </div>
                                 </div>
-                                <div className='recipe-intro'>{recipeBasicList[el].RECP_INTRO}</div>
                             </Link>
                         })
                     }

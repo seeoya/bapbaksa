@@ -1,10 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const basicRecipe = require("../lib/service/basicRecipe");
+const recipe = require("../lib/service/recipe");
 
-router.get("/", (req, res) => {
+router.get("/allBasicRecipe", (req, res) => {
     console.log("/basicRecipe");
-    basicRecipe.getBasicRecipe(req, res);
+    recipe.getAllBasicRecipe(req, res);
+});
+
+router.get("/allRecipeIngredient", (req, res) => {
+    console.log("/recipeIngredient");
+    recipe.getAllRecipeIngredient(req, res);
+});
+
+router.get("/allRecipeProgress", (req, res) => {
+    console.log("/recipeProgress");
+    recipe.getAllRecipeProgress(req, res);
 });
 
 module.exports = router;

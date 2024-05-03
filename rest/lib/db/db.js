@@ -5,9 +5,9 @@ const DB = mysql.createConnection({
     port: "3306",
     user: "root",
     password: "baksa!1234",
-    database: "DB_BAPBAKSA",
+    database: "REST",
     dateStrings: true,
-});
+});;
 
 DB.connect();
 

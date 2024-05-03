@@ -489,15 +489,14 @@ const RecipeList = () => {
                             return <Link to={"/recipe/view/" + el} className='recipe-item'>
                                 <div className='recipe-info'>
                                     <div>{recipeBasicList[el].RECP_CODE}</div>
-                                    <img src={recipeBasicList[el].RECP_MAIN_IMG} alt="" />
+                                    <img src={recipeBasicList[el].RECP_MAIN_IMG} alt={recipeBasicList[el].RECP_NAME} />
                                     <div>{recipeBasicList[el].RECP_NAME}</div>
 
                                     <div className=''>
-                                        <div>{recipeBasicList[el].RECP_CATEGORY_NAME}</div>
+                                        <div>{recipeBasicList[el].RECP_REGION_NAME}/{recipeBasicList[el].RECP_CATEGORY_NAME}</div>
                                         <div>{recipeBasicList[el].RECP_KCAL}</div>
                                         <div>{recipeBasicList[el].RECP_SERVIN}</div>
-                                        <div>{recipeBasicList[el].RECP_DIFFICULT}</div>
-
+                                        <div>{recipeBasicList[el].RECP_TIME}/{recipeBasicList[el].RECP_DIFFICULT} 난이도</div>
                                     </div>
                                 </div>
                                 <div className='recipe-intro'>{recipeBasicList[el].RECP_INTRO}</div>

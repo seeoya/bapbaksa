@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Fridge = () => {
 
@@ -11,7 +12,7 @@ const Fridge = () => {
     }, []);
 
     const setList = () => {
-        setFridgeList([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        setFridgeList([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
     }
 
     const fridgeBtnClickEvent = () => {
@@ -20,28 +21,31 @@ const Fridge = () => {
         let recipeAside = document.getElementById("recipe_aside");
 
         if (fridgeBtn.classList.contains("close")) {
-            fridgeBtn.innerText = "CLOSE";
+            fridgeBtn.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
             fridgeContent.style.display = "grid";
             recipeAside.style.height = '600px';
         } else {
-            fridgeBtn.innerText = "OPEN";
+            fridgeBtn.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
             fridgeContent.style.display = "none";
-            recipeAside.style.height = '80px';
+            recipeAside.style.height = '60px';
         }
 
         fridgeBtn.classList.toggle("close");
-
-
-
     }
 
     return (
         <div id='fridge'>
-            <h2 className='title'>나의 냉장고</h2>
 
-            <div className='fridge-btn-wrap'>
-                <button type='button' id='fridge_btn' onClick={fridgeBtnClickEvent}>CLOSE</button>
-            </div>
+            <Link to="/" className='btn myfridge-link'>
+                <h2 className='title'>
+                    나의 냉장고
+                </h2>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </Link>
+
+
+
+            <button type='button' id='fridge_btn' className='btn main' onClick={fridgeBtnClickEvent}><i class="fa-solid fa-chevron-up"></i></button>
 
             <div className='fridge-content'>
                 {

@@ -1,13 +1,8 @@
-import axios from "axios";
-
-axios.defaults.withCredentials = true;
-
-export const fridgeReducer = (state = {}, action) => {
+export const fridge = (state = {}, action) => {
     switch (action.type) {
         case "view_state":
             console.log({ ...state });
-            return { ...state };
-
+            return { ...state, name: "가나다" };
         case "add_state":
             return { ...state, abc: "12345" };
 
@@ -18,6 +13,7 @@ export const fridgeReducer = (state = {}, action) => {
             let data = action.data;
 
             return { ...state, MyFridge: data };
+            break;
         default:
             return { ...state };
             break;

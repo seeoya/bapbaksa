@@ -8,8 +8,7 @@ const SignIn = () => {
     const [uId, setUId] = useState('');
     const [uPw, setUPw] = useState('');
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useDispatch();   
 
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');
@@ -84,7 +83,7 @@ const SignIn = () => {
                          </Link>
 
                          <Link to={'/auth/kakao'}>
-                         <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" className='kakao-link'/>                         
+                         <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" className='kakao-link' alt=''/>                         
                          </Link>
                     </div>
                 </form>                

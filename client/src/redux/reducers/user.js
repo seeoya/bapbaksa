@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import {SERVER_URL} from '../../util/url';
+
 
 
 axios.defaults.withCredentials = true;
@@ -14,7 +14,7 @@ export const userReducer = (state={}, action) => {
             let formData = action.data;
 
             axios({
-                url: `${SERVER_URL.TARGET_URL()}/user/signup_confirm`,                
+                url: process.env.REACT_APP_SERVER_URL + `/api/user/signup_confirm`,                
                 method: 'post',      
                 data: formData,
             })

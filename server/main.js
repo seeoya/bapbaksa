@@ -33,7 +33,7 @@ app.use(cors({
 const userRouter = require("./routes/userRouter");
 const marketRouter = require("./routes/marketRouter");
 
-app.use("/user", userRouter);
+app.use("/api/user", userRouter);
 app.use("/market", marketRouter);
 
 app.listen(3001);

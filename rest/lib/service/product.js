@@ -6,33 +6,37 @@ const product = {
         DB.query(`SELECT * FROM PRODUCT`, (error, result) => {
             if(error) {
                 console.log(error);
+                console.log("여긴 에러");
                 res.json({
                     'PROD_NO': "000",
                 });
             } else {
                 console.log(result);
-
+                console.log("여긴 성공");
                 res.json(result);
             }
         });
     },
     getTwelveProduct: (req, res) => {
         console.log('getTwelveProduct');
-        DB.query(`SELECT * FROM PRODUCT LIMIT 12 OFFSET 24`, 
-        (error, result) => {
-            if(error) {
-                console.log(error);
-                res.json(null);
-            } else {
-                console.log(result);
-                res.json(result);
-            }
-        });
+        let moreList = req.query.moreList;
+        console.log("+++++++++++++", moreList);
+
+        DB.query(`SELECT * FROM PRODUCT LIMIT 12 OFFSET ?`,
+            [parseInt(moreList)],
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    res.json(null);
+                } else {
+                    console.log(result);
+                    res.json(result);
+                }
+            });
     },
     postSelectedProduct: (req, res) => {
         console.log('postSelectedProduct');
-        let post = req.body;
-        let prodNo = post[0].prod_no;
+        let prodNo = req.query.PROD_NO;
         DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, 
         [prodNo], 
         (error, result) => {

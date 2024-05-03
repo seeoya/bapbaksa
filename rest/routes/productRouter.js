@@ -9,6 +9,7 @@ router.get("/allProduct", (req, res) => {
 
 router.get("/twelveProduct", (req, res) => {
     console.log('/product/twelveProduct');
+    // console.log('router morelist', req.query.moreList);
     product.getTwelveProduct(req, res);
 });
 

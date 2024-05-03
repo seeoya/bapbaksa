@@ -8,8 +8,7 @@ function App() {
 
     useEffect(() => {
         console.log('useEffect()');
-        callingAxios();
-        callingAxios1();
+        
     });
 
     const callingAxios = () => {

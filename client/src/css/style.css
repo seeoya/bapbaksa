@@ -819,7 +819,7 @@ footer .util_footer .btn {
     gap: 20px;
 }
 
-#market_list .ingredient-img, 
+#market_list .product-item-img, 
 #shopping_cart_wrap .ingredient-img {
     width: 100px;    
     height: 100px;

@@ -1,8 +1,19 @@
 import ApexCharts from 'apexcharts';
 import React, { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
+import { getSelectedProduct } from '../../redux/actions/market';
+import { useParams } from "react-router-dom";
 
 const ListView = () => {
+    const dispatch = useDispatch();
+    const { no } = useParams();
     const [quantityInt, setQuantityInt] = useState(0);
+
+
+    useEffect( async () => {
+        console.log(no);
+        dispatch(await getSelectedProduct(no));
+    }, [])
 
     useEffect(() => {
         let options = {

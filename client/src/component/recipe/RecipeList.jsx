@@ -48,20 +48,20 @@ const RecipeList = () => {
         if (allFridgeList && myFridgeList) {
 
             let tmp = myFridgeList;
+            let tmp2 = allFridgeList;
 
             console.log("tmp", tmp);
 
             tmp.sort((a, b) => {
-
-                console.log(a, b);
-
-                console.log(allFridgeList[a]);
-                console.log(allFridgeList[b]);
-
                 return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
             });
 
+            tmp2.sort((a, b) => {
+                return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
+            })
+
             setMyFridgeState(tmp);
+            
         }
     }
 
@@ -99,7 +99,7 @@ const RecipeList = () => {
                     <div className='filter-wrap ingre'>
                         {
 
-                            myFridgeState.map((el, idx) => {
+                            Object.keys(allFridgeList).map((el, idx) => {
                                 return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={(e) => ingreBtnClickEvent(e)}>{allFridgeList[el].RF_NAME}</button>
                             })
                         }

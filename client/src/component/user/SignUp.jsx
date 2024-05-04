@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import $ from 'jquery';
 import {getSignupAction} from '../../redux/actions/user';
 
@@ -326,10 +326,17 @@ const SignUp = () => {
             dispatch(getSignupAction(formData));
         
             setUId(''); setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
-            setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');                    
-                    
+            setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');  
+            
+           
         }
     }
+
+        const user = useSelector(state => state['userReducer']);
+            console.log('user: ', user);
+            setUId(user['userId']);                    
+    
+
 
     
 

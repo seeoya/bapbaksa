@@ -7,8 +7,8 @@ export const getSignupAction = (formData) => {
     
 }
 
-export const getSigninAction = (formData) => {
-        
+export const getSigninAction = async(formData) => {
+
     return {
         type: 'USER_SIGNIN',
         data: formData,

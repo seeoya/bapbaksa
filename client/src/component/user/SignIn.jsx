@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {getSigninAction} from '../../redux/actions/user';
+import axios from 'axios';
 
 const SignIn = () => {
 
@@ -43,13 +44,14 @@ const SignIn = () => {
             let formData = new FormData();
             formData.append("u_id", uId);
             formData.append("u_pw", uPw);            
+
+
+
         
-            dispatch(getSigninAction(formData));
-        
-            setUId(''); setUPw('');
+        }
                     
         }
-    }
+    
 
 
     return (

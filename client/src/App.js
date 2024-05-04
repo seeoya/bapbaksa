@@ -1,15 +1,13 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import LayoutRouter from "./component/LayoutRouter";
-import axios from "axios";
 
 
 function App() {
 
     useEffect(() => {
         console.log('useEffect()');
-        callingAxios();
-        callingAxios1();
     });
 
     const callingAxios = () => {

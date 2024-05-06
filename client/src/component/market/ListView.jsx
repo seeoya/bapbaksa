@@ -1,24 +1,35 @@
 import ApexCharts from 'apexcharts';
-import React, { useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
-import { getSelectedProduct } from '../../redux/actions/market';
+import axios from 'axios';
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { SERVER_URL } from '../../util/url';
 
 const ListView = () => {
-    const dispatch = useDispatch();
     const { no } = useParams();
     const [quantityInt, setQuantityInt] = useState(0);
-
-
-    useEffect( async () => {
-        console.log(no);
-        dispatch(await getSelectedProduct(no));
-    }, [])
+    const [prodInfo, setProdInfo] = useState({});
+    const chartRef = useRef(null);
 
     useEffect(() => {
+        axios_getProdInfo();
+    }, [no]);
+
+    useEffect(() => {
+        axiox_getChartData();
+    }, [prodInfo]);
+
+    useEffect(() => {
+        if (prodInfo.PROD_NAME) {
+            createChart();
+        }
+    }, [prodInfo.PROD_NAME]);
+
+    const createChart = () => {
+        if (!chartRef.current) return; // 참조가 존재하지 않으면 종료
+
         let options = {
             series: [{
-                name: "상추",
+                name: prodInfo.PROD_NAME,
                 data: [1000, 1050, 1200, 950, 1050, 1300, 1470, 1200, 1050]
             }],
             chart: {
@@ -49,7 +60,7 @@ const ListView = () => {
                 curve: 'smooth'
             },
             title: {
-                text: '상추',
+                text: prodInfo.PROD_NAME,
                 align: 'left'
             },
             grid: {
@@ -68,13 +79,21 @@ const ListView = () => {
             colors: ["red"]
         };
 
-        let chart = new ApexCharts(document.querySelector("#price-chart-wrap"), options);
-        chart.render();
+        if (chartRef.current.chart) {
+            chartRef.current.chart.updateOptions(options);
+        } else {
+            const chart = new ApexCharts(chartRef.current, options);
+            chart.render();
+            chartRef.current.chart = chart;
+        }
 
+        // 이전 차트가 존재하면 파기
         return () => {
-            chart.destroy();
+            if (chartRef.current.chart) {
+                chartRef.current.chart.destroy();
+            }
         };
-    }, []);
+    }
 
     const handleCount = (type) => {
         if (type === "plus") {
@@ -88,20 +107,46 @@ const ListView = () => {
         setQuantityInt(parseInt(e.target.value));
     };
 
+    async function axios_getProdInfo() {
+        try {
+            const response = await axios.post(`${SERVER_URL.TARGET_URL()}/product/selectedProduct`, {
+                'PROD_NO' : no
+            })
+
+            console.log(response.data[0])
+            setProdInfo(response.data[0]);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function axiox_getChartData() {
+        console.log('code', prodInfo.PROD_CODE)
+
+        try {
+            const response = await axios.post(`${SERVER_URL.TARGET_URL()}/product/getChartData`, {
+                'code' : prodInfo.PROD_CODE })
+
+                console.log('asdasdasdasdasd', response.data);
+        } catch (error) {
+            
+        }
+    }
+
     return (
         <div className='content-wrap' id="market_list_view">
             <h2 className='title'>품목 상세</h2>
             <div className='content'>
                 <div className='ingredient-view-wrap'>
                     <div className="ingredient-img-wrap">
-                        <img className="ingredient-img" src="/img/방울토마토.jpg" alt="ingredient" />
+                        <img className="ingredient-img" src={`/imgs/product/${prodInfo.PROD_IMG}`} alt="ingredient" />
                     </div>
                     <div className='market-list-view-info-wrap'>
                         <div className="ingredient-info-wrap">
-                            <span className="ingredient-title">토마토</span>
+                            <span className="ingredient-title">{prodInfo.PROD_NAME}</span>
                             <div className="ingredient-top-wrap">
-                                <span className="ingredient-unit">5kg</span>
-                                <span className="ingredient-price">10,000원</span>
+                                <span className="ingredient-unit">{prodInfo.DSBN_STEP_ACTO_WT}{prodInfo.DSBN_STEP_ACTO_UNIT_NM}</span>
+                                <span className="ingredient-price">{Number(prodInfo.PROD_AVRG_PRCE).toLocaleString()}원</span>
                             </div>
                             <div className="ingredient-middle-wrap">
                                 <input type="button" onClick={() => handleCount("minus")} value="-" />
@@ -126,7 +171,7 @@ const ListView = () => {
                 </div>
                 <div>
                     <h2 className='title'>품목 시세</h2>
-                    <div id="price-chart-wrap"></div>
+                    <div id="price-chart-wrap" ref={chartRef}></div>
                 </div>
             </div>
     );

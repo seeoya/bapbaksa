@@ -28,4 +28,9 @@ router.get("/searchedProduct", (req, res) => {
     product.getSearchedProduct(req, res);
 });
 
+router.post('/getChartData', (req, res) => {
+    console.log('/product/getChartData')
+    product.getChartData(req, res);
+})
+
 module.exports = router;

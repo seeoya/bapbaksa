@@ -36,7 +36,8 @@ const product = {
     },
     postSelectedProduct: (req, res) => {
         console.log('postSelectedProduct');
-        let prodNo = req.query.PROD_NO;
+        let prodNo = req.body.PROD_NO;
+
         DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, 
         [prodNo], 
         (error, result) => {
@@ -158,10 +159,24 @@ const product = {
                 console.log(error);
                 res.json(null);
             } else {
-                console.log(result);
                 res.json(result);
             }
         });
+    },
+    getChartData: (req , res) => {
+        let code = req.body.code;
+        console.log(code);
+
+        DB.query(`SELECT PROD_YMD, PROD_AVRG_PRCE FROM PRODUCT WHERE PROD_CODE = ? ORDER BY PROD_YMD DESC`,
+        [code], (error, data) => {
+            if(error) {
+                console.log(error);
+                res.json(null);
+            } else {
+                console.log(data);
+                res.json(data);
+            }
+        })
     }
 }
 

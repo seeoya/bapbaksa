@@ -2,13 +2,12 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 const MarketNav = () => {
-  return (
+    return (
     <nav>            
             <div id="market-category-wrap" className="category-wrap">
                 <div className="header-category">            
                     <div className="market">                        
                         <Link to="/market/list" className="link">리스트 가기</Link>
-                        <Link to="/market/view/:no" className="link">제품 상세 페이지 가기</Link>
                         <Link to="/market/payment" className="link">결제 페이지 가기</Link>
                         <Link to="/market/cart" className="link">장바구니 가기</Link>
                         <Link to="/market/pay-history" className="link">결제 내역 가기</Link>
@@ -19,7 +18,7 @@ const MarketNav = () => {
                 </div>
             </div>
         </nav>
-  );
+    );
 };
 
 export default MarketNav;

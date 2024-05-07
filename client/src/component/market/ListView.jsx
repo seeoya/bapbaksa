@@ -6,8 +6,12 @@ import { SERVER_URL } from '../../util/url';
 
 const ListView = () => {
     const { no } = useParams();
+    const [ num , code] = no.split('_');
+    
     const [quantityInt, setQuantityInt] = useState(0);
     const [prodInfo, setProdInfo] = useState({});
+    const [chartData, setChartData] = useState([]);
+    const [viewData, setViewData] = useState([]);
     const chartRef = useRef(null);
 
     useEffect(() => {
@@ -19,10 +23,10 @@ const ListView = () => {
     }, [prodInfo]);
 
     useEffect(() => {
-        if (prodInfo.PROD_NAME) {
+        if (prodInfo.PROD_NAME && chartData.length > 0) {
             createChart();
         }
-    }, [prodInfo.PROD_NAME]);
+    }, [prodInfo.PROD_NAME, chartData, viewData]);
 
     const createChart = () => {
         if (!chartRef.current) return; // 참조가 존재하지 않으면 종료
@@ -30,7 +34,7 @@ const ListView = () => {
         let options = {
             series: [{
                 name: prodInfo.PROD_NAME,
-                data: [1000, 1050, 1200, 950, 1050, 1300, 1470, 1200, 1050]
+                data: chartData.map(data => data.y)
             }],
             chart: {
                 height: 350,
@@ -70,7 +74,7 @@ const ListView = () => {
                 }
             },
             xaxis: {
-                categories: ['2023.07', '2023.08', '2023.09', '2023.10', '2023.11', '2023.12', '2024.01', '2024.02', '2024.03'],
+                categories: chartData.map(data => data.x),
             },
             fill: {
                 type: "gradient",
@@ -109,11 +113,11 @@ const ListView = () => {
 
     async function axios_getProdInfo() {
         try {
-            const response = await axios.post(`${SERVER_URL.TARGET_URL()}/product/selectedProduct`, {
-                'PROD_NO' : no
+            const response = await axios.post(`${SERVER_URL.TARGET_URL()}/product/postSelectedProduct`, {
+                'PROD_NO' : num,
+                'PROD_SPCS_CODE' : code
             })
-
-            console.log(response.data[0])
+            
             setProdInfo(response.data[0]);
         } catch (error) {
             console.log(error)
@@ -121,15 +125,20 @@ const ListView = () => {
     }
 
     async function axiox_getChartData() {
-        console.log('code', prodInfo.PROD_CODE)
-
         try {
             const response = await axios.post(`${SERVER_URL.TARGET_URL()}/product/getChartData`, {
-                'code' : prodInfo.PROD_CODE })
+                'PROD_CODE': prodInfo.PROD_CODE,
+                'PROD_SPCS_CODE': prodInfo.PROD_SPCS_CODE
+            });
 
-                console.log('asdasdasdasdasd', response.data);
+            setViewData(response.data[response.data.length - 1]);
+            const chartInfo = response.data.map(item => ({
+                x: item.PROD_YMD,
+                y: item.PROD_AVRG_PRCE
+            }));
+            setChartData(chartInfo);
         } catch (error) {
-            
+            console.log(error);
         }
     }
 
@@ -143,10 +152,10 @@ const ListView = () => {
                     </div>
                     <div className='market-list-view-info-wrap'>
                         <div className="ingredient-info-wrap">
-                            <span className="ingredient-title">{prodInfo.PROD_NAME}</span>
+                            <span className="ingredient-title">{viewData?.PROD_NAME}</span>
                             <div className="ingredient-top-wrap">
                                 <span className="ingredient-unit">{prodInfo.DSBN_STEP_ACTO_WT}{prodInfo.DSBN_STEP_ACTO_UNIT_NM}</span>
-                                <span className="ingredient-price">{Number(prodInfo.PROD_AVRG_PRCE).toLocaleString()}원</span>
+                                <span className="ingredient-price">{Number(viewData?.PROD_AVRG_PRCE).toLocaleString()}원</span>
                             </div>
                             <div className="ingredient-middle-wrap">
                                 <input type="button" onClick={() => handleCount("minus")} value="-" />
@@ -158,7 +167,7 @@ const ListView = () => {
                             <div className="ingredient-bottom-wrap">
                                 <div className="ingredient-bottom-wrap-price">
                                     <span className="ingredient-info">총액 : </span>
-                                    <span className="ingredient-price">10,000원</span>
+                                    <span className="ingredient-price">{Number(quantityInt * viewData?.PROD_AVRG_PRCE).toLocaleString()}원</span>
                                 </div>
                                 <div className='ingredient-bottom-wrap-btn'>
                                     <button type="button" className='go-cart-btn'>장바구니</button>

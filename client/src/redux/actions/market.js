@@ -1,49 +1,26 @@
 import axios from "axios";
 import { SERVER_URL } from "../../util/url";
 
-export const getSelectedProduct = async (no) => {
-        
+export const twelveProduct = async (moreList, newPordDate, number, search, page) => {
     let list = '';
 
-    await axios({
-        url: `${SERVER_URL.TARGET_URL()}/product/selectedProduct`,
-        method: 'post',
-        params: {
-            'PROD_NO' : no
-        }
-    })
-        .then(res => {
-            console.log('res: ', res);
-            console.log('res.data: ', res.data);
 
-            if (res.data !== null) {
-                console.log('AXIOS SELECT_PROD COMMUNICATION SUCCESS ==> ', res.data);
-                list = res.data;
-                console.log("!@#!@#", list);
-            } else {
-                console.log('AXIOS SELECT_PROD COMMUNICATION fail ==> ', res.data);
-            }
-        })
-        .catch(error => {
-            console.log('AXIOS SELECT_PROD COMMUNICATION ERROR');
 
-        })
-        .finally(data => {
-            console.log('AXIOS SELECT_PROD COMMUNICATION FINALLY');
-
-        })
-        return { type: "SELECT_PROD" , data: list};
-}
-
-export const twelveProduct = async (moreList) => {
-
-    let list = '';
 
     await axios({
-        url: `${SERVER_URL.TARGET_URL()}/product/twelveProduct`,
+        url: process.env.REACT_APP_REST_SERVER_URL + "/product/twelveProduct",
         method: 'get',
         params: {
-            'moreList': moreList
+            // 더 불러올 항목 수
+            'moreList': moreList, 
+            // 최신 날짜 항목만 불러옴
+            'newProdDate': newPordDate, 
+            // 탄수, 채소 등 필터 번호
+            'filterNumber': number, 
+            // 검색어
+            'searchValue': search, 
+             // 페이지
+            'page': page,
         },
     })
         .then(res => {

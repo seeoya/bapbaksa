@@ -876,6 +876,7 @@ footer .util_footer .btn {
     justify-content: end;
     gap: 3px;
     margin-top: 5px;
+    align-items: center;
 }
 
 #market_list_view .ingredient-bottom-wrap-btn {

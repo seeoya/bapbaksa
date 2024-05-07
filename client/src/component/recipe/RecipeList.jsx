@@ -21,7 +21,6 @@ const RecipeList = () => {
     const [categoryList, setCategoryList] = useState({});
     const [activeRegionList, setActiveRegionList] = useState([]);
     const [activeCateList, setActiveCateList] = useState([]);
-    const [activeTimeList, setActiveTimeList] = useState([]);
     const [activeDifficultList, setActiveDifficultList] = useState([]);
 
     // 검색 정렬
@@ -31,7 +30,7 @@ const RecipeList = () => {
     // 레시피
     const [recipeList, setRecipeList] = useState({});
     const [recipePage, setRecipePage] = useState(1);
-    const [recipePageItemCount, setRecipePageItemCount] = useState(20);
+    const [recipePageItemCount, setRecipePageItemCount] = useState(30);
     const [moreBtnState, setMoreBtnState] = useState(true);
 
     useEffect(() => {
@@ -46,7 +45,7 @@ const RecipeList = () => {
 
     useEffect(() => {
         initRecipeList();
-    }, [recipePage, recipePageItemCount]);
+    }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList]);
 
     const initCategoryList = async () => {
         // category
@@ -73,40 +72,46 @@ const RecipeList = () => {
     const initRecipeList = async () => {
         console.log("recipe init")
 
+
+        console.log(activeDifficultList);
+
         await axios
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
                 params: {
                     type: "list",
-                    search: searchString,
-                    sort: sortState,
+                    // search: searchString,
+                    // sort: sortState,
+                    // sort: "lesstime",
                     region: activeRegionList,
-                    time: activeTimeList,
-                    food: activeIngreList,
-                    foodinclu: 1,
+                    // food: activeIngreList,
+                    // food: [1,2,3],
+                    // foodinclu: 0,
                     difficult: activeDifficultList,
                     category: activeCateList,
-                    page: recipePage,
-                    pagePerItem: recipePageItemCount,
+                    // page: recipePage,
+                    // pagePerItem: recipePageItemCount,
                 },
             })
             .then((data) => {
+                console.log(data.data);
+
                 // #TODO 페이징 추가 후 반복문 제거
-                let newList = {}
+                // let newList = {}
 
-                for (let i = 0; i < (recipePageItemCount * recipePage); i++) {
-                    let thisRecipeNo = Object.keys(data.data)[i];
+                // for (let i = 0; i < (recipePageItemCount * recipePage); i++) {
+                //     let thisRecipeNo = Object.keys(data.data)[i];
 
-                    if (thisRecipeNo) {
-                        newList[thisRecipeNo] = data.data[thisRecipeNo];
-                    } else {
-                        setMoreBtnState(false)
-                    }
-                }
+                //     if (thisRecipeNo) {
+                //         newList[thisRecipeNo] = data.data[thisRecipeNo];
+                //     } else {
+                //         setMoreBtnState(false)
+                //     }
+                // }
 
-                console.log("newList", newList);
+                // console.log("newList", newList);
 
-                setRecipeList(newList);
-                // setRecipeList(data.data);
+                // setRecipeList(newList);
+                setRecipeList(data.data);
             })
             .catch((err) => {
                 return { type: "error" };
@@ -152,7 +157,7 @@ const RecipeList = () => {
         console.log("active", no);
         if (activeIngreList.indexOf(parseInt(no)) > -1) {
             let list = activeIngreList.filter((el) => {
-                return el !== parseInt(no)
+                return parseInt(el) !== parseInt(no)
             });
 
             setActiveIngreList(list);
@@ -188,26 +193,15 @@ const RecipeList = () => {
         }
     }
 
-    const timeBtnActiveEvent = (no) => {
-        if (activeTimeList.indexOf(parseInt(no)) > -1) {
-            let list = activeTimeList.filter((el) => {
-                return el !== parseInt(no)
-            });
-
-            setActiveTimeList(list);
-        } else {
-            setActiveTimeList([...activeTimeList, parseInt(no)]);
-        }
-    }
-    const difficultBtnActiveEvent = (no) => {
-        if (activeDifficultList.indexOf(parseInt(no)) > -1) {
+    const difficultBtnActiveEvent = (text) => {
+        if (activeDifficultList.indexOf(text) > -1) {
             let list = activeDifficultList.filter((el) => {
-                return el !== parseInt(no)
+                return el !== text
             });
 
             setActiveDifficultList(list);
         } else {
-            setActiveDifficultList([...activeDifficultList, parseInt(no)]);
+            setActiveDifficultList([...activeDifficultList, text]);
         }
     }
 
@@ -273,23 +267,14 @@ const RecipeList = () => {
                         </div>
                     </div>
 
-                    <div className='half'>
-                        <div className='filter-title'>시간별</div>
-                        <div className='filter-wrap time'>
-                            {
-                                [1, 10, 20, 30, 40, 50, 60].map((el) => {
-                                    return <button type='button' data-idx={el} key={el} className={activeTimeList.includes(el) ? "btn time on" : 'btn time'} onClick={() => timeBtnActiveEvent(el)} >~ {el}분</button>
-                                })
-                            }
-                        </div>
-                    </div>
+                
 
                     <div className='half'>
                         <div className='filter-title'>난이도별</div>
                         <div className='filter-wrap difficult'>
                             {
-                                [{ no: 0, name: "초보환영" }, { no: 1, name: "보통" }, { no: 2, name: "어려움" }].map((el) => {
-                                    return <button type='button' data-idx={el.no} key={el.no} className={activeDifficultList.includes(el.no) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el.no)} >{el.name}</button>
+                                ["초보환영", "보통", "어려움"].map((el, idx) => {
+                                    return <button type='button' data-idx={el} key={idx} className={activeDifficultList.includes(el) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el)} >{el}</button>
                                 })
                             }
                         </div>

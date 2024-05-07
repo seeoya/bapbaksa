@@ -12,7 +12,7 @@ const refrigeator = {
                     'RF_NO': "000",
                 });
             } else {
-                console.log(result);
+                // console.log(result);
 
                     let refDict = {};
                     result.forEach(function (item) {

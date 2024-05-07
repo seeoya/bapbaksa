@@ -165,8 +165,8 @@ const recipe = {
                 limit = 20;
                 sql = `LIMIT ${limit} OFFSET ?`;
             }
+            state.push(offset);
         }
-        state.push(offset);
 
         let queryString = `
         SELECT 

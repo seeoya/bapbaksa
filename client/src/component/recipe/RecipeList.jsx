@@ -29,7 +29,7 @@ const RecipeList = () => {
 
     // 레시피
     const [recipeList, setRecipeList] = useState({});
-    const [recipePage, setRecipePage] = useState(1);
+    const [recipePage, setRecipePage] = useState(0);
     const [recipePageItemCount, setRecipePageItemCount] = useState(30);
     const [moreBtnState, setMoreBtnState] = useState(true);
 
@@ -79,17 +79,15 @@ const RecipeList = () => {
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
                 params: {
                     type: "list",
-                    // search: searchString,
-                    // sort: sortState,
-                    // sort: "lesstime",
+                    search: searchString,
+                    sort: sortState,
                     region: activeRegionList,
-                    // food: activeIngreList,
-                    // food: [1,2,3],
-                    // foodinclu: 0,
+                    food: activeIngreList,
+                    foodinclu: 1,
                     difficult: activeDifficultList,
                     category: activeCateList,
-                    // page: recipePage,
-                    // pagePerItem: recipePageItemCount,
+                    page: recipePage,
+                    pagePerItem: recipePageItemCount,
                 },
             })
             .then((data) => {

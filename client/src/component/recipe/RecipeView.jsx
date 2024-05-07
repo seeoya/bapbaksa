@@ -1,239 +1,37 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const RecipeView = () => {
 
+    let url_params = useParams().no;
+
     const [recipe, setRecipe] = useState({});
     const [progress, setProgress] = useState({});
-    const [ingre, setIngre] = useState({});
+    const [ingre, setIngre] = useState([]);
 
     useEffect(() => {
         initRecipe();
-        initProgress();
-        initIngre();
+        window.scrollTo(0, 0);
     }, []);
 
-    const initRecipe = () => {
-        let dummy = {
-            "RECP_CODE": 1,
-            "RECP_NAME": "나물비빔밥",
-            "RECP_INTRO": "육수로 지은 밥에 야채를 듬뿍 넣은 영양만점 나물비빔밥!",
-            "RECP_REGION_CODE": 3020001,
-            "RECP_REGION_NAME": "한식",
-            "RECP_CATEGORY_CODE": 3010001,
-            "RECP_CATEGORY_NAME": "밥",
-            "RECP_TIME": "60분",
-            "RECP_KCAL": "580Kcal",
-            "RECP_SERVIN": "4인분",
-            "RECP_DIFFICULT": "보통",
-            "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/000200.jpg"
-        };
-
-        setRecipe(dummy);
-    }
-
-    const initProgress = () => {
-        let dummy = {
-            "1": {
-                "RECP_CODE": 1,
-                "RECP_ORDER_NO": 1,
-                "RECP_ORDER_DETAIL": "양지머리로 육수를 낸 후 식혀 기름을 걷어낸 후, 불린 쌀을 넣어 고슬고슬하게 밥을 짓는다.",
-                "RECP_ORDER_IMG": "http://file.okdab.com/UserFiles/searching/recipe/000200_p01.jpg",
-                "RECP_ORDER_TIP": "여기는 팁을 작성하는 자리입니다. 팁팁."
-            },
-            "2": {
-                "RECP_CODE": 1,
-                "RECP_ORDER_NO": 2,
-                "RECP_ORDER_DETAIL": "안심은 불고기 양념하여 30분간 재워 국물 없이 구워 한 김 식으면 한입 크기로 자른다.",
-                "RECP_ORDER_IMG": "http://file.okdab.com/UserFiles/searching/recipe/000200_p02.jpg",
-                "RECP_ORDER_TIP": " "
-            },
-            "5": {
-                "RECP_CODE": 1,
-                "RECP_ORDER_NO": 5,
-                "RECP_ORDER_DETAIL": "밥을 참기름으로 무쳐 그릇에 담고 준비한 재료를 고루 얹는다.",
-                "RECP_ORDER_IMG": " ",
-                "RECP_ORDER_TIP": " "
-            },
-            "4": {
-                "RECP_CODE": 1,
-                "RECP_ORDER_NO": 4,
-                "RECP_ORDER_DETAIL": "콩나물과 숙주, 미나리는 데쳐서 국간장과 참기름으로 간하고, 고사리와 도라지는 참기름을 두른 프라이팬에 살짝 볶아놓는다.",
-                "RECP_ORDER_IMG": " ",
-                "RECP_ORDER_TIP": " "
-            },
-            "3": {
-                "RECP_CODE": 1,
-                "RECP_ORDER_NO": 3,
-                "RECP_ORDER_DETAIL": "청포묵은 고기와 비슷한 크기로 잘라 끓는 물에 데쳐내고 계란은 노른자와 흰자를 분리해 지단부쳐 곱게 채썬다.",
-                "RECP_ORDER_IMG": " ",
-                "RECP_ORDER_TIP": " "
+    const initRecipe = async () => {
+        await axios.get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
+            params: {
+                type: "view",
+                recipe: url_params
             }
-        }
+        }).then((data) => {
+            console.log(data.data);
 
-        setProgress(dummy);
-
+            setRecipe(data.data);
+            setIngre(data.data.RECP_INGRD);
+            setProgress(data.data.RECP_PROGRESS);
+        }).catch((err) => {
+            return { type: "error" };
+        });
     }
 
-    const initIngre = () => {
-        let dummy = {
-            "1": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 1,
-                "RECP_INGRD_NAME": "쌀",
-                "RECP_INGRD_CODE": 111,
-                "RECP_INGRD_PORTIONS": "4컵",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "2": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 2,
-                "RECP_INGRD_NAME": "안심",
-                "RECP_INGRD_CODE": 0,
-                "RECP_INGRD_PORTIONS": "200g",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "3": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 3,
-                "RECP_INGRD_NAME": "콩나물",
-                "RECP_INGRD_CODE": 818,
-                "RECP_INGRD_PORTIONS": "20g",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "4": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 4,
-                "RECP_INGRD_NAME": "청포묵",
-                "RECP_INGRD_CODE": 0,
-                "RECP_INGRD_PORTIONS": "1/2모",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "5": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 5,
-                "RECP_INGRD_NAME": "미나리",
-                "RECP_INGRD_CODE": 256,
-                "RECP_INGRD_PORTIONS": "20g",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "6": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 6,
-                "RECP_INGRD_NAME": "소금",
-                "RECP_INGRD_CODE": 652,
-                "RECP_INGRD_PORTIONS": "약간",
-                "RECP_INGRD_TYPE": 3060003,
-                "RECP_INGRED_TYPE_NAME": "양념"
-            },
-            "7": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 7,
-                "RECP_INGRD_NAME": "국간장",
-                "RECP_INGRD_CODE": 816,
-                "RECP_INGRD_PORTIONS": "약간",
-                "RECP_INGRD_TYPE": 3060003,
-                "RECP_INGRED_TYPE_NAME": "양념"
-            },
-            "8": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 8,
-                "RECP_INGRD_NAME": "다진파",
-                "RECP_INGRD_CODE": 248,
-                "RECP_INGRD_PORTIONS": "약간",
-                "RECP_INGRD_TYPE": 3060003,
-                "RECP_INGRED_TYPE_NAME": "양념"
-            },
-            "9": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 9,
-                "RECP_INGRD_NAME": "다진마늘",
-                "RECP_INGRD_CODE": 261,
-                "RECP_INGRD_PORTIONS": "약간",
-                "RECP_INGRD_TYPE": 3060003,
-                "RECP_INGRED_TYPE_NAME": "양념"
-            },
-            "10": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 10,
-                "RECP_INGRD_NAME": "참기름",
-                "RECP_INGRD_CODE": 837,
-                "RECP_INGRD_PORTIONS": "약간",
-                "RECP_INGRD_TYPE": 3060003,
-                "RECP_INGRED_TYPE_NAME": "양념"
-            },
-            "11": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 11,
-                "RECP_INGRD_NAME": "고추장",
-                "RECP_INGRD_CODE": 814,
-                "RECP_INGRD_PORTIONS": "1/2큰술",
-                "RECP_INGRD_TYPE": 3060002,
-                "RECP_INGRED_TYPE_NAME": "부재료"
-            },
-            "12": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 12,
-                "RECP_INGRD_NAME": "설탕",
-                "RECP_INGRD_CODE": 833,
-                "RECP_INGRD_PORTIONS": "약간",
-                "RECP_INGRD_TYPE": 3060003,
-                "RECP_INGRED_TYPE_NAME": "양념"
-            },
-            "13": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 13,
-                "RECP_INGRD_NAME": "숙주",
-                "RECP_INGRD_CODE": 0,
-                "RECP_INGRD_PORTIONS": "20g",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "14": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 14,
-                "RECP_INGRD_NAME": "도라지",
-                "RECP_INGRD_CODE": 0,
-                "RECP_INGRD_PORTIONS": "20g",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "15": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 15,
-                "RECP_INGRD_NAME": "고사리",
-                "RECP_INGRD_CODE": 0,
-                "RECP_INGRD_PORTIONS": "20g",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "16": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 16,
-                "RECP_INGRD_NAME": "계란",
-                "RECP_INGRD_CODE": 516,
-                "RECP_INGRD_PORTIONS": "1개",
-                "RECP_INGRD_TYPE": 3060001,
-                "RECP_INGRED_TYPE_NAME": "주재료"
-            },
-            "17": {
-                "RECP_CODE": 1,
-                "RECP_INGRD_ORDER_NO": 17,
-                "RECP_INGRD_NAME": "양지머리",
-                "RECP_INGRD_CODE": 0,
-                "RECP_INGRD_PORTIONS": "100g",
-                "RECP_INGRD_TYPE": 3060002,
-                "RECP_INGRED_TYPE_NAME": "부재료"
-            }
-        }
-
-        setIngre(dummy)
-    }
 
     return (
         <>

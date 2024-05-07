@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import RecipeListItem from './RecipeListItem';
 
 const RecipeList = () => {
     const dispatch = useDispatch();
@@ -21,6 +21,8 @@ const RecipeList = () => {
     const [categoryList, setCategoryList] = useState({});
     const [activeRegionList, setActiveRegionList] = useState([]);
     const [activeCateList, setActiveCateList] = useState([]);
+    const [activeTimeList, setActiveTimeList] = useState([]);
+    const [activeDifficultList, setActiveDifficultList] = useState([]);
 
     // 검색 정렬
     const [searchString, setSearchString] = useState("전");
@@ -51,7 +53,6 @@ const RecipeList = () => {
         await axios
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe/category")
             .then((data) => {
-                console.log(1111, data.data);
                 setCategoryList(data.data);
             })
             .catch((err) => {
@@ -62,7 +63,6 @@ const RecipeList = () => {
         await axios
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe/region")
             .then((data) => {
-                console.log(2222, data.data);
                 setRegionList(data.data);
             })
             .catch((err) => {
@@ -77,12 +77,16 @@ const RecipeList = () => {
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
                 params: {
                     type: "list",
+                    search: searchString,
+                    sort: sortState,
+                    region: activeRegionList,
+                    time: activeTimeList,
+                    food: activeIngreList,
+                    foodinclu: 1,
+                    difficult: activeDifficultList,
+                    category: activeCateList,
                     page: recipePage,
                     pagePerItem: recipePageItemCount,
-                    sort: sortState,
-                    search: searchString,
-                    cateList: activeCateList,
-                    regionList: activeRegionList,
                 },
             })
             .then((data) => {
@@ -127,33 +131,88 @@ const RecipeList = () => {
 
             setNotMyFridgeState(tmpList);
             setMyFridgeState(tmpList2);
+
+            // #TODO 나중에 다시 처리
+            // initDefaultActive();
         }
     }
 
-    const ingreBtnClickEvent = async (e) => {
-        let item = e.target;
+    const initDefaultActive = () => {
+        // #TODO 나중에 다시 처리
+        if (myFridgeList) {
+            console.log(11111);
+            myFridgeList.map((el) => {
+                console.log(22222, el)
+                ingreBtnActiveEvent(el);
+            })
+        }
+    }
 
-        if (item.classList.contains("on")) {
+    const ingreBtnActiveEvent = (no) => {
+        console.log("active", no);
+        if (activeIngreList.indexOf(parseInt(no)) > -1) {
             let list = activeIngreList.filter((el) => {
-                return el !== parseInt(item.dataset.idx)
+                return el !== parseInt(no)
             });
 
             setActiveIngreList(list);
         } else {
-            setActiveIngreList([...activeIngreList, parseInt(item.dataset.idx)]);
+            setActiveIngreList([...activeIngreList, parseInt(no)]);
         }
     }
 
-    const cateBtnClickEvent = async (e) => {
+    const cateBtnActiveEvent = (no) => {
+        console.log(this);
+
+        if (activeCateList.indexOf(parseInt(no)) > -1) {
+            let list = activeCateList.filter((el) => {
+                return el !== parseInt(no)
+            });
+
+            setActiveCateList(list);
+        } else {
+            setActiveCateList([...activeCateList, parseInt(no)]);
+        }
 
     }
 
-    const regionBtnClickEvent = async (e) => {
+    const regionBtnActiveEvent = (no) => {
+        if (activeRegionList.indexOf(parseInt(no)) > -1) {
+            let list = activeRegionList.filter((el) => {
+                return el !== parseInt(no)
+            });
 
+            setActiveRegionList(list);
+        } else {
+            setActiveRegionList([...activeRegionList, parseInt(no)]);
+        }
     }
 
-    const moreBtnClickEvent = () => {
-        console.log(111);
+    const timeBtnActiveEvent = (no) => {
+        if (activeTimeList.indexOf(parseInt(no)) > -1) {
+            let list = activeTimeList.filter((el) => {
+                return el !== parseInt(no)
+            });
+
+            setActiveTimeList(list);
+        } else {
+            setActiveTimeList([...activeTimeList, parseInt(no)]);
+        }
+    }
+    const difficultBtnActiveEvent = (no) => {
+        if (activeDifficultList.indexOf(parseInt(no)) > -1) {
+            let list = activeDifficultList.filter((el) => {
+                return el !== parseInt(no)
+            });
+
+            setActiveDifficultList(list);
+        } else {
+            setActiveDifficultList([...activeDifficultList, parseInt(no)]);
+        }
+    }
+
+    const moreBtnClickEvent = async () => {
+        console.log('more');
 
         setRecipePage((prev) => { return prev + 1 })
     }
@@ -166,12 +225,12 @@ const RecipeList = () => {
 
                 <div className='recipe-filter'>
                     <div>
-                        <div>내 냉장고 재료</div>
+                        <div className='filter-title'>내 냉장고 재료</div>
                         <div className='filter-wrap fridge-ingre'>
                             {
                                 myFridgeState ?
                                     myFridgeState.map((el, idx) => {
-                                        return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={(e) => ingreBtnClickEvent(e)}>{allFridgeList[el].RF_NAME}</button>
+                                        return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={() => ingreBtnActiveEvent(allFridgeList[el].RF_NO)}>{allFridgeList[el].RF_NAME}</button>
                                     })
                                     : null
                             }
@@ -179,61 +238,59 @@ const RecipeList = () => {
                     </div>
 
                     <div>
-                        <div>추가 재료</div>
+                        <div className='filter-title'>추가 재료</div>
                         <div className='filter-wrap ingre'>
                             {
                                 notMyFridgeState ?
                                     notMyFridgeState.map((el, idx) => {
-                                        return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={(e) => ingreBtnClickEvent(e)}>{allFridgeList[el].RF_NAME}</button>
+                                        return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={() => ingreBtnActiveEvent(allFridgeList[el].RF_NO)}>{allFridgeList[el].RF_NAME}</button>
                                     }) : null
                             }
                         </div>
                     </div>
 
                     <div>
-                        <div>카테고리</div>
+                        <div className='filter-title'>카테고리</div>
                         <div className='filter-wrap cate'>
                             {
                                 categoryList ?
                                     Object.keys(categoryList).map((el, idx) => {
-                                        return <button type='button' data-idx={categoryList[el].RECP_CATEGORY_CODE} key={idx} className={'btn cate'} onClick={(e) => cateBtnClickEvent(e)} >{categoryList[el].RECP_CATEGORY_NAME}</button>
+                                        return <button type='button' data-idx={categoryList[el].RECP_CATEGORY_CODE} key={idx} className={activeCateList.includes(categoryList[el].RECP_CATEGORY_CODE) ? "btn cate on" : 'btn cate'} onClick={() => cateBtnActiveEvent(categoryList[el].RECP_CATEGORY_CODE)} >{categoryList[el].RECP_CATEGORY_NAME}</button>
                                     }) : null
                             }
                         </div>
                     </div>
 
                     <div className='half'>
-                        <div>나라별</div>
+                        <div className='filter-title'>나라별</div>
                         <div className='filter-wrap region'>
                             {
                                 regionList ?
                                     Object.keys(regionList).map((el, idx) => {
-                                        return <button type='button' data-idx={regionList[el].RECP_REGION_CODE} key={idx} className={'btn cate'} onClick={(e) => regionBtnClickEvent(e)} >{regionList[el].RECP_REGION_NAME}</button>
+                                        return <button type='button' data-idx={regionList[el].RECP_REGION_CODE} key={idx} className={activeRegionList.includes(regionList[el].RECP_REGION_CODE) ? "btn region on" : 'btn region'} onClick={() => regionBtnActiveEvent(regionList[el].RECP_REGION_CODE)} >{regionList[el].RECP_REGION_NAME}</button>
                                     }) : null
                             }
                         </div>
                     </div>
 
                     <div className='half'>
-                        <div>시간별</div>
-                        <div className='filter-wrap region'>
+                        <div className='filter-title'>시간별</div>
+                        <div className='filter-wrap time'>
                             {
-                                regionList ?
-                                    Object.keys(regionList).map((el, idx) => {
-                                        return <button type='button' data-idx={regionList[el].RECP_REGION_CODE} key={idx} className={'btn cate'} onClick={(e) => regionBtnClickEvent(e)} >{regionList[el].RECP_REGION_NAME}</button>
-                                    }) : null
+                                [1, 10, 20, 30, 40, 50, 60].map((el) => {
+                                    return <button type='button' data-idx={el} key={el} className={activeTimeList.includes(el) ? "btn time on" : 'btn time'} onClick={() => timeBtnActiveEvent(el)} >~ {el}분</button>
+                                })
                             }
                         </div>
                     </div>
 
                     <div className='half'>
-                        <div>난이도별</div>
-                        <div className='filter-wrap region'>
+                        <div className='filter-title'>난이도별</div>
+                        <div className='filter-wrap difficult'>
                             {
-                                regionList ?
-                                    Object.keys(regionList).map((el, idx) => {
-                                        return <button type='button' data-idx={regionList[el].RECP_REGION_CODE} key={idx} className={'btn cate'} onClick={(e) => regionBtnClickEvent(e)} >{regionList[el].RECP_REGION_NAME}</button>
-                                    }) : null
+                                [{ no: 0, name: "초보환영" }, { no: 1, name: "보통" }, { no: 2, name: "어려움" }].map((el) => {
+                                    return <button type='button' data-idx={el.no} key={el.no} className={activeDifficultList.includes(el.no) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el.no)} >{el.name}</button>
+                                })
                             }
                         </div>
                     </div>
@@ -244,32 +301,7 @@ const RecipeList = () => {
 
                         recipeList ?
                             Object.keys(recipeList).map((el, idx) => {
-                                return <Link to={"/recipe/view/" + el} className='recipe-item' key={idx} >
-                                    <div className='recipe-info'>
-                                        <div>{recipeList[el].RECP_CODE}</div>
-                                        <img src={recipeList[el].RECP_MAIN_IMG} alt={recipeList[el].RECP_NAME} />
-                                        <div className='recipe-name'>{recipeList[el].RECP_NAME}</div>
-
-                                        <div className='recipe-sub-info'>
-                                            <div className='recipe-third-info'>
-                                                <span>
-                                                    {recipeList[el].RECP_REGION_NAME}
-                                                </span>
-                                                <span>
-                                                    {recipeList[el].RECP_CATEGORY_NAME}
-                                                </span>
-                                                <span>
-                                                    {recipeList[el].RECP_KCAL}
-                                                </span>
-                                                <span>
-                                                    {recipeList[el].RECP_SERVIN}
-                                                </span>
-                                            </div>
-                                            <div>{recipeList[el].RECP_TIME}/{recipeList[el].RECP_DIFFICULT} 난이도</div>
-                                            <div className='recipe-intro'>{recipeList[el].RECP_INTRO}</div>
-                                        </div>
-                                    </div>
-                                </Link>
+                                return <RecipeListItem itemNo={el} idx={idx} recipeList={recipeList} />
                             }) : null
                     }
 

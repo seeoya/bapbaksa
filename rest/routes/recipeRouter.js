@@ -2,19 +2,27 @@ const express = require("express");
 const router = express.Router();
 const recipe = require("../lib/service/recipe");
 
-router.get("/allBasicRecipe", (req, res) => {
-    console.log("/basicRecipe");
-    recipe.getAllBasicRecipe(req, res);
+router.get("/", (req, res) => {
+    let params = req.query;
+
+    switch (params.type) {
+        case "list":
+            recipe.loadList(req,res);
+            break;
+        case "view":
+            recipe.getSelectRecipeProgress(req, res);
+            break;
+    }
 });
 
-router.get("/allRecipeIngredient", (req, res) => {
-    console.log("/recipeIngredient");
-    recipe.getAllRecipeIngredient(req, res);
+router.get("/category", (req, res) => {
+    console.log("/category");
+    recipe.getCategoryList(req, res);
 });
 
-router.get("/allRecipeProgress", (req, res) => {
-    console.log("/recipeProgress");
-    recipe.getAllRecipeProgress(req, res);
+router.get("/region", (req, res) => {
+    console.log("/region");
+    recipe.getRegionList(req, res);
 });
 
 module.exports = router;

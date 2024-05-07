@@ -1226,6 +1226,13 @@ footer .util_footer .btn {
     overflow-y: scroll;
     cursor: all-scroll;
     z-index: 9999;
+    transition: width ease 0.3s;
+}
+
+#recipe #recipe_aside.close {
+    width: 35px;
+    left: 0 !important;
+    transition: left ease 0.1s, width ease 0.3s;
 }
 
 #recipe #recipe_aside::-webkit-scrollbar {
@@ -1245,14 +1252,21 @@ footer .util_footer .btn {
     font-size: 1.8rem;
 }
 
+#recipe #recipe_aside.close .title {
+    display: none;
+}
+
 #fridge .fridge-content {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
     padding: 10px;
-    min-height: 100%;
     border-radius: 10px;
     background-color: #FFF;
+}
+
+#recipe #recipe_aside.close .fridge-content {
+    display: none;
 }
 
 #fridge .fridge-item {
@@ -1263,6 +1277,7 @@ footer .util_footer .btn {
     font-size: 1.2rem;
     padding: 10px;
     border-radius: 10px;
+    background-color: #eaeaea;
 }
 
 #fridge .fridge-item img {
@@ -1303,7 +1318,7 @@ footer .util_footer .btn {
 
 #recipe .recipe-filter {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: start;
     padding: 20px;
@@ -1312,8 +1327,26 @@ footer .util_footer .btn {
     gap: 10px;
 }
 
+#recipe .recipe-filter > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 300px;
+    gap: 10px;
+}
+
+#recipe .recipe-filter > .half {
+    width: 50%;
+}
+
+#recipe .filter-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
 #recipe .filter-wrap {
     display: flex;
+    overflow-y: scroll;
     gap: 10px;
     flex-wrap: wrap;
 }
@@ -1324,6 +1357,7 @@ footer .util_footer .btn {
     align-items: center;
     padding: 5px 7px;
     border-radius: 30px;
+    height: 30px;
     background-color: var(--main-light-color);
 }
 
@@ -1354,15 +1388,21 @@ footer .util_footer .btn {
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    padding: 20px;
+    padding: 15px 10px;
     height: 100%;
     border: 1px solid var(--gray-color);
+    border-radius: 5px;
+}
+
+#recipe .recipe-item:hover .recipe-name {
+    text-decoration: underline;
 }
 
 #recipe .recipe-item img {
     width: 100%;
     height: 200px;
     object-fit: cover;
+    border-radius: 5px;
 }
 
 #recipe .recipe-view {
@@ -1388,10 +1428,36 @@ footer .util_footer .btn {
     gap: 20px;
 }
 
+#recipe .recipe-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#recipe .recipe-name {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+#recipe .recipe-sub-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#recipe .recipe-third-info {
+    display: flex;
+    gap: 3px;
+}
+
 #recipe .recipe-view .recipe-info .recipe-content {
     flex-direction: row;
     font-size: 1.6rem;
     gap: 40px;
+}
+
+#recipe .btn-more {
+    grid-column: 1/5;
 }
 
 #recipe .recipe-view .recipe-info .info {
@@ -1503,4 +1569,22 @@ footer .util_footer .btn {
 
 #recipe .recipe-view .progress-detail .tip i, #recipe .recipe-view .progress-detail .tip svg {
     margin-right: 5px;
+}
+
+.signin-wrap .login-link {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+.signin-wrap .login-link .google-link, .signin-wrap .login-link .naver-link {
+    font-size: 1.8rem;
+}
+
+.signin-wrap .login-link .kakao-link {
+    max-width: 45px;
+    min-width: 45px;
 }

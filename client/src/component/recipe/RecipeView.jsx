@@ -288,7 +288,7 @@ const RecipeView = () => {
 
                         <div className='recipe-content'>
                             {
-                                Object.keys(ingre).map((el) => {
+                                Object.keys(ingre).map((el, idx) => {
 
                                     let ingreText = ingre[el].RECP_INGRD_PORTIONS !== "" ? " / " + ingre[el].RECP_INGRD_PORTIONS : "";
                                     let ingreClass = "";
@@ -307,7 +307,7 @@ const RecipeView = () => {
                                             break;
                                     }
 
-                                    return <Link to={"/market/list?seacrh=" + ingre[el].RECP_INGRD_NAME} className={'ingre-link ' + ingreClass}>
+                                    return <Link to={"/market/list?seacrh=" + ingre[el].RECP_INGRD_NAME} className={'ingre-link ' + ingreClass} key={idx}>
                                         {ingre[el].RECP_INGRD_NAME}{ingreText}
                                         <span><i class="fa-solid fa-magnifying-glass"></i></span>
                                     </Link>
@@ -322,12 +322,12 @@ const RecipeView = () => {
                         <h3 className='recipe-title'>레시피 과정</h3>
 
                         <div className='recipe-content'>
-                            {Object.keys(progress).sort().map(el => {
+                            {Object.keys(progress).sort().map((el, idx) => {
                                 let progressImg = progress[el].RECP_ORDER_IMG.trim() ? progress[el].RECP_ORDER_IMG : "/imgs/recipe/recipe_default.png";
                                 let progressTip = progress[el].RECP_ORDER_TIP.trim() ?
                                     <div className='tip'><i class="fa-regular fa-lightbulb"></i> {progress[el].RECP_ORDER_TIP}</div> : null;
 
-                                return <div className='progress-item' data-idx={progress[el].RECP_ORDER_NO}>
+                                return <div className='progress-item' data-idx={progress[el].RECP_ORDER_NO} key={idx}>
                                     <img src={progressImg} alt={progress[el].RECP_CODE + "_" + progress[el].RECP_ORDER_NO} />
 
                                     <div className='progress-detail'>

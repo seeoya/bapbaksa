@@ -1,457 +1,212 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import RecipeListItem from './RecipeListItem';
 
 const RecipeList = () => {
+    const dispatch = useDispatch();
 
-    const [ingreList, setIngreList] = useState({});
-    const [fridgeIngreList, setFridgeIngreList] = useState([]);
-    const [notFridgeIngreList, setNotFridgeIngreList] = useState([]);
+    // 재료
+    const allFridgeList = useSelector((state) => state.fridge.allFridge);
+    const myFridgeList = useSelector((state) => state.fridge.myFridge);
+
+    const [myFridgeState, setMyFridgeState] = useState([]);
+    const [notMyFridgeState, setNotMyFridgeState] = useState([]);
     const [activeIngreList, setActiveIngreList] = useState([]);
 
-    const [cateList, setCateList] = useState(["한식", "중식", "일식"]);
+    // 카테고리
+    // const [regionList, setRegionList] = useSelector((state) => state.recipe.region);
+    // const [categoryList, setCategoryList] = useSelector((state) => state.recipe.category);
+    const [regionList, setRegionList] = useState({});
+    const [categoryList, setCategoryList] = useState({});
+    const [activeRegionList, setActiveRegionList] = useState([]);
     const [activeCateList, setActiveCateList] = useState([]);
+    const [activeDifficultList, setActiveDifficultList] = useState([]);
 
+    // 검색 정렬
+    const [searchString, setSearchString] = useState("전");
+    const [sortState, setSortState] = useState("new");
 
-    const [recipeBasicList, setRecipeBasicList] = useState([
-    ]);
+    // 레시피
+    const [recipeList, setRecipeList] = useState({});
+    const [recipePage, setRecipePage] = useState(0);
+    const [recipePageItemCount, setRecipePageItemCount] = useState(30);
+    const [moreBtnState, setMoreBtnState] = useState(true);
 
     useEffect(() => {
-        initIngreList();
+        initIngreDivine();
+        initCategoryList();
         initRecipeList();
     }, []);
 
     useEffect(() => {
-        sortIngreList();
-    }, [activeIngreList]);
+        initIngreDivine();
+    }, [allFridgeList, myFridgeList]);
 
     useEffect(() => {
-        filterIngre();
-    }, [ingreList]);
+        initRecipeList();
+    }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList]);
 
+    const initCategoryList = async () => {
+        // category
+        await axios
+            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe/category")
+            .then((data) => {
+                setCategoryList(data.data);
+            })
+            .catch((err) => {
+                return { type: "error" };
+            });
 
-    const initIngreList = () => {
-        console.log("init ingre")
-        // #TODO axios 자리. ingre 리스트
-        let dummyIngreList = {
-            111: {
-                RF_NO: 111,
-                RF_NAME: "쌀"
-            },
-            112: {
-                RF_NO: 112,
-                RF_NAME: "찹쌀"
-            },
-            141: {
-                RF_NO: 141,
-                RF_NAME: "콩"
-            },
-            142: {
-                RF_NO: 142,
-                RF_NAME: "팥"
-            },
-            143: {
-                RF_NO: 143,
-                RF_NAME: "녹두"
-            },
-            151: {
-                RF_NO: 151,
-                RF_NAME: "고구마"
-            },
-            152: {
-                RF_NO: 152,
-                RF_NAME: "감자"
-            },
-            211: {
-                RF_NO: 211,
-                RF_NAME: "배추"
-            },
-            212: {
-                RF_NO: 212,
-                RF_NAME: "양배추"
-            },
-            213: {
-                RF_NO: 213,
-                RF_NAME: "시금치"
-            },
-            214: {
-                RF_NO: 214,
-                RF_NAME: "상추"
-            },
-            215: {
-                RF_NO: 215,
-                RF_NAME: "얼갈이배추"
-            },
-            216: {
-                RF_NO: 216,
-                RF_NAME: "갓"
-            },
-            221: {
-                RF_NO: 221,
-                RF_NAME: "수박"
-            },
-            223: {
-                RF_NO: 223,
-                RF_NAME: "오이"
-            },
-            224: {
-                RF_NO: 224,
-                RF_NAME: "애호박"
-            },
-            225: {
-                RF_NO: 225,
-                RF_NAME: "토마토"
-            },
-            226: {
-                RF_NO: 226,
-                RF_NAME: "딸기"
-            },
-            231: {
-                RF_NO: 231,
-                RF_NAME: "무"
-            },
-            232: {
-                RF_NO: 232,
-                RF_NAME: "당근"
-            },
-            233: {
-                RF_NO: 233,
-                RF_NAME: "열무"
-            },
-            241: {
-                RF_NO: 241,
-                RF_NAME: "건고추"
-            },
-            242: {
-                RF_NO: 242,
-                RF_NAME: "풋고추"
-            },
-            243: {
-                RF_NO: 243,
-                RF_NAME: "꽈리고추"
-            },
-            245: {
-                RF_NO: 245,
-                RF_NAME: "청양고추"
-            },
-            246: {
-                RF_NO: 246,
-                RF_NAME: "오이맛고추"
-            },
-            247: {
-                RF_NO: 247,
-                RF_NAME: "양파"
-            },
-            248: {
-                RF_NO: 248,
-                RF_NAME: "대파"
-            },
-            252: {
-                RF_NO: 252,
-                RF_NAME: "쪽파"
-            },
-            253: {
-                RF_NO: 253,
-                RF_NAME: "생강"
-            }
-        };
-
-        setIngreList(dummyIngreList);
-
-        // #TODO axios 자리, 냉장고 보유 재료 NO
-        setFridgeIngreList([111, 212, 213, 221, 253]);
-        setActiveIngreList([]);
+        // region
+        await axios
+            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe/region")
+            .then((data) => {
+                setRegionList(data.data);
+            })
+            .catch((err) => {
+                return { type: "error" };
+            });
     }
 
-    const initRecipeList = () => {
-        let dummyRecipeList = {
-            1: {
-                "RECP_CODE": 1,
-                "RECP_NAME": "나물비빔밥",
-                "RECP_INTRO": "육수로 지은 밥에 야채를 듬뿍 넣은 영양만점 나물비빔밥!",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010001,
-                "RECP_CATEGORY_NAME": "밥",
-                "RECP_TIME": "60분",
-                "RECP_KCAL": "580Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/000200.jpg"
-            },
-            2: {
-                "RECP_CODE": 2,
-                "RECP_NAME": "오곡밥",
-                "RECP_INTRO": "정월대보름에 먹던 오곡밥! 영양을 한그릇에 담았습니다.",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010001,
-                "RECP_CATEGORY_NAME": "밥",
-                "RECP_TIME": "60분",
-                "RECP_KCAL": "338Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/000300.jpg"
-            },
-            3: {
-                "RECP_CODE": 3,
-                "RECP_NAME": "잡채밥",
-                "RECP_INTRO": "잡채밥 한 그릇이면 오늘 저녁 끝! 입 맛 없을 때 먹으면 그만이지요~",
-                "RECP_REGION_CODE": 3020004,
-                "RECP_REGION_NAME": "중국",
-                "RECP_CATEGORY_CODE": 3010001,
-                "RECP_CATEGORY_NAME": "밥",
-                "RECP_TIME": "30분",
-                "RECP_KCAL": "520Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/000400.jpg"
-            },
-            4: {
-                "RECP_CODE": 4,
-                "RECP_NAME": "콩나물밥",
-                "RECP_INTRO": "다이어트에 으뜸인 콩나물밥. 밥 물 넣을때 평소보다 적게 넣는거 잊지마세요!",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010001,
-                "RECP_CATEGORY_NAME": "밥",
-                "RECP_TIME": "40분",
-                "RECP_KCAL": "401Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "초보환영",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/000600.jpg"
-            },
-            5: {
-                "RECP_CODE": 5,
-                "RECP_NAME": "약식",
-                "RECP_INTRO": "집에서도 쉽게 만들어 맛있게 먹을 수 있답니다. 어려워 마시고 만들어 보세요~!",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010013,
-                "RECP_CATEGORY_NAME": "떡/한과",
-                "RECP_TIME": "60분",
-                "RECP_KCAL": "259Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/000800.jpg"
-            },
-            6: {
-                "RECP_CODE": 6,
-                "RECP_NAME": "호박죽",
-                "RECP_INTRO": "호박죽 한 그릇이면 하루가 든든하답니다.",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010001,
-                "RECP_CATEGORY_NAME": "밥",
-                "RECP_TIME": "30분",
-                "RECP_KCAL": "115Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/001300.jpg"
-            },
-            7: {
-                "RECP_CODE": 7,
-                "RECP_NAME": "흑임자죽",
-                "RECP_INTRO": "검은깨를 갈아서 만든 고소함이 가득한 흑임자죽. 남녀노소 모두 사랑하는 맛!",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010001,
-                "RECP_CATEGORY_NAME": "밥",
-                "RECP_TIME": "25분",
-                "RECP_KCAL": "450Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/001400.jpg"
-            },
-            8: {
-                "RECP_CODE": 8,
-                "RECP_NAME": "카레라이스",
-                "RECP_INTRO": "향긋한 카레향이 너무 좋지요. 누구나 좋아하는 만들기도 간편한 음식입니다.",
-                "RECP_REGION_CODE": 3020005,
-                "RECP_REGION_NAME": "동남아시아",
-                "RECP_CATEGORY_CODE": 3010001,
-                "RECP_CATEGORY_NAME": "밥",
-                "RECP_TIME": "30분",
-                "RECP_KCAL": "650Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "초보환영",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/001600.jpg"
-            },
-            9: {
-                "RECP_CODE": 9,
-                "RECP_NAME": "오므라이스",
-                "RECP_INTRO": "각종 채소를 계란 속에 꼭꼭 숨겨 편식하는 아이들도 맛있게 먹어요~",
-                "RECP_REGION_CODE": 3020002,
-                "RECP_REGION_NAME": "서양",
-                "RECP_CATEGORY_CODE": 3010001,
-                "RECP_CATEGORY_NAME": "밥",
-                "RECP_TIME": "30분",
-                "RECP_KCAL": "630Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "초보환영",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/001800.jpg"
-            },
-            10: {
-                "RECP_CODE": 10,
-                "RECP_NAME": "감자수제비",
-                "RECP_INTRO": "쫀득쫀득한 수제비와 담백한 맛의 감자가 이뤄내는 하모니!",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010016,
-                "RECP_CATEGORY_NAME": "만두/면류",
-                "RECP_TIME": "60분",
-                "RECP_KCAL": "410Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "초보환영",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/001900.jpg"
-            },
-            11: {
-                "RECP_CODE": 11,
-                "RECP_NAME": "냉면",
-                "RECP_INTRO": "더운 여름, 살얼음 동동 띄운 시원한 냉면 한그릇 생각나시죠~",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010016,
-                "RECP_CATEGORY_NAME": "만두/면류",
-                "RECP_TIME": "50분",
-                "RECP_KCAL": "630Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/002100.jpg"
-            },
-            12: {
-                "RECP_CODE": 12,
-                "RECP_NAME": "동치미막국수",
-                "RECP_INTRO": "시원한 동치미에 쫄깃한 국수를 말아서 만들어보세요.",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010016,
-                "RECP_CATEGORY_NAME": "만두/면류",
-                "RECP_TIME": "30분",
-                "RECP_KCAL": "400Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/002400.jpg"
-            },
-            13: {
-                "RECP_CODE": 13,
-                "RECP_NAME": "열무김치냉면",
-                "RECP_INTRO": "맛있게 담근 열무김치에 냉면을 말아 먹어 보세요~ 새콤달콤 끝내줍니다!",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010016,
-                "RECP_CATEGORY_NAME": "만두/면류",
-                "RECP_TIME": "25분",
-                "RECP_KCAL": "625Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/002800.jpg"
-            },
-            14: {
-                "RECP_CODE": 14,
-                "RECP_NAME": "채소국수",
-                "RECP_INTRO": "갖가지 야채를 듬뿍 넣어서 만든 요리로 출출할 때 간식거리로 아주 좋답니다.",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010016,
-                "RECP_CATEGORY_NAME": "만두/면류",
-                "RECP_TIME": "30분",
-                "RECP_KCAL": "460Kcal",
-                "RECP_SERVIN": "2인분",
-                "RECP_DIFFICULT": "초보환영",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/002900.jpg"
-            },
-            15: {
-                "RECP_CODE": 15,
-                "RECP_NAME": "해물국수",
-                "RECP_INTRO": "해물로 시원한 국물에 국수를 말아 드셔보세요~",
-                "RECP_REGION_CODE": 3020001,
-                "RECP_REGION_NAME": "한식",
-                "RECP_CATEGORY_CODE": 3010016,
-                "RECP_CATEGORY_NAME": "만두/면류",
-                "RECP_TIME": "40분",
-                "RECP_KCAL": "530Kcal",
-                "RECP_SERVIN": "4인분",
-                "RECP_DIFFICULT": "보통",
-                "RECP_MAIN_IMG": "http://file.okdab.com/UserFiles/searching/recipe/003000.jpg"
-            }
-        };
+    const initRecipeList = async () => {
+        console.log("recipe init")
 
-        setRecipeBasicList(dummyRecipeList);
+
+        console.log(activeDifficultList);
+
+        await axios
+            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
+                params: {
+                    type: "list",
+                    search: searchString,
+                    sort: sortState,
+                    region: activeRegionList,
+                    food: activeIngreList,
+                    foodinclu: 1,
+                    difficult: activeDifficultList,
+                    category: activeCateList,
+                    page: recipePage,
+                    pagePerItem: recipePageItemCount,
+                },
+            })
+            .then((data) => {
+                console.log(data.data);
+
+                // #TODO 페이징 추가 후 반복문 제거
+                // let newList = {}
+
+                // for (let i = 0; i < (recipePageItemCount * recipePage); i++) {
+                //     let thisRecipeNo = Object.keys(data.data)[i];
+
+                //     if (thisRecipeNo) {
+                //         newList[thisRecipeNo] = data.data[thisRecipeNo];
+                //     } else {
+                //         setMoreBtnState(false)
+                //     }
+                // }
+
+                // console.log("newList", newList);
+
+                // setRecipeList(newList);
+                setRecipeList(data.data);
+            })
+            .catch((err) => {
+                return { type: "error" };
+            });
     }
 
-    const sortIngreList = () => {
-        let finalList = [];
-        let notActiveList = [];
-        let activeList = [];
+    const initIngreDivine = () => {
+        if (allFridgeList && myFridgeList) {
+            let tmpList = [];
+            let tmpList2 = myFridgeList;
 
-        let lists = [[fridgeIngreList, setFridgeIngreList], [notFridgeIngreList, setNotFridgeIngreList]];
+            Object.keys(allFridgeList).map((el) => {
+                if (!myFridgeList.includes(parseInt(el))) { tmpList.push(parseInt(el)) };
+            })
 
-        lists.map(list => {
-            if (list[0].length > 0) {
-                finalList = [];
-                notActiveList = [];
-                activeList = [];
+            tmpList.sort((a, b) => {
+                return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
+            });
+            tmpList2.sort((a, b) => {
+                return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
+            });
 
-                list[0].map((el) => {
-                    if (activeIngreList.includes(el)) {
-                        activeList.push(el);
-                    } else {
-                        notActiveList.push(el);
-                    }
-                })
+            setNotMyFridgeState(tmpList);
+            setMyFridgeState(tmpList2);
 
-                activeList.sort((a, b) => {
-                    return ingreList[a].RF_NAME > ingreList[b].RF_NAME ? 1 : ingreList[a].RF_NAME < ingreList[b].RF_NAME ? -1 : 0;
-                });
-                notActiveList.sort((a, b) => {
-                    return ingreList[a].RF_NAME > ingreList[b].RF_NAME ? 1 : ingreList[a].RF_NAME < ingreList[b].RF_NAME ? -1 : 0;
-                });
-
-                finalList = [...activeList, ...notActiveList];
-                list[1](finalList);
-            }
-        })
+            // #TODO 나중에 다시 처리
+            // initDefaultActive();
+        }
     }
 
-    const ingreBtnClickEvent = async (e) => {
-        let item = e.target;
+    const initDefaultActive = () => {
+        // #TODO 나중에 다시 처리
+        if (myFridgeList) {
+            console.log(11111);
+            myFridgeList.map((el) => {
+                console.log(22222, el)
+                ingreBtnActiveEvent(el);
+            })
+        }
+    }
 
-        if (item.classList.contains("on")) {
+    const ingreBtnActiveEvent = (no) => {
+        console.log("active", no);
+        if (activeIngreList.indexOf(parseInt(no)) > -1) {
             let list = activeIngreList.filter((el) => {
-                return el !== parseInt(item.dataset.idx)
+                return parseInt(el) !== parseInt(no)
             });
 
             setActiveIngreList(list);
         } else {
-            setActiveIngreList([...activeIngreList, parseInt(item.dataset.idx)]);
+            setActiveIngreList([...activeIngreList, parseInt(no)]);
         }
     }
 
-    const filterIngre = () => {
-        let tmp = [];
+    const cateBtnActiveEvent = (no) => {
+        console.log(this);
 
-        Object.keys(ingreList).map((el) => {
-            if (!fridgeIngreList.includes(parseInt(el))) {
-                tmp.push(parseInt(el));
-            }
-        });
-
-        setNotFridgeIngreList(tmp);
-    }
-
-    const cateBtnClickEvent = (e) => {
-        // 아직 미작업
-        let item = e.target;
-
-        if (item.classList.contains("on")) {
+        if (activeCateList.indexOf(parseInt(no)) > -1) {
             let list = activeCateList.filter((el) => {
-                return el !== parseInt(item.dataset.idx)
+                return el !== parseInt(no)
             });
 
             setActiveCateList(list);
         } else {
-            setActiveCateList([...activeCateList, parseInt(item.dataset.idx)]);
+            setActiveCateList([...activeCateList, parseInt(no)]);
         }
+
+    }
+
+    const regionBtnActiveEvent = (no) => {
+        if (activeRegionList.indexOf(parseInt(no)) > -1) {
+            let list = activeRegionList.filter((el) => {
+                return el !== parseInt(no)
+            });
+
+            setActiveRegionList(list);
+        } else {
+            setActiveRegionList([...activeRegionList, parseInt(no)]);
+        }
+    }
+
+    const difficultBtnActiveEvent = (text) => {
+        if (activeDifficultList.indexOf(text) > -1) {
+            let list = activeDifficultList.filter((el) => {
+                return el !== text
+            });
+
+            setActiveDifficultList(list);
+        } else {
+            setActiveDifficultList([...activeDifficultList, text]);
+        }
+    }
+
+    const moreBtnClickEvent = async () => {
+        console.log('more');
+
+        setRecipePage((prev) => { return prev + 1 })
     }
 
     return (
@@ -461,49 +216,83 @@ const RecipeList = () => {
             <div className='content'>
 
                 <div className='recipe-filter'>
-                    <div>내 냉장고 재료</div>
-                    <div className='filter-wrap fridge-ingre'>
-                        {fridgeIngreList.map((el, idx) => {
-                            return <button type='button' data-idx={ingreList[el].RF_NO} className={activeIngreList.includes(ingreList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={(e) => ingreBtnClickEvent(e)} key={idx}>{ingreList[el].RF_NAME}</button>
-                        })}
+                    <div>
+                        <div className='filter-title'>내 냉장고 재료</div>
+                        <div className='filter-wrap fridge-ingre'>
+                            {
+                                myFridgeState ?
+                                    myFridgeState.map((el, idx) => {
+                                        return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={() => ingreBtnActiveEvent(allFridgeList[el].RF_NO)}>{allFridgeList[el].RF_NAME}</button>
+                                    })
+                                    : null
+                            }
+                        </div>
                     </div>
 
-                    <div>추가 재료</div>
-                    <div className='filter-wrap ingre'>
-                        {notFridgeIngreList.map((el, idx) => {
-                            return <button type='button' data-idx={ingreList[el].RF_NO} className={activeIngreList.includes(ingreList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={(e) => ingreBtnClickEvent(e)} key={idx}>{ingreList[el].RF_NAME}</button>
-                        })}
+                    <div>
+                        <div className='filter-title'>추가 재료</div>
+                        <div className='filter-wrap ingre'>
+                            {
+                                notMyFridgeState ?
+                                    notMyFridgeState.map((el, idx) => {
+                                        return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={() => ingreBtnActiveEvent(allFridgeList[el].RF_NO)}>{allFridgeList[el].RF_NAME}</button>
+                                    }) : null
+                            }
+                        </div>
                     </div>
 
-                    <div>카테고리</div>
-                    <div className='filter-wrap cate'>
-                        {cateList.map((el, idx) => {
-                            return <button type='button' data-idx={el} className={'btn cate'} onClick={(e) => cateBtnClickEvent(e)} key={idx}>{el}</button>
-                        })}
+                    <div>
+                        <div className='filter-title'>카테고리</div>
+                        <div className='filter-wrap cate'>
+                            {
+                                categoryList ?
+                                    Object.keys(categoryList).map((el, idx) => {
+                                        return <button type='button' data-idx={categoryList[el].RECP_CATEGORY_CODE} key={idx} className={activeCateList.includes(categoryList[el].RECP_CATEGORY_CODE) ? "btn cate on" : 'btn cate'} onClick={() => cateBtnActiveEvent(categoryList[el].RECP_CATEGORY_CODE)} >{categoryList[el].RECP_CATEGORY_NAME}</button>
+                                    }) : null
+                            }
+                        </div>
+                    </div>
+
+                    <div className='half'>
+                        <div className='filter-title'>나라별</div>
+                        <div className='filter-wrap region'>
+                            {
+                                regionList ?
+                                    Object.keys(regionList).map((el, idx) => {
+                                        return <button type='button' data-idx={regionList[el].RECP_REGION_CODE} key={idx} className={activeRegionList.includes(regionList[el].RECP_REGION_CODE) ? "btn region on" : 'btn region'} onClick={() => regionBtnActiveEvent(regionList[el].RECP_REGION_CODE)} >{regionList[el].RECP_REGION_NAME}</button>
+                                    }) : null
+                            }
+                        </div>
+                    </div>
+
+                
+
+                    <div className='half'>
+                        <div className='filter-title'>난이도별</div>
+                        <div className='filter-wrap difficult'>
+                            {
+                                ["초보환영", "보통", "어려움"].map((el, idx) => {
+                                    return <button type='button' data-idx={el} key={idx} className={activeDifficultList.includes(el) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el)} >{el}</button>
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
 
                 <div className='recipe-list'>
                     {
-                        Object.keys(recipeBasicList).map((el) => {
-                            return <Link to={"/recipe/view/" + el} className='recipe-item'>
-                                <div className='recipe-info'>
-                                    <div>{recipeBasicList[el].RECP_CODE}</div>
-                                    <img src={recipeBasicList[el].RECP_MAIN_IMG} alt={recipeBasicList[el].RECP_NAME} />
-                                    <div>{recipeBasicList[el].RECP_NAME}</div>
 
-                                    <div className=''>
-                                        <div>{recipeBasicList[el].RECP_REGION_NAME}/{recipeBasicList[el].RECP_CATEGORY_NAME}</div>
-                                        <div>{recipeBasicList[el].RECP_KCAL}</div>
-                                        <div>{recipeBasicList[el].RECP_SERVIN}</div>
-                                        <div>{recipeBasicList[el].RECP_TIME}/{recipeBasicList[el].RECP_DIFFICULT} 난이도</div>
-                                    </div>
-                                </div>
-                                <div className='recipe-intro'>{recipeBasicList[el].RECP_INTRO}</div>
-                            </Link>
-                        })
+                        recipeList ?
+                            Object.keys(recipeList).map((el, idx) => {
+                                return <RecipeListItem itemNo={el} idx={idx} recipeList={recipeList} />
+                            }) : null
                     }
 
+                    {
+                        moreBtnState ?
+                            <button type='button' className='btn main btn-more' onClick={moreBtnClickEvent}>더보기</button>
+                            : null
+                    }
 
                 </div>
 

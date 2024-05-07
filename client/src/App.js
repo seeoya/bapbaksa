@@ -1,63 +1,49 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import LayoutRouter from "./component/LayoutRouter";
-import axios from "axios";
-
+import { loadFridgeAction } from "./redux/actions/fridge_action";
 
 function App() {
-
-    useEffect(() => {
-        console.log('useEffect()');
-        
-    });
-
-    const callingAxios = () => {
-        axios.get(process.env.REACT_APP_REST_SERVER_URL)
-            .then((result) => {
-                console.log("result", result.data);
-            }).catch(error => {
-                console.log("error", error)
-            })
-    }
-
-    const callingAxios1 = () => {
-        axios.get(process.env.REACT_APP_SERVER_URL)
-            .then((result) => {
-                console.log("result", result.data);
-            }).catch(error => {
-                console.log("error", error)
-            })
-    }
+    const dispatch = useDispatch();
 
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
-        setScrollClass();
-        scrollEvent();
+        console.log("App.js");
+        initBapbaksa();
     }, []);
 
-    const scrollEvent = () => {
+    const initBapbaksa = async () => {
+        // 스크롤 이벤트
+        initScrollEvent();
+        initAllFridge();
+    };
+
+    const initScrollEvent = () => {
         document.addEventListener("scroll", () => {
-            setScrollClass();
+            if (window.scrollY > 0) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
         });
     };
 
-    const setScrollClass = () => {
-        if (window.scrollY > 0) {
-            setIsScrolled(true);
-        } else {
-            setIsScrolled(false);
-        }
+    const initAllFridge = async () => {
+        // 냉장고 전체 재료 세팅
+        console.log("initAllFridge");
+        dispatch(await loadFridgeAction());
     };
 
     return (
         <>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <div className="wrap">
-                    <LayoutRouter />               
+                    <LayoutRouter />
                 </div>
             </BrowserRouter>
-        </> 
+        </>
     );
 }
 

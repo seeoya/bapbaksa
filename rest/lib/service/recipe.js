@@ -12,11 +12,16 @@ const recipe = {
         // 재료 필터 // 1인지 2인지
 
         let search = "";
-        let sort = "";
         let time = "";
-        let limit = 0;
+        let region = "";
+        let category = "";
+        let difficult = "";
+        let sort = "";
         let view = "";
+
+        let limit = 0;
         let offset = params.page * limit;
+
         let state = [];
 
         let table = "RECIPE_BASIC";
@@ -57,40 +62,29 @@ const recipe = {
 
         // 걸리는 시간 분류
         if (params.time) {
-            switch (params.time) {
-                case "1":
-                    time = "RECP_TIME < 10";
-                    break;
-                case "10":
-                    time = "RECP_TIME >= 10 AND RECP_TIME < 20";
-                    break;
-                case "20":
-                    time = "RECP_TIME >= 20 AND RECP_TIME < 30";
-                    break;
-                case "30":
-                    time = "RECP_TIME >= 30 AND RECP_TIME < 40";
-                    break;
-                case "40":
-                    time = "RECP_TIME >= 40 AND RECP_TIME < 50";
-                    break;
-                case "50":
-                    time = "RECP_TIME >= 50 AND RECP_TIME < 60";
-                    break;
-                case "60":
-                    time = "RECP_TIME >= 60";
-                    break;
+            if (params.time.length > 1) {
+                // 여러 조건을 OR로 연결
+                time = `${params.time.map((_, i) => `RECP_TIME = ?`).join(' OR ')}`;
+                placeholders = params.time;  // 모든 값을 매개변수로 사용
+            } else {
+                // 단일 조건
+                time = `RECP_TIME = ?`;
+                placeholders = params.time[0];
             }
+
+            // 매개변수 추가
+            state.push(...placeholders);
         }
 
         // 지역 음식 분류
         if (params.region) {
             if (params.region.length > 1) {
                 // 여러 조건을 OR로 연결
-                query = `${params.food.map((_, i) => `RECP_REGION_NAME = ?`).join(' OR ')}`;
+                region = `${params.food.map((_, i) => `RECP_REGION_NAME = ?`).join(' OR ')}`;
                 placeholders = params.region;  // 모든 값을 매개변수로 사용
             } else {
                 // 단일 조건
-                query = "RECP_REGION_NAME = ?";
+                region = `RECP_REGION_NAME = ?`;
                 placeholders = params.region[0];
             }
 
@@ -102,11 +96,11 @@ const recipe = {
         if (params.category) {
             if (params.category.length > 1) {
                 // 여러 조건을 OR로 연결
-                query = `${params.food.map((_, i) => `RECP_CATEGORY_CODE = ?`).join(' OR ')}`;
+                category = `${params.food.map((_, i) => `RECP_CATEGORY_CODE = ?`).join(' OR ')}`;
                 placeholders = params.category;  // 모든 값을 매개변수로 사용
             } else {
                 // 단일 조건
-                query = "RECP_CATEGORY_CODE = ?";
+                category = "RECP_CATEGORY_CODE = ?";
                 placeholders = params.category[0];
             }
 
@@ -116,17 +110,18 @@ const recipe = {
 
         // 난이도 분류
         if (params.difficult) {
-            switch (params.difficult) {
-                case "0":
-                    time = "RECP_DIFFICULT = '초보환영'";
-                    break;
-                case "1":
-                    time = "RECP_DIFFICULT = '보통'";
-                    break;
-                case "2":
-                    time = "RECP_DIFFICULT = '어려움'";
-                    break;
+            if (params.difficult.length > 1) {
+                // 여러 조건을 OR로 연결
+                difficult = `${params.food.map((_, i) => `RECP_REGION_NAME = ?`).join(' OR ')}`;
+                placeholders = params.difficult;  // 모든 값을 매개변수로 사용
+            } else {
+                // 단일 조건
+                difficult = `RECP_REGION_NAME = ?`;
+                placeholders = params.difficult[0];
             }
+
+            // 매개변수 추가
+            state.push(...placeholders);
         }
 
         // 최신순, 요리시간 분류

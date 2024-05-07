@@ -19,7 +19,7 @@ const recipe = {
         let sort = "";
         let view = "";
 
-        let limit = 0;
+        let limit = params.pagePerItem;
         let offset = params.page * limit;
 
         let state = [];
@@ -145,21 +145,9 @@ const recipe = {
 
         // 페이지 및 더보기
         if (params.page === 0) {
-            if (params.select === 1) {
-                limit = 30;
-                view = `LIMIT ${limit}`;
-            } else {
-                limit = 20;
-                view = `LIMIT ${limit}`;
-            }
+            sql = `LIMIT ${limit} OFFSET 0`;
         } else {
-            if (params.select === 1) {
-                limit = 30;
-                sql = `LIMIT ${limit} OFFSET ?`;
-            } else {
-                limit = 20;
-                sql = `LIMIT ${limit} OFFSET ?`;
-            }
+            sql = `LIMIT ${limit} OFFSET ?`;
             state.push(offset);
         }
 

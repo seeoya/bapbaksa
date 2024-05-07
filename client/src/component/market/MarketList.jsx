@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import { getAllProduct } from "../../redux/actions/market";
 import { useDispatch, useSelector } from 'react-redux';
 import { twelveProduct } from "../../redux/actions/market";
 import axios from "axios";
-import { SERVER_URL } from "../../util/url";
 
 const MarketList = () => {
     const dispatch = useDispatch();
@@ -69,7 +67,7 @@ const MarketList = () => {
 
     async function axios_getDate() {
         try {
-            const response = await axios.get(`${SERVER_URL.TARGET_URL()}/product/getNewDate`);
+            const response = await axios.get(process.env.REACT_APP_REST_SERVER_URL + "/product/getNewDate");
             setNewProdDate(response.data[0].PROD_YMD);
 
         } catch (error) {

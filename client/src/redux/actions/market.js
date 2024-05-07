@@ -1,11 +1,7 @@
 import axios from "axios";
-import { SERVER_URL } from "../../util/url";
 
 export const twelveProduct = async (moreList, newPordDate, number, search, page) => {
     let list = '';
-
-
-
 
     await axios({
         url: process.env.REACT_APP_REST_SERVER_URL + "/product/twelveProduct",

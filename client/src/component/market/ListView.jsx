@@ -2,7 +2,6 @@ import ApexCharts from 'apexcharts';
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { SERVER_URL } from '../../util/url';
 
 const ListView = () => {
     const { no } = useParams();
@@ -113,7 +112,7 @@ const ListView = () => {
 
     async function axios_getProdInfo() {
         try {
-            const response = await axios.post(`${SERVER_URL.TARGET_URL()}/product/postSelectedProduct`, {
+            const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/postSelectedProduct", {
                 'PROD_NO' : num,
                 'PROD_SPCS_CODE' : code
             })
@@ -126,7 +125,7 @@ const ListView = () => {
 
     async function axiox_getChartData() {
         try {
-            const response = await axios.post(`${SERVER_URL.TARGET_URL()}/product/getChartData`, {
+            const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/getChartData", {
                 'PROD_CODE': prodInfo.PROD_CODE,
                 'PROD_SPCS_CODE': prodInfo.PROD_SPCS_CODE
             });

@@ -1,93 +1,90 @@
-const DB = require('../db/db');
+const DB = require("../db/db");
 
 const recipe = {
     getAllBasicRecipe: (req, res) => {
-        console.log('/allBasicRecipe');
-        DB.query(`SELECT * FROM RECIPE_BASIC`,
-            (error, result) => {
-                console.log('1234567');
-                if (error) {
-                    console.log(error);
-                    res.json({
-                        'RF_NO': "000",
-                    });
-                } else {
-                    console.log(result);
+        console.log("/allBasicRecipe");
+        DB.query(`SELECT * FROM RECIPE_BASIC`, (error, result) => {
+            console.log("1234567");
+            if (error) {
+                console.log(error);
+                res.json({
+                    RF_NO: "000",
+                });
+            } else {
+                console.log(result);
 
-                    let recpDict = {};
-                    result.forEach(function (item) {
-                        recpDict[item.RECP_CODE] = item;
-                    });
+                let recpDict = {};
+                result.forEach(function (item) {
+                    recpDict[item.RECP_CODE] = item;
+                });
 
-                    res.json(recpDict);
-                }
-            });
+                res.json(recpDict);
+            }
+        });
     },
     getAllRecipeIngredient: (req, res) => {
-        console.log('/allRecipeIngredient');
-        DB.query(`SELECT * FROM RECIPE_INGREDIENT`,
-            (error, result) => {
-                console.log('1234567');
-                if (error) {
-                    console.log(error);
-                    res.json({
-                        'RECP_CODE': "000",
-                    });
-                } else {
-                    console.log(result);
+        console.log("/allRecipeIngredient");
+        DB.query(`SELECT * FROM RECIPE_INGREDIENT`, (error, result) => {
+            console.log("1234567");
+            if (error) {
+                console.log(error);
+                res.json({
+                    RECP_CODE: "000",
+                });
+            } else {
+                console.log(result);
 
-                    let recpDict = {};
-                    result.forEach(function (item) {
-                        recpDict[item.RECP_CODE] = item;
-                    });
+                let recpDict = {};
+                result.forEach(function (item) {
+                    recpDict[item.RECP_CODE] = item;
+                });
 
-                    res.json(recpDict);
-                }
-            });
+                res.json(recpDict);
+            }
+        });
     },
     getAllRecipeProgress: (req, res) => {
-        console.log('/allRecipeProgress');
-        DB.query(`SELECT * FROM RECIPE_PROGRESS`,
-            (error, result) => {
-                console.log('1234567');
-                if (error) {
-                    console.log(error);
-                    res.json({
-                        'RECP_CODE': "000",
-                    });
-                } else {
-                    console.log(result);
+        console.log("/allRecipeProgress");
+        DB.query(`SELECT * FROM RECIPE_PROGRESS`, (error, result) => {
+            console.log("1234567");
+            if (error) {
+                console.log(error);
+                res.json({
+                    RECP_CODE: "000",
+                });
+            } else {
+                console.log(result);
 
-                    const recipeDict = {};
+                const recipeDict = {};
 
-                    result.forEach(step => {
-                        console.log(step);
-                        const recpCode = step["RECP_CODE"];
-                        //351 
+                result.forEach((step) => {
+                    console.log(step);
+                    const recpCode = step["RECP_CODE"];
+                    //351
 
+                    if (!recipeDict[recpCode]) {
+                        recipeDict[recpCode] = {};
+                    }
 
-                        if (!recipeDict[recpCode]) {
-                            recipeDict[recpCode] = {};
-                        }
+                    recipeDict[recpCode][step.RECP_ORDER_NO] = step;
+                });
 
-                        recipeDict[recpCode][step.RECP_ORDER_NO] = step;
-                    });
+                console.log(recipeDict);
 
-                    console.log(recipeDict);
-
-                    res.json(recipeDict);
-                    // res.json();
-                }
-            });
+                res.json(recipeDict);
+                // res.json();
+            }
+        });
     },
     getSelectRecipeProgress: async (req, res) => {
-        console.log('/allRecipeProgress');
+        console.log("/allRecipeProgress");
 
         let query = req.query;
 
         console.log("query : ", query);
 
-        DB.query(`
+        DB.query(
+            `
         SELECT * FROM 
         RECIPE_BASIC 
         WHERE RECP_CODE = ?`,
@@ -96,7 +93,7 @@ const recipe = {
                 if (error) {
                     console.log(error);
                     res.json({
-                        'RECP_CODE': "000",
+                        RECP_CODE: "000",
                     });
                 } else {
                     // 기본정보
@@ -105,55 +102,63 @@ const recipe = {
 
                     console.log("basic", basic);
 
-                    DB.query("SELECT * FROM RECIPE_INGREDIENT WHERE RECP_CODE = ?", [query.recipe], (error2, ingreList) => {
+                    DB.query(
+                        "SELECT * FROM RECIPE_INGREDIENT WHERE RECP_CODE = ?",
+                        [query.recipe],
+                        (error2, ingreList) => {
+                            console.log("ingre", ingreList);
+                            DB.query(
+                                "SELECT * FROM RECIPE_PROGRESS  WHERE RECP_CODE = ?",
+                                [query.recipe],
+                                (error3, progressList) => {
+                                    console.log("progress", progressList);
 
-                        console.log("ingre", ingreList);
-                        DB.query("SELECT * FROM RECIPE_PROGRESS  WHERE RECP_CODE = ?", [query.recipe], (error3, progressList) => {
+                                    let ingreArr = [];
+                                    ingreList.map((ingre) => {
+                                        ingreArr.push({
+                                            RECP_INGRD_NAME: ingre.RECP_INGRD_NAME,
+                                            RECP_INGRD_CODE: ingre.RECP_INGRD_CODE,
+                                            RECP_INGRD_PORTIONS: ingre.RECP_INGRD_PORTIONS,
+                                            RECP_INGRD_TYPE: ingre.RECP_INGRD_TYPE,
+                                            RECP_INGRED_TYPE_NAME: ingre.RECP_INGRED_TYPE_NAME,
+                                        });
+                                    });
 
-                            console.log("progress", progressList);
+                                    let progressObj = {};
+                                    progressList.map((progress) => {
+                                        progressObj[progress.RECP_ORDER_NO] = progress;
+                                    });
 
-                            let ingreArr = [];
-                            ingreList.map((ingre) => {
-                                ingreArr.push({
-                                    RECP_INGRD_NAME: ingre.RECP_INGRD_NAME,
-                                    RECP_INGRD_CODE: ingre.RECP_INGRD_CODE,
-                                    RECP_INGRD_PORTIONS: ingre.RECP_INGRD_PORTIONS,
-                                    RECP_INGRD_TYPE: ingre.RECP_INGRD_TYPE,
-                                    RECP_INGRED_TYPE_NAME: ingre.RECP_INGRED_TYPE_NAME,
-                                })
-                            })
+                                    let basicObj = {};
+                                    console.log(basic[0].RECP_CODE);
 
-                            let progressObj = {};
-                            progressList.map((progress) => {
-                                progressObj[progress.RECP_ORDER_NO] = progress
-                            })
+                                    basicObj = basic[0];
 
-                            let basicObj = {}
-                            console.log(basic[0].RECP_CODE);
+                                    basicObj["RECP_INGRD"] = ingreArr;
+                                    basicObj["RECP_PROGRESS"] = progressObj;
 
-                            basicObj = basic[0];
-
-                            basicObj["RECP_INGRD"] = ingreArr;
-                            basicObj["RECP_PROGRESS"] = progressObj;
-
-                            // console.log(result);
-                            res.json(basicObj);
-                        })
-                    })
+                                    // console.log(result);
+                                    res.json(basicObj);
+                                }
+                            );
+                        }
+                    );
                 }
-            });
+            }
+        );
     },
     view: (req, res) => {
-        console.log('/view');
+        console.log("/view");
         let query = req.query;
-        DB.query(`SELECT * FROM RECIPE_BASIC ORDER BY RECP_CODE BY ASC LIMIT 20 OFFSET (? - 1) * 20`,
+        DB.query(
+            `SELECT * FROM RECIPE_BASIC ORDER BY RECP_CODE BY ASC LIMIT 20 OFFSET (? - 1) * 20`,
             [query.no],
             (error, result) => {
-                console.log('1234567');
+                console.log("1234567");
                 if (error) {
                     console.log(error);
                     res.json({
-                        'RECP_CODE': "000",
+                        RECP_CODE: "000",
                     });
                 } else {
                     console.log(result);
@@ -165,7 +170,8 @@ const recipe = {
 
                     res.json(recpDict);
                 }
-            });
+            }
+        );
     },
     loadList: (req, res) => {
         console.log("loadList");
@@ -179,14 +185,14 @@ const recipe = {
 
         let search = "";
         let sort = "";
-        let filter = ""
+        let filter = "";
         let state = [];
 
         let table = "RECIPE_BASIC";
 
         if (params.search) {
-            search = `RECP_NAME LIKE '%?%'`;
-            state.push(params.search);
+            search = `RECP_NAME LIKE ? `;
+            state.push(`%${params.search}%`);
         }
 
         if (params.food) {
@@ -251,7 +257,7 @@ const recipe = {
             if (error) {
                 console.log(error);
                 res.json({
-                    'RECP_CODE': "000",
+                    RECP_CODE: "000",
                 });
             } else {
                 console.log(result);
@@ -268,17 +274,37 @@ const recipe = {
     loadView: (req, res) => {
         console.log("loadView");
         let params = req.query;
-        DB.query(`SELECT * FROM RECIPE_BASIC`,
-            (error, result) => {
-                if (error) {
-                    console.log(error);
-                    res.json({
-                        'RECP_CODE': "000",
-                    });
-                } else {
-                    // if (params.)
-                }
-            })
+        DB.query(`SELECT * FROM RECIPE_BASIC`, (error, result) => {
+            if (error) {
+                console.log(error);
+                res.json({
+                    RECP_CODE: "000",
+                });
+            } else {
+                // if (params.)
+            }
+        });
+    },
+    getCategoryList: (req, res) => {
+        DB.query(`SELECT * FROM RECIPE_CATEGORY`, (error, result) => {
+            if (error) {
+                console.log(error);
+                res.json();
+            } else {
+                res.json(result);
+            }
+        });
+    },
+    getRegionList: (req, res) => {
+        DB.query(`SELECT * FROM RECIPE_REGION`, (error, result) => {
+            if (error) {
+                console.log(error);
+                res.json();
+            } else {
+                console.log(result);
+                res.json(result);
+            }
+        });
     }
-}
+};
 module.exports = recipe;

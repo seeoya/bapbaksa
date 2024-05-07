@@ -44,4 +44,14 @@ router.get("/view", (req, res) => {
     recipe.view(req, res);
 });
 
+router.get("/category", (req, res) => {
+    console.log("/category");
+    recipe.getCategoryList(req, res);
+});
+
+router.get("/region", (req, res) => {
+    console.log("/region");
+    recipe.getRegionList(req, res);
+});
+
 module.exports = router;

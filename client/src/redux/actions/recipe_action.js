@@ -1,16 +1,18 @@
-// import axios from "axios";
+import axios from "axios";
 
-// export const loadFridgeAction = async () => {
-//     let result = {};
+export const loadRecipeAction = async (param) => {
+    let result = {};
 
-//     await axios
-//         .get(process.env.REACT_APP_REST_SERVER_URL + "/refrigeator")
-//         .then((data) => {
-//             result = data.data;
-//         })
-//         .catch((err) => {
-//             return { type: "error" };
-//         });
+    await axios
+        .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
+            params: param,
+        })
+        .then((data) => {
+            result = data.data;
+        })
+        .catch((err) => {
+            return { type: "error" };
+        });
 
-//     return { type: "set_all_fridge", data: result };
-// };
+    return { type: "load_recipe", data: result };
+};

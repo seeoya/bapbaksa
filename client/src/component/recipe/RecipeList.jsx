@@ -24,13 +24,13 @@ const RecipeList = () => {
     const [activeDifficultList, setActiveDifficultList] = useState([]);
 
     // 검색 정렬
-    const [searchString, setSearchString] = useState("전");
-    const [sortState, setSortState] = useState("new");
+    const [searchString, setSearchString] = useState("");
+    const [sortState, setSortState] = useState("old");
 
     // 레시피
     const [recipeList, setRecipeList] = useState({});
     const [recipePage, setRecipePage] = useState(0);
-    const [recipePageItemCount, setRecipePageItemCount] = useState(30);
+    const [recipePageItemCount, setRecipePageItemCount] = useState(20);
     const [moreBtnState, setMoreBtnState] = useState(true);
 
     useEffect(() => {
@@ -71,9 +71,6 @@ const RecipeList = () => {
 
     const initRecipeList = async () => {
         console.log("recipe init")
-
-
-        console.log(activeDifficultList);
 
         await axios
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
@@ -265,8 +262,6 @@ const RecipeList = () => {
                         </div>
                     </div>
 
-                
-
                     <div className='half'>
                         <div className='filter-title'>난이도별</div>
                         <div className='filter-wrap difficult'>
@@ -293,7 +288,6 @@ const RecipeList = () => {
                             <button type='button' className='btn main btn-more' onClick={moreBtnClickEvent}>더보기</button>
                             : null
                     }
-
                 </div>
 
             </div>

@@ -28,8 +28,8 @@ const MyFridge = () => {
             <div className='content'>
                 {
                     allFridgeList ?
-                        allFridgeList.map((el, idx) => {
-                            return <div key={idx}>{el.RF_NO} : {el.RF_NAME}</div>
+                        Object.keys(allFridgeList).map((el, idx) => {
+                            return <div key={idx}>{allFridgeList[el].RF_NO} : {allFridgeList[el].RF_NAME}</div>
                         })
                         :
                         <div>냉장고에 재료가 없습니다.</div>

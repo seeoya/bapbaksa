@@ -4,10 +4,10 @@ export const fridge = (state = {}, action) => {
             console.log({ ...state });
             return { ...state, name: "가나다" };
 
-        case "set_all_fridge":
+        case "load_all_fridge":
             return { ...state, allFridge: action.data };
 
-        case "set_my_fridge":
+        case "load_my_fridge":
             return { ...state, myFridge: action.data };
 
         case "insert_my_fridge":
@@ -17,6 +17,7 @@ export const fridge = (state = {}, action) => {
             return { ...state, abc: "12345" };
 
         case "error":
+            
         default:
             console.log("REDUCER ACTION ERROR");
             return { ...state };

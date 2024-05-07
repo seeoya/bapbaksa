@@ -32,6 +32,7 @@ function App() {
 
     const initAllFridge = async () => {
         // 냉장고 전체 재료 세팅
+        console.log("initAllFridge");
         dispatch(await loadFridgeAction());
     };
 

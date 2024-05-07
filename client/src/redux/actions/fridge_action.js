@@ -14,7 +14,7 @@ export const loadFridgeAction = async () => {
 
     console.log("fridge", result);
 
-    return { type: "set_all_fridge", data: result };
+    return { type: "load_all_fridge", data: result };
 };
 
 export const loadMyFridgeAction = async (uNo) => {
@@ -37,5 +37,5 @@ export const loadMyFridgeAction = async (uNo) => {
 
     console.log("myfridge", list);
 
-    return { type: "set_my_fridge", data: list };
+    return { type: "load_my_fridge", data: list };
 };

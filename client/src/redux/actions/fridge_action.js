@@ -12,8 +12,6 @@ export const loadFridgeAction = async () => {
             return { type: "error" };
         });
 
-    console.log("fridge", result);
-
     return { type: "load_all_fridge", data: result };
 };
 

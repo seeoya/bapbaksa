@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
 const RecipeView = () => {
 
     let url_params = useParams().no;
+    const myFridgeList = useSelector((state) => state.fridge.myFridge);
 
     const [recipe, setRecipe] = useState({});
     const [progress, setProgress] = useState({});
@@ -86,7 +88,7 @@ const RecipeView = () => {
                             {
                                 Object.keys(ingre).map((el, idx) => {
 
-                                    let ingreText = ingre[el].RECP_INGRD_PORTIONS !== "" ? " / " + ingre[el].RECP_INGRD_PORTIONS : "";
+                                    let ingreText = ingre[el].RECP_INGRD_PORTIONS !== "" ? " : " + ingre[el].RECP_INGRD_PORTIONS : "";
                                     let ingreClass = "";
 
                                     switch (ingre[el].RECP_INGRED_TYPE_NAME) {
@@ -101,6 +103,10 @@ const RecipeView = () => {
                                             break;
                                         default:
                                             break;
+                                    }
+
+                                    if (myFridgeList && myFridgeList.includes(ingre[el].RECP_INGRD_CODE)) {
+                                        ingreClass += " on"
                                     }
 
                                     return <Link to={"/market/list?seacrh=" + ingre[el].RECP_INGRD_NAME} className={'ingre-link ' + ingreClass} key={idx}>

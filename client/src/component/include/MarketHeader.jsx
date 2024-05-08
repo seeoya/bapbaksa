@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getToken } from "../../storage/loginedToken";
 
 const MarketHeader = () => {
+
+    const [isLogined, setIsLogined] = useState(false);
+    
+    useEffect(() => {
+     
+        let loginedUId = getToken('loginedUId');
+        console.log('loginedUIdString', loginedUId);
+
+        if(loginedUId !== null) {
+            setIsLogined(true);
+        }
+
+    }, [isLogined]);
+
+
   return (
     <header>
     <div id="market-header-wrap" className="header-wrap">
@@ -22,13 +38,21 @@ const MarketHeader = () => {
 
         <div className="user-menu">
             <div className="nav">
-                <Link to="/admin/qna" className="link">고객문의</Link>
-
-                <Link to="/user/signup" className="link">회원가입</Link>
-                <Link to="/user/signin" className="link">로그인</Link>
-
-                <Link to="/user/modify" className="link">정보수정</Link>
-                <Link to="/user/signout" className="link">로그아웃</Link>
+            { isLogined ? (
+                            <>
+                            <Link to="/admin/qna" className="link">고객문의</Link>
+                            <Link to="/user/modify" className="link">정보수정</Link>
+                            <Link to="/user/signout" className="link">로그아웃</Link>
+                            </>
+                        )
+                            :
+                        (
+                            <>
+                            <Link to="/user/signup" className="link">회원가입</Link>
+                            <Link to="/user/signin" className="link">로그인</Link>
+                            </>
+                        )
+                        }
             </div>
         </div>
     </div>

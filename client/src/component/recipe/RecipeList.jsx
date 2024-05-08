@@ -88,24 +88,6 @@ const RecipeList = () => {
                 },
             })
             .then((data) => {
-                console.log(data.data);
-
-                // #TODO 페이징 추가 후 반복문 제거
-                // let newList = {}
-
-                // for (let i = 0; i < (recipePageItemCount * recipePage); i++) {
-                //     let thisRecipeNo = Object.keys(data.data)[i];
-
-                //     if (thisRecipeNo) {
-                //         newList[thisRecipeNo] = data.data[thisRecipeNo];
-                //     } else {
-                //         setMoreBtnState(false)
-                //     }
-                // }
-
-                // console.log("newList", newList);
-
-                // setRecipeList(newList);
                 setRecipeList(data.data);
             })
             .catch((err) => {
@@ -140,16 +122,13 @@ const RecipeList = () => {
     const initDefaultActive = () => {
         // #TODO 나중에 다시 처리
         if (myFridgeList) {
-            console.log(11111);
             myFridgeList.map((el) => {
-                console.log(22222, el)
                 ingreBtnActiveEvent(el);
             })
         }
     }
 
     const ingreBtnActiveEvent = (no) => {
-        console.log("active", no);
         if (activeIngreList.indexOf(parseInt(no)) > -1) {
             let list = activeIngreList.filter((el) => {
                 return parseInt(el) !== parseInt(no)
@@ -162,8 +141,6 @@ const RecipeList = () => {
     }
 
     const cateBtnActiveEvent = (no) => {
-        console.log(this);
-
         if (activeCateList.indexOf(parseInt(no)) > -1) {
             let list = activeCateList.filter((el) => {
                 return el !== parseInt(no)

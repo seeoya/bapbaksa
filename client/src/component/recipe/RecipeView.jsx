@@ -22,8 +22,6 @@ const RecipeView = () => {
                 recipe: url_params
             }
         }).then((data) => {
-            console.log(data.data);
-
             setRecipe(data.data);
             setIngre(data.data.RECP_INGRD);
             setProgress(data.data.RECP_PROGRESS);

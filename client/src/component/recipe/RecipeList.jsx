@@ -24,13 +24,13 @@ const RecipeList = () => {
     const [activeDifficultList, setActiveDifficultList] = useState([]);
 
     // 검색 정렬
-    const [searchString, setSearchString] = useState("전");
-    const [sortState, setSortState] = useState("new");
+    const [searchString, setSearchString] = useState("");
+    const [sortState, setSortState] = useState("old");
 
     // 레시피
     const [recipeList, setRecipeList] = useState({});
     const [recipePage, setRecipePage] = useState(0);
-    const [recipePageItemCount, setRecipePageItemCount] = useState(30);
+    const [recipePageItemCount, setRecipePageItemCount] = useState(20);
     const [moreBtnState, setMoreBtnState] = useState(true);
 
     useEffect(() => {
@@ -72,9 +72,6 @@ const RecipeList = () => {
     const initRecipeList = async () => {
         console.log("recipe init")
 
-
-        console.log(activeDifficultList);
-
         await axios
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
                 params: {
@@ -91,24 +88,6 @@ const RecipeList = () => {
                 },
             })
             .then((data) => {
-                console.log(data.data);
-
-                // #TODO 페이징 추가 후 반복문 제거
-                // let newList = {}
-
-                // for (let i = 0; i < (recipePageItemCount * recipePage); i++) {
-                //     let thisRecipeNo = Object.keys(data.data)[i];
-
-                //     if (thisRecipeNo) {
-                //         newList[thisRecipeNo] = data.data[thisRecipeNo];
-                //     } else {
-                //         setMoreBtnState(false)
-                //     }
-                // }
-
-                // console.log("newList", newList);
-
-                // setRecipeList(newList);
                 setRecipeList(data.data);
             })
             .catch((err) => {
@@ -143,16 +122,13 @@ const RecipeList = () => {
     const initDefaultActive = () => {
         // #TODO 나중에 다시 처리
         if (myFridgeList) {
-            console.log(11111);
             myFridgeList.map((el) => {
-                console.log(22222, el)
                 ingreBtnActiveEvent(el);
             })
         }
     }
 
     const ingreBtnActiveEvent = (no) => {
-        console.log("active", no);
         if (activeIngreList.indexOf(parseInt(no)) > -1) {
             let list = activeIngreList.filter((el) => {
                 return parseInt(el) !== parseInt(no)
@@ -165,8 +141,6 @@ const RecipeList = () => {
     }
 
     const cateBtnActiveEvent = (no) => {
-        console.log(this);
-
         if (activeCateList.indexOf(parseInt(no)) > -1) {
             let list = activeCateList.filter((el) => {
                 return el !== parseInt(no)
@@ -265,8 +239,6 @@ const RecipeList = () => {
                         </div>
                     </div>
 
-                
-
                     <div className='half'>
                         <div className='filter-title'>난이도별</div>
                         <div className='filter-wrap difficult'>
@@ -293,7 +265,6 @@ const RecipeList = () => {
                             <button type='button' className='btn main btn-more' onClick={moreBtnClickEvent}>더보기</button>
                             : null
                     }
-
                 </div>
 
             </div>

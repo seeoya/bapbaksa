@@ -72,6 +72,28 @@
     height: 40px;
 }
 
+.form #profile{
+    
+    align-items: center;
+    flex-direction: row;
+}
+
+.form #profile input{
+    
+    align-items: center;
+    width: 280px;
+    height: 100px;
+    
+}
+
+.form .input-wrap .profile-img img{
+    width: 100px;
+    height: 100px;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    object-fit: contain;    
+}
+
 .btn-wrap {
     display: flex;
     margin-top: 10px;
@@ -763,7 +785,25 @@ footer .util_footer .btn {
     width: 1000px;
 }
 
-#market_list_view .ingredient-view-wrap, #shopping_cart_wrap .ingredient-view-wrap {
+#market_list_view .market-list-view-info-wrap {
+    border-top: 1px solid #dadada;
+    border-bottom: 1px solid #dadada;
+    border-radius: 10px;
+    padding: 30px 10px;
+    width: 630px;
+    height: 230px;
+}
+
+#market_list_view .ingredient-view-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 1000px;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+#shopping_cart_wrap .ingredient-view-wrap {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -785,21 +825,35 @@ footer .util_footer .btn {
     text-align: right;
 }
 
-#market_list_view .ingredient-img-wrap, #shopping_cart_wrap .ingredient-img-wrap {
+#market_list_view .ingredient-img-wrap img {
+    max-width: 300px;
+    min-width: 300px;
+    max-height: 230px;
+    min-height: 230px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+#shopping_cart_wrap .ingredient-img-wrap {
     margin-right: 20px;
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-#market_list .ingredient-img, #market_list_view .ingredient-img, #shopping_cart_wrap .ingredient-img {
+#market_list .product-item-img, #shopping_cart_wrap .ingredient-img {
     width: 100px;
     height: 100px;
     object-fit: cover;
     border-radius: 50%;
 }
 
-#market_list_view .ingredient-info-wrap, #shopping_cart_wrap .ingredient-info-wrap {
+#market_list_view .ingredient-info-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+#shopping_cart_wrap .ingredient-info-wrap {
     display: flex;
 }
 
@@ -833,7 +887,28 @@ footer .util_footer .btn {
     margin-bottom: 10px;
 }
 
-#market_list_view .ingredient-bottom-wrap, #shopping_cart_wrap .ingredient-bottom-wrap {
+#market_list_view .ingredient-bottom-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#market_list_view .ingredient-bottom-wrap-price {
+    display: flex;
+    justify-content: end;
+    gap: 3px;
+    margin-top: 5px;
+    align-items: center;
+}
+
+#market_list_view .ingredient-bottom-wrap-btn {
+    display: flex;
+    justify-content: end;
+    gap: 5px;
+    height: 49px;
+}
+
+#shopping_cart_wrap .ingredient-bottom-wrap {
     display: flex;
     align-items: center;
     gap: 3px;
@@ -953,6 +1028,13 @@ footer .util_footer .btn {
 #payment_wrap {
     display: flex;
     flex-direction: column;
+}
+
+#payment_wrap .find-address-btn {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 #payment_wrap .title-wrap {
@@ -1218,6 +1300,10 @@ footer .util_footer .btn {
     padding: 10px;
     border-radius: 10px;
     background-color: #eaeaea;
+}
+
+#fridge .fridge-item.link {
+    grid-column: 1/4;
 }
 
 #fridge .fridge-item img {
@@ -1509,6 +1595,54 @@ footer .util_footer .btn {
 
 #recipe .recipe-view .progress-detail .tip i, #recipe .recipe-view .progress-detail .tip svg {
     margin-right: 5px;
+}
+
+#my_fridge {
+    width: 100%;
+}
+
+#my_fridge .content {
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    gap: 40px;
+}
+
+#my_fridge .fridge-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+}
+
+#my_fridge .fridge-list .title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+#my_fridge .ingre-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    width: 100%;
+    gap: 10px;
+}
+
+#my_fridge .ingre-list .btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    overflow: hidden;
+}
+
+#my_fridge .ingre-list .btn img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    background-color: #fff;
 }
 
 .signin-wrap .login-link {

@@ -20,20 +20,26 @@ import Modify from './user/Modify';
 import SignIn from './user/SignIn';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
+import SignOut from './user/SignOut';
+import Delete from './user/Delete';
+
+
+
 
 
 const LayoutRouter = () => {
+
     return (
         <Routes>
             <Route element={<MainLayout />}>
-
+                
                 <Route path="/" element={<Home />} />
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>
                     <Route path="signin" element={<SignIn />}></Route>
                     <Route path="modify" element={<Modify />}></Route>
-                    <Route path="signout" element={<div>로그아웃</div>}></Route>
-                    <Route path="delete" element={<div>회원탈퇴</div>}></Route>
+                    <Route path="signout" element={<SignOut />}></Route>
+                    <Route path="delete" element={<Delete />}></Route>
                 </Route>
 
                 <Route path="/mypage" element={<Outlet />}>

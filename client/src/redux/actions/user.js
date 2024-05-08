@@ -1,22 +1,14 @@
-export const getSignupAction = (formData) => {
-        
-    return {
-        type: 'USER_SIGNUP',
-        data: formData,
-        };
-    
-}
 
-export const getSigninAction = (formData) => {
-        
+export const setLoginedUIdAction = (uId) => {
+
     return {
-        type: 'USER_SIGNIN',
-        data: formData,
+        type: 'setLoginedUId',
+        data: uId,
         };
     
 }
     
-export const getModifyAction = (formData) => {
+export const setAction = (formData) => {
         
     return {
         type: 'USER_MODIFY',

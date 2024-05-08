@@ -6,22 +6,24 @@ import { loadMyFridgeAction } from '../../redux/actions/fridge_action';
 const RecipeAside = () => {
     const dispatch = useDispatch();
 
+    const allFridgeList = useSelector((state) => state.fridge.allFridge);
+    const myFridgeList = useSelector((state) => state.fridge.myFridge);
+
     const [windowX, setWindowX] = useState(0);
     const [windowY, setWindowY] = useState(200);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
 
-    const myFridgeList = useSelector((state) => state.fridge.MyFridge);
 
     useEffect(() => {
-        initFridge();
+        initMyFridge();
     }, []);
 
     useEffect(() => {
         dragEvent()
     }, [windowX, windowY, startX, startY]);
 
-    const initFridge = async () => {
+    const initMyFridge = async () => {
         // #TODO 로그인한 회원 u_no로 변경
         let uNo = 1;
         dispatch(await loadMyFridgeAction(uNo));
@@ -84,21 +86,21 @@ const RecipeAside = () => {
                 <div className='fridge-content'>
 
                     {
-                        myFridgeList ?
+                        allFridgeList && myFridgeList ?
                             myFridgeList.map((el, idx) => {
-                                return <button className='fridge-item' key={idx}>
+                                return <button className='fridge-item' key={allFridgeList[el].RF_NO}>
                                     <div className='item-img'>
-                                        <img src="/img/방울토마토.jpg" alt="" />
+                                        <img src={"/imgs/product/" + allFridgeList[el].RF_IMG} alt={allFridgeList[el].RF_NAME} />
                                     </div>
 
-                                    <div className='item-title'>방울토마토 {el}</div>
+                                    <div className='item-title'>{allFridgeList[el].RF_NAME}</div>
                                 </button>
                             })
                             :
                             <div>냉장고에 재료가 없습니다.</div>
                     }
 
-                    <Link to={"/mypage/myFridge"} className='fridge-item'>
+                    <Link to={"/mypage/myFridge"} className='fridge-item link'>
                         <div className='item-img'>
                             <i class="fa-solid fa-square-up-right"></i>
                         </div>

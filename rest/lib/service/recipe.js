@@ -46,10 +46,12 @@ const recipe = {
                 table = `(SELECT BASIC.* `;
                 table += `FROM RECIPE_BASIC BASIC JOIN RECIPE_INGREDIENT FOOD `;
                 table += `ON BASIC.RECP_CODE = FOOD.RECP_CODE WHERE `;
-                table += `${params.food.map((_, i) => `FOOD.RECP_INGRD_CODE = ?`).join(" OR ")} GROUP BY BASIC.RECP_CODE) FI `;
-                // table = `(SELECT * FROM (SELECT BASIC.* FROM 
-                //     RECIPE_BASIC BASIC 
-                //     JOIN RECIPE_INGREDIENT FOOD 
+                table += `${params.food
+                    .map((_, i) => `FOOD.RECP_INGRD_CODE = ?`)
+                    .join(" OR ")} GROUP BY BASIC.RECP_CODE) FI `;
+                // table = `(SELECT * FROM (SELECT BASIC.* FROM
+                //     RECIPE_BASIC BASIC
+                //     JOIN RECIPE_INGREDIENT FOOD
                 //     ON BASIC.RECP_CODE = FOOD.RECP_CODE ${params.food.map((_, i) => `FOOD.RECP_INGRD_CODE = ?`).join(" OR ")} GROUP BY BASIC.RECP_CODE) FI`;
                 placeholders = params.food; // 모든 값을 매개변수로 사용
                 state.push(...placeholders);
@@ -59,9 +61,9 @@ const recipe = {
                 table += `FROM RECIPE_BASIC BASIC JOIN RECIPE_INGREDIENT FOOD `;
                 table += `ON BASIC.RECP_CODE = FOOD.RECP_CODE WHERE `;
                 table += `FOOD.RECP_INGRD_CODE = ? GROUP BY BASIC.RECP_CODE) FI `;
-                // table = `(SELECT * FROM (SELECT BASIC.* 
-                //     FROM RECIPE_BASIC BASIC 
-                //     JOIN RECIPE_INGREDIENT FOOD 
+                // table = `(SELECT * FROM (SELECT BASIC.*
+                //     FROM RECIPE_BASIC BASIC
+                //     JOIN RECIPE_INGREDIENT FOOD
                 //     ON BASIC.RECP_CODE = FOOD.RECP_CODE WHERE BASIC.RECP_CODE = ? GROUP BY BASIC.RECP_CODE) FI`;
                 placeholders = params.food[0];
                 state.push(placeholders);
@@ -99,7 +101,9 @@ const recipe = {
         if (params.category) {
             if (params.category.length > 1) {
                 // 여러 조건을 OR로 연결
-                category = `(${params.category.map((_, i) => `RECP_CATEGORY_CODE = ?`).join(" OR ")})`;
+                category = `(${params.category
+                    .map((_, i) => `RECP_CATEGORY_CODE = ?`)
+                    .join(" OR ")})`;
                 placeholders = params.category; // 모든 값을 매개변수로 사용
                 state.push(...placeholders);
             } else {
@@ -114,7 +118,9 @@ const recipe = {
         if (params.difficult) {
             if (params.difficult.length > 1) {
                 // 여러 조건을 OR로 연결
-                difficult = `(${params.difficult.map((_, i) => `RECP_DIFFICULT = ?`).join(" OR ")})`;
+                difficult = `(${params.difficult
+                    .map((_, i) => `RECP_DIFFICULT = ?`)
+                    .join(" OR ")})`;
                 placeholders = params.difficult; // 모든 값을 매개변수로 사용
                 state.push(...placeholders);
             } else {
@@ -153,12 +159,12 @@ const recipe = {
         }
 
         let queryString = `SELECT * FROM ${table} `;
-        queryString += `${search ? "WHERE " + (search) : ""} `;
-        queryString += `${region ? (search ? "AND " + (region) : "WHERE " + region) : ""} `;
+        queryString += `${search ? "WHERE " + search : ""} `;
+        queryString += `${region ? (search ? "AND " + region : "WHERE " + region) : ""} `;
         queryString += `${
-            category ? (search || region ? "AND " + (category) : "WHERE " + category) : ""
+            category ? (search || region ? "AND " + category : "WHERE " + category) : ""
         } `;
-        queryString += `${  
+        queryString += `${
             difficult
                 ? search || region || category
                     ? "AND " + difficult
@@ -168,7 +174,7 @@ const recipe = {
         queryString += `${sort ? sort : ""} `;
         // sort가 들어가게 되면 ORDER BY제거, sort가 없으면 ORDER BY 추가 (FI 추가)
         queryString += `${
-            sort ? (view) : ("ORDER BY " + params.food ? "FI." : "" + "RECP_CODE " + view)
+            sort ? view : "ORDER BY " + params.food ? "FI." : "" + "RECP_CODE " + view
         }`;
         console.log("queryString : ", queryString);
         console.log("state : ", state);
@@ -183,12 +189,12 @@ const recipe = {
                 console.log(result);
 
                 let countQuery = `SELECT COUNT(DISTINCT RECP_CODE) FROM ${table} `;
-                countQuery += `${search ? "WHERE " + (search) : ""} `;
-                countQuery += `${region ? (search ? "AND " + (region) : "WHERE " + region) : ""} `;
+                countQuery += `${search ? "WHERE " + search : ""} `;
+                countQuery += `${region ? (search ? "AND " + region : "WHERE " + region) : ""} `;
                 countQuery += `${
-                    category ? (search || region ? "AND " + (category) : "WHERE " + category) : ""
+                    category ? (search || region ? "AND " + category : "WHERE " + category) : ""
                 } `;
-                countQuery += `${  
+                countQuery += `${
                     difficult
                         ? search || region || category
                             ? "AND " + difficult
@@ -197,16 +203,17 @@ const recipe = {
                 } `;
 
                 DB.query(countQuery, state, (error2, recipeCount) => {
-
                     let recpDict = {};
+                    let sortNo = [];
                     result.forEach(function (item) {
                         recpDict[item.RECP_CODE] = item;
+                        sortNo.push(item.RECP_CODE);
                     });
-                    recpDict.count = recipeCount[0]['COUNT(DISTINCT RECP_CODE)'];
+                    recpDict.count = recipeCount[0]["COUNT(DISTINCT RECP_CODE)"];
+                    recpDict.sortNo = sortNo;
                     console.log("==========================> ", recpDict);
                     res.json(recpDict);
                 });
-
             }
         });
     },

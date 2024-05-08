@@ -30,8 +30,11 @@ const RecipeList = () => {
 
     // 레시피
     const [recipeList, setRecipeList] = useState({});
+    const [recipeSortList, setRecipeSortList] = useState([]);
+
     const [recipePage, setRecipePage] = useState(0);
     const [recipePageItemCount, setRecipePageItemCount] = useState(20);
+    const [recipeCount, setRecipeCount] = useState(0);
     const [moreBtnState, setMoreBtnState] = useState(true);
 
     useEffect(() => {
@@ -74,6 +77,9 @@ const RecipeList = () => {
     const initRecipeList = async () => {
         console.log("recipe init");
 
+        setMoreBtnState(true);
+        setRecipePage(0);
+
         await axios
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
                 params: {
@@ -85,11 +91,29 @@ const RecipeList = () => {
                     foodinclu: filterInclude,
                     difficult: activeDifficultList,
                     category: activeCateList,
-                    page: recipePage,
+                    page: 0,
                     pagePerItem: recipePageItemCount,
                 },
             })
             .then((data) => {
+                console.log(data.data);
+
+                if (data.data.count) {
+                    if (data.data.count >= 0) {
+                        setRecipeCount(data.data.count)
+                    };
+
+                    if (data.data.count < recipePageItemCount) {
+                        setMoreBtnState(false)
+                    } else {
+                        setMoreBtnState(true);
+                    }
+                }
+
+                if (data.data.sortNo) {
+                    setRecipeSortList(data.data.sortNo);
+                }
+
                 setRecipeList(data.data);
             })
             .catch((err) => {
@@ -221,7 +245,7 @@ const RecipeList = () => {
                     sort: sortState,
                     region: activeRegionList,
                     food: activeIngreList,
-                    foodinclu: 1,
+                    foodinclu: filterInclude,
                     difficult: activeDifficultList,
                     category: activeCateList,
                     page: recipePage + 1,
@@ -229,15 +253,26 @@ const RecipeList = () => {
                 },
             })
             .then((data) => {
-                console.log(data.data)
-                if (data.data.count && data.data.count < (recipePage + 1) * recipePageItemCount) {
-                    setMoreBtnState(false);
-                } else {
-                    setMoreBtnState(true);
+                console.log(data.data);
+
+                if (data.data.count) {
+                    if (data.data.count >= 0) {
+                        setRecipeCount(data.data.count)
+                    };
+
+                    if (data.data.count < (recipePage + 1) * recipePageItemCount) {
+                        setMoreBtnState(false)
+                    } else {
+                        setMoreBtnState(true);
+                    }
                 }
+
+                if (data.data.sortNo) {
+                    setRecipeSortList([...recipeSortList, ...data.data.sortNo]);
+                }
+
                 setRecipeList({ ...recipeList, ...data.data });
                 setRecipePage(prev => prev + 1);
-
             })
             .catch((err) => {
                 return { type: "error" };
@@ -317,7 +352,6 @@ const RecipeList = () => {
                             <div>
                                 <input type="radio" name="food_include" id="food_include_0" value="0" checked={filterInclude === 0 ? "checked" : ""} onClick={() => setFilterInclude(0)} />
                                 <label htmlFor="food_include_0">재료 하나라도 포함</label>
-                                {filterInclude}
                                 <input type="radio" name="food_include" id="food_include_1" value="1" checked={filterInclude === 1 ? "checked" : ""} onClick={() => setFilterInclude(1)} />
                                 <label htmlFor="food_include_1">재료 전부 포함</label>
                             </div>
@@ -331,7 +365,9 @@ const RecipeList = () => {
                         </div>
 
                         <div>
+                            <div>총 {recipeCount} 건</div>
                             <button type='button' onClick={resetRecipeEvent}>되돌리기</button>
+
                         </div>
                     </div>
                 </div>
@@ -339,11 +375,15 @@ const RecipeList = () => {
                 <div className='recipe-list'>
                     {
 
-                        recipeList ?
-                            Object.keys(recipeList).map((el, idx) => {
-                                return <RecipeListItem itemNo={el} idx={idx} recipeList={recipeList} />
+                        recipeSortList ?
+                            recipeSortList.map((el, idx) => {
+                                if (el !== "count") {
+                                    return <RecipeListItem itemNo={el} idx={idx} recipeList={recipeList} />
+                                }
                             }) : null
                     }
+
+                    {moreBtnState}
 
                     {
                         moreBtnState ?

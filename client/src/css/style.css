@@ -1454,10 +1454,14 @@ footer .util_footer .btn {
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    padding: 15px 10px;
+    padding: 20px;
     height: 100%;
-    border: 1px solid var(--gray-color);
-    border-radius: 5px;
+    border: 2px solid var(--gray-color);
+    border-radius: 10px;
+}
+
+#recipe .recipe-item:hover {
+    background-color: var(--gray-light-color);
 }
 
 #recipe .recipe-item:hover .recipe-name {
@@ -1523,6 +1527,7 @@ footer .util_footer .btn {
 }
 
 #recipe .btn-more {
+    font-size: 1.8rem;
     grid-column: 1/5;
 }
 
@@ -1567,32 +1572,33 @@ footer .util_footer .btn {
     padding: 5px 7px;
     background-color: #eee;
     border-radius: 30px;
-    gap: 3px;
+    gap: 5px;
 }
 
 #recipe .recipe-view .ingre-link span {
-
-    /* display: none; */
-
-    /* margin-left: 5px; */
-}
-
-#recipe .recipe-view .ingre-link:hover span {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 1.2rem;
 }
 
-#recipe .recipe-view .main-ingre:hover {
-    background-color: var(--main-light-color);
+/* #recipe .recipe-view .main-ingre:hover {
+background-color: var(--main-light-color);
 }
 
 #recipe .recipe-view .sub-ingre:hover {
-    background-color: var(--sub-light-color);
+background-color: var(--sub-light-color);
 }
 
 #recipe .recipe-view .add-ingre:hover {
-    background-color: var(--highlight-light-color);
+background-color: var(--highlight-light-color);
+} */
+#recipe .recipe-view .ingre-link:hover {
+    background-color: var(--main-light-color);
+}
+
+#recipe .recipe-view .ingre-link.on {
+    background-color: var(--highlight-color);
 }
 
 #recipe .recipe-view .progress-item {
@@ -1713,4 +1719,23 @@ footer .util_footer .btn {
 .signin-wrap .login-link .kakao-link {
     max-width: 45px;
     min-width: 45px;
+}
+
+.addition-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    margin: 30px;
+    right: 0;
+    bottom: 0;
+    gap: 10px;
+}
+
+.addition-btn-wrap .btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 40px;
+    font-size: 2rem;
 }

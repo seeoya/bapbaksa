@@ -72,6 +72,28 @@
     height: 40px;
 }
 
+.form #profile{
+    
+    align-items: center;
+    flex-direction: row;
+}
+
+.form #profile input{
+    
+    align-items: center;
+    width: 280px;
+    height: 100px;
+    
+}
+
+.form .input-wrap .profile-img img{
+    width: 100px;
+    height: 100px;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    object-fit: contain;    
+}
+
 .btn-wrap {
     display: flex;
     margin-top: 10px;

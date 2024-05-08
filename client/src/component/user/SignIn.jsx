@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import {getSigninAction} from '../../redux/actions/user';
+import axios from 'axios';
+import { setToken } from '../../storage/loginedToken';
+
+axios.defaults.withCredentials = true;
 
 const SignIn = () => {
 
     const [uId, setUId] = useState('');
-    const [uPw, setUPw] = useState('');
+    const [uPw, setUPw] = useState('');    
+    const [message, setMessage] = useState('');
 
-    const dispatch = useDispatch();   
+    const navigate = useNavigate(); 
+
+    useEffect(() => {
+
+    }, []);
 
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');
@@ -25,7 +32,7 @@ const SignIn = () => {
     }
 
      
-    const signinBtnClickHandler =() => {
+    const signinBtnClickHandler = async () => {
         console.log('signinBtnClickHandler()');
 
         let form = document.signin_form;
@@ -39,17 +46,70 @@ const SignIn = () => {
             form.u_pw.focus();
         
         } else {            
+                
+                let data = {
+                    "u_id": uId,
+                    "u_pw": uPw
+                }                 
 
-            let formData = new FormData();
-            formData.append("u_id", uId);
-            formData.append("u_pw", uPw);            
-        
-            dispatch(getSigninAction(formData));
-        
-            setUId(''); setUPw('');
+                await axios({
+                    url: process.env.REACT_APP_SERVER_URL + `/api/user/signin_confirm`,                
+                    method: 'post',      
+                    data: data,
+                })
+                .then(res => {        
+                    console.log('AXIOS SIGN_IN COMMUNICATION SUCCESS ==> ', res.data);   
+                    let message = res.data.message; 
+                    setMessage(message);
+
+                    console.log('res: ', res);
+                    console.log('res.data: ', res.data);      
+                    console.log('message: ', res.data.message);          
+                    console.log(res.data.accessToken);
+                    console.log(res.data.refreshToken);
+                    console.log(res.data.uId);
+                    console.log('res.data.result.affectedRows', res.data.result.affectedRows);
+                                                           
+                    if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {                                   
+
+                            let refreshToken = res.data.refreshToken;                                               
+                            let accessToken = res.data.accessToken;
+
+                            setToken('accessToken', accessToken);                     
+                            setToken('refreshToken', refreshToken);                     
+                            setToken('loginedUId', res.data.uId);                     
+                            setToken('loginedUNo', res.data.uNo);                            
+                                                 
+                            alert('로그인에 성공하였습니다.');                        
+                            navigate('/');                        
+                            window.location.reload(true);
+                    }                    
+                
+                })
+                .catch(error => {
+                    console.log('AXIOS SIGN_IN COMMUNICATION ERROR');
                     
-        }
+                    if(message.includes('아이디')){
+                        alert('아이디가 일치하지 않습니다.');
+                    } else {
+                        alert('비밀번호가 일치하지 않습니다.'); 
+                    }
+                    
+                    
+                })
+                .finally(data => {
+                    console.log('AXIOS SIGN_IN COMMUNICATION FINALLY');
+            
+                });                
+                   
+                setUId(''); setUPw('');
+                window.location.reload(true); 
+                               
+            }     
+               
     }
+
+          
 
 
     return (

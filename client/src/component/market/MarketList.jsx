@@ -9,55 +9,59 @@ const MarketList = () => {
 
     const prodData = useSelector((state) => state.marketReducer.ProdData);
     const [active, setActive] = useState("");
-    const [moreList, setMoreList] = useState(12);
     const [newProdDate, setNewProdDate] = useState([]);
-    const [number,setNumber] = useState(0);
+    const [number,setNumber] = useState(1);
     const [search,setSearch] = useState('');
     const [page, setPage] = useState(0);
 
     useEffect(() => {
-        axios_getDate();
-    }, []);
-
-    useEffect(() => {
-        handleCategoryClick("all");
         moreProductBtn();
-    }, [newProdDate]);
-
+        handleCategoryClick("all");
+    }, []);
+    
     const moreProductBtn = async () => {
-        setMoreList(prev => prev + 12);
-        dispatch(await twelveProduct(moreList, newProdDate, number, search, page));
-    }
+        setPage(prev => prev + 1);
+        console.log("💕💕💕💕💕💕💕",page);
+        dispatch(await twelveProduct(newProdDate, number, search, page));        
+    };
+    
+    
 
-    const handleCategoryClick = (category_name) => {
-
+    const handleCategoryClick = async (category_name) => {
             switch (category_name) {
                 case "all":
                     setNumber(1);
+                    console.log("번호",number);
                     break;
                 case "carbohydrate":
                     console.log('탄수화물 클릭');
                     setNumber(2);
+                    console.log("번호",number);
                     break;
                 case "vegetable":
                     console.log('채소 클릭');
                     setNumber(3);
+                    console.log("번호",number);
                     break;
                 case "meat":
                     console.log('육류 클릭');
                     setNumber(4);
+                    console.log("번호",number);
                     break;
                 case "seaweed":
                     console.log('해조류 클릭');
                     setNumber(5);
+                    console.log("번호",number);
                     break;
                 case "processed_meet":
                     console.log('가공육류 클릭');
                     setNumber(6);
+                    console.log("번호",number);
                     break;
                 case "processed_food":
                     console.log('가공식품 클릭');
                     setNumber(7);
+                    console.log("번호",number);
                     break;
                 default:
                     break;
@@ -65,19 +69,7 @@ const MarketList = () => {
             setActive(category_name);
     };
 
-    async function axios_getDate() {
-        try {
-            const response = await axios.get(process.env.REACT_APP_REST_SERVER_URL + "/product/getNewDate");
-            setNewProdDate(response.data[0].PROD_YMD);
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     return (
-
-
 
         <div id="market_list">
             <div className="ingredient-category">

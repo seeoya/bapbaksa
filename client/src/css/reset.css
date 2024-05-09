@@ -18,9 +18,9 @@
     --highlight-light-color: #f2644fba;
     --highlight-dark-color: #EA4329;
     --highlight-red-color: #be271d;
-    --admin-main-color: #213066;
-    --admin-main-light-color: #394981;
-    --admin-main-dark-color: #101b41;
+    --admin-main-color: #394981;
+    --admin-main-light-color: #707dab;
+    --admin-main-dark-color: #213066;
     --admin-sub-color: #358d80;
     --admin-sub-light-color: #59b2a5;
     --admin-sub-dark-color: #1d675c;
@@ -87,23 +87,4 @@ table {
 
 a, button {
     border: none;
-}
-
-.addition-btn-wrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    margin: 30px;
-    right: 0;
-    bottom: 0;
-    gap: 10px;
-}
-
-.addition-btn-wrap .btn {
-    width: 35px;
-    height: 35px;
-    border-radius: 40px;
-    font-size: 2rem;
 }

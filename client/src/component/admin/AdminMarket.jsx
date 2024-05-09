@@ -2,9 +2,10 @@ import React from 'react';
 
 const AdminMarket = () => {
     return (
-        <div>
-            관리자 마켓 관리
-        </div>
+        <>
+            <div className='title'>관리자 마켓관리</div>
+
+        </>
     );
 };
 

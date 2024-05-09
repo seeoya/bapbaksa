@@ -2,9 +2,10 @@ import React from 'react';
 
 const AdminUser = () => {
     return (
-        <div>
-            관리자 회원관리
-        </div>
+        <>
+            <div className='title'>관리자 회원관리</div>
+
+        </>
     );
 };
 

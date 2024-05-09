@@ -9,6 +9,7 @@ import MartketMainLayout from './MarketMainLayout';
 import StyleGuide from './StyleGuide';
 import AdminMain from './admin/AdminMain';
 import AdminMarket from './admin/AdminMarket';
+import AdminMarketRefund from './admin/AdminMarketRefund';
 import AdminUser from './admin/AdminUser';
 import ListView from './market/ListView';
 import MartketLayout from './market/MarketLayout';
@@ -73,6 +74,7 @@ const LayoutRouter = () => {
                 <Route path="" element={<AdminMain />}></Route>
                 <Route path="user" element={<AdminUser />}></Route>
                 <Route path="market" element={<AdminMarket />}></Route>
+                <Route path="market_refund" element={<AdminMarketRefund />}></Route>
             </Route>
         </Routes>
     );

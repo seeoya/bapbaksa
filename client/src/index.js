@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { legacy_createStore as createStore } from "redux";
-import "../css/style.css";
 import App from "./App";
 import "./css/reset.css";
+import "./css/style.css";
 
 import { reducer } from "./redux/reducers/reducer";
 import reportWebVitals from "./reportWebVitals";

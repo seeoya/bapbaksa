@@ -1759,3 +1759,22 @@ background-color: var(--highlight-light-color);
     max-width: 45px;
     min-width: 45px;
 }
+
+.addition-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    margin: 30px;
+    right: 0;
+    bottom: 0;
+    gap: 10px;
+}
+
+.addition-btn-wrap .btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 40px;
+    font-size: 2rem;
+}

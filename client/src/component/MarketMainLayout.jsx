@@ -1,6 +1,5 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import "../css/style.css";
 import Footer from './include/Footer';
 import MarketHeader from './include/MarketHeader';
 import MarketNav from './include/MarketNav';

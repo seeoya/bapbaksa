@@ -7,6 +7,18 @@ const router = express.Router();
 //     product.getAllProduct(req, res);
 // });
 
+router.get("/", (req, res) => {
+    console.log('/product/');
+    // 마켓 품목 갯수 및 뷰
+    product.loadList(req, res);
+});
+
+router.post("/view", (req, res) => {
+    console.log('product/view');
+    // 상세 뷰
+    product.loadView(req, res);
+})
+
 router.get("/getNewDate", (req, res) => {
     console.log('/product/getNewDate');
     product.getNewDate(req, res);

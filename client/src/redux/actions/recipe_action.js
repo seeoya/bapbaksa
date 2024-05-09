@@ -16,3 +16,7 @@ export const loadRecipeAction = async (param) => {
 
     return { type: "load_recipe", data: result };
 };
+
+export const searchRecipe = (param) => {
+    return { type: "recipe_search_change", data: param };
+};

@@ -1,11 +1,15 @@
 import React from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
+import AdminLayout from './AdminLayout';
 import Copy from './Copy';
 import Error from './Error';
 import Home from './Home';
 import MainLayout from './MainLayout';
 import MartketMainLayout from './MarketMainLayout';
 import StyleGuide from './StyleGuide';
+import AdminMain from './admin/AdminMain';
+import AdminMarket from './admin/AdminMarket';
+import AdminUser from './admin/AdminUser';
 import ListView from './market/ListView';
 import MartketLayout from './market/MarketLayout';
 import MarketList from './market/MarketList';
@@ -16,23 +20,18 @@ import MyFridge from './recipe/MyFridge';
 import RecipeLayout from './recipe/RecipeLayout';
 import RecipeList from './recipe/RecipeList';
 import RecipeView from './recipe/RecipeView';
+import Delete from './user/Delete';
 import Modify from './user/Modify';
 import SignIn from './user/SignIn';
+import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
-import SignOut from './user/SignOut';
-import Delete from './user/Delete';
-
-
-
-
 
 const LayoutRouter = () => {
 
     return (
         <Routes>
             <Route element={<MainLayout />}>
-                
                 <Route path="/" element={<Home />} />
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>
@@ -57,7 +56,6 @@ const LayoutRouter = () => {
                 <Route path="*" element={<Error />}></Route>
                 {/* Sample Page */}
                 <Route path="/copy" element={<Copy />}></Route>
-
             </Route>
 
             <Route element={<MartketMainLayout />}>
@@ -71,6 +69,11 @@ const LayoutRouter = () => {
                 </Route>
             </Route>
 
+            <Route path="/admin" element={<AdminLayout />}>
+                <Route path="" element={<AdminMain />}></Route>
+                <Route path="user" element={<AdminUser />}></Route>
+                <Route path="market" element={<AdminMarket />}></Route>
+            </Route>
         </Routes>
     );
 };

@@ -1,13 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchRecipe } from '../../redux/actions/recipe_action';
 
 const RecipeListFilter = (props) => {
     let { myFridgeState, notMyFridgeState,
         activeIngreList, activeRegionList, activeCateList, activeDifficultList,
         setActiveIngreList, setActiveRegionList, setActiveCateList, setActiveDifficultList,
-        setSortState, setSearchString, filterInclude, setFilterInclude,
+        setSortState, filterInclude, setFilterInclude,
         setMoreBtnState, recipeCount } = props;
+
+    const dispatch = useDispatch();
 
     const allFridgeList = useSelector((state) => state.fridge.allFridge);
 
@@ -100,9 +103,10 @@ const RecipeListFilter = (props) => {
         setActiveRegionList([]);
         setActiveCateList([]);
         setActiveDifficultList([]);
-        setSearchString("");
         setSortState("old");
         setMoreBtnState(true);
+        dispatch(searchRecipe(""));
+        document.getElementById("recipe_search").value = "";
     }
 
     return (

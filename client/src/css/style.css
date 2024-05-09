@@ -253,12 +253,9 @@ header .logo img {
 }
 
 header .header-menu .search {
-    width: 100%;
-}
-
-header .header-menu .search form {
     display: flex;
     gap: 10px;
+    width: 100%;
 }
 
 header .header-menu .search input {

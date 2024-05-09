@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import $ from 'jquery';
-import {getModifyAction} from '../../redux/actions/user';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { getToken } from '../../storage/loginedToken';
+import { Link } from 'react-router-dom';
+import { getRefreshToken } from '../../util/refreshToken';
 
+
+axios.defaults.withCredentials = true;
 
 const Modify = () => {
 
@@ -14,237 +19,82 @@ const Modify = () => {
     const [uMail, setUMail] = useState('');
     const [uPhone, setUPhone] = useState('');
     const [uProfile, setUProfile] = useState('');
+    const [uProfileImg, setUProfileImg] = useState('');
     const [uZipcode, setUZipCode] = useState('');
     const [uFirstAddr, setUFirstAddr] = useState('');
     const [uSecondAddr, setUSeconAddr] = useState('');
+    const [accessToken, setAccessToken] = useState('');    
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    
+    const navigate = useNavigate();     
+        
+    
+    useEffect(() => {
 
-       //  // 회원가입, 정보수정
-    //  function memberFormCheck(type) {
-    //     if (type == "create") {
-    //         // 아이디 검증: 영어 소문자와 숫자로만 구성되어야 함
-    //         switch (idCheck()) {
-    //             case 1:
-    //                 break;
-    //             case 2:
-    //             case 4:
-    //                 alert("아이디는 최소 5자 이상이어야 합니다.");
-    //                 document.getElementsByName("u_id")[0].focus();
-    //                 return false;
-    //                 break;
-    //             case 3:
-    //                 alert("아이디는 영어 소문자와 숫자로만 구성되어야 합니다.");
-    //                 document.getElementsByName("u_id")[0].focus();
-    //                 return false;
-    //                 break;
-    //             case 5:
-    //                 alert("중복된 아이디입니다.");
-    //                 document.getElementsByName("u_id")[0].focus();
-    //                 return false;
-    //         }
-
-    //         // 비밀번호 검증: 최소 8자 이상 및 특수문자 1개 이상 포함
-    //         switch (pwCheck()) {
-    //             case 1:
-    //                 break;
-    //             case 2:
-    //                 alert("비밀번호를 입력해 주세요.");
-    //                 document.getElementsByName("m_pw")[0].focus();
-    //                 return false;
-    //                 break;
-    //             case 3:
-    //                 alert(
-    //                     "비밀번호는 최소 8자 이상이어야 하며, 특수문자를 최소 1개 이상 포함해야 합니다."
-    //                 );
-    //                 document.getElementsByName("m_pw")[0].focus();
-    //                 return false;
-    //                 break;
-    //         }
-
-    //         // 비밀번호 재확인
-    //         switch (pwCompareCheck()) {
-    //             case 1:
-    //                 break;
-    //             case 2:
-    //                 alert("비밀번호가 일치하지 않습니다.");
-    //                 document.getElementsByName("m_pw_again")[0].focus();
-    //                 return false;
-    //                 break;
-    //         }
-    //     }
-      
-
-    //     // 이메일 주소 검증: 정규식 사용
-    //     switch (mailCheck()) {
-    //         case 1:
-    //             break;
-    //         case 2:
-    //         case 3:
-    //             alert("유효한 이메일 주소를 입력해 주세요.");
-    //             document.getElementsByName("u_mail")[0].focus();
-    //             return false;
-    //             break;
-    //     }
-
-    //     // 핸드폰 검증 : 정규식 사용
-    //     switch (phoneCheck()) {
-    //         case 1:
-    //             break;
-    //         case 2:
-    //         case 3:
-    //             alert("유효한 전화번호를 입력해 주세요.");
-    //             document.getElementsByName("u_phone")[0].focus();
-    //             return false;
-    //             break;
-    //     }
-
-    //     // 주소 검증 : 정규식 사용
-    //     switch (addrCheck()) {
-    //         case 1:
-    //             break;
-    //         case 2:
-    //             alert("유효한 우편번호를 입력해 주세요.");
-    //             document.getElementById("search_address_btn").focus();
-    //             return false;
-    //         case 3:
-    //             alert("주소를 입력해 주세요.");
-    //             document.getElementById("search_address_btn").focus();
-    //             return false;
-    //         case 4:
-    //             alert("상세주소를 입력해 주세요.");
-    //             document.getElementsByName("u_detail_addr")[0].focus();
-    //             return false;
-    //     }
-
-    //     // 유효한 경우 폼 제출
-    //     if (type == "modify") {
-    //         modifyConfirm();
-    //     } else if (type == "create") {
-    //         document.signup_form.submit();
-    //     }
-    // }
-
-    // /* 전화번호에 숫자만 들어올 수 있게 */
-    // function extractNumbers(input) {
-    //     // 입력된 값에서 숫자만 추출하여 새로운 값으로 설정
-    //     let cleanedValue = input.value.replace(/\D/g, "");
-
-    //     // 추출된 숫자를 입력 필드의 값으로 설정
-    //     input.value = cleanedValue;
-    // }
-
-    // function inputTextCheck(e) {
-    //     let inputEl = e.target;
-    //     let inputName = inputEl.name;
-
-    //     let result = 0;
-
-    //     switch (inputName) {
-    //         case "m_id":
-    //             result = idCheck();
-    //             break;
-
-    //         case "m_pw":
-    //             result = pwCheck();
-    //             break;
-
-    //         case "m_pw_again":
-    //             result = pwCompareCheck();
-    //             break;
-
-    //         case "m_mail":
-    //             result = mailCheck();
-    //             break;
-
-    //         case "m_name":
-    //             result = nameCheck();
-    //             break;
-
-    //         case "m_phone":
-    //             result = phoneCheck();
-    //             break;
-
-    //         case "m_addr_code":
-    //         case "m_addr":
-    //         case "m_detail_addr":
-    //             result = addrCheck();
-    //             break;
-    //     }
-
-    //     if (inputName == "m_id") {
-    //         idMessage(result);
-    //     } else {
-    //         if (result == 1) {
-    //             hideMessage(inputEl);
-    //         } else {
-    //             showMessage(inputEl);
-    //         }
-    //     }
-    // }
-
-    // function showMessage(input) {
-    //     let messageEl = document.getElementById("message_" + input.name);
-    //     let iconEl = document.getElementById("icon_" + input.name);
-
-    //     if (messageEl && iconEl) {
-    //         messageEl.style.color = "#ff0000";
-    //         iconEl.style.color = "#ff0000";
-
-    //         iconEl.innerHTML = "<i class='fa-solid fa-circle-xmark'></i>";
-    //         messageEl.style.display = "block";
-    //     }
-    // }
-
-    // function hideMessage(input) {
-    //     let messageEl = document.getElementById("message_" + input.name);
-    //     let iconEl = document.getElementById("icon_" + input.name);
-
-    //     if (messageEl && iconEl) {
-    //         messageEl.style.color = "var(--main-light-color)";
-    //         iconEl.style.color = "var(--main-light-color)";
-
-    //         iconEl.innerHTML = "<i class='fa-solid fa-circle-check'></i>";
-    //         messageEl.style.display = "none";
-    //     }
-    // }
-
-    // function idMessage(result) {
-    //     let messageEl = document.getElementById("message_m_id");
-    //     let messageSameEl = document.getElementById("message_same_m_id");
-    //     let iconEl = document.getElementById("icon_m_id");
+       setUser();
+       modifyForm();
+    
+    }, [accessToken]);
 
 
-    //     if (messageEl && messageSameEl && iconEl) {
-    //         if (result == 1) {
-    //             messageEl.style.color = "var(--main-light-color)";
-    //             messageSameEl.style.color = "var(--main-light-color)";
-    //             iconEl.style.color = "var(--main-light-color)";
+    const setUser = async () => {
+        let loginedUId = await getToken('loginedUId');
+        let token = await getToken('accessToken');
+        setUId(loginedUId);        
+        setAccessToken(token);    
+                                    
+    }
 
-    //             iconEl.innerHTML = "<i class='fa-solid fa-circle-check'></i>";
-    //             messageEl.style.display = "none";
-    //             messageSameEl.style.display = "none";
-    //         } else if (result != 5) {
-    //             messageEl.style.color = "#ff0000";
-    //             iconEl.style.color = "#ff0000";
+    const modifyForm = async () => {
 
-    //             iconEl.innerHTML = "<i class='fa-solid fa-circle-xmark'></i>";
-    //             messageSameEl.style.display = "none";
-    //             messageEl.style.display = "block";
-    //         } else {
-    //             messageSameEl.style.color = "#ff0000";
-    //             iconEl.style.color = "#ff0000";
+        let data = {
+            "u_id": uId,
+        }        
 
-    //             iconEl.innerHTML = "<i class='fa-solid fa-circle-xmark'></i>";
-    //             messageEl.style.display = "none";
-    //             messageSameEl.style.display = "block";
-    //         }
-    //     }
-    // }
+        await axios({
+            url: process.env.REACT_APP_SERVER_URL + `/api/user/modify_form`,
+            method: 'post',      
+            data: data,
+            headers:{Authorization : `Bearer ${accessToken}`,
+            },
+        })
+        .then(res => {        
+            console.log('res: ', res);
+            console.log('res.data: ', res.data);                
+            
+            if (res.data !== null && res.data.message === undefined) {
+                        
+                console.log('AXIOS MODIFY_FORM COMMUNICATION SUCCESS ==> ', res.data);                    
+                    
+                setUNo( res.data.user.u_no);
+                setUId(res.data.user.u_id);               
+                setUMail(res.data.user.u_mail);
+                setUPhone(res.data.user.u_phone);
+                setUZipCode(res.data.user.u_zip_code);
+                setUFirstAddr(res.data.user.u_first_address);
+                setUSeconAddr(res.data.user.u_second_address);
+                setUProfileImg(res.data.user.pi_name);                
 
+            }         
+        })
+        .catch(error => {
+            console.log('AXIOS MODIFY_FORM COMMUNICATION ERROR');
 
+            console.log('AXIOS USER_DELETE COMMUNICATION ERROR');
+            console.log(error.response.data.message);
+            if(error.response.data.message !== undefined){
 
+                getRefreshToken();
+            }                    
+            
+        })
+        .finally(data => {
+            console.log('AXIOS MODIFY_FORM COMMUNICATION FINALLY');
+
+        });           
+            
+    }               
+        
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');
 
@@ -278,10 +128,10 @@ const Modify = () => {
     }
 
      
-    const signupBtnClickHandler =() => {
-        console.log('signupBtnClickHandler()');
+    const modifyBtnClickHandler = () => {
+        console.log('modifyBtnClickHandler()');
 
-        let form = document.signup_form;
+        let form = document.modify_form;
 
         if (uPw === '') {
             alert('비밀번호를 입력해 주세요');
@@ -316,14 +166,48 @@ const Modify = () => {
             formData.append("u_second_address", uSecondAddr);
             formData.append("u_profile_img", files[0]);
         
-            dispatch(getModifyAction(formData));
-        
-            setUNo(0); setUId(''); setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
-            setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');                    
+            axios({
+                url: process.env.REACT_APP_SERVER_URL + `/api/user/modify_confirm`,                
+                method: 'put',      
+                data: formData,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            .then(res => {        
+                console.log('res: ', res);
+                console.log('res.data: ', res.data);
+                console.log('res.affect: ', res.data.result.affectedRows);
+
+                if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {
+                    console.log('AXIOS MODIFY_CONFIRM COMMUNICATION SUCCESS ==> ', res.data);                                        
                     
+                    alert('정보수정에 성공하였습니다.');
+                    navigate('/');
+
+                }
+        
+            
+            })
+            .catch(error => {
+                console.log('AXIOS MODIFY_CONFIRM COMMUNICATION ERROR');
+                alert('정보수정에 실패하였습니다.');  
+            })
+            .finally(data => {
+                console.log('AXIOS MODIFY_CONFIRM COMMUNICATION FINALLY');
+        
+            });
+                   
+                        
+            setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
+            setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');  
+     
         }
+   
     }
 
+
+    
     return (
         <div className='content-wrap'>
 
@@ -375,23 +259,32 @@ const Modify = () => {
                                 <input type="text" id="address" name="u_first_address" value={uFirstAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="주소" readOnly/>
                                 <input type="text" id="detailAddress" name="u_second_address" value={uSecondAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="상세주소"/>
 
-                                <span id="icon_u_detail_addr" class="input-icon"></span>
-                                <span id="message_u_detail_addr" class="input-message">주소를 입력해 주세요.</span>
+                                <span id="icon_u_detail_addr" className="input-icon"></span>
+                                <span id="message_u_detail_addr" className="input-message">주소를 입력해 주세요.</span>
                             </div>
                         </div>
                         
-                        <div class='input-wrap'>
+                        <div className='input-wrap' id='profile'>
+                            <div className="profile-img">               
+                                       
+                                       {/*<img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />*/}
+                                       <img src="/imgs/logo/logo.png" alt="밥박사" />
+                                       
+                            </div>
                             <div>
-                                <span id="icon_u_profile" class="input-icon"></span>
-                                <span id="message_u_profile" class="input-message">프로필 사진을 선택해 주세요.</span>
+                                <span id="icon_u_profile" className="input-icon"></span>
+                                <span id="message_u_profile" className="input-message">프로필 사진을 선택해 주세요.</span>
                                 <input type="file" name="u_profile" value={uProfile} onChange={(e) => userInfoChangeHandler(e)}/>                
                             </div>
+                            
                         </div>
                     
-                        <div class='btn-wrap'>
-                            <button type="button" onClick={signupBtnClickHandler} className="btn main full">정보수정</button>
+                        <div className='btn-wrap'>
+                            <button type="button" onClick={modifyBtnClickHandler} className="btn main full">정보수정</button>
+                            <Link to = '/user/delete' className="btn sub full" >회원탈퇴</Link>
+
                         </div>
-                        
+            
 
                         {/* <div class="btn-wrap">
                             <button type="button" onclick="memberFormCheck('create');" class="btn main full">회원가입</button>
@@ -401,14 +294,7 @@ const Modify = () => {
                     
                 </div>
 
-
-
-
-
-
-
-
-
+              
 
         </div>
 

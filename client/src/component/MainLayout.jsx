@@ -1,22 +1,24 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Footer from './include/Footer';
 import Header from './include/Header';
 import Nav from './include/Nav';
-import Footer from './include/Footer';
+import ScrollMoveBtn from './include/ScrollMoveBtn';
 
 
 const MainLayout = () => {
-  return (
+    return (
         <>
             <Header />
-            <Nav />       
-            <div className="container">             
-              <Outlet />
+            <Nav />
+            <div className="container">
+                <Outlet />
             </div>
-            <Footer />         
+            <Footer />
+            <ScrollMoveBtn />
         </>
-      
-  );
+
+    );
 }
 
 export default MainLayout;

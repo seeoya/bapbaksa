@@ -3,33 +3,35 @@ import { Link } from 'react-router-dom';
 
 const RecipeListItem = ({ itemNo, idx, recipeList }) => {
 
+    let item = recipeList[itemNo];
+
     return (
         <>
             {
                 recipeList ?
                     <Link to={"/recipe/view/" + itemNo} className='recipe-item' key={idx} >
                         <div className='recipe-info'>
-                            <div>{recipeList[itemNo].RECP_CODE}</div>
-                            <img src={recipeList[itemNo].RECP_MAIN_IMG} alt={recipeList[itemNo].RECP_NAME} />
-                            <div className='recipe-name'>{recipeList[itemNo].RECP_NAME}</div>
+                            <div>{item.RECP_CODE}</div>
+                            <img src={item.RECP_MAIN_IMG} alt={item.RECP_NAME} />
+                            <div className='recipe-name'>{item.RECP_NAME}</div>
 
                             <div className='recipe-sub-info'>
                                 <div className='recipe-third-info'>
                                     <span>
-                                        {recipeList[itemNo].RECP_REGION_NAME}
+                                        {item.RECP_REGION_NAME}
                                     </span>
                                     <span>
-                                        {recipeList[itemNo].RECP_CATEGORY_NAME}
+                                        {item.RECP_CATEGORY_NAME}
                                     </span>
                                     <span>
-                                        {recipeList[itemNo].RECP_KCAL}
+                                        {item.RECP_KCAL}
                                     </span>
                                     <span>
-                                        {recipeList[itemNo].RECP_SERVIN}
+                                        {item.RECP_SERVIN}
                                     </span>
                                 </div>
-                                <div>{recipeList[itemNo].RECP_TIME}/{recipeList[itemNo].RECP_DIFFICULT} 난이도</div>
-                                <div className='recipe-intro'>{recipeList[itemNo].RECP_INTRO}</div>
+                                <div>{item.RECP_TIME}/{item.RECP_DIFFICULT} 난이도</div>
+                                <div className='recipe-intro'>{item.RECP_INTRO}</div>
                             </div>
                         </div>
                     </Link > : null

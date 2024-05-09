@@ -809,9 +809,15 @@ footer .util_footer .btn {
     padding: 20px;
 }
 
-#market_list_view .ingredient-middle-wrap, #shopping_cart_wrap .ingredient-middle-wrap {
+#market_list_view .ingredient-middle-wrap {
     display: flex;
     justify-content: flex-end;
+}
+
+#shopping_cart_wrap .ingredient-middle-wrap {
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
 }
 
 #market_list_view input[type="number"], #shopping_cart_wrap input[type="number"] {
@@ -829,10 +835,10 @@ footer .util_footer .btn {
 }
 
 #shopping_cart_wrap .ingredient-img-wrap {
-    margin-right: 20px;
+    width: 400px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 }
 
 #market_list .product-item-img, #shopping_cart_wrap .ingredient-img {
@@ -851,9 +857,30 @@ footer .util_footer .btn {
     display: flex;
 }
 
-#market_list_view .ingredient-top-wrap, #shopping_cart_wrap .ingredient-top-wrap {
+#market_list_view .ingredient-top-wrap {
     display: flex;
     align-items: center;
+}
+
+#shopping_cart_wrap .ingredient-top-wrap {
+    display: flex;
+    align-items: center;
+    width: 150px;
+}
+
+#shopping_cart_wrap .title {
+    text-align: center;
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+}
+
+#cart-no-item .error-content p {
+    text-align: center;
+    font-size: 2rem;
+    display: flex;
+    height: 100px;
+    align-items: end;
 }
 
 #market_list_view .ingredient-price-btn-wrap, #shopping_cart_wrap .ingredient-price-btn-wrap {
@@ -863,7 +890,7 @@ footer .util_footer .btn {
 }
 
 #market_list_view .ingredient-title, #shopping_cart_wrap .ingredient-title {
-    font-size: 20px;
+    font-size: 2.3rem;
     font-weight: bold;
     margin-right: 10px;
 }
@@ -906,6 +933,7 @@ footer .util_footer .btn {
     display: flex;
     align-items: center;
     gap: 3px;
+    width: 150px;
 }
 
 #market_list_view #result, #shopping_cart_wrap #result {
@@ -1118,6 +1146,15 @@ footer .util_footer .btn {
 
 /* cart css */
 #shopping_cart_wrap .shpping_cart_wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+#shopping_cart_wrap .ingredient-sub-title {
+    font-size: 1.5rem;
+}
+
+#shopping_cart_wrap .ingredient-title-wrap {
     display: flex;
     flex-direction: column;
 }

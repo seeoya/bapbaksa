@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const compression = require("compression");
 const path = require("path");
 const session = require("express-session");
-const cors = require('cors');
+const cors = require("cors");
 const os = require("os");
 
 app.use(bodyParser.json());
@@ -28,14 +28,15 @@ app.use(
     })
 );
 
-
 // routes
 const userRouter = require("./routes/userRouter");
+const adminRouter = require("./routes/adminRouter");
 const marketRouter = require("./routes/marketRouter");
 const recipeRouter = require("./routes/recipeRouter");
 const fridgeRouter = require("./routes/fridgeRouter");
 
 app.use("/api/user", userRouter);
+app.use("/admin", adminRouter);
 app.use("/market", marketRouter);
 app.use("/recipe", recipeRouter);
 app.use("/fridge", fridgeRouter);

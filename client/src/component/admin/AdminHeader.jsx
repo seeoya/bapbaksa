@@ -10,23 +10,39 @@ const AdminHeader = () => {
     }, [url]);
 
     const initActiveTab = () => {
-        let active = url.replace("/admin", "").replace("/", "");
+        let active = url.replace("/admin", "");
         setActiveTab(active);
+
+        switch (active) {
+            case "/user":
+            case "/user/":
+                setActiveTab(0)
+                break;
+            case "/market":
+            case "/market/":
+                setActiveTab(1)
+                break;
+            case "/market/refund":
+                setActiveTab(2)
+                break;
+            default:
+                break;
+        }
     }
 
     return (
         <header>
-            <div className='logo'>
+            <Link to={"/admin"} className='logo'>
                 <img src="/imgs/logo/logo.png" alt="밥박사 로고" />
-            </div>
+                <div className=''>밥박사</div>
+            </Link>
 
             <nav>
-                <Link to={"/admin"} className={activeTab === "" ? "admin-link active" : 'admin-link'}>MAIN</Link>
                 <div className='admin-link'>회원 관리</div>
-                <Link to={"/admin/user"} className={activeTab === "user" ? "admin-link active" : 'admin-link'}>회원목록</Link>
+                <Link to={"/admin/user"} className={activeTab === 0 ? "admin-link active" : 'admin-link'}>회원목록</Link>
                 <div className='admin-link'>마켓 관리</div>
-                <Link to={"/admin/market"} className={activeTab === "market" ? "admin-link active" : 'admin-link'}>구매 내역</Link>
-                <Link to={"/admin/market_refund"} className={activeTab === "market_refund" ? "admin-link active" : 'admin-link'}>환불 관리</Link>
+                <Link to={"/admin/market"} className={activeTab === 1 ? "admin-link active" : 'admin-link'}>구매 내역</Link>
+                <Link to={"/admin/market/refund"} className={activeTab === 2 ? "admin-link active" : 'admin-link'}>환불 관리</Link>
             </nav>
         </header>
     );

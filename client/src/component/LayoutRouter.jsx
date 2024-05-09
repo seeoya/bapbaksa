@@ -10,7 +10,9 @@ import StyleGuide from './StyleGuide';
 import AdminMain from './admin/AdminMain';
 import AdminMarket from './admin/AdminMarket';
 import AdminMarketRefund from './admin/AdminMarketRefund';
+import AdminMarketView from './admin/AdminMarketView';
 import AdminUser from './admin/AdminUser';
+import AdminUserView from './admin/AdminUserView';
 import ListView from './market/ListView';
 import MartketLayout from './market/MarketLayout';
 import MarketList from './market/MarketList';
@@ -72,9 +74,18 @@ const LayoutRouter = () => {
 
             <Route path="/admin" element={<AdminLayout />}>
                 <Route path="" element={<AdminMain />}></Route>
-                <Route path="user" element={<AdminUser />}></Route>
-                <Route path="market" element={<AdminMarket />}></Route>
-                <Route path="market_refund" element={<AdminMarketRefund />}></Route>
+
+                <Route path="user" element={<Outlet />}>
+                    <Route path="" element={<AdminUser />}></Route>
+                    <Route path=":no" element={<AdminUserView />}></Route>
+                </Route>
+
+                <Route path="market" element={<Outlet />}>
+                    <Route path="" element={<AdminMarket />}></Route>
+                    <Route path=":no" element={<AdminMarketView />}></Route>
+                    <Route path="refund" element={<AdminMarketRefund />}></Route>
+                </Route>
+
             </Route>
         </Routes>
     );

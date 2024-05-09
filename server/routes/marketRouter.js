@@ -6,9 +6,30 @@ router.get("/", (req, res) => {
     res.json({ key: "value" });
 });
 
-router.get("/allProduct", (req,res) => {
-    console.log("[server] marketRouter getAllProduct!");
-    marketService.getAllProduct(req,res);
+router.post("/goToMarketCart", (req,res) => {
+    console.log('goToMarketCart');
+    marketService.goToMarketCart(req,res);
+});
+
+router.post("/getMarketCart", (req,res) => {
+    console.log('getMarketCart');
+    marketService.getMarketCart(req,res);
+});
+
+router.post("/deleteCart", (req,res) => {
+    console.log('deleteCart');
+    marketService.deleteCart(req,res);
+});
+
+router.post("/payment", (req,res) => {
+    console.log('payment');
+    marketService.payment(req,res);
 })
+// router.get("/allProduct", (req,res) => {
+//     console.log("[server] marketRouter getAllProduct!");
+//     marketService.getAllProduct(req,res);
+// })
+
+
 
 module.exports = router;

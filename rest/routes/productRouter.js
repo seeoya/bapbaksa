@@ -49,4 +49,9 @@ router.post('/getChartData', (req, res) => {
     product.getChartData(req, res);
 });
 
+router.post('/getProduct', (req, res) => {
+    console.log('/product/getProduct')
+    product.getProduct(req, res);
+});
+
 module.exports = router;

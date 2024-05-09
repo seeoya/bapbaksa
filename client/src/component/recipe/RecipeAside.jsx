@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { loadMyFridgeAction } from '../../redux/actions/fridge_action';
+import { getToken } from '../../storage/loginedToken';
 
 const RecipeAside = () => {
     const dispatch = useDispatch();
@@ -25,8 +26,11 @@ const RecipeAside = () => {
 
     const initMyFridge = async () => {
         // #TODO 로그인한 회원 u_no로 변경
-        let uNo = 1;
-        dispatch(await loadMyFridgeAction(uNo));
+        let uNo = getToken('loginedUNo');
+
+        if (uNo) {
+            dispatch(await loadMyFridgeAction(uNo));
+        }
     }
 
     const fridgeBtnClickEvent = () => {
@@ -97,7 +101,7 @@ const RecipeAside = () => {
                                 </button>
                             })
                             :
-                            <div>냉장고에 재료가 없습니다.</div>
+                            <div className='empty'>냉장고에 재료가 없습니다.</div>
                     }
 
                     <Link to={"/mypage/myFridge"} className='fridge-item link'>

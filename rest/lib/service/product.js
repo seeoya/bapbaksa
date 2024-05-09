@@ -315,6 +315,35 @@ const product = {
             }
         })
     },
+    getProduct: (req, res) => {
+        console.log("123", req.body.I_NO);
+        let i_no = req.body.I_NO;
+        DB.query(
+            `SELECT PROD_IMG, PROD_NAME, PROD_SPCS_NAME, PROD_AVRG_PRCE, DSBN_STEP_ACTO_WT, DSBN_STEP_ACTO_UNIT_NM FROM PRODUCT WHERE PROD_NO = ?`,
+            [i_no],
+            (error, data) => {
+                if (error) {
+                console.log(error);
+                res.json(null);
+                } else {
+                if (data.length > 0) {
+                    const productData = {
+                    PROD_IMG: data[0].PROD_IMG,
+                    PROD_NAME: data[0].PROD_NAME,
+                    PROD_SPCS_NAME: data[0].PROD_SPCS_NAME,
+                    PROD_AVRG_PRCE: data[0].PROD_AVRG_PRCE,
+                    DSBN_STEP_ACTO_WT: data[0].DSBN_STEP_ACTO_WT,
+                    DSBN_STEP_ACTO_UNIT_NM: data[0].DSBN_STEP_ACTO_UNIT_NM
+                    };
+                    res.json(productData);
+                } else {
+                    res.json(null);
+                }
+                }
+            }
+            );
+        },
+
 }
 
 module.exports = product;

@@ -331,17 +331,12 @@ nav .link {
     font-weight: 500;
 }
 
-.scrolled nav {
-
-    /* top: 60px; */
-}
-
 .scrolled nav .category-wrap {
-
-    /* height: 50px; */
+    height: 40px;
 }
 
 .scrolled nav .link {
+    font-size: 1.4rem !important;
 }
 
 .category-wrap .header-category {
@@ -362,8 +357,9 @@ nav .link {
 
 #main-category-wrap .header-category .market {
     display: flex;
-    width: 80px;
     align-items: center;
+    justify-content: right;
+    width: 200px;
 }
 
 #market-category-wrap .header-category .market {

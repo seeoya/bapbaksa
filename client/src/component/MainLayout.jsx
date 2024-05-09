@@ -1,10 +1,10 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import "../css/style.css";
 import Footer from './include/Footer';
 import Header from './include/Header';
 import Nav from './include/Nav';
 import ScrollMoveBtn from './include/ScrollMoveBtn';
-
 
 const MainLayout = () => {
     return (

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getToken } from "../../storage/loginedToken";
 
 const ShoppingCart = () => {
 
@@ -9,7 +10,7 @@ const ShoppingCart = () => {
     const [temp, setTemp] = useState(false);
 
     useEffect(() => {
-        let u_no = 1;
+        let u_no = getToken('loginedUNo');
         axios_getCartInfo(u_no);
     }, [temp]);
 

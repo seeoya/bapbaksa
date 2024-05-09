@@ -2,6 +2,7 @@ import ApexCharts from 'apexcharts';
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { getToken } from '../../storage/loginedToken';
 
 const ListView = () => {
     const { no } = useParams();
@@ -99,8 +100,10 @@ const ListView = () => {
     }
 
     const goToMarketCartBtn = () => {
-
-        let u_no = 1; let i_no = prodInfo.PROD_NO; let mc_count = quantityInt;
+        let u_no = getToken('loginedUNo');
+        let i_no = prodInfo.PROD_NO; 
+        let mc_count = quantityInt;
+        console.log("💘💘💘💘💘💘💘💘",u_no);
 
         axios_goToMarketCart(u_no,i_no,mc_count);
         setQuantityInt(0);
@@ -150,6 +153,7 @@ const ListView = () => {
     }
 
     async function axios_goToMarketCart(u_no, i_no, mc_count) {
+        console.log("💌💌💌💌💌",u_no);
         try {
 
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/goToMarketCart", {

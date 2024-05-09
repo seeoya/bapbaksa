@@ -26,6 +26,7 @@ const MarketList = () => {
 
     const moreProductBtn = async () => {
         setMoreList(prev => prev + 12);
+        setPage(prev => prev + 1);
         dispatch(await twelveProduct(moreList, newProdDate, number, search, page));
     }
 

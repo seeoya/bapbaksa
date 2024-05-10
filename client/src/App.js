@@ -39,7 +39,7 @@ function App() {
     return (
         <>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
-                <div className="wrap">
+                <div className={isScrolled ? "wrap scrolled" : "wrap"}>
                     <LayoutRouter />
                 </div>
             </BrowserRouter>

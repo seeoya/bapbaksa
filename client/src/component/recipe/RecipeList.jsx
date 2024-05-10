@@ -10,6 +10,7 @@ const RecipeList = () => {
     // 재료
     const allFridgeList = useSelector((state) => state.fridge.allFridge);
     const myFridgeList = useSelector((state) => state.fridge.myFridge);
+    const recipeSearch = useSelector((state) => state.recipe.search);
 
     const [myFridgeState, setMyFridgeState] = useState([]);
     const [notMyFridgeState, setNotMyFridgeState] = useState([]);
@@ -49,7 +50,7 @@ const RecipeList = () => {
     useEffect(() => {
         setRecipePage(0);
         initRecipeList();
-    }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude]);
+    }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch]);
 
     useEffect(() => {
         setMoreBtn();
@@ -115,7 +116,7 @@ const RecipeList = () => {
             .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
                 params: {
                     type: "list",
-                    search: searchString,
+                    search: recipeSearch,
                     sort: sortState,
                     region: activeRegionList,
                     food: activeIngreList,
@@ -158,13 +159,18 @@ const RecipeList = () => {
 
     return (
         <>
-            <h2 className='title'>레시피 목록 {recipePage}</h2>
-
+            <h2 className='title'>
+                {
+                    recipeSearch ?
+                        `"${recipeSearch}" 검색 결과 ${recipeCount} 건`
+                        : "레시피 목록"
+                }
+            </h2>
             <div className='content'>
                 <RecipeListFilter myFridgeState={myFridgeState} notMyFridgeState={notMyFridgeState}
                     activeIngreList={activeIngreList} activeRegionList={activeRegionList} activeCateList={activeCateList} activeDifficultList={activeDifficultList}
                     setActiveIngreList={setActiveIngreList} setActiveRegionList={setActiveRegionList} setActiveCateList={setActiveCateList} setActiveDifficultList={setActiveDifficultList}
-                    setSortState={setSortState} setSearchString={setSearchString} filterInclude={filterInclude} setFilterInclude={setFilterInclude}
+                    setSortState={setSortState} filterInclude={filterInclude} setFilterInclude={setFilterInclude}
                     setMoreBtnState={setMoreBtnState} recipeCount={recipeCount}
                 />
 

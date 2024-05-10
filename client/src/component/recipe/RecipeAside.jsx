@@ -38,9 +38,9 @@ const RecipeAside = () => {
         let recipeAside = document.getElementById("recipe_aside");
 
         if (recipeAside.classList.contains("close")) {
-            fridgeBtn.innerHTML = '<i className="fa-solid fa-chevron-left"></i>';
+            fridgeBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i><span class="blind">내 냉장고 닫기</span>';
         } else {
-            fridgeBtn.innerHTML = '<i className="fa-solid fa-chevron-right"></i>';
+            fridgeBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i><span class="blind">내 냉장고 열기</span>';
         }
 
         recipeAside.classList.toggle("close");
@@ -84,7 +84,8 @@ const RecipeAside = () => {
                 <h2 className='title'>나의 냉장고</h2>
 
                 <button type='button' id='fridge_btn' className='btn main' onClick={fridgeBtnClickEvent}>
-                    <i className="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <span className='blind'>내 냉장고 닫기</span>
                 </button>
 
                 <div className='fridge-content'>

@@ -1,13 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchRecipe } from '../../redux/actions/recipe_action';
 
 const RecipeListFilter = (props) => {
     let { myFridgeState, notMyFridgeState,
         activeIngreList, activeRegionList, activeCateList, activeDifficultList,
         setActiveIngreList, setActiveRegionList, setActiveCateList, setActiveDifficultList,
-        setSortState, setSearchString, filterInclude, setFilterInclude,
+        setSortState, filterInclude, setFilterInclude,
         setMoreBtnState, recipeCount } = props;
+
+    const dispatch = useDispatch();
 
     const allFridgeList = useSelector((state) => state.fridge.allFridge);
 
@@ -100,9 +103,10 @@ const RecipeListFilter = (props) => {
         setActiveRegionList([]);
         setActiveCateList([]);
         setActiveDifficultList([]);
-        setSearchString("");
         setSortState("old");
         setMoreBtnState(true);
+        dispatch(searchRecipe(""));
+        document.getElementById("recipe_search").value = "";
     }
 
     return (
@@ -172,14 +176,14 @@ const RecipeListFilter = (props) => {
             <div className='sub-filter'>
                 <div>
                     <div>
-                        <input type="radio" name="food_include" id="food_include_0" value="0" checked={filterInclude === 0 ? "checked" : ""} onClick={() => setFilterInclude(0)} />
+                        <input type="radio" name="food_include" id="food_include_0" value="0" defaultChecked={filterInclude === 0 ? "checked" : ""} onClick={() => setFilterInclude(0)} />
                         <label htmlFor="food_include_0">재료 하나라도 포함</label>
-                        <input type="radio" name="food_include" id="food_include_1" value="1" checked={filterInclude === 1 ? "checked" : ""} onClick={() => setFilterInclude(1)} />
+                        <input type="radio" name="food_include" id="food_include_1" value="1" defaultChecked={filterInclude === 1 ? "checked" : ""} onClick={() => setFilterInclude(1)} />
                         <label htmlFor="food_include_1">재료 전부 포함</label>
                     </div>
 
                     <select id="sort_filter" onChange={sortChangeEvent}>
-                        <option value="old" selected>오래된 순</option>
+                        <option value="old" defaultValue>오래된 순</option>
                         <option value="new">최신순</option>
                         <option value="lesstime">조리시간 짧은 순</option>
                         <option value="moretime">조리시간 긴 순</option>

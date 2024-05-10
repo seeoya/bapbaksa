@@ -63,4 +63,14 @@ router.post('/getProductInfo', (req,res) => {
     console.log('/product/getProductInfo');
     product.getProductInfo(req,res);
 })
+router.get('/random', (req, res) => {
+    console.log('/product/random');
+    product.random(req, res);
+});
+
+router.get('/compareprice', (req, res) => {
+    console.log('/product/compareprice');
+    product.compareprice(req, res);
+});
+
 module.exports = router;

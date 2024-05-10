@@ -41,7 +41,7 @@ const LayoutRouter = () => {
             <Route element={<MainLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/auth/google/callback" element={<Google />}></Route>
-                <Route path="/auth/kakao/callback" element={<Kakao />}></Route>
+                <Route path="/oauth/kakao/callback" element={<Kakao />}></Route>
 
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>

@@ -52,8 +52,6 @@ const product = {
         console.log("params : ", params)
         /* 
         params = {
-            moreList        : 더 불러올 항목
-            newProdDate     : 최신날짜 항목만 불러옴
             filterNumber    : 탄수, 채소 등 필터
             searchValue     : 검색어
             page            : 현재 페이지
@@ -343,7 +341,54 @@ const product = {
             }
             );
         },
-
+    random: (req, res) => {
+        console.log("random");
+        DB.query(`SELECT * FROM PRODUCT ORDER BY RAND() LIMIT 5`, 
+        (error, random) => {
+            if (error) {
+                res.json(null);
+            } else {
+                console.log('random success return json');
+                res.json(random);
+            }
+        });
+    },
+    compareprice: (req, res) => {
+        console.log("compareprice");
+        let cur_date = "";
+        let last_date = "";
+        DB.query(`SELECT PROD_YMD FROM PRODUCT GROUP BY PROD_YMD ORDER BY PROD_YMD DESC LIMIT 2`, 
+        (error, date) => {
+            if (error) {
+                res.json(null);
+            } else {
+                cur_date = date[0].PROD_YMD;
+                last_date = date[1].PROD_YMD;
+                DB.query(`
+                SELECT 
+                    * 
+                FROM 
+                    PRODUCT cur 
+                INNER JOIN 
+                    PRODUCT last 
+                ON 
+                    cur.PROD_CODE = last.PROD_CODE
+                    AND cur.PROD_SPCS_CODE = last.PROD_SPCS_CODE 
+                    AND cur.PROD_GRAD_CODE = last.PROD_GRAD_CODE 
+                WHERE 
+                    cur.PROD_YMD = ${cur_date} 
+                    AND last.PROD_YMD = ${last_date} 
+                    AND cur.PROD_AVRG_PRCE < (last.PROD_AVRG_PRCE * 0.9) ORDER BY RAND() LIMIT 5
+                `, (error, cheep) => {
+                    if (error) {
+                        res.json(null);
+                    } else {
+                        res.json(cheep);
+                    }
+                });
+            }
+        })
+    }
 }
-
+// 10퍼센트 이상 더 싼 물품을 찾을 때 : 현재가격 / 전달 가격 * 100
 module.exports = product;

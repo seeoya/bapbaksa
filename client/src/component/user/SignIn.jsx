@@ -7,13 +7,17 @@ import $ from 'jquery';
 
 axios.defaults.withCredentials = true;
 const googleid = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-console.log('googleid', googleid);
+const kakaoid = process.env.REACT_APP_KAKAO_CLIENT_ID;
 
-//카카오 로그인 요청 주소
-const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=process.env._uri=https://www.teamprojectvv.shop/callback/kakao&response_type=code`;
+const googleRedirect = `http%3A//localhost:3000/auth/google/callback`;
+const kakaoRedirect = `http://localhost:3000/oauth/kakao/callback`;
+
 
 //구글 로그인 요청 주소
-const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${googleid}&state=state_parameter_passthrough_value&redirect_uri=http%3A//localhost:3000/auth/google/callback&response_type=code&scope=https%3A//www.googleapis.com/auth/userinfo.email&include_granted_scopes=true`;
+const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${googleid}&state=state_parameter_passthrough_value&redirect_uri=${googleRedirect}&response_type=code&scope=https%3A//www.googleapis.com/auth/userinfo.email&include_granted_scopes=true`;
+
+//카카오 로그인 요청 주소
+const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoid}&redirect_uri=${kakaoRedirect}&response_type=code`;
 
 //네이버 로그인 요청 주소
 const state = Math.floor(new Date().getTime() + Math.random() * 1000);
@@ -153,17 +157,18 @@ const SignIn = () => {
                     <div className='login-link'>
                    
                          <Link to={googleURL}>
-                         <img src="/imgs/logo/web_light_sq_na@2x.png" className='kakao-link' alt=''/>                         
-                         
+                         <img src="/imgs/logo/web_light_sq_na@2x.png" className='kakao-link' alt=''/>                                                  
+                         </Link>
+
+                         <Link to={KakaoURL}>
+                         <img src="/imgs/logo/kakao_login_medium.png" className='kakao-link' alt=''/>                         
                          </Link>
 
                          <Link to={'/auth/naver'}>
                          <span className="naver-link">NAVER</span>
                          </Link>
 
-                         <Link to={'/auth/kakao'}>
-                         <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" className='kakao-link' alt=''/>                         
-                         </Link>
+                         
                     </div>
                 </form>                
             </div>

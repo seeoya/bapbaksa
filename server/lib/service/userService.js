@@ -14,6 +14,11 @@ const GOOGLE_WEB_CLIENT_SECRET = process.env.GOOGLE_WEB_CLIENT_SECRET;
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
 
+const KAKAO_WEB_CLIENT_ID = process.env.KAKAO_WEB_CLIENT_ID;
+const KAKAO_WEB_CLIENT_SECRET = process.env.KAKAO_WEB_CLIENT_SECRET;
+const KAKAO_TOKEN_URL = 'https://kauth.kakao.com/oauth/token';
+const KAKAO_USERINFO_URL = 'https://kapi.kakao.com/v2/user/me';
+
 
 const userService = {    
 
@@ -341,8 +346,6 @@ const userService = {
         const GOOGLEID = GOOGLE_WEB_CLIENT_ID;
         const GOOGLESECRET = GOOGLE_WEB_CLIENT_SECRET;    
         const GOOGLE_REDIRECT_URI = 'http://localhost:3000/auth/google/callback';
-        const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
-        const GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
         
 
         let post = req.body;
@@ -468,6 +471,139 @@ const userService = {
         
     },    
 
+    kakao_callback: async (req, res) => {
+        console.log('/kakao/callback/kakao_callback()');
+
+        const kakaoid = KAKAO_WEB_CLIENT_ID;
+        const kakaosecret = KAKAO_WEB_CLIENT_SECRET;       
+        const KAKAO_REDIRECT_URI = 'http://localhost:3000/oauth/kakao/callback';
+
+        console.log('kakaoid: ', kakaoid);
+        console.log('kakaosecret: ', kakaosecret);        
+
+        let post = req.body;
+        console.log('post:', post);
+        console.log('post.code: ', post.code);  
+        let code = post.code;  
+        let kakao_u_id = '';       
+     
+      
+        try {
+            let response_token = await axios.post(KAKAO_TOKEN_URL, {
+                code,
+                client_id: kakaoid,                
+                client_secret: kakaosecret,
+                redirect_uri: KAKAO_REDIRECT_URI,
+                grant_type: 'authorization_code',
+                headers: {'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'},
+            });
+
+            console.log('AXIOS KAKAO GET ACCESS_TOKEN COMMUNICATION SUCCESS', response_token);
+            console.log('AXIOS GOOGLE GET ACCESS_TOKEN COMMUNICATION SUCCESS', response_token, response_token.data.access_token);
+            
+
+            try {
+                let response_user_info = await axios.get(KAKAO_USERINFO_URL, {
+                    headers: {
+                        Authorization: `Bearer ${response_token.data.access_token}`,
+                    },
+                });
+
+                console.log('AXIOS GOOGLE GET USER INFO COMMUNICATION SUCCESS', response_user_info.data);
+                console.log('AXIOS GOOGLE GET USER INFO COMMUNICATION SUCCESS', response_user_info.data.properties);
+                
+                
+               // kakao_u_id = response_user_info.data.id;                
+
+            } catch (error) {
+                console.log('AXIOS KAKAO GET USER INFO COMMUNICATION FAIL', error);
+                
+            } finally {
+                console.log('AXIOS KAKAO GET USER INFO COMMUNICATION COMPLETE');
+
+            }
+
+        } catch (error) {
+            console.log('AXIOS KAKAO GET ACCESS_TOKEN COMMUNICATION FAIL', error);
+
+        } finally {
+            console.log('AXIOS KAKAO GET ACCESS_TOKEN COMMUNICATION COMPLETE');
+
+        }
+
+        //console.log("uid, umail======>", kakao_u_id);
+
+                                              
+        // db.query(`SELECT * FROM TBL_USER WHERE u_kakao_id = ?`,
+        //          [kakao_u_id], (error, user) => {
+                    
+        //             console.log('user', user);
+
+        //     if(user.length > 0) {              
+                
+        //         db.query(`UPDATE TBL_USER SET u_google_id = ?, u_mod_date = now() WHERE u_id = ?`,
+        //                     [google_u_id, user[0].u_id], (error, result) => {
+
+        //             console.log('result:', result);
+
+        //             if(result.affectedRows > 0){
+                        
+        //                 let accessToken = tokenUtils.makeToken({id: user[0].u_id});
+        //                 console.log("accessToken:", accessToken);
+        //                 let refreshToken = tokenUtils.makeRefreshToken();
+        //                 console.log("refreshToken:", refreshToken);
+
+        //                 db.query(`UPDATE TBL_USER SET u_refresh_token= ? WHERE u_id = ?`,
+        //                             [refreshToken, user[0].u_id], (error, result) => {
+
+        //                     if(result.affectedRows > 0){
+        //                         return res.json({result, uId:user[0].u_id, uNo:user[0].u_no, accessToken, refreshToken});     
+
+        //                     } else {
+        //                         return res.json({result, message: 'DB 에러! 관리자에게 문의하세요.'});
+        //                     }
+
+        //                 });
+            
+        //             } else {
+        //                 return res.json({result, message: 'DB 에러! 관리자에게 문의하세요.'});
+        //             }           
+            
+        //         });    
+                    
+        //     } else {
+
+        //         let u_id = shortid.generate();
+        //         let u_pw = shortid.generate();
+        //         let u_mail = google_u_mail;
+        //         let u_phone = '--';
+        //         let u_google_id = google_u_id;
+
+        //         console.log('====> ', u_id, u_pw, u_mail, u_phone, u_google_id);
+
+        //         let accessToken = tokenUtils.makeToken({id: u_google_id});
+        //         console.log("accessToken:", accessToken);
+                
+        //         let refreshToken = tokenUtils.makeRefreshToken();
+        //         console.log("refreshToken:", refreshToken);
+                
+
+        //         db.query(`insert into TBL_USER (u_id, u_pw, u_mail, u_phone, u_google_id, u_refresh_token) values(?, ?, ?, ?, ?, ?)`,
+        //                 [u_id, bcrypt.hashSync(u_pw, 10), u_mail, u_phone, u_google_id, refreshToken], (error, result) => {
+        //                     console.log('result', result);
+        //             if(result.affectedRows > 0) {
+        //                 return res.json({result, uId:u_id, uNo:result.insertId, accessToken, refreshToken});     
+        //             } else {
+        //                 return res.json({result, message: 'DB 에러! 관리자에게 문의하세요.'});
+        //             }
+
+        //         });
+
+        //     }    
+
+        // });          
+        
+    },    
 }
 
 module.exports = userService;

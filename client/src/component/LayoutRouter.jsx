@@ -29,11 +29,8 @@ import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
-import SignOut from './user/SignOut';
-import Delete from './user/Delete';
 import Google from './user/Google';
-
-
+import Kakao from './user/Kakao';
 
 
 
@@ -44,6 +41,8 @@ const LayoutRouter = () => {
             <Route element={<MainLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/auth/google/callback" element={<Google />}></Route>
+                <Route path="/auth/kakao/callback" element={<Kakao />}></Route>
+
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>
                     <Route path="signin" element={<SignIn />}></Route>

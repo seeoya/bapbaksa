@@ -41,7 +41,7 @@ router.delete("/delete_confirm", (req, res) => {
 
 
 router.post("/google/callback", (req, res) => {
-    console.log('google/callback()');
+    console.log("google/callback()");
 
     userService.google_callback(req, res);
     

@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 
 let origin_addr = ["http://54.253.228.81:3000", "http://52.62.249.221:3002"];
 if (os.version().includes("Windows")) {
-    origin_addr = ["http://localhost:3000", "http://localhost:3002"];
+    origin_addr = ["http://localhost:3000", "http://localhost:3002", "https://oauth2.googleapis.com/token"];
 }
 
 app.use(
@@ -35,6 +35,8 @@ const marketRouter = require("./routes/marketRouter");
 const recipeRouter = require("./routes/recipeRouter");
 const fridgeRouter = require("./routes/fridgeRouter");
 
+app.use("/auth", userRouter);
+app.use("/api/auth", userRouter);
 app.use("/api/user", userRouter);
 app.use("/market", marketRouter);
 app.use("/recipe", recipeRouter);

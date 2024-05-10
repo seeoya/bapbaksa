@@ -1,11 +1,18 @@
 import React from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
+import AdminLayout from './AdminLayout';
 import Copy from './Copy';
 import Error from './Error';
 import Home from './Home';
 import MainLayout from './MainLayout';
 import MartketMainLayout from './MarketMainLayout';
 import StyleGuide from './StyleGuide';
+import AdminMain from './admin/AdminMain';
+import AdminMarket from './admin/AdminMarket';
+import AdminMarketRefund from './admin/AdminMarketRefund';
+import AdminMarketView from './admin/AdminMarketView';
+import AdminUser from './admin/AdminUser';
+import AdminUserView from './admin/AdminUserView';
 import ListView from './market/ListView';
 import MartketLayout from './market/MarketLayout';
 import MarketList from './market/MarketList';
@@ -16,8 +23,10 @@ import MyFridge from './recipe/MyFridge';
 import RecipeLayout from './recipe/RecipeLayout';
 import RecipeList from './recipe/RecipeList';
 import RecipeView from './recipe/RecipeView';
+import Delete from './user/Delete';
 import Modify from './user/Modify';
 import SignIn from './user/SignIn';
+import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
 import SignOut from './user/SignOut';
@@ -33,7 +42,6 @@ const LayoutRouter = () => {
     return (
         <Routes>
             <Route element={<MainLayout />}>
-                
                 <Route path="/" element={<Home />} />
                 <Route path="/auth/google/callback" element={<Google />}></Route>
                 <Route path="/user" element={<UserLayout />}>
@@ -59,7 +67,6 @@ const LayoutRouter = () => {
                 <Route path="*" element={<Error />}></Route>
                 {/* Sample Page */}
                 <Route path="/copy" element={<Copy />}></Route>
-
             </Route>
 
             <Route element={<MartketMainLayout />}>
@@ -73,6 +80,21 @@ const LayoutRouter = () => {
                 </Route>
             </Route>
 
+            <Route path="/admin" element={<AdminLayout />}>
+                <Route path="" element={<AdminMain />}></Route>
+
+                <Route path="user" element={<Outlet />}>
+                    <Route path="" element={<AdminUser />}></Route>
+                    <Route path=":no" element={<AdminUserView />}></Route>
+                </Route>
+
+                <Route path="market" element={<Outlet />}>
+                    <Route path="" element={<AdminMarket />}></Route>
+                    <Route path=":no" element={<AdminMarketView />}></Route>
+                    <Route path="refund" element={<AdminMarketRefund />}></Route>
+                </Route>
+
+            </Route>
         </Routes>
     );
 };

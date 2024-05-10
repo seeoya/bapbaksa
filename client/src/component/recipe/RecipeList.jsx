@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import RecipeListFilter from './RecipeListFilter';
 import RecipeListItem from './RecipeListItem';
 
 const RecipeList = () => {
@@ -9,6 +10,7 @@ const RecipeList = () => {
     // 재료
     const allFridgeList = useSelector((state) => state.fridge.allFridge);
     const myFridgeList = useSelector((state) => state.fridge.myFridge);
+    const recipeSearch = useSelector((state) => state.recipe.search);
 
     const [myFridgeState, setMyFridgeState] = useState([]);
     const [notMyFridgeState, setNotMyFridgeState] = useState([]);
@@ -17,8 +19,7 @@ const RecipeList = () => {
     // 카테고리
     // const [regionList, setRegionList] = useSelector((state) => state.recipe.region);
     // const [categoryList, setCategoryList] = useSelector((state) => state.recipe.category);
-    const [regionList, setRegionList] = useState({});
-    const [categoryList, setCategoryList] = useState({});
+
     const [activeRegionList, setActiveRegionList] = useState([]);
     const [activeCateList, setActiveCateList] = useState([]);
     const [activeDifficultList, setActiveDifficultList] = useState([]);
@@ -26,16 +27,19 @@ const RecipeList = () => {
     // 검색 정렬
     const [searchString, setSearchString] = useState("");
     const [sortState, setSortState] = useState("old");
+    const [filterInclude, setFilterInclude] = useState(0);
 
     // 레시피
     const [recipeList, setRecipeList] = useState({});
+    const [recipeSortList, setRecipeSortList] = useState([]);
+
     const [recipePage, setRecipePage] = useState(0);
     const [recipePageItemCount, setRecipePageItemCount] = useState(20);
+    const [recipeCount, setRecipeCount] = useState(0);
     const [moreBtnState, setMoreBtnState] = useState(true);
 
     useEffect(() => {
         initIngreDivine();
-        initCategoryList();
         initRecipeList();
     }, []);
 
@@ -44,219 +48,139 @@ const RecipeList = () => {
     }, [allFridgeList, myFridgeList]);
 
     useEffect(() => {
+        setRecipePage(0);
         initRecipeList();
-    }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList]);
+    }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch]);
 
-    const initCategoryList = async () => {
-        // category
-        await axios
-            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe/category")
-            .then((data) => {
-                setCategoryList(data.data);
-            })
-            .catch((err) => {
-                return { type: "error" };
-            });
-
-        // region
-        await axios
-            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe/region")
-            .then((data) => {
-                setRegionList(data.data);
-            })
-            .catch((err) => {
-                return { type: "error" };
-            });
-    }
+    useEffect(() => {
+        setMoreBtn();
+    }, [recipeCount, recipePage, recipePageItemCount]);
 
     const initRecipeList = async () => {
-        console.log("recipe init")
+        console.log("recipe init");
 
-        await axios
-            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
-                params: {
-                    type: "list",
-                    search: searchString,
-                    sort: sortState,
-                    region: activeRegionList,
-                    food: activeIngreList,
-                    foodinclu: 1,
-                    difficult: activeDifficultList,
-                    category: activeCateList,
-                    page: recipePage,
-                    pagePerItem: recipePageItemCount,
-                },
-            })
-            .then((data) => {
-                setRecipeList(data.data);
-            })
-            .catch((err) => {
-                return { type: "error" };
-            });
+        await loadRecipe("init");
     }
 
     const initIngreDivine = () => {
-        if (allFridgeList && myFridgeList) {
-            let tmpList = [];
-            let tmpList2 = myFridgeList;
+        if (allFridgeList) {
+            if (myFridgeList) {
+                let tmpList = [];
+                let tmpList2 = myFridgeList;
 
-            Object.keys(allFridgeList).map((el) => {
-                if (!myFridgeList.includes(parseInt(el))) { tmpList.push(parseInt(el)) };
-            })
+                Object.keys(allFridgeList).map((el) => {
+                    if (!myFridgeList.includes(parseInt(el))) { tmpList.push(parseInt(el)) };
+                })
 
-            tmpList.sort((a, b) => {
-                return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-            });
-            tmpList2.sort((a, b) => {
-                return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-            });
+                tmpList.sort((a, b) => {
+                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
+                });
+                tmpList2.sort((a, b) => {
+                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
+                });
 
-            setNotMyFridgeState(tmpList);
-            setMyFridgeState(tmpList2);
+                setNotMyFridgeState(tmpList);
+                setMyFridgeState(tmpList2);
+            } else {
+                let tmpList = [];
 
-            // #TODO 나중에 다시 처리
-            // initDefaultActive();
+                Object.keys(allFridgeList).map((el) => {
+                    tmpList.push(parseInt(el))
+                })
+
+                tmpList.sort((a, b) => {
+                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
+                });
+
+                setNotMyFridgeState(tmpList);
+            }
         }
     }
 
-    const initDefaultActive = () => {
-        // #TODO 나중에 다시 처리
-        if (myFridgeList) {
-            myFridgeList.map((el) => {
-                ingreBtnActiveEvent(el);
-            })
-        }
-    }
-
-    const ingreBtnActiveEvent = (no) => {
-        if (activeIngreList.indexOf(parseInt(no)) > -1) {
-            let list = activeIngreList.filter((el) => {
-                return parseInt(el) !== parseInt(no)
-            });
-
-            setActiveIngreList(list);
+    const setMoreBtn = () => {
+        if (recipeCount > (recipePage + 1) * recipePageItemCount) {
+            setMoreBtnState(true);
         } else {
-            setActiveIngreList([...activeIngreList, parseInt(no)]);
-        }
-    }
-
-    const cateBtnActiveEvent = (no) => {
-        if (activeCateList.indexOf(parseInt(no)) > -1) {
-            let list = activeCateList.filter((el) => {
-                return el !== parseInt(no)
-            });
-
-            setActiveCateList(list);
-        } else {
-            setActiveCateList([...activeCateList, parseInt(no)]);
-        }
-
-    }
-
-    const regionBtnActiveEvent = (no) => {
-        if (activeRegionList.indexOf(parseInt(no)) > -1) {
-            let list = activeRegionList.filter((el) => {
-                return el !== parseInt(no)
-            });
-
-            setActiveRegionList(list);
-        } else {
-            setActiveRegionList([...activeRegionList, parseInt(no)]);
-        }
-    }
-
-    const difficultBtnActiveEvent = (text) => {
-        if (activeDifficultList.indexOf(text) > -1) {
-            let list = activeDifficultList.filter((el) => {
-                return el !== text
-            });
-
-            setActiveDifficultList(list);
-        } else {
-            setActiveDifficultList([...activeDifficultList, text]);
+            setMoreBtnState(false)
         }
     }
 
     const moreBtnClickEvent = async () => {
         console.log('more');
 
-        setRecipePage((prev) => { return prev + 1 })
+        await loadRecipe("more");
+    }
+
+    const loadRecipe = async (type) => {
+        await axios
+            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
+                params: {
+                    type: "list",
+                    search: recipeSearch,
+                    sort: sortState,
+                    region: activeRegionList,
+                    food: activeIngreList,
+                    foodinclu: filterInclude,
+                    difficult: activeDifficultList,
+                    category: activeCateList,
+                    page: type === "more" ? recipePage + 1 : 0,
+                    pagePerItem: recipePageItemCount,
+                },
+            })
+            .then((data) => {
+                console.log(data.data);
+
+                if (data.data.count > 0) {
+                    setRecipeCount(data.data.count)
+                } else {
+                    setRecipeCount(0)
+                };
+
+                if (type === "init") {
+                    if (data.data.sortNo) {
+                        setRecipeSortList(data.data.sortNo)
+                    }
+
+                    setRecipeList(data.data);
+                    setRecipePage(0);
+                } else if (type === "more") {
+                    if (data.data.sortNo) {
+                        setRecipeSortList([...recipeSortList, ...data.data.sortNo])
+                    }
+
+                    setRecipeList({ ...recipeList, ...data.data });
+                    setRecipePage(prev => prev + 1);
+                }
+            })
+            .catch((err) => {
+                return { type: "error" };
+            });
     }
 
     return (
         <>
-            <h2 className='title'>레시피 목록</h2>
-
+            <h2 className='title'>
+                {
+                    recipeSearch ?
+                        `"${recipeSearch}" 검색 결과 ${recipeCount} 건`
+                        : "레시피 목록"
+                }
+            </h2>
             <div className='content'>
-
-                <div className='recipe-filter'>
-                    <div>
-                        <div className='filter-title'>내 냉장고 재료</div>
-                        <div className='filter-wrap fridge-ingre'>
-                            {
-                                myFridgeState ?
-                                    myFridgeState.map((el, idx) => {
-                                        return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={() => ingreBtnActiveEvent(allFridgeList[el].RF_NO)}>{allFridgeList[el].RF_NAME}</button>
-                                    })
-                                    : null
-                            }
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className='filter-title'>추가 재료</div>
-                        <div className='filter-wrap ingre'>
-                            {
-                                notMyFridgeState ?
-                                    notMyFridgeState.map((el, idx) => {
-                                        return <button type='button' data-idx={allFridgeList[el].RF_NO} key={idx} className={activeIngreList.includes(allFridgeList[el].RF_NO) ? "btn ingre on" : "btn ingre"} onClick={() => ingreBtnActiveEvent(allFridgeList[el].RF_NO)}>{allFridgeList[el].RF_NAME}</button>
-                                    }) : null
-                            }
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className='filter-title'>카테고리</div>
-                        <div className='filter-wrap cate'>
-                            {
-                                categoryList ?
-                                    Object.keys(categoryList).map((el, idx) => {
-                                        return <button type='button' data-idx={categoryList[el].RECP_CATEGORY_CODE} key={idx} className={activeCateList.includes(categoryList[el].RECP_CATEGORY_CODE) ? "btn cate on" : 'btn cate'} onClick={() => cateBtnActiveEvent(categoryList[el].RECP_CATEGORY_CODE)} >{categoryList[el].RECP_CATEGORY_NAME}</button>
-                                    }) : null
-                            }
-                        </div>
-                    </div>
-
-                    <div className='half'>
-                        <div className='filter-title'>나라별</div>
-                        <div className='filter-wrap region'>
-                            {
-                                regionList ?
-                                    Object.keys(regionList).map((el, idx) => {
-                                        return <button type='button' data-idx={regionList[el].RECP_REGION_CODE} key={idx} className={activeRegionList.includes(regionList[el].RECP_REGION_CODE) ? "btn region on" : 'btn region'} onClick={() => regionBtnActiveEvent(regionList[el].RECP_REGION_CODE)} >{regionList[el].RECP_REGION_NAME}</button>
-                                    }) : null
-                            }
-                        </div>
-                    </div>
-
-                    <div className='half'>
-                        <div className='filter-title'>난이도별</div>
-                        <div className='filter-wrap difficult'>
-                            {
-                                ["초보환영", "보통", "어려움"].map((el, idx) => {
-                                    return <button type='button' data-idx={el} key={idx} className={activeDifficultList.includes(el) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el)} >{el}</button>
-                                })
-                            }
-                        </div>
-                    </div>
-                </div>
+                <RecipeListFilter myFridgeState={myFridgeState} notMyFridgeState={notMyFridgeState}
+                    activeIngreList={activeIngreList} activeRegionList={activeRegionList} activeCateList={activeCateList} activeDifficultList={activeDifficultList}
+                    setActiveIngreList={setActiveIngreList} setActiveRegionList={setActiveRegionList} setActiveCateList={setActiveCateList} setActiveDifficultList={setActiveDifficultList}
+                    setSortState={setSortState} filterInclude={filterInclude} setFilterInclude={setFilterInclude}
+                    setMoreBtnState={setMoreBtnState} recipeCount={recipeCount}
+                />
 
                 <div className='recipe-list'>
                     {
-
-                        recipeList ?
-                            Object.keys(recipeList).map((el, idx) => {
-                                return <RecipeListItem itemNo={el} idx={idx} recipeList={recipeList} />
+                        recipeSortList ?
+                            recipeSortList.map((el, idx) => {
+                                if (el !== "count") {
+                                    return <RecipeListItem itemNo={el} idx={idx} recipeList={recipeList} />
+                                }
                             }) : null
                     }
 

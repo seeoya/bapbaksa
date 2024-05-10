@@ -98,6 +98,14 @@ const ListView = () => {
         };
     }
 
+    const goToMarketCartBtn = () => {
+
+        let u_no = 1; let i_no = prodInfo.PROD_NO; let mc_count = quantityInt;
+
+        axios_goToMarketCart(u_no,i_no,mc_count);
+        setQuantityInt(0);
+    }
+
     const handleCount = (type) => {
         if (type === "plus") {
             setQuantityInt(quantityInt + 1);
@@ -141,6 +149,21 @@ const ListView = () => {
         }
     }
 
+    async function axios_goToMarketCart(u_no, i_no, mc_count) {
+        try {
+
+            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/goToMarketCart", {
+                'U_NO' : u_no,
+                'I_NO' : i_no,
+                'MC_COUNT' : mc_count
+            })
+            console.log("장바구니 추가 성공(인서트)" , response.data.insertResult);
+            console.log("장바구니 추가 성공(업데이트)" , response.data.updateResult);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className='content-wrap' id="market_list_view">
             <h2 className='title'>품목 상세</h2>
@@ -169,7 +192,7 @@ const ListView = () => {
                                     <span className="ingredient-price">{Number(quantityInt * viewData?.PROD_AVRG_PRCE).toLocaleString()}원</span>
                                 </div>
                                 <div className='ingredient-bottom-wrap-btn'>
-                                    <button type="button" className='go-cart-btn'>장바구니</button>
+                                    <button type="button" className='go-cart-btn' onClick={goToMarketCartBtn}>장바구니</button>
                                     <button type="button" className='go-payment-btn'>바로 결제</button>
                                 </div>
                             </div>

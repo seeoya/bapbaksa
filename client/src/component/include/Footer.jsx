@@ -39,12 +39,12 @@ const Footer = () => {
                     <div className="join_footer">
                         <div className="link">
                             <Link to="/">
-                                <img src="/imgs/logo/kadx_logo.png" alt="" />
+                                <img src="/imgs/logo/kadx_logo.png" alt="KADX 로고" />
                             </Link>
                         </div>
                         <div className="link">
                             <Link to="/">
-                                <img src="/imgs/logo/logo2.jpg" alt="" />
+                                <img src="/imgs/logo/logo2.jpg" alt="한국 소비자원 참 가격 로고" />
                             </Link>
                         </div>
                     </div>

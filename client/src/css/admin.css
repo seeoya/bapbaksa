@@ -1,0 +1,93 @@
+#admin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+}
+
+#admin header {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    position: relative;
+    padding: 20px 0;
+    width: 200px;
+    height: 100%;
+    top: 0;
+    min-height: 100vh;
+    background-color: var(--admin-main-dark-color);
+    gap: 30px;
+}
+
+#admin header .logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 2.4rem;
+    color: #fff;
+    width: 100%;
+    height: auto;
+}
+
+#admin header .logo img {
+    width: 100%;
+    height: 100px;
+}
+
+#admin header nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+    width: 100%;
+    top: 0;
+    box-shadow: none;
+    border: none;
+}
+
+#admin header nav .admin-link {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+    padding: 10px 10px 10px 25px;
+    font-size: 1.6rem;
+    background-color: #eaeaea;
+    border-left: 20px solid var(--admin-main-light-color);
+}
+
+#admin header nav div.admin-link {
+    padding: 15px 10px 15px 35px;
+    background-color: var(--admin-main-color);
+    font-size: 1.8rem;
+    color: #fff;
+    border: none;
+}
+
+#admin header nav .admin-link.active {
+    background-color: #fff;
+    font-weight: 500;
+}
+
+#admin .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding: 50px;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+}
+
+#admin .container .title {
+    font-size: 2rem;
+    font-weight: 500;
+}
+

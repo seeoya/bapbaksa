@@ -3,9 +3,17 @@ const db = require('../db/db');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path');
-const session = require('express-session');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 const tokenUtils = require('../utils/token');
+const $ = require('jquery');
+const shortid = require('shortid');
+require('dotenv').config();
+const GOOGLE_WEB_CLIENT_ID = process.env.GOOGLE_WEB_CLIENT_ID;
+const GOOGLE_WEB_CLIENT_SECRET = process.env.GOOGLE_WEB_CLIENT_SECRET;
+const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
+const GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
+
 
 const userService = {    
 
@@ -174,6 +182,7 @@ const userService = {
                         WHERE u_id = ?`;
 
                 let state = [bcrypt.hashSync(post.u_pw, 10), post.u_mail, post.u_phone, post.u_zip_code, post.u_first_address, post.u_second_address];
+                
                 if(req.file !== undefined) state.push(req.file.filename);
                 state.push(post.u_id);
 
@@ -193,7 +202,7 @@ const userService = {
 
                         if(req.file !== undefined) {                    
 
-                            db.query(`UPDATE TBL_USER_PROFILE_IMG SET pi_name = ?  WHERE u_no = ?) VALUES(?, ?)`,
+                            db.query(`UPDATE TBL_USER_PROFILE_IMG SET pi_name = ?  WHERE u_no = ?`,
                                         [req.file.filename, post.u_no], (error, result) => {
 
                                             res.json({result, message: '프로파일 수정 실패!'});
@@ -326,6 +335,138 @@ const userService = {
         }
     },
 
+    google_callback: async (req, res) => {
+        console.log('/google/callback/google_callback()');
+
+        const GOOGLEID = GOOGLE_WEB_CLIENT_ID;
+        const GOOGLESECRET = GOOGLE_WEB_CLIENT_SECRET;    
+        const GOOGLE_REDIRECT_URI = 'http://localhost:3000/auth/google/callback';
+        const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
+        const GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
+        
+
+        let post = req.body;
+        console.log('post:', post);
+        console.log('post.code: ', post.code);  
+        let code = post.code;  
+        let google_u_id = '';
+        let google_u_mail = '';   
+     
+      
+        try {
+            let response_token = await axios.post(GOOGLE_TOKEN_URL, {
+                code,
+                client_id: GOOGLEID,
+                client_secret: GOOGLESECRET,
+                redirect_uri: GOOGLE_REDIRECT_URI,
+                grant_type: 'authorization_code',
+            });
+
+            console.log('AXIOS GOOGLE GET ACCESS_TOKEN COMMUNICATION SUCCESS', response_token, response_token.data.access_token);
+
+            try {
+                let response_user_info = await axios.get(GOOGLE_USERINFO_URL, {
+                    headers: {
+                        Authorization: `Bearer ${response_token.data.access_token}`,
+                    },
+                });
+
+                console.log('AXIOS GOOGLE GET USER INFO COMMUNICATION SUCCESS', response_user_info.data);
+
+                google_u_id = response_user_info.data.id;
+                google_u_mail = response_user_info.data.email;                
+
+            } catch (error) {
+                console.log('AXIOS GOOGLE GET USER INFO COMMUNICATION FAIL', error);
+                
+            } finally {
+                console.log('AXIOS GOOGLE GET USER INFO COMMUNICATION COMPLETE');
+
+            }
+
+        } catch (error) {
+            console.log('AXIOS GOOGLE GET ACCESS_TOKEN COMMUNICATION FAIL', error);
+
+        } finally {
+            console.log('AXIOS GOOGLE GET ACCESS_TOKEN COMMUNICATION COMPLETE');
+
+        }
+
+        console.log("uid, umail======>", google_u_id, google_u_mail);
+
+                                              
+        db.query(`SELECT * FROM TBL_USER WHERE u_mail = ?`,
+                 [google_u_mail], (error, user) => {
+
+                    google_u_id = google_u_id;
+                    google_u_mail = google_u_mail;
+                    console.log('user', user);
+
+            if(user.length > 0) {              
+                
+                db.query(`UPDATE TBL_USER SET u_google_id = ?, u_mod_date = now() WHERE u_id = ?`,
+                            [google_u_id, user[0].u_id], (error, result) => {
+
+                    console.log('result:', result);
+
+                    if(result.affectedRows > 0){
+                        
+                        let accessToken = tokenUtils.makeToken({id: user[0].u_id});
+                        console.log("accessToken:", accessToken);
+                        let refreshToken = tokenUtils.makeRefreshToken();
+                        console.log("refreshToken:", refreshToken);
+
+                        db.query(`UPDATE TBL_USER SET u_refresh_token= ? WHERE u_id = ?`,
+                                    [refreshToken, user[0].u_id], (error, result) => {
+
+                            if(result.affectedRows > 0){
+                                return res.json({result, uId:user[0].u_id, uNo:user[0].u_no, accessToken, refreshToken});     
+
+                            } else {
+                                return res.json({result, message: 'DB 에러! 관리자에게 문의하세요.'});
+                            }
+
+                        });
+            
+                    } else {
+                        return res.json({result, message: 'DB 에러! 관리자에게 문의하세요.'});
+                    }           
+            
+                });    
+                    
+            } else {
+
+                let u_id = shortid.generate();
+                let u_pw = shortid.generate();
+                let u_mail = google_u_mail;
+                let u_phone = '--';
+                let u_google_id = google_u_id;
+
+                console.log('====> ', u_id, u_pw, u_mail, u_phone, u_google_id);
+
+                let accessToken = tokenUtils.makeToken({id: u_google_id});
+                console.log("accessToken:", accessToken);
+                
+                let refreshToken = tokenUtils.makeRefreshToken();
+                console.log("refreshToken:", refreshToken);
+                
+
+                db.query(`insert into TBL_USER (u_id, u_pw, u_mail, u_phone, u_google_id, u_refresh_token) values(?, ?, ?, ?, ?, ?)`,
+                        [u_id, bcrypt.hashSync(u_pw, 10), u_mail, u_phone, u_google_id, refreshToken], (error, result) => {
+                            console.log('result', result);
+                    if(result.affectedRows > 0) {
+                        return res.json({result, uId:u_id, uNo:result.insertId, accessToken, refreshToken});     
+                    } else {
+                        return res.json({result, message: 'DB 에러! 관리자에게 문의하세요.'});
+                    }
+
+                });
+
+            }    
+
+        });          
+        
+    },    
 
 }
 

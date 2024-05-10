@@ -2,8 +2,23 @@ import React, { useEffect, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { setToken } from '../../storage/loginedToken';
+import $ from 'jquery';
+
 
 axios.defaults.withCredentials = true;
+const googleid = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+console.log('googleid', googleid);
+
+//카카오 로그인 요청 주소
+const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=process.env._uri=https://www.teamprojectvv.shop/callback/kakao&response_type=code`;
+
+//구글 로그인 요청 주소
+const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${googleid}&state=state_parameter_passthrough_value&redirect_uri=http%3A//localhost:3000/auth/google/callback&response_type=code&scope=https%3A//www.googleapis.com/auth/userinfo.email&include_granted_scopes=true`;
+
+//네이버 로그인 요청 주소
+const state = Math.floor(new Date().getTime() + Math.random() * 1000);
+
+const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=''_uri=https://www.teamprojectvv.shop/callback/naver&state=${state}`;
 
 const SignIn = () => {
 
@@ -12,6 +27,7 @@ const SignIn = () => {
     const [message, setMessage] = useState('');
 
     const navigate = useNavigate(); 
+    
 
     useEffect(() => {
 
@@ -19,6 +35,8 @@ const SignIn = () => {
 
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');
+        console.log('google_id===>', googleid);
+        console.log('google_url===>', googleURL);
 
         let input_name = e.target.name;
         let input_value = e.target.value;
@@ -115,7 +133,7 @@ const SignIn = () => {
     return (
         <div className='content-wrap'>
 
-        <h2 className='title'>로그인</h2>
+        <h1 className='title'>로그인</h1>
 
         <div className='content'>
             <div className='signin-wrap'>            
@@ -134,8 +152,9 @@ const SignIn = () => {
 
                     <div className='login-link'>
                    
-                         <Link to={'/auth/google'}>
-                         <span className="google-link">GOOGLE</span>
+                         <Link to={googleURL}>
+                         <img src="/imgs/logo/web_light_sq_na@2x.png" className='kakao-link' alt=''/>                         
+                         
                          </Link>
 
                          <Link to={'/auth/naver'}>

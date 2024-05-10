@@ -5,7 +5,6 @@ import Header from './include/Header';
 import Nav from './include/Nav';
 import ScrollMoveBtn from './include/ScrollMoveBtn';
 
-
 const MainLayout = () => {
     return (
         <>

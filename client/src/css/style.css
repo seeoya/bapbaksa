@@ -570,6 +570,124 @@ nav .link {
     gap: 10px;
 }
 
+/* main css start */
+.container .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%; height: 100%;
+    gap: 10px;
+}
+
+/* swiper css start */
+.container .recipe-grid .swiper-container {
+    grid-column-start: 1;
+	grid-column-end: 3;
+    height: 300px;
+}
+
+.container .recipe-grid .swiper-container .mySwiper {
+    width: 100%;
+    height: 100%;
+}
+
+.container .recipe-grid .swiper-container .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .recipe-grid .item:nth-child(2) .today-recommend {
+    width: 475px;
+    height: auto;
+    padding: 10px;
+}
+
+.container .recipe-grid .item:nth-child(2) .today-recommend .today-recommend-swiper {
+    height: 300px;
+}
+
+.container .recipe-grid .item:nth-child(2) .today-recommend .today-recommend-swiper .my-swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.container .recipe-grid .item:nth-child(2) .today-recommend .today-recommend-swiper .my-swiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.random-recipe-info img {
+    max-width: 300px; max-height: 200px;
+    min-width: 300px; min-height: 200px;
+}
+
+/* random recipe swiper start */
+.container .recipe-grid .item:nth-child(3) .today-recommend {
+    width: 475px;
+    height: auto;
+    padding: 10px;
+}
+
+.container .recipe-grid .item:nth-child(3) .today-recommend .today-recommend-swiper {
+    height: 300px;
+}
+
+.container .recipe-grid .item:nth-child(3) .today-recommend .today-recommend-swiper .mySwiper {
+    width: 100%;
+    height: 100%;
+}
+
+.container .recipe-grid .item:nth-child(3) .today-recommend .today-recommend-swiper .mySwiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* swiper css end */
+
+.container .recipe-grid .item:nth-child(3) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .recipe-grid .item:nth-child(3) a {
+    display: flex;
+    min-width: 300px; height: 60px;
+    margin-top: 7px;
+    padding-left: 10px;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50px;
+}
+
+.container .recipe-grid .item:nth-child(3) a:hover {
+    transition: 0.5s;
+    filter: brightness(0.5)
+}
+
+.container .recipe-grid .item:nth-child(3) a:not(:hover) {
+    transition: 0.5s ease-out;
+}
+
+.container .recipe-grid .item:nth-child(3) a .banner {
+    max-width: 300px;
+    flex-direction: row;
+    text-shadow: -1px 0px #a8a8a8, 0px 1px #a8a8a8, 1px 0px #a8a8a8, 0px -1px #a8a8a8;
+    font-size: 1.3em;
+    font-weight: bolder;
+    padding-left: 10px;
+}
+
+.container .recipe-grid .item:nth-child(3) a .icon {
+    padding-left: 10px;
+    font-size: 28px;
+}
+
+/* main css end */
+
 /* 푸터 */
 footer {
     width: 100%;

@@ -38,9 +38,9 @@ const RecipeAside = () => {
         let recipeAside = document.getElementById("recipe_aside");
 
         if (recipeAside.classList.contains("close")) {
-            fridgeBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            fridgeBtn.innerHTML = '<i className="fa-solid fa-chevron-left"></i>';
         } else {
-            fridgeBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            fridgeBtn.innerHTML = '<i className="fa-solid fa-chevron-right"></i>';
         }
 
         recipeAside.classList.toggle("close");
@@ -84,7 +84,7 @@ const RecipeAside = () => {
                 <h2 className='title'>나의 냉장고</h2>
 
                 <button type='button' id='fridge_btn' className='btn main' onClick={fridgeBtnClickEvent}>
-                    <i class="fa-solid fa-chevron-left"></i>
+                    <i className="fa-solid fa-chevron-left"></i>
                 </button>
 
                 <div className='fridge-content'>
@@ -106,7 +106,7 @@ const RecipeAside = () => {
 
                     <Link to={"/mypage/myFridge"} className='fridge-item link'>
                         <div className='item-img'>
-                            <i class="fa-solid fa-square-up-right"></i>
+                            <i className="fa-solid fa-square-up-right"></i>
                         </div>
 
                         <div className='item-title'>내 냉장고로</div>

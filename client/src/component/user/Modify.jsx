@@ -224,34 +224,34 @@ const Modify = () => {
 
                         <div className='input-wrap'>
                             <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요"/>    
-                            <span id="icon_m_pw" class="input-icon"></span>
-                            <span id="message_m_pw" class="input-message">비밀번호는 최소 8자 이상이어야 하며, 특수문자를 최소 1개 이상 포함해야 합니다.</span>
+                            <span id="icon_m_pw" className="input-icon"></span>
+                            <span id="message_m_pw" className="input-message">비밀번호는 최소 8자 이상이어야 하며, 특수문자를 최소 1개 이상 포함해야 합니다.</span>
                         </div>
 
                         <div className='input-wrap'>
                             <input type="password" name="u_check_pw" value={uCheckPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 한번 더 입력해 주세요"/>
-                            <span id="icon_u_check_pw" class="input-icon"></span>
-                            <span id="message_u_check_pw" class="input-message">비밀번호가 일치하지 않습니다.</span>
+                            <span id="icon_u_check_pw" className="input-icon"></span>
+                            <span id="message_u_check_pw" className="input-message">비밀번호가 일치하지 않습니다.</span>
                         </div>
 
                         <div className='input-wrap'>
                             <input type="text" name="u_mail" value={uMail} onChange={(e) => userInfoChangeHandler(e)} placeholder="이메일 주소를 입력해 주세요"/>
-                            <span id="icon_u_mail" class="input-icon"></span>
-                            <span id="message_u_mail" class="input-message">유효한 이메일 주소를 입력해 주세요.</span>
+                            <span id="icon_u_mail" className="input-icon"></span>
+                            <span id="message_u_mail" className="input-message">유효한 이메일 주소를 입력해 주세요.</span>
                         </div>
 
                         <div className='input-wrap'>
                             <input type="text" name="u_phone" value={uPhone} onChange={(e) => userInfoChangeHandler(e)} placeholder="휴대폰 번호를 입력해 주세요"/>
                             {/* <input type="text" name="m_phone" placeholder="전화번호를 입력해 주세요." oninput="extractNumbers(this)"/> */}
-                            <span id="icon_u_phone" class="input-icon"></span>
-                            <span id="message_u_phone" class="input-message">전화번호는 숫자 9~12자까지 입력 가능합니다.</span>
+                            <span id="icon_u_phone" className="input-icon"></span>
+                            <span id="message_u_phone" className="input-message">전화번호는 숫자 9~12자까지 입력 가능합니다.</span>
                         </div>
 
                         <div className='input-wrap'>
                             <div>
                                 <input type="text" id="postcode" name="u_zip_code" value={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readOnly/>
-                                <button type="button" id="search_address_btn" onclick="searchAddress()" class="btn sub">
-                                    <i class="fa-solid fa-location-crosshairs"></i>
+                                <button type="button" id="search_address_btn" onclick="searchAddress()" className="btn sub">
+                                    <i className="fa-solid fa-location-crosshairs"></i>
                                 </button>
                             </div>
 
@@ -286,8 +286,8 @@ const Modify = () => {
                         </div>
             
 
-                        {/* <div class="btn-wrap">
-                            <button type="button" onclick="memberFormCheck('create');" class="btn main full">회원가입</button>
+                        {/* <div className="btn-wrap">
+                            <button type="button" onclick="memberFormCheck('create');" className="btn main full">회원가입</button>
                         </div> */}
 
                     </form>

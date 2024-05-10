@@ -2,10 +2,10 @@ const { json } = require('body-parser');
 const DB = require('../db/db');
 const { default: axios } = require('axios');
 
-const marketService = {    
+const marketService = {
 
 
-    
+
 
     // getAllProduct: (req, res) => {
     //     console.log("getAllProduct");
@@ -28,7 +28,7 @@ const marketService = {
         console.log("회원 번호 = ", post.U_NO);
         console.log("상품 번호 = ", post.I_NO);
         console.log("상품 갯수 = ", post.MC_COUNT);
-    
+
         DB.query(`SELECT * FROM TBL_MARKET_CART WHERE u_no = ? AND i_no = ?`, [post.U_NO, post.I_NO], (error, result) => {
             if (error) {
                 console.log(error);
@@ -77,14 +77,14 @@ const marketService = {
                     }
                 });
             });
-    
+
             const productPromises = cartItems.map(item => axios_getCartInfo(item.i_no));
             const productInfos = await Promise.all(productPromises);
             const mergedResult = cartItems.map((item, index) => ({
                 ...item,
                 productInfo: productInfos[index],
             }));
-    
+
             res.json(mergedResult);
         } catch (error) {
             console.log(error);
@@ -93,34 +93,144 @@ const marketService = {
     },
     deleteCart: (req, res) => {
         let mc_nos = req.body.MC_NO; // 여러 개의 MC_NO 값들을 배열로 받음
-        console.log("💘💘💘", mc_nos);
-        // 💘💘💘 [ 4, 6 ] 이렇게 들어와
-    
-        DB.query(`DELETE FROM TBL_MARKET_CART WHERE MC_NO IN (?)`, // IN 연산자 사용
-            [mc_nos], // 배열을 직접 넣음
+
+        DB.query(`DELETE FROM TBL_MARKET_CART WHERE MC_NO IN (?)`,
+            [mc_nos],
             (error, result) => {
                 if (error) {
                     console.log(error);
                     res.json(null);
                 } else {
-                    console.log('💘💘💘삭제 성공');
                     res.json(result);
                 }
             }
         );
-    }
+    },
+
+    insertPayment: (req, res) => {
+        let u_no = req.body.u_no;
+        let o_count = req.body.o_count;
+        let o_price = req.body.o_price;
+        let p_no = req.body.p_no;
+
+        function formatDate(date) {
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            let seconds = date.getSeconds();
+            let milliseconds = date.getMilliseconds();
+
+            month = (month < 10) ? '0' + month : month;
+            day = (day < 10) ? '0' + day : day;
+            hours = (hours < 10) ? '0' + hours : hours;
+            minutes = (minutes < 10) ? '0' + minutes : minutes;
+            seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+            if (milliseconds < 10) {
+                milliseconds = '00' + milliseconds;
+            } else if (milliseconds < 100) {
+                milliseconds = '0' + milliseconds;
+            }
+
+            return '' + year + month + day + hours + minutes + seconds + milliseconds;
+        }
+
+        let currentDate = new Date();
+        let formattedDate = formatDate(currentDate);
+
+        for (let i = 0; i < o_count.length; i++) {
+            DB.query(`INSERT INTO TBL_ORDER(
+                O_ID, U_NO, O_COUNT, O_PRICE, P_NO, O_FINAL_PRICE)
+                VALUES(?, ?, ?, ?, ?, ?)`,
+                [`${formattedDate}${u_no}`, u_no, o_count[i], o_price[i], p_no[i], (o_count[i] * o_price[i])],
+                (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        res.json(false);
+                        return;
+                    } else {
+                        DB.query(`DELETE FROM TBL_MARKET_CART WHERE U_NO = ? AND I_NO = ?`,
+                            [u_no, p_no[i]],
+                            (error, data) => {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    res.json(true);
+                                }
+                            }
+                        )
+                    }
+                })
+        }
+        res.json(true);
+    },
+    getPaymentHistory: (req, res) => {
+        let post = req.body;
+        DB.query(`SELECT * FROM TBL_ORDER WHERE U_NO = ?`, [post.u_no], async (error, orders) => {
+            if (error) {
+                console.log(error);
+                return res.json(null);
+            } else {
+                try {
+                    // 모든 주문에서 필요한 제품 번호 추출
+                    const productIds = [...new Set(orders.map((order) => order.p_no))];
+                    // 한 번에 모든 제품 정보 가져오기
+                    const productInfoResults = await axios_getProductInfo(productIds);
+    
+                    // 주문을 o_id로 그룹화하기
+                    const groupedOrders = orders.reduce((acc, order) => {
+                        if (!acc[order.o_id]) {
+                            acc[order.o_id] = {
+                                o_id: order.o_id,
+                                orders: [],
+                            };
+                        }
+                        const productInfo = productInfoResults.find((product) => product.PROD_NO === order.p_no);
+                        acc[order.o_id].orders.push({
+                            ...order,
+                            productInfo: productInfo ? [productInfo] : [],
+                        });
+                        return acc;
+                    }, {});
+    
+                    // 그룹화된 주문 객체들을 배열로 변환하여 응답
+                    const groupedOrdersArray = Object.values(groupedOrders);
+                    res.json(groupedOrdersArray);
+                } catch (error) {
+                    console.log(error);
+                    res.json(null);
+                }
+            }
+        });
+    },
+
+
+
 }
 
 
 async function axios_getCartInfo(i_no) {
     try {
         const response = await axios.post("http://localhost:3002/product/getProduct", {
-            'I_NO' : i_no,
+            'I_NO': i_no,
         })
         return response.data;
     } catch (error) {
         console.log(error)
     }
-}                
+}
+
+async function axios_getProductInfo(p_no) {
+    try {
+        const response = await axios.post("http://localhost:3002/product/getProductInfo", {
+            'P_NO': p_no,
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 module.exports = marketService;

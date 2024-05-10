@@ -34,6 +34,11 @@ router.post("/postSelectedProduct", (req, res) => {
     product.postSelectedProduct(req, res);
 });
 
+router.post("/paymentGetProd", (req,res) => {
+    console.log('/product/paymentGetProd');
+    product.paymentGetProd(req,res);
+});
+
 // router.get("/selectedProduct", (req, res) => {
 //     console.log('/product/selectedProduct');
 //     product.getSelectedProduct(req, res);
@@ -54,4 +59,8 @@ router.post('/getProduct', (req, res) => {
     product.getProduct(req, res);
 });
 
+router.post('/getProductInfo', (req,res) => {
+    console.log('/product/getProductInfo');
+    product.getProductInfo(req,res);
+})
 module.exports = router;

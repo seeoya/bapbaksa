@@ -10,9 +10,9 @@ const ScrollMoveBtn = () => {
     }
 
     return (
-        <div class="addition-btn-wrap">
-            <button type="button" id="to_top" class="btn highlight" onClick={toTopMoveEvent}><i class="fa-solid fa-up-long"></i></button>
-            <button type="button" id="to_bottom" class="btn highlight" onClick={toBottomMoveEvent}><i class="fa-solid fa-down-long"></i></button>
+        <div className="addition-btn-wrap">
+            <button type="button" id="to_top" className="btn highlight" onClick={toTopMoveEvent}><i className="fa-solid fa-up-long"></i></button>
+            <button type="button" id="to_bottom" className="btn highlight" onClick={toBottomMoveEvent}><i className="fa-solid fa-down-long"></i></button>
         </div>
     );
 };

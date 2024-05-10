@@ -8,11 +8,7 @@ const Main = () => {
 
         <div className='content'>
 
-
-
-
         </div>
-
 
     </div>
     );

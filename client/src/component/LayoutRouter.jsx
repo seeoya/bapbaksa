@@ -32,6 +32,7 @@ import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
 import Google from './user/Google';
 import Kakao from './user/Kakao';
+import Naver from './user/Naver';
 
 
 
@@ -43,6 +44,7 @@ const LayoutRouter = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/auth/google/callback" element={<Google />}></Route>
                 <Route path="/oauth/kakao/callback" element={<Kakao />}></Route>
+                <Route path="/oauth/naver/callback" element={<Naver />}></Route>
 
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>

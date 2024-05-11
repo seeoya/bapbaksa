@@ -111,7 +111,7 @@ const RecipeView = () => {
 
                                     return <Link to={"/market/list?seacrh=" + ingre[el].RECP_INGRD_NAME} className={'ingre-link ' + ingreClass} key={idx}>
                                         {ingre[el].RECP_INGRD_NAME}{ingreText}
-                                        <span><i class="fa-solid fa-magnifying-glass"></i></span>
+                                        <span><i className="fa-solid fa-magnifying-glass"></i></span>
                                     </Link>
                                 })
                             }
@@ -127,7 +127,7 @@ const RecipeView = () => {
                             {Object.keys(progress).sort().map((el, idx) => {
                                 let progressImg = progress[el].RECP_ORDER_IMG.trim() ? progress[el].RECP_ORDER_IMG : "/imgs/recipe/recipe_default.png";
                                 let progressTip = progress[el].RECP_ORDER_TIP.trim() ?
-                                    <div className='tip'><i class="fa-regular fa-lightbulb"></i> {progress[el].RECP_ORDER_TIP}</div> : null;
+                                    <div className='tip'><i className="fa-regular fa-lightbulb"></i> {progress[el].RECP_ORDER_TIP}</div> : null;
 
                                 return <div className='progress-item' data-idx={progress[el].RECP_ORDER_NO} key={idx}>
                                     <img src={progressImg} alt={progress[el].RECP_CODE + "_" + progress[el].RECP_ORDER_NO} />

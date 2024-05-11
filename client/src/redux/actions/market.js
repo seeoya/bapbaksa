@@ -4,7 +4,6 @@ export const twelveProduct = async (newPordDate, number, search, page) => {
     let list = '';
 
     console.log("💟💟💟💟💟",number);
-    console.log("✡✡✡✡✡✡✡✡",page);
     await axios({
         url: process.env.REACT_APP_REST_SERVER_URL + "/product/",
         method: 'get',

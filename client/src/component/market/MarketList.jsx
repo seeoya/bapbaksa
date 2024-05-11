@@ -13,6 +13,7 @@ const MarketList = () => {
     const [number,setNumber] = useState(1);
     const [search,setSearch] = useState('');
     const [page, setPage] = useState(0);
+    const [temp,setTemp] = useState(false);
 
     useEffect(() => {
         moreProductBtn();
@@ -21,47 +22,39 @@ const MarketList = () => {
     
     const moreProductBtn = async () => {
         setPage(prev => prev + 1);
-        console.log("💕💕💕💕💕💕💕",page);
-        dispatch(await twelveProduct(newProdDate, number, search, page));        
+        const updatedNumber = number;
+        dispatch(await twelveProduct(newProdDate, updatedNumber, search, page));        
     };
     
-    
-
     const handleCategoryClick = async (category_name) => {
             switch (category_name) {
                 case "all":
                     setNumber(1);
-                    console.log("번호",number);
+                    console.log('전체 클릭');
                     break;
                 case "carbohydrate":
                     console.log('탄수화물 클릭');
                     setNumber(2);
-                    console.log("번호",number);
                     break;
                 case "vegetable":
                     console.log('채소 클릭');
                     setNumber(3);
-                    console.log("번호",number);
                     break;
                 case "meat":
                     console.log('육류 클릭');
                     setNumber(4);
-                    console.log("번호",number);
                     break;
                 case "seaweed":
                     console.log('해조류 클릭');
                     setNumber(5);
-                    console.log("번호",number);
                     break;
                 case "processed_meet":
                     console.log('가공육류 클릭');
                     setNumber(6);
-                    console.log("번호",number);
                     break;
                 case "processed_food":
                     console.log('가공식품 클릭');
                     setNumber(7);
-                    console.log("번호",number);
                     break;
                 default:
                     break;

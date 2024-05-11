@@ -34,6 +34,11 @@ router.post("/postSelectedProduct", (req, res) => {
     product.postSelectedProduct(req, res);
 });
 
+router.post("/paymentGetProd", (req,res) => {
+    console.log('/product/paymentGetProd');
+    product.paymentGetProd(req,res);
+});
+
 // router.get("/selectedProduct", (req, res) => {
 //     console.log('/product/selectedProduct');
 //     product.getSelectedProduct(req, res);
@@ -52,6 +57,20 @@ router.post('/getChartData', (req, res) => {
 router.post('/getProduct', (req, res) => {
     console.log('/product/getProduct')
     product.getProduct(req, res);
+});
+
+router.post('/getProductInfo', (req,res) => {
+    console.log('/product/getProductInfo');
+    product.getProductInfo(req,res);
+})
+router.get('/random', (req, res) => {
+    console.log('/product/random');
+    product.random(req, res);
+});
+
+router.get('/compareprice', (req, res) => {
+    console.log('/product/compareprice');
+    product.compareprice(req, res);
 });
 
 module.exports = router;

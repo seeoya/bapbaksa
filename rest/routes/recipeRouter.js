@@ -25,4 +25,9 @@ router.get("/region", (req, res) => {
     recipe.getRegionList(req, res);
 });
 
+router.get("/random", (req, res) => {
+    console.log("/random");
+    recipe.getRandomRecipe(req, res);
+});
+
 module.exports = router;

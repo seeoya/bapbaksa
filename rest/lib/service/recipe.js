@@ -310,5 +310,16 @@ const recipe = {
             }
         });
     },
+    getRandomRecipe: (req, res) => {
+        DB.query(`SELECT * FROM RECIPE_BASIC ORDER BY RAND() LIMIT 5`, 
+        (error, random) => {
+            if (error) {
+                console.log(error);
+                res.json(null);
+            } else {
+                res.json(random);
+            }
+        });
+    }
 };
 module.exports = recipe;

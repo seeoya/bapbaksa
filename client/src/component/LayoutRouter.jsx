@@ -16,6 +16,7 @@ import AdminUserView from './admin/AdminUserView';
 import ListView from './market/ListView';
 import MartketLayout from './market/MarketLayout';
 import MarketList from './market/MarketList';
+import Market from './market/Market';
 import Payment from './market/Payment';
 import PaymentHistory from './market/PaymentHistory';
 import ShoppingCart from './market/ShoppingCart';
@@ -71,7 +72,7 @@ const LayoutRouter = () => {
 
             <Route element={<MartketMainLayout />}>
                 <Route path="/market" element={<MartketLayout />}>
-                    <Route path="" element={<div>Market</div>}></Route>
+                    <Route path="" element={<Market />}></Route>
                     <Route path="list" element={<MarketList />}></Route>
                     <Route path="view/:no" element={<ListView />}></Route>
                     <Route path="payment" element={<Payment />}></Route>

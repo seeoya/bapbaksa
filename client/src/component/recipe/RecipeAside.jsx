@@ -107,7 +107,7 @@ const RecipeAside = () => {
 
                     <Link to={"/mypage/myFridge"} className='fridge-item link'>
                         <div className='item-img'>
-                            <i class="fa-solid fa-square-up-right"></i>
+                            <i className="fa-solid fa-square-up-right"></i>
                         </div>
 
                         <div className='item-title'>내 냉장고로</div>

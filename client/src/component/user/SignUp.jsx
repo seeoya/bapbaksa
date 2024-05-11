@@ -148,7 +148,7 @@ const SignUp = () => {
                     <form name="signup_form" className='form'>
                         <div className='input-wrap'>                    
                             <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요"/>    
-                            {/* <button type="button" class="btn sub" onClick="isMember();">중복체크</button> */}
+                            {/* <button type="button" className="btn sub" onClick="isMember();">중복체크</button> */}
 
                             <span id="icon_m_id" className="input-icon"></span>
                             <span id="message_m_id" className="input-message">아이디는 5글자 이상이며, 영문 소문자와 숫자만 입력 가능합니다.</span>
@@ -183,7 +183,7 @@ const SignUp = () => {
                         <div className='input-wrap'>
                             <div>
                                 <input type="text" id="postcode" name="u_zip_code" value={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readOnly/>
-                                <button type="button" id="search_address_btn" onClick="searchAddress()" className="btn sub">
+                                <button type="button" id="search_address_btn" onClick="searchAddress()" className="btn sub">                               
                                     <i className="fa-solid fa-location-crosshairs"></i>
                                 </button>
                             </div>
@@ -211,7 +211,11 @@ const SignUp = () => {
                         
 
                         {/* <div className="btn-wrap">
+<<<<<<< HEAD
                             <button type="button" onClick="userFormCheck('create');" className="btn main full">회원가입</button>
+=======
+                            <button type="button" onclick="memberFormCheck('create');" className="btn main full">회원가입</button>
+>>>>>>> c9472a4ca96055804ad12361be277c9ab9869fdd
                         </div> */}
 
                     </form>

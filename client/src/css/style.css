@@ -551,6 +551,11 @@ nav .link {
     font-size: 3rem;
 }
 
+.content-wrap h3.title {
+    text-align: center;
+    font-size: 2rem;
+}
+
 .content-wrap .error-content p {
     text-align: center;
     font-size: 2rem;

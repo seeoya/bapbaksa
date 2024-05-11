@@ -30,11 +30,9 @@ import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
-import SignOut from './user/SignOut';
-import Delete from './user/Delete';
 import Google from './user/Google';
-
-
+import Kakao from './user/Kakao';
+import Naver from './user/Naver';
 
 
 
@@ -45,6 +43,9 @@ const LayoutRouter = () => {
             <Route element={<MainLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/auth/google/callback" element={<Google />}></Route>
+                <Route path="/oauth/kakao/callback" element={<Kakao />}></Route>
+                <Route path="/oauth/naver/callback" element={<Naver />}></Route>
+
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>
                     <Route path="signin" element={<SignIn />}></Route>

@@ -47,4 +47,18 @@ router.post("/google/callback", (req, res) => {
     
 });
 
+router.post("/kakao/callback", (req, res) => {
+    console.log("kakao/callback()");
+
+    userService.kakao_callback(req, res);
+    
+});
+
+router.post("/naver/callback", (req, res) => {
+    console.log("naver/callback()");
+
+    userService.naver_callback(req, res);
+    
+});
+
 module.exports = router;

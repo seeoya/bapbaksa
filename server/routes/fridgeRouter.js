@@ -18,7 +18,7 @@ router.post("/add", (req, res) => {
     add_my_fridge(req, res);
 });
 
-router.post("/delete", (req, res) => {
+router.delete("/delete", (req, res) => {
     console.log("delete fridge", req.body);
 
     delete_my_fridge(req, res);

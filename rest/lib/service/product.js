@@ -315,7 +315,7 @@ const product = {
         console.log("123", req.body.I_NO);
         let i_no = req.body.I_NO;
         DB.query(
-            `SELECT PROD_IMG, PROD_NAME, PROD_SPCS_NAME, PROD_AVRG_PRCE, DSBN_STEP_ACTO_WT, DSBN_STEP_ACTO_UNIT_NM FROM PRODUCT WHERE PROD_NO = ?`,
+            `SELECT PROD_NO, PROD_SPCS_CODE, PROD_IMG, PROD_NAME, PROD_SPCS_NAME, PROD_AVRG_PRCE, DSBN_STEP_ACTO_WT, DSBN_STEP_ACTO_UNIT_NM FROM PRODUCT WHERE PROD_NO = ?`,
             [i_no],
             (error, data) => {
                 if (error) {
@@ -324,6 +324,8 @@ const product = {
                 } else {
                     if (data.length > 0) {
                         const productData = {
+                            PROD_CODE: data[0].PROD_CODE,
+                            PROD_SPCS_CODE: data[0].PROD_SPCS_CODE,
                             PROD_IMG: data[0].PROD_IMG,
                             PROD_NAME: data[0].PROD_NAME,
                             PROD_SPCS_NAME: data[0].PROD_SPCS_NAME,

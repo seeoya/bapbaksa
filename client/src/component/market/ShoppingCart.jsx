@@ -19,6 +19,11 @@ const ShoppingCart = () => {
         setPaymentInfo()
     },[selectAll]);
 
+    useEffect(() => {
+        console.log("🤍🤍🤍",cartInfo);
+    },[goToPay]);
+
+
     const handleCount = (type, index) => {
         const updatedCartInfo = [...cartInfo];
         if (type === "plus") {
@@ -68,8 +73,9 @@ const ShoppingCart = () => {
                 'MC_COUNT': item.mc_count
             });
         });
-
+        console.log("❤❤❤",items);
         setGoToPay(items);
+        
     }
 
     const handleCheckout = () => {
@@ -83,24 +89,24 @@ const ShoppingCart = () => {
         axios_deleteCart(mcNos);
     };
     
-    const handlePayment = () => {
-        const checkedItems = cartInfo.filter(item => item.isSelected);
+    // const handlePayment = () => {
+    //     const checkedItems = cartInfo.filter(item => item.isSelected);
         
-        if (checkedItems.length === 0) {
-            alert('선택된 항목이 없습니다.');
-            return;
-        }
+    //     if (checkedItems.length === 0) {
+    //         alert('선택된 항목이 없습니다.');
+    //         return;
+    //     }
     
-        let items = [];
-        checkedItems.map(item => {
-            items.push({
-                'I_NO': item.i_no,
-                'MC_COUNT': item.mc_count
-            });
-        });
+    //     let items = [];
+    //     checkedItems.map(item => {
+    //         items.push({
+    //             'I_NO': item.i_no,
+    //             'MC_COUNT': item.mc_count
+    //         });
+    //     });
     
-        setGoToPay(items);
-    };
+    //     setGoToPay(items);
+    // };
 
 
     async function axios_deleteCart(mcNos) {
@@ -155,10 +161,10 @@ const ShoppingCart = () => {
                                         checked={item.isSelected}
                                         onChange={() => handleItemSelect(index)}
                                     />
-                                    <Link to={`/market/view/${item.i_no}`}>
+                                    <Link to={`/market/view/${item.i_no}_${item.productInfo.PROD_SPCS_CODE}`}>
                                         <img className="ingredient-img" src={`/imgs/product/${item.productInfo.PROD_IMG}`} alt="ingredient" />
                                     </Link>
-                                    <Link to={`/market/view/${item.i_no}`}>
+                                    <Link to={`/market/view/${item.i_no}_${item.productInfo.PROD_SPCS_CODE}`}>
                                         <div className="ingredient-title-wrap">
                                             <span className="ingredient-title">{item.productInfo.PROD_NAME}</span>
                                             <span className="ingredient-sub-title">{item.productInfo.PROD_SPCS_NAME}</span>

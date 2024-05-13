@@ -10,7 +10,11 @@ const $ = require('jquery');
 const shortid = require('shortid');
 const uuid4 = require('uuid4');
 const qs = require('querystring');
+const nodemailer = require('nodemailer');
+const { sendMailForID, sendMailForPW } = require('../utils/mail');
 require('dotenv').config();
+
+
 const GOOGLE_WEB_CLIENT_ID = process.env.GOOGLE_WEB_CLIENT_ID;
 const GOOGLE_WEB_CLIENT_SECRET = process.env.GOOGLE_WEB_CLIENT_SECRET;
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
@@ -25,8 +29,99 @@ const NAVER_WEB_CLIENT_SECRET = process.env.NAVER_WEB_CLIENT_SECRET;
 const NAVER_TOKEN_URL = `https://nid.naver.com/oauth2.0/token`;
 const NAVER_USERINFO_URL = `https://openapi.naver.com/v1/nid/me`;
 
+const NODEMAILER_USER = process.env.NODEMAILER_USER;
+const NODEMAILER_SECRET = process.env.NODEMAILER_SECRET;
+
+
 
 const userService = {    
+
+    isMember_confirm: (req, res) => {
+        console.log('/user/isMember_confirm()');
+
+        let post = req.body;
+        console.log('post:', post);
+
+        db.query(`SELECT * FROM TBL_USER WHERE u_id = ?`,
+                     [post.u_id], (error, user) => {
+                        console.log('user', user);
+                          
+            if(user.length > 0) {
+                res.json({isMember: true});
+            } else {
+                res.json({isMember: false});
+            }
+            
+        });
+
+    },
+
+    findid_confirm: (req, res) => {
+        console.log('/user/findid_confirm()');
+
+        let post = req.body;
+        console.log('post:', post);
+
+        db.query(`SELECT * FROM TBL_USER WHERE u_mail = ?`,
+                     [post.u_mail], (error, user) => {
+                        console.log('user', user);
+                          
+            if(user.length > 0) {
+
+                let email = user[0].u_mail;
+                let id = user[0].u_id;
+
+                let result = sendMailForID(email, id);
+                if(result !== null){
+
+                    res.json({findID: true, uId: user[0].u_id});
+                }                
+                
+            } else {
+                res.json({findID: false});
+            }
+            
+        });
+
+    },
+
+    findpw_confirm: async (req, res) => {
+        console.log('/user/findpw_confirm()');
+
+        let post = req.body;
+        console.log('post:', post);
+
+        db.query(`SELECT * FROM TBL_USER WHERE u_id = ? && u_mail = ?`,
+                     [post.u_id, post.u_mail], (error, user) => {
+                        console.log('user', user);
+                          
+            if(user.length > 0) {   
+
+                let email = user[0].u_mail;
+                let pw = shortid.generate();
+
+                let mailResult = sendMailForPW(email, pw);
+                console.log('🎈🎈🎈', mailResult);
+
+                if(mailResult !== null) {
+
+                    db.query(`UPDATE TBL_USER SET u_pw = ?, u_mod_date = now() WHERE u_id = ?`,
+                                [bcrypt.hashSync(pw, 10), user[0].u_id], (error, result) => {
+
+                                    if( result.affectedRows > 0 ){
+                                        res.json({findPW: true});                
+                                    }
+                                });
+                }                  
+                
+            } else {
+                res.json({findPW: false});
+            }
+            
+        });
+
+    },
+
 
     signup_confirm: (req, res) => {
         console.log('/user/signup_confirm()');
@@ -34,8 +129,7 @@ const userService = {
         let post = req.body;
         console.log('post:', post);
 
-        console.log("req.file: ", req.file);     
-        console.log("post.u_id: ", post.u_id);     
+        console.log("req.file: ", req.file);            
 
             
         let sql = `INSERT INTO TBL_USER (u_id, u_pw, u_mail, u_phone, u_zip_code, u_first_address, u_second_address ${req.file !== undefined ? `, pi_name` : `` }) 
@@ -63,7 +157,9 @@ const userService = {
                     db.query(`INSERT INTO TBL_USER_PROFILE_IMG (pi_name, u_no) VALUES(?, ?)`,
                                 [req.file.filename, result.insertId], (error, result) => {
 
+                                    if(!error){
                                     res.json({result, message:"회원가입 성공"});
+                                    }
 
                                 });
                 } else {

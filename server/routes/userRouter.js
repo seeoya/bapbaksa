@@ -3,10 +3,29 @@ const router = express.Router();
 const userService = require("../lib/service/userService");
 const upload = require("../lib/uploadFile/uploadFile");
 
+
+router.post("/isMember_confirm", (req, res) => {
+    console.log("isMember_confirm()");
+
+    userService.isMember_confirm(req, res);
+});
+
 router.post("/signup_confirm", upload.UPLOAD_MIDDLEWARE(), (req, res) => {
     console.log("signup_confirm()");
 
     userService.signup_confirm(req, res);
+});
+
+router.post("/findid_confirm", (req, res) => {
+    console.log("findid_confirm()");
+
+    userService.findid_confirm(req, res);
+});
+
+router.post("/findpw_confirm", (req, res) => {
+    console.log("findpw_confirm()");
+
+    userService.findpw_confirm(req, res);
 });
 
 router.post("/signin_confirm", (req, res) => {

@@ -19,6 +19,7 @@ import MarketList from './market/MarketList';
 import Market from './market/Market';
 import Payment from './market/Payment';
 import PaymentHistory from './market/PaymentHistory';
+import PaymentDetail from './market/PaymentDetail';
 import ShoppingCart from './market/ShoppingCart';
 import MyFridge from './recipe/MyFridge';
 import RecipeLayout from './recipe/RecipeLayout';
@@ -70,6 +71,7 @@ const LayoutRouter = () => {
                     <Route path="payment" element={<Payment />}></Route>
                     <Route path="cart" element={<ShoppingCart />}></Route>
                     <Route path="pay-history" element={<PaymentHistory />}></Route>
+                    <Route path="payment_detail/:oId" element={<PaymentDetail />}></Route>
                 </Route>
             </Route>
 

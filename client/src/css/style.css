@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     gap: 10px;
 }
 
@@ -17,9 +17,10 @@
     border: 1px solid #ddd;
     border-radius: 10px;
     outline: none;
+    font-size: 1.6rem;
 }
 
-.form .input-wrap, .form .btn-wrap {
+.form .input-wrap, .form .btn-wrap, #find-result .btn-wrap, #find-result .find-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,16 +60,19 @@
     display: none;
     margin-top: 3px;
     width: 100%;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    padding-left: 20px;
+    color: var(--highlight-dark-color);
     text-align: left;
 }
+
 
 .form .input-wrap > div input {
     width: 100%;
 }
 
 .form .input-wrap .btn {
-    width: 20%;
+    width: 25%;
     height: 40px;
 }
 
@@ -89,6 +93,10 @@
     border: 1px solid #e6e6e6;
     border-radius: 10px;
     object-fit: contain;
+}
+
+.form .signup-hint {
+    text-align: right;
 }
 
 .btn-wrap {
@@ -336,6 +344,33 @@ nav .link {
     transition: all ease 0.3s;
 }
 
+nav .user-mypage-link .user-info{
+    display: flex;  
+    width: 100%;        
+    padding: 10px 0;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+    gap: 5px;
+    transition: all ease 0.3s;
+}
+
+nav .user-info span {
+    
+    
+}
+nav .user-info img {
+    width: 50px;
+    height: 50px;
+    margin-left: 5px;
+    align-items: center;
+    object-fit: contain;
+    border: 1px solid var(--gray-green-color);
+    border-radius: 35px;
+    transition: all ease 0.3s;
+
+}
+
 .scrolled nav {
     top: 60px;
 }
@@ -346,6 +381,15 @@ nav .link {
 
 .scrolled nav .link {
     font-size: 1.4rem !important;
+}
+
+.scrolled nav .user-info span {      
+    font-size: 1.3rem !important;
+}
+
+.scrolled nav .user-info img{     
+    width: 40px; 
+    height: 40px;
 }
 
 .category-wrap .header-category {
@@ -371,6 +415,14 @@ nav .link {
     width: 200px;
 }
 
+#main-category-wrap .header-category .user-mypage-link {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    width: 200px;
+}
+
+
 #market-category-wrap .header-category .market {
     display: flex;
     width: 100%;
@@ -381,7 +433,7 @@ nav .link {
 
 #market-category-wrap .header-category .recipe {
     display: flex;
-    width: 80px;
+    width: 200px;
     align-items: center;
 }
 
@@ -576,6 +628,7 @@ nav .link {
     grid-template-columns: repeat(2, 1fr);
     width: 100%; height: 100%;
     gap: 10px;
+    
 }
 
 /* swiper css start */
@@ -687,6 +740,44 @@ nav .link {
 }
 
 /* main css end */
+
+/* FindID, FindPW css start */
+#find-result {    
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;   
+
+}
+
+#find-result .find-wrap {        
+    display: flex;
+    margin-top: 10px;
+    width: 100%;        
+    gap: 30px;
+    text-align: center;
+}
+
+#find-result .find-wrap .find-link {
+    width: 100%;
+}
+
+.find-wrap .result-message {
+    margin-top: 20px;
+}
+
+.find-wrap .result-message.title{
+    font-size: 2.0rem;
+    font-weight: 600;
+
+}
+
+.find-wrap .result-message.text{
+    font-size: 1.5rem;
+}
+
+/* FindID, FindPW css end */
+
 
 /* 푸터 */
 footer {
@@ -1865,12 +1956,22 @@ background-color: var(--highlight-light-color);
     border-radius: 20px;
 }
 
+.signin-wrap .login-find {
+    display: inline-flex;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    gap: 10px;
+    justify-content: right;
+    align-items: center;
+}
+
 .signin-wrap .login-link {
     display: flex;
     width: 100%;
     margin-top: 10px;
-    gap: 50px;
-    justify-content: center;
+    gap: 10px;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -1878,9 +1979,13 @@ background-color: var(--highlight-light-color);
     font-size: 1.8rem;
 }
 
+.signin-wrap .login-link .naver-link,
+.signin-wrap .login-link .google-link,
 .signin-wrap .login-link .kakao-link {
-    max-width: 45px;
-    min-width: 45px;
+    max-width: 120px;
+    min-width: 120px;
+    min-height: 33.5px;
+    max-height: 33.5px;
 }
 
 .addition-btn-wrap {

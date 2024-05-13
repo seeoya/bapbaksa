@@ -139,7 +139,7 @@ const SignIn = () => {
     return (
         <div className='content-wrap'>
 
-        <h1 className='title'>로그인</h1>
+        <h2 className='title'>로그인</h2>
 
         <div className='content'>
             <div className='signin-wrap'>            
@@ -156,22 +156,29 @@ const SignIn = () => {
                         <button type="button" onClick={signinBtnClickHandler} className="btn main full">로그인</button>
                     </div>
 
+                    <div className='login-find'>
+                   
+                         <Link to="/user/findid" className='find-id'>아이디 찾기</Link>
+                         <span>|</span>
+                         <Link to="/user/findpw" className='find-pw'>비밀번호 찾기</Link>
+                         
+                    </div>
+
                     <div className='login-link'>
                    
                          <Link to={googleURL}>
-                         <img src="/imgs/logo/web_light_sq_na@2x.png" className='kakao-link' alt=''/>                                                  
+                         <img src="/imgs/logo/login/web_neutral_sq_SU@1x.png" className='google-link' alt=''/>                                                  
                          </Link>
 
                          <Link to={kakaoURL}>
-                         <img src="/imgs/logo/kakao_login_medium.png" className='kakao-link' alt=''/>                         
+                         <img src="/imgs/logo/login/kakao_login_medium_narrow.png" className='kakao-link' alt=''/>                         
                          </Link>
 
                          <Link to={naverURL}>                         
-                         <img src="/imgs/logo/btnW_아이콘사각.png" className='kakao-link' alt='' />
-                         </Link>
-
-                         
+                         <img src="/imgs/logo/login/btnG_완성형.png" className='naver-link' alt='' />
+                         </Link>                         
                     </div>
+
                 </form>                
             </div>
         </div>

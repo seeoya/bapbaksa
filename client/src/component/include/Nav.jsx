@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getToken } from "../../storage/loginedToken";
 
 const Nav = () => {
+
+    const [loginedID, setLoginedID] = useState('');
+
+    useEffect(() => {
+
+        let loginedUId = getToken('loginedUId');
+        console.log('loginedUIdString', loginedUId);
+
+        if (loginedUId !== null) {
+            setLoginedID(loginedUId);
+        }
+
+    }, [loginedID]);
+
 
     return (
         <nav>
@@ -15,6 +30,18 @@ const Nav = () => {
                     </div>
                     <div className="market">
                         <Link to="/market" className="link link_market">Market 가기</Link>
+                    </div>
+                    <div className="user-mypage-link">      
+                    
+                        <Link to="/mypage" className="link_mypage" title="마이페이지 바로가기">
+                            <div className="user-info">
+                                <span> {loginedID} </span>
+                                <span> 님 </span>                        
+                                <img src="/imgs/logo/logo.png" alt="마이페이지"/>
+                                {/*<img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />*/}
+                            </div>            
+                        </Link>
+                        
                     </div>
                 </div>
             </div>

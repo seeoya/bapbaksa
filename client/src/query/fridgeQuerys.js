@@ -58,7 +58,7 @@ export const MyFridgeQuery = () => {
         },
         staleTime: 0,
         gcTime: 1000 * 5,
-        // refetchInterval: 1000 * 15,
+        refetchInterval: 1000 * 30,
     });
 };
 

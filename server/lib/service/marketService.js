@@ -4,25 +4,6 @@ const { default: axios } = require('axios');
 
 const marketService = {
 
-
-
-
-    // getAllProduct: (req, res) => {
-    //     console.log("getAllProduct");
-    //     DB.query(`SELECT * FROM PRODUCT`, (error, result) => {
-    //         if(error) {
-    //             console.log(error);
-    //             console.log('여기로 들어오면 안 되는데?');
-    //             res.json({
-    //                 'PROD_NO': "000",
-    //             });
-    //         } else {
-    //             console.log(result);
-    //             console.log('여기로 와야해!');
-    //             res.json(result);
-    //         }
-    //     });
-    // },
     goToMarketCart: (req, res) => {
         let post = req.body;
         console.log("회원 번호 = ", post.U_NO);
@@ -174,12 +155,9 @@ const marketService = {
                 return res.json(null);
             } else {
                 try {
-                    // 모든 주문에서 필요한 제품 번호 추출
                     const productIds = [...new Set(orders.map((order) => order.p_no))];
-                    // 한 번에 모든 제품 정보 가져오기
                     const productInfoResults = await axios_getProductInfo(productIds);
     
-                    // 주문을 o_id로 그룹화하기
                     const groupedOrders = orders.reduce((acc, order) => {
                         if (!acc[order.o_id]) {
                             acc[order.o_id] = {
@@ -195,7 +173,42 @@ const marketService = {
                         return acc;
                     }, {});
     
-                    // 그룹화된 주문 객체들을 배열로 변환하여 응답
+                    const groupedOrdersArray = Object.values(groupedOrders);
+                    res.json(groupedOrdersArray);
+                } catch (error) {
+                    console.log(error);
+                    res.json(null);
+                }
+            }
+        });
+    },
+    getPaymentDetail: (req,res) => {
+        let oId = req.body.O_ID;
+
+        DB.query(`SELECT * FROM TBL_ORDER WHERE O_ID = ?`, [oId], async (error, orders) => {
+            if (error) {
+                console.log(error);
+                return res.json(null);
+            } else {
+                try {
+                    const productIds = [...new Set(orders.map((order) => order.p_no))];
+                    const productInfoResults = await axios_getProductInfo(productIds);
+    
+                    const groupedOrders = orders.reduce((acc, order) => {
+                        if (!acc[order.o_id]) {
+                            acc[order.o_id] = {
+                                o_id: order.o_id,
+                                orders: [],
+                            };
+                        }
+                        const productInfo = productInfoResults.find((product) => product.PROD_NO === order.p_no);
+                        acc[order.o_id].orders.push({
+                            ...order,
+                            productInfo: productInfo ? [productInfo] : [],
+                        });
+                        return acc;
+                    }, {});
+    
                     const groupedOrdersArray = Object.values(groupedOrders);
                     res.json(groupedOrdersArray);
                 } catch (error) {

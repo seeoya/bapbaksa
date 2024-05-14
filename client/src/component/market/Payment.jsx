@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getToken } from '../../storage/loginedToken';
 
 const Payment = () => {
@@ -25,8 +25,6 @@ const Payment = () => {
                 fors.push(item.I_NO);
             })
                 axios_paymentGetProd(fors);
-            
-        
     }, []);
 
     useEffect(() => {
@@ -70,7 +68,7 @@ const Payment = () => {
             if (response.data === true) {
                 alert("결제 성공");
                 if (location.pathname === "/market/payment") {
-                    window.location.href = "/market";
+                    window.location.href = "/market/pay-history";
                 }
             } else {
                 alert("결제 실패");
@@ -108,10 +106,10 @@ const Payment = () => {
 
                         return (
                         <div className="flex-item" key={idx}>
-                            <a href="#none">
+                            <Link to={`/market/view/${info.PROD_NO}_${info.PROD_SPCS_CODE}`}>
                             <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} alt="ingredient" />
-                            </a>
                             <span className="ingredient-title">{info.PROD_NAME}</span>
+                            </Link>
                             <span className="ingredient-unit">
                             {info.DSBN_STEP_ACTO_WT}
                             {info.DSBN_STEP_ACTO_UNIT_NM}

@@ -36,6 +36,11 @@ router.post("/getPaymentHistory", (req,res) => {
     marketService.getPaymentHistory(req,res);
 })
 
+router.post("/getPaymentDetail", (req,res) => {
+    console.log('getPaymentDetail');
+    marketService.getPaymentDetail(req,res);
+})
+
 
 // router.get("/allProduct", (req,res) => {
 //     console.log("[server] marketRouter getAllProduct!");

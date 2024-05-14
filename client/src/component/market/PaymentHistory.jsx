@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getToken } from "../../storage/loginedToken";
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 const PaymentHistory = () => {
     const [selectedItems, setSelectedItems] = useState({});
@@ -54,6 +55,7 @@ const PaymentHistory = () => {
                 u_no
             })
             setOrderInfo(response.data);
+            console.log("❤❤❤❤",orderInfo);
         } catch (error) {
             console.log(error)
         }
@@ -102,7 +104,8 @@ const PaymentHistory = () => {
                                                     <span>이름: {item.productInfo[0].PROD_NAME}</span>
                                                 </div>
                                                 <div>
-                                                    <span>수량: {item.o_count} {item.productInfo[0].DSBN_STEP_ACTO_UNIT_NM}</span>
+                                                    <span>수량: {item.o_count}개</span><br/>
+                                                    <span>단위: {item.productInfo[0].DSBN_STEP_ACTO_WT}{item.productInfo[0].DSBN_STEP_ACTO_UNIT_NM}</span>
                                                 </div>
                                             </>
                                         ) : (
@@ -110,6 +113,14 @@ const PaymentHistory = () => {
                                         )}
                                         <div>
                                             <span>가격: {item.o_final_price.toLocaleString()}원</span>
+                                        </div>
+                                        <div className="ingredient-cart-btn">
+                                            <button>구매 취소</button>
+                                            <button>환불 요청</button>
+                                            <button>구매 확정</button>
+                                            <Link to={`/market/payment_detail/${order.o_id}`}>
+                                                상세 보기
+                                            </Link>
                                         </div>
                                     </div>
                                 ))}
@@ -119,9 +130,7 @@ const PaymentHistory = () => {
                     ))}
                 </div>
             </div>
-                            <div className="ingredient-cart-btn">
-                                <button>환불 요청</button>
-                            </div>
+                            
         </div>
     );
 }

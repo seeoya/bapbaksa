@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { AllRecipeQuery } from '../../query/recipeQuerys';
 
-const RecipeListItem = ({ itemNo, idx, recipeList }) => {
+const RecipeListItem = ({ itemNo, idx }) => {
+    const { data: recipeList, isLoading: recipeIsLoading, isError: recipeIsError } = AllRecipeQuery();
 
-    let item = recipeList[itemNo];
+    const item = recipeList[itemNo];
 
     return (
         <>

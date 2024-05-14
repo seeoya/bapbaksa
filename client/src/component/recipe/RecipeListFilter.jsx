@@ -1,18 +1,22 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AllFridgeQuery, MyFridgeQuery } from '../../query/fridgeQuerys';
 import { searchRecipe } from '../../redux/actions/recipe_action';
 
 const RecipeListFilter = (props) => {
-    let { myFridgeState, notMyFridgeState,
+    let {
         activeIngreList, activeRegionList, activeCateList, activeDifficultList,
         setActiveIngreList, setActiveRegionList, setActiveCateList, setActiveDifficultList,
-        setSortState, filterInclude, setFilterInclude,
-        setMoreBtnState, recipeCount } = props;
+        setSortState, filterInclude, setFilterInclude, setMoreBtnState, filteredRecipeCount } = props;
 
     const dispatch = useDispatch();
 
-    const allFridgeList = useSelector((state) => state.fridge.allFridge);
+    // 재료
+    const { data: myFridgeList, isLoading: myFridgeIsLoading, isError: myFridgeIsError } = MyFridgeQuery();
+    const { data: allFridgeList, isLoading: allFridgeIsLoading, isError: allFridgeIsError } = AllFridgeQuery();
+    const myFridgeState = useSelector((state) => state.fridge.myFridgeState);
+    const notMyFridgeState = useSelector((state) => state.fridge.notMyFridgeState);
 
     const [regionList, setRegionList] = useState({});
     const [categoryList, setCategoryList] = useState({});
@@ -191,7 +195,7 @@ const RecipeListFilter = (props) => {
                 </div>
 
                 <div>
-                    <div>총 {recipeCount} 건</div>
+                    <div>총 {filteredRecipeCount} 건</div>
                     <button type='button' onClick={resetRecipeEvent}>되돌리기</button>
 
                 </div>

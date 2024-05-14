@@ -1,6 +1,8 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AllFridgeQuery, MyFridgeQuery } from '../../query/fridgeQuerys';
+import { AllRecipeQuery } from '../../query/recipeQuerys';
+import { initIngreDivineAction } from '../../redux/actions/fridge_action';
 import RecipeListFilter from './RecipeListFilter';
 import RecipeListItem from './RecipeListItem';
 
@@ -8,180 +10,138 @@ const RecipeList = () => {
     const dispatch = useDispatch();
 
     // 재료
-    const allFridgeList = useSelector((state) => state.fridge.allFridge);
-    const myFridgeList = useSelector((state) => state.fridge.myFridge);
-    const recipeSearch = useSelector((state) => state.recipe.search);
+    const { data: myFridgeList, isLoading: myFridgeIsLoading, isError: myFridgeIsError } = MyFridgeQuery();
+    const { data: allFridgeList, isLoading: allFridgeIsLoading, isError: allFridgeIsError } = AllFridgeQuery();
 
-    const [myFridgeState, setMyFridgeState] = useState([]);
-    const [notMyFridgeState, setNotMyFridgeState] = useState([]);
-    const [activeIngreList, setActiveIngreList] = useState([]);
+    // 레시피
+    const { data: recipeList, isLoading: recipeIsLoading, isError: recipeIsError } = AllRecipeQuery();
+    const [filteredRecipeList, setFilteredRecipeList] = useState([]);
+    const [filteredRecipeCount, setFilteredRecipeCount] = useState(0);
+    const [moreBtnState, setMoreBtnState] = useState(true);
 
     // 카테고리
-    // const [regionList, setRegionList] = useSelector((state) => state.recipe.region);
-    // const [categoryList, setCategoryList] = useSelector((state) => state.recipe.category);
-
     const [activeRegionList, setActiveRegionList] = useState([]);
     const [activeCateList, setActiveCateList] = useState([]);
     const [activeDifficultList, setActiveDifficultList] = useState([]);
 
-    // 검색 정렬
-    const [searchString, setSearchString] = useState("");
+    // 필터
+    const recipeSearch = useSelector((state) => state.recipe.search);
+    const [activeIngreList, setActiveIngreList] = useState([]);
     const [sortState, setSortState] = useState("old");
     const [filterInclude, setFilterInclude] = useState(0);
-
-    // 레시피
-    const [recipeList, setRecipeList] = useState({});
-    const [recipeSortList, setRecipeSortList] = useState([]);
-
-    const [recipePage, setRecipePage] = useState(0);
-    const [recipePageItemCount, setRecipePageItemCount] = useState(20);
-    const [recipeCount, setRecipeCount] = useState(0);
-    const [moreBtnState, setMoreBtnState] = useState(true);
-
-    useEffect(() => {
-        initIngreDivine();
-        initRecipeList();
-    }, []);
+    const [recipeListViewCount, setRecipeListViewCount] = useState(20);
 
     useEffect(() => {
         initIngreDivine();
     }, [allFridgeList, myFridgeList]);
 
     useEffect(() => {
-        setRecipePage(0);
-        initRecipeList();
+        filterRecipe();
+    }, [recipeList]);
+
+    useEffect(() => {
+
+        console.log(activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch)
+        filterRecipe();
+        setRecipeListViewCount(20);
     }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch]);
 
     useEffect(() => {
-        setMoreBtn();
-    }, [recipeCount, recipePage, recipePageItemCount]);
-
-    const initRecipeList = async () => {
-        console.log("recipe init");
-
-        await loadRecipe("init");
-    }
+        filteredRecipeCount > recipeListViewCount ? setMoreBtnState(true) : setMoreBtnState(false);
+    }, [filteredRecipeCount, recipeListViewCount]);
 
     const initIngreDivine = () => {
-        if (allFridgeList) {
-            if (myFridgeList) {
-                let tmpList = [];
-                let tmpList2 = myFridgeList;
-
-                Object.keys(allFridgeList).map((el) => {
-                    if (!myFridgeList.includes(parseInt(el))) { tmpList.push(parseInt(el)) };
-                })
-
-                tmpList.sort((a, b) => {
-                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-                });
-                tmpList2.sort((a, b) => {
-                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-                });
-
-                setNotMyFridgeState(tmpList);
-                setMyFridgeState(tmpList2);
-            } else {
-                let tmpList = [];
-
-                Object.keys(allFridgeList).map((el) => {
-                    tmpList.push(parseInt(el))
-                })
-
-                tmpList.sort((a, b) => {
-                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-                });
-
-                setNotMyFridgeState(tmpList);
-            }
+        if (allFridgeList && myFridgeList) {
+            dispatch(initIngreDivineAction(allFridgeList, myFridgeList));
         }
     }
 
-    const setMoreBtn = () => {
-        if (recipeCount > (recipePage + 1) * recipePageItemCount) {
-            setMoreBtnState(true);
-        } else {
-            setMoreBtnState(false)
+    const filterRecipe = async () => {
+        console.log("recipe filter");
+
+        if (recipeList) {
+            let keys = Object.keys(recipeList);
+            let tmp = [];
+
+            keys.map((el, idx) => {
+                let item = recipeList[el];
+
+                // activeRegionList [숫자, 숫자]
+                if (activeRegionList.length > 0 && !activeRegionList.includes(item.RECP_REGION_CODE)) {
+                    return false;
+                }
+
+                // activeCateList [숫자, 숫자]
+                if (activeCateList.length > 0 && !activeCateList.includes(item.RECP_CATEGORY_CODE)) {
+                    return false;
+                }
+                // activeDifficultList ['보통' ]
+                if (activeDifficultList.length > 0 && !activeDifficultList.includes(item.RECP_DIFFICULT)) {
+                    return false;
+                }
+
+                // recipeSearch '가지'
+                if (recipeSearch && item.RECP_NAME.indexOf(recipeSearch) < 0) {
+                    return false;
+                }
+
+                // activeIngreList [숫자, 숫자]
+                // filterInclude 0
+                
+
+                // sortState 'old'
+
+
+                tmp.push(el);
+            })
+
+            console.log("length: ", tmp.length);
+
+            setFilteredRecipeList(tmp);
+            setFilteredRecipeCount(tmp.length);
         }
     }
 
-    const moreBtnClickEvent = async () => {
+
+    const moreBtnClickEvent = () => {
         console.log('more');
 
-        await loadRecipe("more");
-    }
-
-    const loadRecipe = async (type) => {
-        await axios
-            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
-                params: {
-                    type: "list",
-                    search: recipeSearch,
-                    sort: sortState,
-                    region: activeRegionList,
-                    food: activeIngreList,
-                    foodinclu: filterInclude,
-                    difficult: activeDifficultList,
-                    category: activeCateList,
-                    page: type === "more" ? recipePage + 1 : 0,
-                    pagePerItem: recipePageItemCount,
-                },
-            })
-            .then((data) => {
-                console.log(data.data);
-
-                if (data.data.count > 0) {
-                    setRecipeCount(data.data.count)
-                } else {
-                    setRecipeCount(0)
-                };
-
-                if (type === "init") {
-                    if (data.data.sortNo) {
-                        setRecipeSortList(data.data.sortNo)
-                    }
-
-                    setRecipeList(data.data);
-                    setRecipePage(0);
-                } else if (type === "more") {
-                    if (data.data.sortNo) {
-                        setRecipeSortList([...recipeSortList, ...data.data.sortNo])
-                    }
-
-                    setRecipeList({ ...recipeList, ...data.data });
-                    setRecipePage(prev => prev + 1);
-                }
-            })
-            .catch((err) => {
-                return { type: "error" };
-            });
+        setRecipeListViewCount((prev) => prev + 20);
     }
 
     return (
         <>
+            <div>지역: {activeRegionList}</div>
+            <div>카테: {activeCateList}</div>
+            <div>난이도: {activeDifficultList}</div>
+            <div>검색어: {recipeSearch}</div>
+            <div>재료: {activeIngreList}</div>
+            <div>포함여부: {filterInclude}</div>
+            <div>소트: {sortState}</div>
+
             <h2 className='title'>
                 {
                     recipeSearch ?
-                        `"${recipeSearch}" 검색 결과 ${recipeCount} 건`
+                        `"${recipeSearch}" 검색 결과 ${filteredRecipeCount} 건`
                         : "레시피 목록"
                 }
             </h2>
             <div className='content'>
-                <RecipeListFilter myFridgeState={myFridgeState} notMyFridgeState={notMyFridgeState}
+                <RecipeListFilter
                     activeIngreList={activeIngreList} activeRegionList={activeRegionList} activeCateList={activeCateList} activeDifficultList={activeDifficultList}
                     setActiveIngreList={setActiveIngreList} setActiveRegionList={setActiveRegionList} setActiveCateList={setActiveCateList} setActiveDifficultList={setActiveDifficultList}
                     setSortState={setSortState} filterInclude={filterInclude} setFilterInclude={setFilterInclude}
-                    setMoreBtnState={setMoreBtnState} recipeCount={recipeCount}
+                    setMoreBtnState={setMoreBtnState} filteredRecipeCount={filteredRecipeCount}
                 />
 
                 <div className='recipe-list'>
                     {
-                        recipeSortList ?
-                            recipeSortList.map((el, idx) => {
-                                if (el !== "count") {
-                                    return <RecipeListItem itemNo={el} idx={idx} recipeList={recipeList} />
+                        filteredRecipeList && filteredRecipeList.length > 0 ?
+                            filteredRecipeList.map((el, idx) => {
+                                if (idx < recipeListViewCount) {
+                                    return <RecipeListItem itemNo={el} idx={idx} />
                                 }
-                            }) : null
+                            }) : <div className='empty'>일치하는 레시피가 없어요!</div>
                     }
 
                     {

@@ -569,14 +569,15 @@ nav .link {
 .container .recipe-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     gap: 10px;
 }
 
 /* swiper css start */
 .container .recipe-grid .swiper-container {
     grid-column-start: 1;
-	grid-column-end: 3;
+    grid-column-end: 3;
     height: 300px;
 }
 
@@ -613,8 +614,10 @@ nav .link {
 }
 
 .random-recipe-info img {
-    max-width: 300px; max-height: 200px;
-    min-width: 300px; min-height: 200px;
+    max-width: 300px;
+    max-height: 200px;
+    min-width: 300px;
+    min-height: 200px;
 }
 
 /* random recipe swiper start */
@@ -638,8 +641,8 @@ nav .link {
     align-items: center;
     justify-content: center;
 }
-/* swiper css end */
 
+/* swiper css end */
 .container .recipe-grid .item:nth-child(3) {
     display: flex;
     flex-direction: column;
@@ -649,7 +652,8 @@ nav .link {
 
 .container .recipe-grid .item:nth-child(3) a {
     display: flex;
-    min-width: 300px; height: 60px;
+    min-width: 300px;
+    height: 60px;
     margin-top: 7px;
     padding-left: 10px;
     align-items: center;
@@ -1571,8 +1575,15 @@ footer .util_footer .btn {
     padding: 5px 7px;
     border-radius: 30px;
     height: 30px;
+    width: calc(50% - 5px);
     background-color: var(--main-light-color);
     word-break: keep-all;
+    font-size: 1.3rem;
+}
+
+#recipe .filter-wrap.region .btn,
+#recipe .filter-wrap.difficult .btn {
+    width: 100%;
 }
 
 #recipe .filter-wrap .btn.on {
@@ -1604,6 +1615,15 @@ footer .util_footer .btn {
     align-items: start;
     width: 100%;
     gap: 10px;
+}
+
+#recipe .recipe-list .empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 300px;
+    grid-column: 1 / 5;
 }
 
 #recipe .recipe-item {
@@ -1658,11 +1678,11 @@ footer .util_footer .btn {
 #recipe .recipe-info {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
 }
 
 #recipe .recipe-name {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 600;
 }
 
@@ -1673,8 +1693,8 @@ footer .util_footer .btn {
 }
 
 #recipe .recipe-third-info {
-    display: flex;
-    gap: 3px;
+    display: flex;     /* justify-content: space-between; */
+    gap: 10px;
 }
 
 #recipe .recipe-view .recipe-info .recipe-content {

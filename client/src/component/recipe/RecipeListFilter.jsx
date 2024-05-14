@@ -8,7 +8,7 @@ const RecipeListFilter = (props) => {
     let {
         activeIngreList, activeRegionList, activeCateList, activeDifficultList,
         setActiveIngreList, setActiveRegionList, setActiveCateList, setActiveDifficultList,
-        setSortState, filterInclude, setFilterInclude, setMoreBtnState, filteredRecipeCount } = props;
+        setSortState, filterInclude, setFilterInclude, filteredRecipeCount } = props;
 
     const dispatch = useDispatch();
 
@@ -170,7 +170,11 @@ const RecipeListFilter = (props) => {
                     <div className='filter-wrap difficult'>
                         {
                             ["초보환영", "보통", "어려움"].map((el, idx) => {
-                                return <button type='button' data-idx={el} key={idx} className={activeDifficultList.includes(el) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el)} >{el}</button>
+                                return <button type='button' data-idx={el} key={idx} className={activeDifficultList.includes(el) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el)} >
+                                    {
+                                        el == "초보환영" ? "★" : el == "보통" ? "★★" : "★★★"
+                                    }
+                                </button>
                             })
                         }
                     </div>

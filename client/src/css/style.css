@@ -547,12 +547,7 @@ nav .user-info img {
     grid-template-columns: repeat(3, 2fr);
     grid-template-rows: repeat(3, auto);
     width: 100%; height: 100%;
-<<<<<<< HEAD
-    gap: 10px;
-    
-=======
     gap: 50px 10px;
->>>>>>> c52c40ef5a6558441693ad5c79be97f099294a76
 }
 
 .container .recipe-grid .menu-wrap {

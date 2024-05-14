@@ -76,7 +76,9 @@ const PaymentDetail = () => {
                         <span className="ingredient-title">상품 가격 : {totalPay.toLocaleString()}원</span>
                         <span className="ingredient-title">배송비 : 3,000원</span>
                         <span className="ingredient-title">총 가격 : {(totalPay + 3000).toLocaleString()}원</span>
-                        <span className="ingredient-title"><a>뒤로 가기</a></span>
+                        <Link to={`/market/pay-history`}>
+                            <span className="ingredient-title">뒤로 가기</span>
+                        </Link>
                     </div>
                 </div>
             </div>

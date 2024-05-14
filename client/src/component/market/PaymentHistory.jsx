@@ -4,58 +4,135 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 
 const PaymentHistory = () => {
-    const [selectedItems, setSelectedItems] = useState({});
-    const [selectAll, setSelectAll] = useState(false);
     const [orderInfo, setOrderInfo] = useState([]);
-    let u_no = getToken('loginedUNo');
+    const [refundInfo, setRefundInfo] = useState();
+    const [acceptInfo, setAcceptInfo] = useState();
+    const [cancelInfo, setCancelInfo] = useState();
+    const [temp, setTemp] = useState(false);
+
 
     useEffect(() => {
         axios_getPaymentHistory();
-    }, []);
+    }, [temp]);
 
     useEffect(() => {
-        console.log("💘💘💘💘", orderInfo);
-    }, [orderInfo]);
+        if (refundInfo && refundInfo.p_no && refundInfo.o_id) {
+            axios_refund_order();
+        }
+    }, [refundInfo]);
 
-    const omit = (obj, key) => {
-        const { [key]: _, ...rest } = obj;
-        return rest;
+    useEffect(() => {
+        if (acceptInfo && acceptInfo.p_no && acceptInfo.o_id) {
+            axios_accept_order();
+        }
+    }, [acceptInfo]);
+
+    useEffect(() => {
+        if (cancelInfo && cancelInfo.p_no &&cancelInfo.o_id) {
+            axios_cancel_order();
+        }
+    }, [cancelInfo]);
+
+    const refundProduct = (p_no, o_id) => {
+        const refund = {
+            'p_no': p_no,
+            'o_id': o_id
+        };
+        setRefundInfo(refund);
     };
 
-    const toggleItemSelection = (orderId, productId) => {
-        setSelectedItems((prevSelectedItems) => {
-            const key = `${orderId}_${productId}`;
-            const isSelected = prevSelectedItems[key];
-            return isSelected
-                ? omit(prevSelectedItems, key)
-                : { ...prevSelectedItems, [key]: true };
-        });
-    };
+    const acceptPayment = (p_no ,o_id) => {
+        const accept = {
+            'o_id': o_id,
+            'p_no': p_no
+        };
+        setAcceptInfo(accept);
+    }
 
-    const toggleSelectAll = (isSelectAll) => {
-        setSelectedItems((prevSelectedItems) => {
-            if (isSelectAll) {
-                const newSelectedItems = {};
-                orderInfo.forEach((order) => {
-                    order.orders.forEach((item) => {
-                        newSelectedItems[`${order.o_id}_${item.p_no}`] = true;
-                    });
-                });
-                return newSelectedItems;
-            } else {
-                return {};
-            }
-        });
-        setSelectAll(isSelectAll);
-    };
+    const cancelPayment = ( p_no, o_id) => {
+        const cancel = {
+            'o_id': o_id,
+            'p_no' : p_no
+        };
+        setCancelInfo(cancel);
+    }
+
 
     const axios_getPaymentHistory = async () => {
+        let u_no = getToken('loginedUNo');
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/getPaymentHistory", {
-                u_no
+                'u_no': u_no,
             })
-            setOrderInfo(response.data);
-            console.log("❤❤❤❤",orderInfo);
+            console.log("💝💝", response.data.orders);
+
+            // orders = {};
+            // orders[주문번호] = {};
+            // orders[키값][키값].p_no
+            // Object.keys(orders) == [202405141511366791, 202405141524101631] == 배열
+
+            // Object.keys(orders).map((el) => {
+            //     orders[el] => {}
+
+            //     Object.keys(orders[el]) == [284, 292]
+            // })
+
+
+            // Object.keys(orders).map((el) => {
+            //   <div>orders[el].name</div>>
+
+            //   {
+            //     Object.keys(orders[el]).map(ell => {
+            //         return <div>ell.p_no</div>
+            //     })
+            //   }
+            // })
+            // <div>
+                
+
+            // </div>
+
+
+            setOrderInfo(response.data.orders);
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const axios_refund_order = async () => {
+        try {
+            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/refundOrder", {
+                'refundInfo': refundInfo
+            })
+            console.log("성공", response.data);
+            setTemp((temp) => !temp);
+            alert('주문 상태 바꾸기 성공');
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const axios_accept_order = async () => {
+        try {
+            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/acceptOrder", {
+                'acceptInfo': acceptInfo
+            })
+            console.log("성공", response.data);
+            setTemp((temp) => !temp);
+            alert('구매 확정 바꾸기 성공');
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const axios_cancel_order = async () => {
+        try {
+            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/cancelOrder", {
+                'cancelInfo': cancelInfo
+            })
+            console.log("성공", response.data);
+            setTemp((temp) => !temp);
+            alert('구매 취소 바꾸기 성공');
         } catch (error) {
             console.log(error)
         }
@@ -66,73 +143,53 @@ const PaymentHistory = () => {
             <h2 className='title'>결제 내역</h2>
             <div id="payment_total_wrap">
                 <div className='content ingredient-cart-wrap'>
-                    <div className="payment-history-btn-status">
-                        <div className="all-select-btn">
-                            <input
-                                className="ingredient-cart-all-check-btn"
-                                type="checkbox"
-                                checked={selectAll}
-                                onChange={(e) => toggleSelectAll(e.target.checked)}
-                            />
-                            <p>전체 선택</p>
-                        </div>
-                        <p>주문 상태 : 배송 중</p>
-                    </div>
-                    {orderInfo.map((order, orderIdx) => (
-                        <div key={orderIdx}>
+                    {Object.keys(orderInfo).map((order) => (
+                        <div key={order}>
                             <div className="ingredient-payment-history">
                                 <div>
-                                    <p>주문 번호: {order.o_id}</p>
+                                    <p>주문 번호: {order}</p>
                                 </div>
                                 <div>
-                                    <p>주문 시간: {order.orders[0].o_reg_date}</p>
+                                    <p>주문 시간: {orderInfo[order][Object.keys(orderInfo[order])[0]].o_reg_date}</p>
                                 </div>
                             </div>
-
                             <div className="ingredient-cart-item">
-                                {order.orders.map((item) => (
-                                    <div key={`${order.o_id}_${item.p_no}`} className="payment-history-check">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedItems[`${order.o_id}_${item.p_no}`] || false}
-                                            onChange={() => toggleItemSelection(order.o_id, item.p_no)}
-                                        />
-                                        {item.productInfo && item.productInfo.length > 0 ? (
-                                            <>
-                                                <img className="ingredient-cart-img" src={`/imgs/product/${item.productInfo[0].PROD_IMG}`} />
-                                                <div>
-                                                    <span>이름: {item.productInfo[0].PROD_NAME}</span>
-                                                </div>
-                                                <div>
-                                                    <span>수량: {item.o_count}개</span><br/>
-                                                    <span>단위: {item.productInfo[0].DSBN_STEP_ACTO_WT}{item.productInfo[0].DSBN_STEP_ACTO_UNIT_NM}</span>
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <div>상품 정보를 가져오는 중...</div>
-                                        )}
-                                        <div>
-                                            <span>가격: {item.o_final_price.toLocaleString()}원</span>
+                                {Object.keys(orderInfo[order]).map((prod, orderIdx) => {
+                                    let item = orderInfo[order][prod];
+                                    return (
+                                        <div key={`${order}_${item.p_no}`} className="payment-history-check">
+                                            <img className="ingredient-cart-img" src={`/imgs/product/${item.PROD_IMG}`} />
+                                            <div>
+                                                <span>이름: {item.PROD_NAME}</span>
+                                            </div>
+                                            <div>
+                                                <span>수량: {item.o_count}개</span><br />
+                                                <span>단위: {item.DSBN_STEP_ACTO_WT}{item.DSBN_STEP_ACTO_UNIT_NM}</span>
+                                            </div>
+                                            <div>
+                                                <span>가격: {item.o_final_price.toLocaleString()}원</span>
+                                            </div>
+                                            <div className="ingredient-cart-btn">
+                                                {item.o_s_no === 1 || item.o_s_no === 6 ? <button onClick={() => refundProduct(item.p_no, item.o_id)}>환불 요청</button> : null}
+                                                <Link to={`/market/payment_detail/${item.o_id}`}>
+                                                    상세 보기
+                                                </Link>
+                                                <p>주문 상태: {item.o_s_name}</p>
+                                                {item.o_s_no === 0 ? <button onClick={() => cancelPayment(item.p_no, item.o_id)}>구매 취소</button> : ''}
+                                                {item.o_s_no === 0 || item.o_s_no === 1 || item.o_s_no === 6 ? <button onClick={() => acceptPayment(item.p_no, item.o_id)}>구매 확정</button> : ''}
+                                            </div>
                                         </div>
-                                        <div className="ingredient-cart-btn">
-                                            <button>구매 취소</button>
-                                            <button>환불 요청</button>
-                                            <button>구매 확정</button>
-                                            <Link to={`/market/payment_detail/${order.o_id}`}>
-                                                상세 보기
-                                            </Link>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
+                            <div className="ingredient-cart-btn">
                             </div>
-                            <p>총 가격: {order.orders.reduce((total, item) => total + item.o_final_price, 0).toLocaleString()}원</p>
+                            </div>
+                            <p>총 가격: {Object.values(orderInfo[order]).reduce((total, item) => total + item.o_final_price, 0).toLocaleString()}원</p>
                         </div>
                     ))}
                 </div>
             </div>
-                            
         </div>
     );
 }
-
 export default PaymentHistory;

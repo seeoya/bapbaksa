@@ -41,6 +41,21 @@ router.post("/getPaymentDetail", (req,res) => {
     marketService.getPaymentDetail(req,res);
 })
 
+router.post("/refundOrder", (req,res) => {
+    console.log('refundOrder');
+    marketService.refundOrder(req,res);
+})
+
+router.post("/acceptOrder", (req,res) => {
+    console.log('acceptOrder');
+    marketService.acceptOrder(req,res);
+})
+
+router.post("/cancelOrder", (req,res) => {
+    console.log('cancelOrder');
+    marketService.cancelOrder(req,res);
+})
+
 
 // router.get("/allProduct", (req,res) => {
 //     console.log("[server] marketRouter getAllProduct!");

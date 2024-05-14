@@ -362,8 +362,6 @@ const product = {
     getProductInfo: (req, res) => {
         let p_no = req.body.P_NO;
 
-        console.log('💥💢💟💝🕳💢💌💙💌✝', p_no)
-
         if (Array.isArray(p_no)) {
             // p_no가 배열인 경우
             const placeholders = p_no.map(() => '?').join(', ');
@@ -436,7 +434,34 @@ const product = {
                 });
             }
         })
+    },
+    axiosGetProduct: (req, res) => {
+        let pNo = req.body.P_NO;
+    
+        const promises = pNo.map(prodNo => {
+            return new Promise((resolve, reject) => {
+                DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, [prodNo], (error, products) => {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    } else {
+                        resolve(products);
+                    }
+                });
+            });
+        });
+    
+        Promise.all(promises)
+            .then(results => {
+                const mergedResults = results.reduce((acc, curr) => acc.concat(curr), []);
+                res.json(mergedResults);
+            })
+            .catch(error => {
+                console.log(error);
+                res.json(null);
+            });
     }
+    
 }
 // 10퍼센트 이상 더 싼 물품을 찾을 때 : 현재가격 / 전달 가격 * 100
 module.exports = product;

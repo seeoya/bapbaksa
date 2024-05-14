@@ -16,6 +16,7 @@ const SignUp = () => {
     const [uZipcode, setUZipCode] = useState('');
     const [uFirstAddr, setUFirstAddr] = useState('');
     const [uSecondAddr, setUSeconAddr] = useState('');
+    const [isMemberFlag, setIsMemberFlag] = useState(false);
     
     const navigate = useNavigate();
 
@@ -117,6 +118,23 @@ const SignUp = () => {
         }        
     }
 
+    const pwViewClickHandler = () => {
+        console.log('pwViewClickHandler()');
+        $('#view').css('display', 'block');
+        $('#hide').css('display', 'none');
+        $('.pw-view-icon input[name="u_pw"]').prop('type', 'text'); 
+
+    }
+
+    const pwHideClickHandler = () => {
+        console.log('pwViewClickHandler()');
+        $('#view').css('display', 'none');
+        $('#hide').css('display', 'block');
+        $('.pw-view-icon input[name="u_pw"]').prop('type', 'password'); 
+
+
+    }
+
     const isMemberClickHandler = async () => {
         console.log('isMemberClickHandler()');
 
@@ -134,9 +152,11 @@ const SignUp = () => {
             console.log('res.data: ', res.data);
             console.log(res.data.isMember);
 
-            if (res.data.isMember !== true) {                       
+            if (res.data.isMember !== true) {               
+                setIsMemberFlag(true);        
                 alert('사용 가능한 아이디입니다.');                   
             } else {
+                setIsMemberFlag(false);        
                 alert('사용 불가능한 아이디입니다.');               
             }
         })
@@ -178,6 +198,10 @@ const SignUp = () => {
         if (uId === '') {
             alert('아이디를 입력해 주세요');
             form.u_id.focus();
+        
+        }else if (isMemberFlag === false) {
+            alert('아이디 중복체크를 해주세요');
+            form.u_id.focus();            
 
         } else if (uPw === '') {
             alert('비밀번호를 입력해 주세요');
@@ -271,7 +295,11 @@ const SignUp = () => {
                         </div>
 
                         <div className='input-wrap'>
-                            <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요 *"/>                                
+                            <div className='pw-view-icon'>
+                            <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요 *"/> 
+                            <button id="hide" type="button" className="btn pw-icon" onClick={pwViewClickHandler}><i class="fa-regular fa-eye-slash"></i></button>                            
+                            <button id="view" type="button" className="btn pw-icon" onClick={pwHideClickHandler}><i class="fa-regular fa-eye"></i></button>                            
+                            </div>
                             <span id="message_u_pw" className="input-message">비밀번호는 8 ~ 20자,&nbsp;&nbsp;영문과 숫자, 특수문자를 1개 이상 포함해야 합니다.</span>
                         </div>
 

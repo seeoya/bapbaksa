@@ -2079,6 +2079,25 @@ background-color: var(--highlight-light-color);
     border-radius: 20px;
 }
 
+.signup-wrap .input-wrap .pw-view-icon {
+    align-items: center;    
+}
+
+.signup-wrap .input-wrap .pw-view-icon #view {
+    display: none;
+}
+
+.btn.pw-icon {
+    width: 30px !important;
+    background-color: #fff;
+    color: var(--sub-dark-color);
+}
+
+.btn.pw-icon:hover {
+    background-color: #fff;
+    color: var(--sub-light-color);
+}
+
 .signin-wrap .find-button {
 
     margin-bottom: 5px;

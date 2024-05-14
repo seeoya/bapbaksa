@@ -12,6 +12,7 @@ const uuid4 = require('uuid4');
 const qs = require('querystring');
 const nodemailer = require('nodemailer');
 const { sendMailForID, sendMailForPW } = require('../utils/mail');
+const { sendSmsForID, sendSmsForPW } = require('../utils/sms');
 require('dotenv').config();
 
 
@@ -60,28 +61,60 @@ const userService = {
         console.log('/user/findid_confirm()');
 
         let post = req.body;
-        console.log('post:', post);
+        console.log('post:', post);        
 
-        db.query(`SELECT * FROM TBL_USER WHERE u_mail = ?`,
-                     [post.u_mail], (error, user) => {
-                        console.log('user', user);
-                          
-            if(user.length > 0) {
+        if(post.u_mail){
 
-                let email = user[0].u_mail;
-                let id = user[0].u_id;
+            let sql = `SELECT * FROM TBL_USER WHERE u_mail = ?`;
+            let state =  [post.u_mail];
 
-                let result = sendMailForID(email, id);
-                if(result !== null){
+            db.query(sql, state, (error, user) => {
+                            console.log('user', user);
+                            
+                if(user.length > 0) {
 
-                    res.json({findID: true, uId: user[0].u_id});
-                }                
+                    let email = user[0].u_mail;
+                    let id = user[0].u_id;
+
+                    let result = sendMailForID(email, id);
+                    if(result !== null){
+
+                        res.json({findID: true, uId: user[0].u_id});
+                    }                
+                    
+                } else {
+                    res.json({findID: false});
+                }
                 
-            } else {
-                res.json({findID: false});
-            }
-            
-        });
+            });
+
+        } else if(post.u_phone){
+
+            let sql = `SELECT * FROM TBL_USER WHERE u_phone = ?`;
+            let state =  [post.u_phone];
+
+            db.query(sql, state, (error, user) => {
+                            console.log('user', user);
+                            
+                if(user.length > 0) {
+
+                    let phone = user[0].u_phone;
+                    let id = user[0].u_id;
+
+                    let result = sendSmsForID(phone, id);
+                    if(result !== null){
+
+                        res.json({findID: true, uId: user[0].u_id});
+                    }                
+                    
+                } else {
+                    res.json({findID: false});
+                }
+                
+            });
+        
+
+        }
 
     },
 
@@ -91,35 +124,76 @@ const userService = {
         let post = req.body;
         console.log('post:', post);
 
-        db.query(`SELECT * FROM TBL_USER WHERE u_id = ? && u_mail = ?`,
-                     [post.u_id, post.u_mail], (error, user) => {
-                        console.log('user', user);
-                          
-            if(user.length > 0) {   
+        if (post.u_mail) {
 
-                let email = user[0].u_mail;
-                let pw = shortid.generate();
+            let sql = `SELECT * FROM TBL_USER WHERE u_id = ? && u_mail = ?`;
+            let state =  [post.u_id, post.u_mail];
 
-                let mailResult = sendMailForPW(email, pw);
-                console.log('🎈🎈🎈', mailResult);
+            db.query(sql, state, (error, user) => {
+                            console.log('user', user);
+                            
+                if(user.length > 0) {   
 
-                if(mailResult !== null) {
+                    let email = user[0].u_mail;
+                    let pw = shortid.generate();
 
-                    db.query(`UPDATE TBL_USER SET u_pw = ?, u_mod_date = now() WHERE u_id = ?`,
-                                [bcrypt.hashSync(pw, 10), user[0].u_id], (error, result) => {
+                    let mailResult = sendMailForPW(email, pw);
+                    console.log('🎈🎈🎈', mailResult);
 
-                                    if( result.affectedRows > 0 ){
-                                        res.json({findPW: true});                
-                                    }
-                                });
-                }                  
+                    if(mailResult !== null) {
+
+                        db.query(`UPDATE TBL_USER SET u_pw = ?, u_mod_date = now() WHERE u_id = ?`,
+                                    [bcrypt.hashSync(pw, 10), user[0].u_id], (error, result) => {
+
+                                        if( result.affectedRows > 0 ){
+                                            res.json({findPW: true});                
+                                        }
+                                    });
+                    }                  
+                    
+                } else {
+                    res.json({findPW: false});
+                }
                 
-            } else {
-                res.json({findPW: false});
-            }
-            
-        });
+            });
+        
+        } else if (post.u_phone) {
 
+            let sql = `SELECT * FROM TBL_USER WHERE u_id = ? && u_phone = ?`;
+            let state =  [post.u_id, post.u_phone];
+
+            db.query(sql, state, (error, user) => {
+                            console.log('user', user);
+                            
+                            
+                if(user.length > 0) {   
+
+                    let phone = user[0].u_phone;
+                    let pw = shortid.generate();
+                    console.log('pw', pw);
+
+                    let smsResult = sendSmsForPW(phone, pw);
+                    console.log('🎈🎈🎈', smsResult);
+               
+                            
+                    if(smsResult !== null) {
+
+                        db.query(`UPDATE TBL_USER SET u_pw = ?, u_mod_date = now() WHERE u_id = ?`,
+                                    [bcrypt.hashSync(pw, 10), user[0].u_id], (error, result) => {
+
+                                        if( result.affectedRows > 0 ){
+                                            res.json({findPW: true});                
+                                        }
+                                    });
+                     }                  
+                    
+                } else {
+                    res.json({findPW: false});
+                }
+                
+            });
+
+        }    
     },
 
 

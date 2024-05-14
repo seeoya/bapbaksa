@@ -543,7 +543,7 @@ nav .link {
 
 .content-wrap {
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
 }
 
 .content-wrap h2.title {
@@ -562,94 +562,37 @@ nav .link {
     justify-content: start;
     align-items: center;
     min-width: 400px;
-    gap: 10px;
+    gap: 30px;
 }
 
 /* main css start */
 .container .recipe-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 2fr);
+    grid-template-rows: repeat(3, auto);
     width: 100%; height: 100%;
-    gap: 10px;
+    gap: 50px 10px;
 }
 
-/* swiper css start */
-.container .recipe-grid .swiper-container {
-    grid-column-start: 1;
-	grid-column-end: 3;
-    height: 300px;
-}
-
-.container .recipe-grid .swiper-container .mySwiper {
-    width: 100%;
-    height: 100%;
-}
-
-.container .recipe-grid .swiper-container .swiper-slide {
+.container .recipe-grid .menu-wrap {
+    grid-column-start: 3;
+	grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 3;
     display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.container .recipe-grid .item:nth-child(2) .today-recommend {
-    width: 475px;
-    height: auto;
-    padding: 10px;
-}
-
-.container .recipe-grid .item:nth-child(2) .today-recommend .today-recommend-swiper {
-    height: 300px;
-}
-
-.container .recipe-grid .item:nth-child(2) .today-recommend .today-recommend-swiper .my-swiper {
-    width: 100%;
-    height: 100%;
-}
-
-.container .recipe-grid .item:nth-child(2) .today-recommend .today-recommend-swiper .my-swiper .swiper-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.random-recipe-info img {
-    max-width: 300px; max-height: 200px;
-    min-width: 300px; min-height: 200px;
-}
-
-/* random recipe swiper start */
-.container .recipe-grid .item:nth-child(3) .today-recommend {
-    width: 475px;
-    height: auto;
-    padding: 10px;
-}
-
-.container .recipe-grid .item:nth-child(3) .today-recommend .today-recommend-swiper {
-    height: 300px;
-}
-
-.container .recipe-grid .item:nth-child(3) .today-recommend .today-recommend-swiper .mySwiper {
-    width: 100%;
-    height: 100%;
-}
-
-.container .recipe-grid .item:nth-child(3) .today-recommend .today-recommend-swiper .mySwiper .swiper-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-/* swiper css end */
-
-.container .recipe-grid .item:nth-child(3) {
+.container .recipe-grid .menu {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.container .recipe-grid .item:nth-child(3) a {
+.container .recipe-grid .menu a {
     display: flex;
-    min-width: 300px; height: 60px;
+    flex-direction: row;
+    min-width: 270px; height: 50px;
     margin-top: 7px;
     padding-left: 10px;
     align-items: center;
@@ -658,17 +601,8 @@ nav .link {
     border-radius: 50px;
 }
 
-.container .recipe-grid .item:nth-child(3) a:hover {
-    transition: 0.5s;
-    filter: brightness(0.5)
-}
-
-.container .recipe-grid .item:nth-child(3) a:not(:hover) {
-    transition: 0.5s ease-out;
-}
-
-.container .recipe-grid .item:nth-child(3) a .banner {
-    max-width: 300px;
+.container .recipe-grid .menu a .banner {
+    max-width: 250px;
     flex-direction: row;
     text-shadow: -1px 0px #a8a8a8, 0px 1px #a8a8a8, 1px 0px #a8a8a8, 0px -1px #a8a8a8;
     font-size: 1.3em;
@@ -676,11 +610,255 @@ nav .link {
     padding-left: 10px;
 }
 
-.container .recipe-grid .item:nth-child(3) a .icon {
+.container .recipe-grid .menu a .icon {
     padding-left: 10px;
     font-size: 28px;
 }
 
+/* swiper css start */
+.container .recipe-grid .swiper-container {
+    grid-column-start: 1;
+	grid-column-end: 4;
+    height: 300px;
+}
+
+.container .recipe-grid .swiper-container .my-swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: auto;
+}
+
+.container .recipe-grid .swiper-container .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .recipe-grid .recommend-container {
+    grid-column-start: 1;
+	grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    height: 400px;
+    max-width: 600px;
+}
+
+.container .recipe-grid .recommend-container .today-recommend {
+    width: 600px;
+    height: 500px;
+    padding: 10px;
+}
+
+.container .recipe-grid .recommend-container .today-recommend h2 {
+    padding: 10px 0 5px 10px;
+    font-size: 2em;
+    text-align: center;
+}
+
+.container .recipe-grid .recommend-container .today-recommend h3 {
+    font-size: 1.4em;
+}
+
+.container .recipe-grid .recommend-container .today-recommend .line {
+    height: 0; width: 610px;
+    margin: 20px 0 40px 0;
+    border-bottom: 2px dashed #d0cfcf;
+}
+
+.container .recipe-grid .today-container .today-recommend .today-recommend-swiper {
+    height: 400px;
+}
+
+.container .recipe-grid .today-container .today-recommend .today-recommend-swiper .my-swiper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.container .recipe-grid .today-container .today-recommend .today-recommend-swiper .my-swiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.random-recipe-info {
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.random-recipe-info a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.random-recipe-detail {
+    justify-content: center;
+    align-items: center;
+}
+
+.random-recipe-detail p {
+    max-width: 450px;
+    word-break: keep-all;
+    text-align: center;
+}
+
+.random-recipe-info img {
+    max-width: 280px; max-height: 180px;
+    min-width: 280px; min-height: 180px;
+    object-fit: cover;
+}
+
+.random-ingre-info {
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.random-ingre-info a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.random-ingre-info img {
+    max-width: 280px; max-height: 180px;
+    min-width: 280px; min-height: 180px;
+    object-fit: cover;
+}
+
+.random-ingre-detail {
+    text-align: center;
+}
+
+/* market grid start */
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%; height: 100%;
+    gap: 50px 0;
+}
+
+.container .market-grid .recomand-container {
+    grid-column-start: 1;
+	grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    height: 400px;
+    max-width: 600px;
+}
+
+.container .market-grid .today-recommend {
+    grid-column-start: 1;
+	grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    height: 400px;
+    max-width: 600px;
+}
+
+.container .market-grid .swiper-container {
+    grid-column-start: 1;
+	grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    height: 400px;
+    max-width: 900px;
+}
+
+.container .market-grid .swiper-container .my-swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.container .market-grid .swiper-container .my-swiper .random-market-info a {
+    display: flex;
+    flex-direction: column;
+}
+
+.container .market-grid .swiper-container .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* market 1st swiper start */
+.container .market-grid .cheep-container .cheep-recommend {
+    width: 960px;
+    height: auto;
+    padding: 10px;
+}
+
+.container .market-grid .cheep-container .cheep-recommend h2 {
+    padding: 10px 0 5px 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+}
+
+.container .market-grid .cheep-container .cheep-recommend h3 {
+    font-size: 1.2em;
+}
+
+.container .market-grid .cheep-container .cheep-recommend .line {
+    height: 0; width: 940px;
+    margin: 20px 0 40px 0 ;
+    border-bottom: 2px dashed #d0cfcf;
+}
+
+.container .market-grid .cheep-container .today-recommend .today-recommend-swiper {
+    height: 500px;
+}
+
+.container .market-grid .cheep-container .today-recommend .today-recommend-swiper .my-swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.container .market-grid .cheep-container .today-recommend .today-recommend-swiper .my-swiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* market 2nd swiper start */
+.container .market-grid .cheep-container {
+    grid-column-start: 1;
+	grid-column-end: 3;
+    height: 380px;
+}
+
+.container .market-grid .cheep-container h2 {
+    padding: 10px 0 5px 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    text-align: center;
+}
+
+.container .market-grid .cheep-container .line {
+    height: 0; width: 940px;
+    margin: 20px 0 40px 0 ;
+    border-bottom: 2px dashed #d0cfcf;
+}
+
+.random-market-info img {
+    max-width: 280px; max-height: 180px;
+    min-width: 280px; min-height: 180px;
+    object-fit: cover;
+}
+
+/* swiper css end */
 /* main css end */
 
 /* 푸터 */

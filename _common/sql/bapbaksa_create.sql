@@ -10,6 +10,8 @@ CREATE TABLE TBL_USER (
     u_mail           VARCHAR(100) NOT NULL,
     u_phone          VARCHAR(50) NOT NULL,
     u_google_id      VARCHAR(100),
+    u_kakao_id       VARCHAR(100),
+    u_naver_id       VARCHAR(100),
     u_status         INT NOT NULL DEFAULT 1,
     u_zip_code       VARCHAR(50),
     u_first_address  VARCHAR(100),

@@ -1,8 +1,11 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import LayoutRouter from "./component/LayoutRouter";
 import { loadFridgeAction } from "./redux/actions/fridge_action";
+
+const queryClient = new QueryClient();
 
 function App() {
     const dispatch = useDispatch();
@@ -39,9 +42,11 @@ function App() {
     return (
         <>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
-                <div className="wrap">
-                    <LayoutRouter />
-                </div>
+                <QueryClientProvider client={queryClient}>
+                    <div className={isScrolled ? "wrap scrolled" : "wrap"}>
+                        <LayoutRouter />
+                    </div>
+                </QueryClientProvider>
             </BrowserRouter>
         </>
     );

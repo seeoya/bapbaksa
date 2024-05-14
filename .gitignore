@@ -10,6 +10,7 @@
 /server/lib/db
 /.pnp
 .pnp.js
+.env
 
 # testing
 /coverage

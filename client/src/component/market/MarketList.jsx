@@ -9,31 +9,28 @@ const MarketList = () => {
 
     const prodData = useSelector((state) => state.marketReducer.ProdData);
     const [active, setActive] = useState("");
-    const [moreList, setMoreList] = useState(12);
     const [newProdDate, setNewProdDate] = useState([]);
-    const [number,setNumber] = useState(0);
+    const [number,setNumber] = useState(1);
     const [search,setSearch] = useState('');
     const [page, setPage] = useState(0);
+    const [temp,setTemp] = useState(false);
 
     useEffect(() => {
-        axios_getDate();
-    }, []);
-
-    useEffect(() => {
-        handleCategoryClick("all");
         moreProductBtn();
-    }, [newProdDate]);
-
+        handleCategoryClick("all");
+    }, []);
+    
     const moreProductBtn = async () => {
-        setMoreList(prev => prev + 12);
-        dispatch(await twelveProduct(moreList, newProdDate, number, search, page));
-    }
-
-    const handleCategoryClick = (category_name) => {
-
+        setPage(prev => prev + 1);
+        const updatedNumber = number;
+        dispatch(await twelveProduct(newProdDate, updatedNumber, search, page));        
+    };
+    
+    const handleCategoryClick = async (category_name) => {
             switch (category_name) {
                 case "all":
                     setNumber(1);
+                    console.log('전체 클릭');
                     break;
                 case "carbohydrate":
                     console.log('탄수화물 클릭');
@@ -65,19 +62,7 @@ const MarketList = () => {
             setActive(category_name);
     };
 
-    async function axios_getDate() {
-        try {
-            const response = await axios.get(process.env.REACT_APP_REST_SERVER_URL + "/product/getNewDate");
-            setNewProdDate(response.data[0].PROD_YMD);
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     return (
-
-
 
         <div id="market_list">
             <div className="ingredient-category">

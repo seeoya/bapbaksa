@@ -4,10 +4,11 @@ export const recipe = (state = {}, action) => {
             console.log({ ...state });
             return { ...state, name: "가나다" };
 
-        // case "load_recipe_list":
-        //     return { ...state, recipeList: action.data };
+        case "recipe_search_change":
+            return { ...state, search: action.data };
 
         case "error":
+            break;
 
         default:
             console.log("REDUCER ACTION ERROR");

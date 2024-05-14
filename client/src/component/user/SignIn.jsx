@@ -2,8 +2,29 @@ import React, { useEffect, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { setToken } from '../../storage/loginedToken';
+import $ from 'jquery';
+
 
 axios.defaults.withCredentials = true;
+const googleid = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+const kakaoid = process.env.REACT_APP_KAKAO_CLIENT_ID;
+const naverid = process.env.REACT_APP_NAVER_CLIENT_ID;
+
+const googleRedirect = `http%3A//localhost:3000/auth/google/callback`;
+const kakaoRedirect = `http://localhost:3000/oauth/kakao/callback`;
+const naverRedirect = `http://localhost:3000/oauth/naver/callback`;
+
+
+//구글 로그인 요청 주소
+const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${googleid}&state=state_parameter_passthrough_value&redirect_uri=${googleRedirect}&response_type=code&scope=https%3A//www.googleapis.com/auth/userinfo.email&include_granted_scopes=true`;
+
+//카카오 로그인 요청 주소
+const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoid}&redirect_uri=${kakaoRedirect}&response_type=code`;
+
+//네이버 로그인 요청 주소
+const state = Math.floor(new Date().getTime() + Math.random() * 1000);
+
+const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverid}&state=${state}&redirect_uri=${naverRedirect}`;
 
 const SignIn = () => {
 
@@ -12,6 +33,7 @@ const SignIn = () => {
     const [message, setMessage] = useState('');
 
     const navigate = useNavigate(); 
+    
 
     useEffect(() => {
 
@@ -19,6 +41,8 @@ const SignIn = () => {
 
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');
+        console.log('google_id===>', googleid);
+        console.log('google_url===>', googleURL);
 
         let input_name = e.target.name;
         let input_value = e.target.value;
@@ -132,20 +156,29 @@ const SignIn = () => {
                         <button type="button" onClick={signinBtnClickHandler} className="btn main full">로그인</button>
                     </div>
 
+                    <div className='login-find'>
+                   
+                         <Link to="/user/findid" className='find-id'>아이디 찾기</Link>
+                         <span>|</span>
+                         <Link to="/user/findpw" className='find-pw'>비밀번호 찾기</Link>
+                         
+                    </div>
+
                     <div className='login-link'>
                    
-                         <Link to={'/auth/google'}>
-                         <span className="google-link">GOOGLE</span>
+                         <Link to={googleURL}>
+                         <img src="/imgs/logo/login/web_neutral_sq_SU@1x.png" className='google-link' alt=''/>                                                  
                          </Link>
 
-                         <Link to={'/auth/naver'}>
-                         <span className="naver-link">NAVER</span>
+                         <Link to={kakaoURL}>
+                         <img src="/imgs/logo/login/kakao_login_medium_narrow.png" className='kakao-link' alt=''/>                         
                          </Link>
 
-                         <Link to={'/auth/kakao'}>
-                         <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" className='kakao-link' alt=''/>                         
-                         </Link>
+                         <Link to={naverURL}>                         
+                         <img src="/imgs/logo/login/btnG_완성형.png" className='naver-link' alt='' />
+                         </Link>                         
                     </div>
+
                 </form>                
             </div>
         </div>

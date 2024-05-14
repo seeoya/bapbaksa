@@ -27,35 +27,149 @@ const SignUp = () => {
         let input_value = e.target.value;
 
         if (input_name === "u_id") {
+            idCheck(input_value);
             setUId(input_value);
 
         } else if (input_name === "u_pw") {
+            pwCheck(input_value);
             setUPw(input_value);
 
-        } else if (input_name === "u_check_pw") {
+        } else if (input_name === "u_check_pw") {            
+            rePwCheck(input_value);
             setUCheckPw(input_value);
 
         } else if (input_name === "u_mail") {
+            emailCheck(input_value);
             setUMail(input_value);
 
         } else if (input_name === "u_phone") {
+            phoneCheck(input_value);
             setUPhone(input_value);
 
         } else if (input_name === "u_profile") {
             setUProfile(input_value);
-
-        } else if (input_name === "u_zip_code") {
-            setUZipCode(input_value);
-
-        } else if (input_name === "u_first_address") {
-            setUFirstAddr(input_value);
 
         } else if (input_name === "u_second_address") {
             setUSeconAddr(input_value);
         }
     }
 
-     
+    function idCheck(input_value) {
+        // 아이디 검증: 영어 소문자와 숫자로만 구성되어야 함
+        let regex = new RegExp();
+        regex = /^[a-z0-9]{5,19}$/g;        
+
+        if(regex.test(input_value)) {
+            $('#message_u_id').css('display', 'none');
+           return input_value;
+        }else {            
+            $('#message_u_id').css('display', 'block');
+        }        
+    }
+
+    function pwCheck(input_value) {
+        // 비밀번호 검증: 8~20자, 영문 대소문자, 숫자, 특수 문자 1개 이상 포함되어야 함
+        let regex = new RegExp();
+        regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;        
+
+        if(regex.test(input_value)) {
+            $('#message_u_pw').css('display', 'none');
+           return input_value;
+        }else {            
+            $('#message_u_pw').css('display', 'block');
+        }        
+    }
+    
+
+    function rePwCheck(input_value) {
+        // 비밀번호 일치 검증        
+        if(input_value === uPw) {
+            $('#message_u_check_pw').css('display', 'none');
+           return input_value;
+        }else {            
+            $('#message_u_check_pw').css('display', 'block');
+        }        
+    }
+    
+    function emailCheck(input_value) {
+        // 이메일 검증: 
+        let regex = new RegExp();
+        regex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;        
+
+        if(regex.test(input_value)) {
+            $('#message_u_mail').css('display', 'none');
+           return input_value;
+        }else {            
+            $('#message_u_mail').css('display', 'block');
+        }        
+    }
+
+    function phoneCheck(input_value) {
+        // 전화번호 검증: 
+        let regex = new RegExp();
+        regex = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;        
+
+        if(regex.test(input_value)) {
+            $('#message_u_phone').css('display', 'none');
+           return input_value;
+        }else {            
+            $('#message_u_phone').css('display', 'block');
+        }        
+    }
+
+    const isMemberClickHandler = async () => {
+        console.log('isMemberClickHandler()');
+
+        let data = {
+            'u_id' : uId
+        }
+
+        await axios({
+            url: process.env.REACT_APP_SERVER_URL + `/api/user/isMember_confirm`,                
+            method: 'post',      
+            data: data,
+        })
+        .then(res => {        
+            console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION SUCCESS ==> ', res.data);                                
+            console.log('res.data: ', res.data);
+            console.log(res.data.isMember);
+
+            if (res.data.isMember !== true) {                       
+                alert('사용 가능한 아이디입니다.');                   
+            } else {
+                alert('사용 불가능한 아이디입니다.');               
+            }
+        })
+        .catch(error => {    
+            console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION ERROR');
+        })
+        .finally(data => {
+            console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION FINALLY');    
+        });            
+           
+    }
+
+    const searchAddrClickHandler = () =>{
+        console.log('searchAddrClickHandler()');
+
+      
+            new window.daum.Postcode({
+                oncomplete: (data) => {
+                    let extraRoadAddr = '';
+    
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraRoadAddr += data.bname;
+                    }
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+    
+                    setUZipCode(data.zonecode);
+                    setUFirstAddr(data.roadAddress + ` (${extraRoadAddr})`);                    
+                }
+            }).open();
+    }    
+
     const signupBtnClickHandler = async () => {
         console.log('signupBtnClickHandler()');
 
@@ -146,45 +260,41 @@ const SignUp = () => {
 
                 <div className='signup-wrap'>            
                     <form name="signup_form" className='form'>
-                        <div className='input-wrap'>                    
-                            <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요"/>    
-                            {/* <button type="button" class="btn sub" onClick="isMember();">중복체크</button> */}
-
-                            <span id="icon_m_id" class="input-icon"></span>
-                            <span id="message_m_id" class="input-message">아이디는 5글자 이상이며, 영문 소문자와 숫자만 입력 가능합니다.</span>
-                            <span id="message_same_m_id" class="input-message">중복된 아이디입니다.</span>
+                        <p className='signup-hint'>* 필수항목</p>
+                        <div className='input-wrap'>  
+                            <div>
+                            <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요 *"/>    
+                            <button type="button" className="btn sub" onClick={isMemberClickHandler}>중복확인</button>
+                            </div>                  
+                          
+                            <span id="message_u_id" className="input-message">아이디는 6 ~ 20자,&nbsp;&nbsp;영문과 숫자를 조합해야 합니다.</span>                             
                         </div>
 
                         <div className='input-wrap'>
-                            <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요"/>    
-                            <span id="icon_m_pw" class="input-icon"></span>
-                            <span id="message_m_pw" class="input-message">비밀번호는 최소 8자 이상이어야 하며, 특수문자를 최소 1개 이상 포함해야 합니다.</span>
+                            <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요 *"/>                                
+                            <span id="message_u_pw" className="input-message">비밀번호는 8 ~ 20자,&nbsp;&nbsp;영문과 숫자, 특수문자를 1개 이상 포함해야 합니다.</span>
                         </div>
 
                         <div className='input-wrap'>
-                            <input type="password" name="u_check_pw" value={uCheckPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 한번 더 입력해 주세요"/>
-                            <span id="icon_u_check_pw" class="input-icon"></span>
-                            <span id="message_u_check_pw" class="input-message">비밀번호가 일치하지 않습니다.</span>
+                            <input type="password" name="u_check_pw" value={uCheckPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 한번 더 입력해 주세요 *"/>                            
+                            <span id="message_u_check_pw" className="input-message">비밀번호가 일치하지 않습니다.</span>
                         </div>
 
                         <div className='input-wrap'>
-                            <input type="text" name="u_mail" value={uMail} onChange={(e) => userInfoChangeHandler(e)} placeholder="이메일 주소를 입력해 주세요"/>
-                            <span id="icon_u_mail" class="input-icon"></span>
-                            <span id="message_u_mail" class="input-message">유효한 이메일 주소를 입력해 주세요.</span>
+                            <input type="text" name="u_mail" value={uMail} onChange={(e) => userInfoChangeHandler(e)} placeholder="이메일 주소를 입력해 주세요 *"/>                         
+                            <span id="message_u_mail" className="input-message">이메일 형식으로 입력해 주세요.</span>
                         </div>
 
                         <div className='input-wrap'>
-                            <input type="text" name="u_phone" value={uPhone} onChange={(e) => userInfoChangeHandler(e)} placeholder="휴대폰 번호를 입력해 주세요"/>
-                            {/* <input type="text" name="m_phone" placeholder="전화번호를 입력해 주세요." oninput="extractNumbers(this)"/> */}
-                            <span id="icon_u_phone" class="input-icon"></span>
-                            <span id="message_u_phone" class="input-message">전화번호는 숫자 9~12자까지 입력 가능합니다.</span>
+                            <input type="text" name="u_phone" value={uPhone} onChange={(e) => userInfoChangeHandler(e)} placeholder="휴대폰 번호를 입력해 주세요 *"/>                                                        
+                            <span id="message_u_phone" className="input-message">예: 010-1234-5678</span>
                         </div>
 
                         <div className='input-wrap'>
                             <div>
                                 <input type="text" id="postcode" name="u_zip_code" value={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readOnly/>
-                                <button type="button" id="search_address_btn" onclick="searchAddress()" class="btn sub">
-                                    <i class="fa-solid fa-location-crosshairs"></i>
+                                <button type="button" id="search_address_btn" onClick={searchAddrClickHandler} className="btn sub">                               
+                                    <i className="fa-solid fa-location-crosshairs"></i>
                                 </button>
                             </div>
 
@@ -192,28 +302,22 @@ const SignUp = () => {
                                 <input type="text" id="address" name="u_first_address" value={uFirstAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="주소" readOnly/>
                                 <input type="text" id="detailAddress" name="u_second_address" value={uSecondAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="상세주소"/>
 
-                                <span id="icon_u_detail_addr" class="input-icon"></span>
-                                <span id="message_u_detail_addr" class="input-message">주소를 입력해 주세요.</span>
+                                <span id="icon_u_detail_addr" className="input-icon"></span>
+                                <span id="message_u_detail_addr" className="input-message">주소를 입력해 주세요.</span>
                             </div>
                         </div>
                         
-                        <div class='input-wrap'>
+                        <div className='input-wrap'>
                             <div>
-                                <span id="icon_u_profile" class="input-icon"></span>
-                                <span id="message_u_profile" class="input-message">프로필 사진을 선택해 주세요.</span>
+                                <span id="icon_u_profile" className="input-icon"></span>
+                                <span id="message_u_profile" className="input-message">프로필 사진을 선택해 주세요.</span>
                                 <input type="file" name="u_profile" value={uProfile} onChange={(e) => userInfoChangeHandler(e)}/>                
                             </div>
                         </div>
                     
-                        <div class='btn-wrap'>
+                        <div className='btn-wrap'>
                             <button type="button" onClick={signupBtnClickHandler} className="btn main full">회원가입</button>
                         </div>
-                        
-
-                        {/* <div class="btn-wrap">
-                            <button type="button" onclick="memberFormCheck('create');" class="btn main full">회원가입</button>
-                        </div> */}
-
                     </form>
                     
                 </div>

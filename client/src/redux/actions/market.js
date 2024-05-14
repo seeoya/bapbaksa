@@ -1,14 +1,13 @@
 import axios from "axios";
 
-export const twelveProduct = async (moreList, newPordDate, number, search, page) => {
+export const twelveProduct = async (newPordDate, number, search, page) => {
     let list = '';
 
+    console.log("💟💟💟💟💟",number);
     await axios({
-        url: process.env.REACT_APP_REST_SERVER_URL + "/product/twelveProduct",
+        url: process.env.REACT_APP_REST_SERVER_URL + "/product/",
         method: 'get',
         params: {
-            // 더 불러올 항목 수
-            'moreList': moreList, 
             // 최신 날짜 항목만 불러옴
             'newProdDate': newPordDate, 
             // 탄수, 채소 등 필터 번호
@@ -18,6 +17,7 @@ export const twelveProduct = async (moreList, newPordDate, number, search, page)
              // 페이지
             'page': page,
         },
+        
     })
         .then(res => {
             if (res.data !== null) {

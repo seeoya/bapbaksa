@@ -7,13 +7,21 @@ const fridgeService = {
                 console.log("error", error);
                 return { status: 400 };
             } else {
-                res.json(result);
+                let val = {};
+
+                Object.keys(result).map((el) => {
+                    val[result[el].ig_no] = result[el];
+                });
+
+                res.json(val);
             }
         });
     },
 
     add_my_fridge: (req, res) => {
-        let data = req.body;
+        let data = req.body.data;
+
+        console.log("111111", data);
         DB.query(
             "INSERT INTO TBL_FRIDGE(u_no, ig_no) VALUES(?, ?)",
             [data.u_no, data.rf_no],

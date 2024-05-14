@@ -8,8 +8,12 @@
 /server/node_modules
 /rest/lib/db
 /server/lib/db
+/client/config/google.json
+/client/config/kakao.json
+/client/config/naver.json
 /.pnp
 .pnp.js
+.env
 
 # testing
 /coverage
@@ -23,6 +27,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+
 
 npm-debug.log*
 yarn-debug.log*

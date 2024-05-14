@@ -389,15 +389,25 @@ const product = {
         },
     random: (req, res) => {
         console.log("random");
-        DB.query(`SELECT * FROM PRODUCT ORDER BY RAND() LIMIT 5`, 
-        (error, random) => {
+        let cur_date = ""; 
+        DB.query(`SELECT PROD_YMD FROM PRODUCT GROUP BY PROD_YMD ORDER BY PROD_YMD DESC LIMIT 1`, 
+        (error, date) => {
             if (error) {
                 res.json(null);
             } else {
-                console.log('random success return json');
-                res.json(random);
+                cur_date = date[0].PROD_YMD;
+                DB.query(`SELECT * FROM PRODUCT WHERE PROD_YMD = ${cur_date} ORDER BY RAND() LIMIT 9`, 
+                (error, random) => {
+                    if (error) {
+                        res.json(null);
+                    } else {
+                        console.log('random success return json');
+                        res.json(random);
+                    }
+                });
             }
         });
+        
     },
     compareprice: (req, res) => {
         console.log("compareprice");
@@ -410,21 +420,22 @@ const product = {
             } else {
                 cur_date = date[0].PROD_YMD;
                 last_date = date[1].PROD_YMD;
+                console.log("cur_date : " ,cur_date);
+                console.log("last_date : ", last_date);
                 DB.query(`
                 SELECT 
                     * 
                 FROM 
-                    PRODUCT cur 
+                (SELECT * FROM PRODUCT WHERE PROD_YMD = ${last_date}) las 
                 INNER JOIN 
-                    PRODUCT last 
+                (SELECT * FROM PRODUCT WHERE PROD_YMD = ${cur_date}) cur 
                 ON 
-                    cur.PROD_CODE = last.PROD_CODE
-                    AND cur.PROD_SPCS_CODE = last.PROD_SPCS_CODE 
-                    AND cur.PROD_GRAD_CODE = last.PROD_GRAD_CODE 
+                    cur.PROD_CODE = las.PROD_CODE 
+                    AND cur.PROD_SPCS_CODE = las.PROD_SPCS_CODE 
+                    AND cur.PROD_GRAD_CODE = las.PROD_GRAD_CODE 
                 WHERE 
                     cur.PROD_YMD = ${cur_date} 
-                    AND last.PROD_YMD = ${last_date} 
-                    AND cur.PROD_AVRG_PRCE < (last.PROD_AVRG_PRCE * 0.9) ORDER BY RAND() LIMIT 5
+                    AND cur.PROD_AVRG_PRCE < (las.PROD_AVRG_PRCE * 0.9) ORDER BY RAND()
                 `, (error, cheep) => {
                     if (error) {
                         res.json(null);
@@ -433,6 +444,7 @@ const product = {
                     }
                 });
             }
+
         })
     },
     axiosGetProduct: (req, res) => {
@@ -460,6 +472,7 @@ const product = {
                 console.log(error);
                 res.json(null);
             });
+
     }
     
 }

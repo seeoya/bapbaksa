@@ -31,6 +31,13 @@ import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
+import Google from './user/Google';
+import Kakao from './user/Kakao';
+import Naver from './user/Naver';
+import FindID from './user/FindID';
+import FindPW from './user/FindPW';
+
+
 
 const LayoutRouter = () => {
 
@@ -38,12 +45,18 @@ const LayoutRouter = () => {
         <Routes>
             <Route element={<MainLayout />}>
                 <Route path="/" element={<Home />} />
+                <Route path="/auth/google/callback" element={<Google />}></Route>
+                <Route path="/oauth/kakao/callback" element={<Kakao />}></Route>
+                <Route path="/oauth/naver/callback" element={<Naver />}></Route>
+
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>
                     <Route path="signin" element={<SignIn />}></Route>
+                    <Route path="findid" element={<FindID />}></Route>
+                    <Route path="findpw" element={<FindPW />}></Route>                    
                     <Route path="modify" element={<Modify />}></Route>
                     <Route path="signout" element={<SignOut />}></Route>
-                    <Route path="delete" element={<Delete />}></Route>
+                    <Route path="delete" element={<Delete />}></Route>                    
                 </Route>
 
                 <Route path="/mypage" element={<Outlet />}>

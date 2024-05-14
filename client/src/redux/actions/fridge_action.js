@@ -37,3 +37,47 @@ export const loadMyFridgeAction = async (uNo) => {
 
     return { type: "load_my_fridge", data: list };
 };
+
+export const initIngreDivineAction = (allFridgeList, myFridgeList) => {
+    if (allFridgeList && myFridgeList) {
+        console.log("initIngreDivineAction");
+
+        let tmpList = [];
+        let tmpList2 = Object.keys(myFridgeList).map((el) => {
+            return parseInt(el);
+        });
+
+        Object.keys(allFridgeList).map((el) => {
+            if (!tmpList2.includes(parseInt(el))) {
+                tmpList.push(parseInt(el));
+            }
+        });
+
+        tmpList.sort((a, b) => {
+            return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME
+                ? 1
+                : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME
+                ? -1
+                : 0;
+        });
+        tmpList2.sort((a, b) => {
+            return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME
+                ? 1
+                : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME
+                ? -1
+                : 0;
+        });
+
+        return {
+            type: "init_ingre_divine",
+            data: {
+                myFridgeState: tmpList2,
+                notMyFridgeState: tmpList,
+            },
+        };
+    } else {
+        return {
+            type: "error",
+        };
+    }
+};

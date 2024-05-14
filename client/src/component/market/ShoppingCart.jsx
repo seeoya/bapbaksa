@@ -19,11 +19,6 @@ const ShoppingCart = () => {
         setPaymentInfo()
     },[selectAll]);
 
-    useEffect(() => {
-        console.log("🤍🤍🤍",cartInfo);
-    },[goToPay]);
-
-
     const handleCount = (type, index) => {
         const updatedCartInfo = [...cartInfo];
         if (type === "plus") {

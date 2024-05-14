@@ -123,8 +123,8 @@ const marketService = {
 
         for (let i = 0; i < o_count.length; i++) {
             DB.query(`INSERT INTO TBL_ORDER(
-                O_ID, U_NO, O_COUNT, O_PRICE, P_NO, O_FINAL_PRICE)
-                VALUES(?, ?, ?, ?, ?, ?)`,
+                O_ID, U_NO, O_COUNT, O_PRICE, P_NO, O_FINAL_PRICE, O_S_NO)
+                VALUES(?, ?, ?, ?, ?, ?, 0)`,
                 [`${formattedDate}${u_no}`, u_no, o_count[i], o_price[i], p_no[i], (o_count[i] * o_price[i])],
                 (error, result) => {
                     if (error) {
@@ -149,32 +149,28 @@ const marketService = {
     },
     getPaymentHistory: (req, res) => {
         let post = req.body;
-        DB.query(`SELECT * FROM TBL_ORDER WHERE U_NO = ?`, [post.u_no], async (error, orders) => {
+        DB.query(`SELECT * FROM TBL_ORDER O JOIN TBL_ORDER_STATUS OS ON O.o_s_no = OS.o_s_no WHERE U_NO = ?`, [post.u_no], async (error, orders) => {
             if (error) {
                 console.log(error);
-                return res.json(null);
+                res.json(null);
             } else {
                 try {
-                    const productIds = [...new Set(orders.map((order) => order.p_no))];
-                    const productInfoResults = await axios_getProductInfo(productIds);
-    
-                    const groupedOrders = orders.reduce((acc, order) => {
-                        if (!acc[order.o_id]) {
-                            acc[order.o_id] = {
-                                o_id: order.o_id,
-                                orders: [],
-                            };
+                    const pNo = orders.map(item => item.p_no);
+                    const prodInfo = await axios_get_product(pNo);
+                    let tmp = {};
+
+                    orders.map((order, index) => {
+                        if (!tmp[order.o_id]) {
+                            tmp[order.o_id] = {}
                         }
-                        const productInfo = productInfoResults.find((product) => product.PROD_NO === order.p_no);
-                        acc[order.o_id].orders.push({
+
+                        tmp[order.o_id][order.p_no] = {
                             ...order,
-                            productInfo: productInfo ? [productInfo] : [],
-                        });
-                        return acc;
-                    }, {});
-    
-                    const groupedOrdersArray = Object.values(groupedOrders);
-                    res.json(groupedOrdersArray);
+                            ...prodInfo[index]
+                        };
+                    });
+
+                    res.json({ orders: tmp });
                 } catch (error) {
                     console.log(error);
                     res.json(null);
@@ -182,7 +178,8 @@ const marketService = {
             }
         });
     },
-    getPaymentDetail: (req,res) => {
+
+    getPaymentDetail: (req, res) => {
         let oId = req.body.O_ID;
 
         DB.query(`SELECT * FROM TBL_ORDER WHERE O_ID = ?`, [oId], async (error, orders) => {
@@ -193,7 +190,7 @@ const marketService = {
                 try {
                     const productIds = [...new Set(orders.map((order) => order.p_no))];
                     const productInfoResults = await axios_getProductInfo(productIds);
-    
+
                     const groupedOrders = orders.reduce((acc, order) => {
                         if (!acc[order.o_id]) {
                             acc[order.o_id] = {
@@ -208,7 +205,7 @@ const marketService = {
                         });
                         return acc;
                     }, {});
-    
+
                     const groupedOrdersArray = Object.values(groupedOrders);
                     res.json(groupedOrdersArray);
                 } catch (error) {
@@ -218,7 +215,53 @@ const marketService = {
             }
         });
     },
+    refundOrder: (req, res) => {
+        let p_no = Number(req.body.refundInfo.p_no);
+        let o_id = Number(req.body.refundInfo.o_id);
+        DB.query(`UPDATE TBL_ORDER SET O_S_NO = 2 WHERE P_NO = ? AND O_ID = ?`,
+            [p_no, o_id],
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    res.json(null);
+                } else {
+                    res.json(result);
+                }
+            }
+        )
+    },
+    acceptOrder: (req, res) => {
+        let o_id = Number(req.body.acceptInfo.o_id);
+        let p_no = Number(req.body.acceptInfo.p_no);
+        console.log("💘💘", o_id);
+        DB.query(`UPDATE TBL_ORDER SET O_S_NO = 5 WHERE P_NO = ? AND O_ID = ?`,
+            [p_no,o_id],
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    res.json(null);
+                } else {
+                    res.json(result);
+                }
+            }
+        )
+    },
 
+    cancelOrder: (req, res) => {
+        let o_id = Number(req.body.cancelInfo.o_id);
+        let p_no = Number(req.body.cancelInfo.p_no);
+        DB.query(`UPDATE TBL_ORDER SET O_S_NO = 4 WHERE P_NO = ? AND O_ID = ?`,
+            [p_no,o_id],
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    res.json(null);
+                } else {
+                    res.json(result);
+                }
+            }
+        )
+    },
 
 
 }
@@ -246,4 +289,14 @@ async function axios_getProductInfo(p_no) {
     }
 }
 
+async function axios_get_product(p_no) {
+    try {
+        const response = await axios.post("http://localhost:3002/product/axios_get_product", {
+            'P_NO': p_no,
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
 module.exports = marketService;

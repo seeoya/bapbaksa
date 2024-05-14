@@ -3,10 +3,29 @@ const router = express.Router();
 const userService = require("../lib/service/userService");
 const upload = require("../lib/uploadFile/uploadFile");
 
+
+router.post("/isMember_confirm", (req, res) => {
+    console.log("isMember_confirm()");
+
+    userService.isMember_confirm(req, res);
+});
+
 router.post("/signup_confirm", upload.UPLOAD_MIDDLEWARE(), (req, res) => {
     console.log("signup_confirm()");
 
     userService.signup_confirm(req, res);
+});
+
+router.post("/findid_confirm", (req, res) => {
+    console.log("findid_confirm()");
+
+    userService.findid_confirm(req, res);
+});
+
+router.post("/findpw_confirm", (req, res) => {
+    console.log("findpw_confirm()");
+
+    userService.findpw_confirm(req, res);
 });
 
 router.post("/signin_confirm", (req, res) => {
@@ -37,6 +56,28 @@ router.delete("/delete_confirm", (req, res) => {
     console.log("delete_confirm()");
 
     userService.delete_confirm(req, res);
+});
+
+
+router.post("/google/callback", (req, res) => {
+    console.log("google/callback()");
+
+    userService.google_callback(req, res);
+    
+});
+
+router.post("/kakao/callback", (req, res) => {
+    console.log("kakao/callback()");
+
+    userService.kakao_callback(req, res);
+    
+});
+
+router.post("/naver/callback", (req, res) => {
+    console.log("naver/callback()");
+
+    userService.naver_callback(req, res);
+    
 });
 
 module.exports = router;

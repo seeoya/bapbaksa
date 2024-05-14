@@ -1,42 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { AddMyFridgeQuery, AllFridgeQuery, DeleteMyFridgeQuery, MyFridgeQuery } from '../../query/fridgeQuerys';
+import { initIngreDivineAction } from '../../redux/actions/fridge_action';
 import { getToken } from '../../storage/loginedToken';
 
 const MyFridge = () => {
+    const dispatch = useDispatch();
 
     const { data: myFridgeList, isLoading: myFridgeIsLoading, isError: myFridgeIsError } = MyFridgeQuery();
     const { data: allFridgeList, isLoading: allFridgeIsLoading, isError: allFridgeIsError } = AllFridgeQuery();
     const { mutate: addMyFridgeMutate } = AddMyFridgeQuery();
     const { mutate: deleteMyFridgeMutate } = DeleteMyFridgeQuery();
 
-    const [myFridgeState, setMyFridgeState] = useState([]);
-    const [notMyFridgeState, setNotMyFridgeState] = useState([]);
+    const myFridgeState = useSelector((state) => state.fridge.myFridgeState);
+    const notMyFridgeState = useSelector((state) => state.fridge.notMyFridgeState);
+    // const [myFridgeState, setMyFridgeState] = useState([]);
+    // const [notMyFridgeState, setNotMyFridgeState] = useState([]);
 
     useEffect(() => {
         initIngreDivine();
-        console.log("내 냉장고: ", myFridgeState);
     }, [allFridgeList, myFridgeList]);
 
     const initIngreDivine = () => {
         if (allFridgeList && myFridgeList) {
-            let tmpList = [];
-            let tmpList2 = Object.keys(myFridgeList).map((el) => {
-                return parseInt(el);
-            });
-
-            Object.keys(allFridgeList).map((el) => {
-                if (!tmpList2.includes(parseInt(el))) { tmpList.push(parseInt(el)) };
-            })
-
-            tmpList.sort((a, b) => {
-                return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-            });
-            tmpList2.sort((a, b) => {
-                return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-            });
-
-            setNotMyFridgeState(tmpList);
-            setMyFridgeState(tmpList2);
+            dispatch(initIngreDivineAction(allFridgeList, myFridgeList));
         }
     }
 

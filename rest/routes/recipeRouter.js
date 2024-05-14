@@ -7,7 +7,8 @@ router.get("/", (req, res) => {
 
     switch (params.type) {
         case "list":
-            recipe.loadList(req,res);
+            recipe.getAllRecipe(req, res);
+            // recipe.loadList(req,res);
             break;
         case "view":
             recipe.getSelectRecipeProgress(req, res);

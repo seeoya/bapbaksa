@@ -289,7 +289,6 @@ const recipe = {
             }
         );
     },
-
     getCategoryList: (req, res) => {
         DB.query(`SELECT * FROM RECIPE_CATEGORY`, (error, result) => {
             if (error) {
@@ -311,8 +310,7 @@ const recipe = {
         });
     },
     getRandomRecipe: (req, res) => {
-        DB.query(`SELECT * FROM RECIPE_BASIC ORDER BY RAND() LIMIT 5`, 
-        (error, random) => {
+        DB.query(`SELECT * FROM RECIPE_BASIC ORDER BY RAND() LIMIT 5`, (error, random) => {
             if (error) {
                 console.log(error);
                 res.json(null);
@@ -320,6 +318,57 @@ const recipe = {
                 res.json(random);
             }
         });
-    }
+    },
+    getAllRecipe: (req, res) => {
+        DB.query(`SELECT * FROM RECIPE_BASIC`, [], (error, result) => {
+            if (error) {
+                res.json(null);
+            } else {
+                DB.query("SELECT * FROM RECIPE_INGREDIENT", [], (error, ingres) => {
+                    if (error) {
+                        res.json(null);
+                    } else {
+                        DB.query(
+                            "SELECT * FROM RECIPE_PROGRESS ORDER BY RECP_CODE, RECP_ORDER_NO",
+                            [],
+                            (error, progress) => {
+                                let ingreTmp = {};
+                                let progressTmp = {};
+
+                                let resultTmp = {};
+                                ingres.map((el) => {
+                                    if (!ingreTmp[el.RECP_CODE]) {
+                                        ingreTmp[el.RECP_CODE] = {};
+                                    }
+
+                                    if (el.RECP_INGRD_CODE != 0) {
+                                        ingreTmp[el.RECP_CODE][el.RECP_INGRD_CODE] = el;
+                                    }
+                                });
+
+                                progress.map((el) => {
+                                    if (!progressTmp[el.RECP_CODE]) {
+                                        progressTmp[el.RECP_CODE] = {};
+                                    }
+
+                                    progressTmp[el.RECP_CODE][el.RECP_ORDER_NO] = el;
+                                });
+
+                                result.map((el) => {
+                                    resultTmp[el.RECP_CODE] = {
+                                        ...el,
+                                        RECP_INGRD: ingreTmp[el.RECP_CODE],
+                                        RECP_PROGRESS: progressTmp[el.RECP_CODE],
+                                    };
+                                });
+
+                                res.json(resultTmp);
+                            }
+                        );
+                    }
+                });
+            }
+        });
+    },
 };
 module.exports = recipe;

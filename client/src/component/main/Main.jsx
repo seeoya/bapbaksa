@@ -16,10 +16,10 @@ const Main = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        ramdomRecipe();
+        randomRecipeAxios();
     }, []);
 
-    const ramdomRecipe = async () => {
+    const randomRecipeAxios = async () => {
         await axios.get(process.env.REACT_APP_REST_SERVER_URL + "/recipe/random", {
             params: {
             }
@@ -31,6 +31,12 @@ const Main = () => {
             setIsLoading(false);
         });
     }
+
+    const banner_img = [
+        '/imgs/banner/recipe/grandopen.png',
+        '/imgs/banner/recipe/bapbaksaEvent.png',
+        '/imgs/banner/recipe/bapdoduk.png',
+    ];
 
     return (
         <div className='recipe-grid'>
@@ -47,33 +53,37 @@ const Main = () => {
                     }}
                     navigation={true}
                     modules={[Autoplay, Pagination, A11y, Navigation]}
-                    className="mySwiper"
+                    className="my-swiper"
                 >
-                    <SwiperSlide>Slide 1</SwiperSlide>
-                    <SwiperSlide>Slide 2</SwiperSlide>
-                    <SwiperSlide>Slide 3</SwiperSlide>
-                    <SwiperSlide>Slide 4</SwiperSlide>
-                    <SwiperSlide>Slide 5</SwiperSlide>
+                    <div className='banner'>
+                        <SwiperSlide>
+                            <img src='/imgs/banner/recipe/grandopen.png' />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <img src='/imgs/banner/recipe/bapbaksaEvent.png' />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <img src='/imgs/banner/recipe/bapdoduk.png' />
+                        </SwiperSlide>
+                    </div>
                 </Swiper>
             </div>
-            <div className='item'>
+            <div className='recommend-container'>
                 <div className='today-recommend'>
-                    <h3>오늘의 추천 요리</h3>
+                    <h2>오늘의 추천 요리</h2>
+                    <div className='line'></div>
                         <div className='today-recommend-swiper'>
                         {isLoading ? (
-                            <div>Loading recipes...</div> // 로딩 중 메시지 또는 스피너
+                            <div>Loading recipes...</div>
                         ) : (
                             <Swiper
-                                spaceBetween={30}
+                                spaceBetween={40}
                                 autoplay={{
                                     delay: 4000,
                                     disableOnInteraction: false,
                                 }}
                                 centeredSlides={true}
-                                pagination={{
-                                    clickable: true,
-                                }}
-                                modules={[Autoplay, Pagination]}
+                                modules={[Autoplay]}
                                 className="my-swiper"
                             >
                                 {randomRecipe.length > 0 ? (
@@ -83,7 +93,7 @@ const Main = () => {
                                                 <Link to={`/recipe/view/${recipe.RECP_CODE}`}>
                                                     <img src={recipe.RECP_MAIN_IMG} alt={recipe.RECP_NAME} />
                                                     <div className='random-recipe-detail'>
-                                                        <h3>{recipe.RECP_NAME}</h3> {/* ${} 대신 {} */}
+                                                        <h3>{recipe.RECP_NAME}</h3>
                                                         <p>{recipe.RECP_INTRO}</p>
                                                     </div>
                                                 </Link>
@@ -100,9 +110,11 @@ const Main = () => {
                     </div>
                 </div>
             </div>
-            <div className='item'>
-                <a href='/market' className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-store"/><div className='banner'>마켓으로 이동</div></a>
-                <a href='/recipe/list' className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-bowl-rice"/><div className='banner'>레시피 보러가기</div></a>
+            <div className='menu-wrap'>
+                <div className='menu'>
+                    <a href='/market' className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-store"/><div className='banner'>마켓으로 이동</div></a>
+                    <a href='/recipe/list' className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-bowl-rice"/><div className='banner'>레시피 보러가기</div></a>
+                </div>
             </div>
         </div>
     );

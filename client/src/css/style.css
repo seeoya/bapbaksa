@@ -543,7 +543,7 @@ nav .link {
 
 .content-wrap {
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
 }
 
 .content-wrap h2.title {
@@ -1682,7 +1682,7 @@ footer .util_footer .btn {
 }
 
 #recipe .recipe-name {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 600;
 }
 

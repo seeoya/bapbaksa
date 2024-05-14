@@ -103,14 +103,14 @@ const RecipeListFilter = (props) => {
     }
 
     const resetRecipeEvent = () => {
-        setActiveIngreList([]);
         setActiveRegionList([]);
         setActiveCateList([]);
         setActiveDifficultList([]);
-        setSortState("old");
-        setMoreBtnState(true);
         dispatch(searchRecipe(""));
         document.getElementById("recipe_search").value = "";
+        setActiveIngreList([]);
+        setFilterInclude(0);
+        setSortState("old");
     }
 
     return (
@@ -186,17 +186,19 @@ const RecipeListFilter = (props) => {
                         <label htmlFor="food_include_1">재료 전부 포함</label>
                     </div>
 
-                    <select id="sort_filter" onChange={sortChangeEvent}>
-                        <option value="old" defaultValue>오래된 순</option>
-                        <option value="new">최신순</option>
+                    <select id="sort_filter" onChange={sortChangeEvent} className='input'>
+                        <option value="old" defaultValue>번호 낮은 순</option>
+                        <option value="new">번호 높은 순</option>
                         <option value="lesstime">조리시간 짧은 순</option>
-                        <option value="moretime">조리시간 긴 순</option>
+                        <option value="moretime">조리시간 긴순</option>
+                        <option value="rowkal">칼로리 낮은 순(인분당)</option>
+                        <option value="hightkal">칼로리 높은 순(인분당)</option>
                     </select>
                 </div>
 
                 <div>
                     <div>총 {filteredRecipeCount} 건</div>
-                    <button type='button' onClick={resetRecipeEvent}>되돌리기</button>
+                    <button type='button' onClick={resetRecipeEvent}>선택 옵션 되돌리기 <i class="fa-solid fa-rotate-left"></i></button>
 
                 </div>
             </div>

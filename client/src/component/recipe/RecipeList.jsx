@@ -40,8 +40,6 @@ const RecipeList = () => {
     }, [recipeList]);
 
     useEffect(() => {
-
-        console.log(activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch)
         filterRecipe();
         setRecipeListViewCount(20);
     }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch]);
@@ -61,6 +59,8 @@ const RecipeList = () => {
 
         if (recipeList) {
             let keys = Object.keys(recipeList);
+            keys = keys.map((el) => parseInt(el));
+
             let tmp = [];
 
             keys.map((el, idx) => {
@@ -86,22 +86,82 @@ const RecipeList = () => {
                 }
 
                 // activeIngreList [숫자, 숫자]
-                // filterInclude 0
-                
+                // filterInclude 0 // 0 하나라도 1 전부 포함
+                if (activeIngreList.length > 0) {
+                    if (filterInclude == 0) {
+                        let flag = false;
+
+                        Object.keys(item.RECP_INGRD).map((ingre) => {
+                            if (activeIngreList.includes(parseInt(ingre))) {
+                                flag = true;
+                            }
+                        })
+
+                        if (!flag) {
+                            return false;
+                        }
+                    } else if (filterInclude == 1) {
+                        let ingreTmp = Object.keys(item.RECP_INGRD).map((ingre) => {
+                            return parseInt(ingre);
+                        })
+
+                        let flag = true;
+
+                        activeIngreList.map((active) => {
+                            if (!ingreTmp.includes(active)) {
+                                flag = false;
+                            }
+                        })
+
+                        if (!flag) {
+                            return false;
+                        }
+                    }
+                }
+
+                tmp.push(parseInt(el));
 
                 // sortState 'old'
-
-
-                tmp.push(el);
+                switch (sortState) {
+                    case "old":
+                        tmp.sort((a, b) => {
+                            return a - b;
+                        });
+                        break;
+                    case "new":
+                        tmp.sort((a, b) => {
+                            return b - a;
+                        });
+                        break;
+                    case "lesstime":
+                        tmp.sort((a, b) => {
+                            return parseInt(recipeList[a].RECP_TIME) - parseInt(recipeList[b].RECP_TIME);
+                        });
+                        break;
+                    case "moretime":
+                        tmp.sort((a, b) => {
+                            return parseInt(recipeList[b].RECP_TIME) - parseInt(recipeList[a].RECP_TIME);
+                        });
+                        break;
+                    case "rowkal":
+                        tmp.sort((a, b) => {
+                            return parseInt(recipeList[a].RECP_KCAL) / parseInt(recipeList[a].RECP_SERVIN) - parseInt(recipeList[b].RECP_KCAL) / parseInt(recipeList[b].RECP_SERVIN);
+                        });
+                        break;
+                    case "hightkal":
+                        tmp.sort((a, b) => {
+                            return parseInt(recipeList[b].RECP_KCAL) / parseInt(recipeList[b].RECP_SERVIN) - parseInt(recipeList[a].RECP_KCAL) / parseInt(recipeList[a].RECP_SERVIN);
+                        });
+                        break;
+                    default:
+                        break;
+                }
             })
-
-            console.log("length: ", tmp.length);
 
             setFilteredRecipeList(tmp);
             setFilteredRecipeCount(tmp.length);
         }
     }
-
 
     const moreBtnClickEvent = () => {
         console.log('more');
@@ -111,14 +171,6 @@ const RecipeList = () => {
 
     return (
         <>
-            <div>지역: {activeRegionList}</div>
-            <div>카테: {activeCateList}</div>
-            <div>난이도: {activeDifficultList}</div>
-            <div>검색어: {recipeSearch}</div>
-            <div>재료: {activeIngreList}</div>
-            <div>포함여부: {filterInclude}</div>
-            <div>소트: {sortState}</div>
-
             <h2 className='title'>
                 {
                     recipeSearch ?
@@ -126,12 +178,13 @@ const RecipeList = () => {
                         : "레시피 목록"
                 }
             </h2>
+
             <div className='content'>
                 <RecipeListFilter
                     activeIngreList={activeIngreList} activeRegionList={activeRegionList} activeCateList={activeCateList} activeDifficultList={activeDifficultList}
                     setActiveIngreList={setActiveIngreList} setActiveRegionList={setActiveRegionList} setActiveCateList={setActiveCateList} setActiveDifficultList={setActiveDifficultList}
                     setSortState={setSortState} filterInclude={filterInclude} setFilterInclude={setFilterInclude}
-                    setMoreBtnState={setMoreBtnState} filteredRecipeCount={filteredRecipeCount}
+                    filteredRecipeCount={filteredRecipeCount}
                 />
 
                 <div className='recipe-list'>

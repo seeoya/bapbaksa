@@ -152,6 +152,28 @@
     background-color: var(--main-light-color);
 }
 
+.btn.main-light {
+    background-color: var(--main-light-color);
+    color: #fff;
+}
+
+.btn.main-light:hover {
+    background-color: var(--main-color);
+}
+
+.btn.main-light.mail {
+    border-radius: 5px 0 0 5px;
+}
+
+.btn.half.sms {
+    border-radius: 0 5px 5px 0;
+}
+
+.btn.half.sms:hover {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
 .btn.sub {
     background-color: var(--sub-color);
     color: #fff;
@@ -477,110 +499,7 @@ nav .user-info img {
     color: var(--main-light-color);
 }
 
-.header-category #usermenu_btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    min-width: 130px;
-}
 
-.header-category .usermenu-list {
-    display: none;
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    top: 57px;
-    left: 0;
-    width: 100%;
-    padding: 0 10px;
-    background-color: #e6e6e6;
-    text-align: center;
-    color: var(--text-color);
-    z-index: 999;
-}
-
-.header-category .usermenu-list div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.header-category .usermenu-list > div {
-    flex-direction: column;
-    padding: 5px 0;
-    width: 100%;
-    border-bottom: 1px solid var(--gray-color);
-}
-
-.header-category .usermenu-list > div:last-child {
-    border: none;
-}
-
-.header-category .usermenu-list a {
-    padding: 5px 10px;
-    width: 100%;
-    font-size: 1.3rem;
-}
-
-.header-category .usermenu-list .point {
-    justify-content: space-between;
-    flex-direction: column;
-}
-
-.header-category .usermenu-list .point-now {
-    padding: 5px 0;
-    width: 100%;
-    font-size: 1.6rem;
-    font-weight: 600;
-}
-
-.header-category .usermenu-list .point-now:hover {
-    background-color: transparent;
-    color: var(--main-light-color);
-}
-
-.header-category .usermenu-list .btn {
-    padding: 5px;
-    width: 100%;
-    border-radius: 0;
-    font-size: 1rem;
-}
-
-.header-category .usermenu-list .btns .btn:hover {
-    color: #fff;
-}
-
-.header-category #category_btn:hover .category-link-wrap, .header-category #usermenu_btn:hover .usermenu-list {
-    display: flex;
-}
-
-.header-category .category-link-wrap {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    top: 57px;
-    left: 0;
-    background-color: var(--gray-light-color);
-    color: var(--text-color);
-}
-
-.header-category .category-link-wrap .category-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    width: 100%;
-    border-bottom: 3px solid transparent;
-    color: var(--main-color) !important;
-}
-
-.header-category .category-link-wrap .category-link:hover {
-    border-bottom-color: var(--main-color);
-}
 
 /* 페이지 */
 .container {
@@ -2136,6 +2055,15 @@ background-color: var(--highlight-light-color);
     object-fit: cover;
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 20px;
+}
+
+.signin-wrap .find-button {
+
+    margin-bottom: 5px;
+}
+
+.signin-wrap .find-sms {
+    display: none;
 }
 
 .signin-wrap .login-find {

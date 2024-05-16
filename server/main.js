@@ -39,6 +39,7 @@ const adminRouter = require("./routes/adminRouter");
 const marketRouter = require("./routes/marketRouter");
 const recipeRouter = require("./routes/recipeRouter");
 const fridgeRouter = require("./routes/fridgeRouter");
+const mypageRouter = require("./routes/mypageRouter");
 
 app.use("/auth", userRouter);
 app.use("/oauth", userRouter);
@@ -49,6 +50,7 @@ app.use("/admin", adminRouter);
 app.use("/market", marketRouter);
 app.use("/recipe", recipeRouter);
 app.use("/fridge", fridgeRouter);
+app.use("/mypage", mypageRouter);
 
 // payment
 const paymentRouter = require("./lib/payment/payments.router");

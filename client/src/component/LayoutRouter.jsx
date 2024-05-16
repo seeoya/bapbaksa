@@ -14,28 +14,31 @@ import AdminMarketView from './admin/AdminMarketView';
 import AdminUser from './admin/AdminUser';
 import AdminUserView from './admin/AdminUserView';
 import ListView from './market/ListView';
+import Market from './market/Market';
 import MartketLayout from './market/MarketLayout';
 import MarketList from './market/MarketList';
-import Market from './market/Market';
 import Payment from './market/Payment';
-import PaymentHistory from './market/PaymentHistory';
 import PaymentDetail from './market/PaymentDetail';
+import PaymentHistory from './market/PaymentHistory';
 import ShoppingCart from './market/ShoppingCart';
+import { CheckoutPage } from './payment/Checkout';
+import { FailPage } from './payment/Fail';
+import { SuccessPage } from './payment/Success';
 import MyFridge from './recipe/MyFridge';
 import RecipeLayout from './recipe/RecipeLayout';
 import RecipeList from './recipe/RecipeList';
 import RecipeView from './recipe/RecipeView';
 import Delete from './user/Delete';
+import FindID from './user/FindID';
+import FindPW from './user/FindPW';
+import Google from './user/Google';
+import Kakao from './user/Kakao';
 import Modify from './user/Modify';
+import Naver from './user/Naver';
 import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
-import Google from './user/Google';
-import Kakao from './user/Kakao';
-import Naver from './user/Naver';
-import FindID from './user/FindID';
-import FindPW from './user/FindPW';
 
 
 
@@ -53,10 +56,10 @@ const LayoutRouter = () => {
                     <Route path="signup" element={<SignUp />}></Route>
                     <Route path="signin" element={<SignIn />}></Route>
                     <Route path="findid" element={<FindID />}></Route>
-                    <Route path="findpw" element={<FindPW />}></Route>                    
+                    <Route path="findpw" element={<FindPW />}></Route>
                     <Route path="modify" element={<Modify />}></Route>
                     <Route path="signout" element={<SignOut />}></Route>
-                    <Route path="delete" element={<Delete />}></Route>                    
+                    <Route path="delete" element={<Delete />}></Route>
                 </Route>
 
                 <Route path="/mypage" element={<Outlet />}>
@@ -86,6 +89,12 @@ const LayoutRouter = () => {
                     <Route path="pay-history" element={<PaymentHistory />}></Route>
                     <Route path="payment_detail/:oId" element={<PaymentDetail />}></Route>
                 </Route>
+
+                <Route path="/sandbox" element={<MartketLayout />}>
+                    <Route path="" element={<CheckoutPage />}></Route>
+                    <Route path="success" element={<SuccessPage />}></Route>
+                    <Route path="fail" element={<FailPage />}></Route>
+                </Route>
             </Route>
 
             <Route path="/admin" element={<AdminLayout />}>
@@ -101,7 +110,6 @@ const LayoutRouter = () => {
                     <Route path=":no" element={<AdminMarketView />}></Route>
                     <Route path="refund" element={<AdminMarketRefund />}></Route>
                 </Route>
-
             </Route>
         </Routes>
     );

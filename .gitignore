@@ -13,7 +13,7 @@
 /client/config/naver.json
 /.pnp
 .pnp.js
-.env
+/*/.env
 
 # testing
 /coverage

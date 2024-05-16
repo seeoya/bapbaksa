@@ -21,6 +21,8 @@ import Payment from './market/Payment';
 import PaymentDetail from './market/PaymentDetail';
 import PaymentHistory from './market/PaymentHistory';
 import ShoppingCart from './market/ShoppingCart';
+import LikeRecipe from './mypage/LikeRecipe';
+import MyPage from './mypage/MyPage';
 import { CheckoutPage } from './payment/Checkout';
 import { FailPage } from './payment/Fail';
 import { SuccessPage } from './payment/Success';
@@ -39,6 +41,7 @@ import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
+import Questions from './user/Questions';
 
 
 
@@ -51,6 +54,7 @@ const LayoutRouter = () => {
                 <Route path="/auth/google/callback" element={<Google />}></Route>
                 <Route path="/oauth/kakao/callback" element={<Kakao />}></Route>
                 <Route path="/oauth/naver/callback" element={<Naver />}></Route>
+                <Route path="question" element={<Questions />}></Route>
 
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>
@@ -63,7 +67,9 @@ const LayoutRouter = () => {
                 </Route>
 
                 <Route path="/mypage" element={<Outlet />}>
+                    <Route path="" element={<MyPage />}></Route>
                     <Route path="myfridge" element={<MyFridge />}></Route>
+                    <Route path="like" element={<LikeRecipe />}></Route>
                 </Route>
 
                 <Route path="/recipe" element={<RecipeLayout />}>

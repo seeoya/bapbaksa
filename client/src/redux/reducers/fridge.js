@@ -10,6 +10,13 @@ export const fridge = (state = {}, action) => {
         case "load_my_fridge":
             return { ...state, myFridge: action.data };
 
+        case "init_ingre_divine":
+            return {
+                ...state,
+                myFridgeState: action.data.myFridgeState,
+                notMyFridgeState: action.data.notMyFridgeState,
+            };
+            break;
         case "insert_my_fridge":
             return { ...state, abc: "12345" };
 
@@ -17,7 +24,6 @@ export const fridge = (state = {}, action) => {
             return { ...state, abc: "12345" };
 
         case "error":
-            
         default:
             console.log("REDUCER ACTION ERROR");
             return { ...state };

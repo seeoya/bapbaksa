@@ -1,6 +1,8 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AllFridgeQuery, MyFridgeQuery } from '../../query/fridgeQuerys';
+import { AllRecipeQuery } from '../../query/recipeQuerys';
+import { initIngreDivineAction } from '../../redux/actions/fridge_action';
 import RecipeListFilter from './RecipeListFilter';
 import RecipeListItem from './RecipeListItem';
 
@@ -8,153 +10,163 @@ const RecipeList = () => {
     const dispatch = useDispatch();
 
     // 재료
-    const allFridgeList = useSelector((state) => state.fridge.allFridge);
-    const myFridgeList = useSelector((state) => state.fridge.myFridge);
-    const recipeSearch = useSelector((state) => state.recipe.search);
+    const { data: myFridgeList, isLoading: myFridgeIsLoading, isError: myFridgeIsError } = MyFridgeQuery();
+    const { data: allFridgeList, isLoading: allFridgeIsLoading, isError: allFridgeIsError } = AllFridgeQuery();
 
-    const [myFridgeState, setMyFridgeState] = useState([]);
-    const [notMyFridgeState, setNotMyFridgeState] = useState([]);
-    const [activeIngreList, setActiveIngreList] = useState([]);
+    // 레시피
+    const { data: recipeList, isLoading: recipeIsLoading, isError: recipeIsError } = AllRecipeQuery();
+    const [filteredRecipeList, setFilteredRecipeList] = useState([]);
+    const [filteredRecipeCount, setFilteredRecipeCount] = useState(0);
+    const [moreBtnState, setMoreBtnState] = useState(true);
 
     // 카테고리
-    // const [regionList, setRegionList] = useSelector((state) => state.recipe.region);
-    // const [categoryList, setCategoryList] = useSelector((state) => state.recipe.category);
-
     const [activeRegionList, setActiveRegionList] = useState([]);
     const [activeCateList, setActiveCateList] = useState([]);
     const [activeDifficultList, setActiveDifficultList] = useState([]);
 
-    // 검색 정렬
-    const [searchString, setSearchString] = useState("");
+    // 필터
+    const recipeSearch = useSelector((state) => state.recipe.search);
+    const [activeIngreList, setActiveIngreList] = useState([]);
     const [sortState, setSortState] = useState("old");
     const [filterInclude, setFilterInclude] = useState(0);
-
-    // 레시피
-    const [recipeList, setRecipeList] = useState({});
-    const [recipeSortList, setRecipeSortList] = useState([]);
-
-    const [recipePage, setRecipePage] = useState(0);
-    const [recipePageItemCount, setRecipePageItemCount] = useState(20);
-    const [recipeCount, setRecipeCount] = useState(0);
-    const [moreBtnState, setMoreBtnState] = useState(true);
-
-    useEffect(() => {
-        initIngreDivine();
-        initRecipeList();
-    }, []);
+    const [recipeListViewCount, setRecipeListViewCount] = useState(20);
 
     useEffect(() => {
         initIngreDivine();
     }, [allFridgeList, myFridgeList]);
 
     useEffect(() => {
-        setRecipePage(0);
-        initRecipeList();
+        filterRecipe();
+    }, [recipeList]);
+
+    useEffect(() => {
+        filterRecipe();
+        setRecipeListViewCount(20);
     }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch]);
 
     useEffect(() => {
-        setMoreBtn();
-    }, [recipeCount, recipePage, recipePageItemCount]);
-
-    const initRecipeList = async () => {
-        console.log("recipe init");
-
-        await loadRecipe("init");
-    }
+        filteredRecipeCount > recipeListViewCount ? setMoreBtnState(true) : setMoreBtnState(false);
+    }, [filteredRecipeCount, recipeListViewCount]);
 
     const initIngreDivine = () => {
-        if (allFridgeList) {
-            if (myFridgeList) {
-                let tmpList = [];
-                let tmpList2 = myFridgeList;
-
-                Object.keys(allFridgeList).map((el) => {
-                    if (!myFridgeList.includes(parseInt(el))) { tmpList.push(parseInt(el)) };
-                })
-
-                tmpList.sort((a, b) => {
-                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-                });
-                tmpList2.sort((a, b) => {
-                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-                });
-
-                setNotMyFridgeState(tmpList);
-                setMyFridgeState(tmpList2);
-            } else {
-                let tmpList = [];
-
-                Object.keys(allFridgeList).map((el) => {
-                    tmpList.push(parseInt(el))
-                })
-
-                tmpList.sort((a, b) => {
-                    return allFridgeList[a].RF_NAME > allFridgeList[b].RF_NAME ? 1 : allFridgeList[a].RF_NAME < allFridgeList[b].RF_NAME ? -1 : 0;
-                });
-
-                setNotMyFridgeState(tmpList);
-            }
+        if (allFridgeList && myFridgeList) {
+            dispatch(initIngreDivineAction(allFridgeList, myFridgeList));
         }
     }
 
-    const setMoreBtn = () => {
-        if (recipeCount > (recipePage + 1) * recipePageItemCount) {
-            setMoreBtnState(true);
-        } else {
-            setMoreBtnState(false)
-        }
-    }
+    const filterRecipe = async () => {
+        console.log("recipe filter");
 
-    const moreBtnClickEvent = async () => {
-        console.log('more');
+        if (recipeList) {
+            let keys = Object.keys(recipeList);
+            keys = keys.map((el) => parseInt(el));
 
-        await loadRecipe("more");
-    }
+            let tmp = [];
 
-    const loadRecipe = async (type) => {
-        await axios
-            .get(process.env.REACT_APP_REST_SERVER_URL + "/recipe", {
-                params: {
-                    type: "list",
-                    search: recipeSearch,
-                    sort: sortState,
-                    region: activeRegionList,
-                    food: activeIngreList,
-                    foodinclu: filterInclude,
-                    difficult: activeDifficultList,
-                    category: activeCateList,
-                    page: type === "more" ? recipePage + 1 : 0,
-                    pagePerItem: recipePageItemCount,
-                },
-            })
-            .then((data) => {
-                console.log(data.data);
+            keys.map((el, idx) => {
+                let item = recipeList[el];
 
-                if (data.data.count > 0) {
-                    setRecipeCount(data.data.count)
-                } else {
-                    setRecipeCount(0)
-                };
+                // activeRegionList [숫자, 숫자]
+                if (activeRegionList.length > 0 && !activeRegionList.includes(item.RECP_REGION_CODE)) {
+                    return false;
+                }
 
-                if (type === "init") {
-                    if (data.data.sortNo) {
-                        setRecipeSortList(data.data.sortNo)
+                // activeCateList [숫자, 숫자]
+                if (activeCateList.length > 0 && !activeCateList.includes(item.RECP_CATEGORY_CODE)) {
+                    return false;
+                }
+                // activeDifficultList ['보통' ]
+                if (activeDifficultList.length > 0 && !activeDifficultList.includes(item.RECP_DIFFICULT)) {
+                    return false;
+                }
+
+                // recipeSearch '가지'
+                if (recipeSearch && item.RECP_NAME.indexOf(recipeSearch) < 0) {
+                    return false;
+                }
+
+                // activeIngreList [숫자, 숫자]
+                // filterInclude 0 // 0 하나라도 1 전부 포함
+                if (activeIngreList.length > 0) {
+                    if (filterInclude == 0) {
+                        let flag = false;
+
+                        Object.keys(item.RECP_INGRD).map((ingre) => {
+                            if (activeIngreList.includes(parseInt(ingre))) {
+                                flag = true;
+                            }
+                        })
+
+                        if (!flag) {
+                            return false;
+                        }
+                    } else if (filterInclude == 1) {
+                        let ingreTmp = Object.keys(item.RECP_INGRD).map((ingre) => {
+                            return parseInt(ingre);
+                        })
+
+                        let flag = true;
+
+                        activeIngreList.map((active) => {
+                            if (!ingreTmp.includes(active)) {
+                                flag = false;
+                            }
+                        })
+
+                        if (!flag) {
+                            return false;
+                        }
                     }
+                }
 
-                    setRecipeList(data.data);
-                    setRecipePage(0);
-                } else if (type === "more") {
-                    if (data.data.sortNo) {
-                        setRecipeSortList([...recipeSortList, ...data.data.sortNo])
-                    }
+                tmp.push(parseInt(el));
 
-                    setRecipeList({ ...recipeList, ...data.data });
-                    setRecipePage(prev => prev + 1);
+                // sortState 'old'
+                switch (sortState) {
+                    case "old":
+                        tmp.sort((a, b) => {
+                            return a - b;
+                        });
+                        break;
+                    case "new":
+                        tmp.sort((a, b) => {
+                            return b - a;
+                        });
+                        break;
+                    case "lesstime":
+                        tmp.sort((a, b) => {
+                            return parseInt(recipeList[a].RECP_TIME) - parseInt(recipeList[b].RECP_TIME);
+                        });
+                        break;
+                    case "moretime":
+                        tmp.sort((a, b) => {
+                            return parseInt(recipeList[b].RECP_TIME) - parseInt(recipeList[a].RECP_TIME);
+                        });
+                        break;
+                    case "rowkal":
+                        tmp.sort((a, b) => {
+                            return parseInt(recipeList[a].RECP_KCAL) / parseInt(recipeList[a].RECP_SERVIN) - parseInt(recipeList[b].RECP_KCAL) / parseInt(recipeList[b].RECP_SERVIN);
+                        });
+                        break;
+                    case "hightkal":
+                        tmp.sort((a, b) => {
+                            return parseInt(recipeList[b].RECP_KCAL) / parseInt(recipeList[b].RECP_SERVIN) - parseInt(recipeList[a].RECP_KCAL) / parseInt(recipeList[a].RECP_SERVIN);
+                        });
+                        break;
+                    default:
+                        break;
                 }
             })
-            .catch((err) => {
-                return { type: "error" };
-            });
+
+            setFilteredRecipeList(tmp);
+            setFilteredRecipeCount(tmp.length);
+        }
+    }
+
+    const moreBtnClickEvent = () => {
+        console.log('more');
+
+        setRecipeListViewCount((prev) => prev + 20);
     }
 
     return (
@@ -162,26 +174,27 @@ const RecipeList = () => {
             <h2 className='title'>
                 {
                     recipeSearch ?
-                        `"${recipeSearch}" 검색 결과 ${recipeCount} 건`
+                        `"${recipeSearch}" 검색 결과 ${filteredRecipeCount} 건`
                         : "레시피 목록"
                 }
             </h2>
+
             <div className='content'>
-                <RecipeListFilter myFridgeState={myFridgeState} notMyFridgeState={notMyFridgeState}
+                <RecipeListFilter
                     activeIngreList={activeIngreList} activeRegionList={activeRegionList} activeCateList={activeCateList} activeDifficultList={activeDifficultList}
                     setActiveIngreList={setActiveIngreList} setActiveRegionList={setActiveRegionList} setActiveCateList={setActiveCateList} setActiveDifficultList={setActiveDifficultList}
                     setSortState={setSortState} filterInclude={filterInclude} setFilterInclude={setFilterInclude}
-                    setMoreBtnState={setMoreBtnState} recipeCount={recipeCount}
+                    filteredRecipeCount={filteredRecipeCount}
                 />
 
                 <div className='recipe-list'>
                     {
-                        recipeSortList ?
-                            recipeSortList.map((el, idx) => {
-                                if (el !== "count") {
-                                    return <RecipeListItem itemNo={el} idx={idx} recipeList={recipeList} />
+                        filteredRecipeList && filteredRecipeList.length > 0 ?
+                            filteredRecipeList.map((el, idx) => {
+                                if (idx < recipeListViewCount) {
+                                    return <RecipeListItem itemNo={el} idx={idx} />
                                 }
-                            }) : null
+                            }) : <div className='empty'>일치하는 레시피가 없어요!</div>
                     }
 
                     {

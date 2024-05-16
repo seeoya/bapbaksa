@@ -231,6 +231,7 @@ const Modify = () => {
             console.log('files: ', files);
 
             let formData = new FormData();
+            formData.append("u_no", uNo);
             formData.append("u_id", uId);
             formData.append("u_pw", uPw);            
             formData.append("u_mail", uMail);
@@ -273,8 +274,8 @@ const Modify = () => {
             });
                    
                         
-            setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
-            setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');  
+            setUPw(''); setUCheckPw('');
+            
      
         }
    

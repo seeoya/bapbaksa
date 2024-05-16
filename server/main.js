@@ -18,7 +18,12 @@ app.get("/", (req, res) => {
 
 let origin_addr = ["http://54.253.228.81:3000", "http://52.62.249.221:3002"];
 if (os.version().includes("Windows")) {
-    origin_addr = ["http://localhost:3000", "http://localhost:3002", "https://oauth2.googleapis.com/token", "https://kauth.kakao.com/oauth/token"];
+    origin_addr = [
+        "http://localhost:3000",
+        "http://localhost:3002",
+        "https://oauth2.googleapis.com/token",
+        "https://kauth.kakao.com/oauth/token",
+    ];
 }
 
 app.use(
@@ -46,7 +51,7 @@ app.use("/recipe", recipeRouter);
 app.use("/fridge", fridgeRouter);
 
 // payment
-// const paymentRouter = require("./lib/payment/payments.router");
-// app.use("/sandbox-dev/api/v1/payments", paymentRouter);
+const paymentRouter = require("./lib/payment/payments.router");
+app.use("/sandbox-dev/api/v1/payments", paymentRouter);
 
 app.listen(3001);

@@ -1,13 +1,17 @@
 import { ANONYMOUS, loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { getToken } from "../../storage/loginedToken";
 
 const generateRandomString = () => window.btoa(Math.random()).slice(0, 20);
 
-export function CheckoutPage() {
+export function CheckoutPage(props) {
+    let { p_no, o_count, totalPay, orderNo } = props;
+
+    let u_id = getToken('loginedUId');
+
     const paymentWidgetRef = useRef(null);
     const paymentMethodsWidgetRef = useRef(null);
     const agreementWidgetRef = useRef(null);
-    const [price, setPrice] = useState(1000);
 
     useEffect(() => {
         (async () => {
@@ -23,7 +27,7 @@ export function CheckoutPage() {
              */
             const paymentMethodsWidget = paymentWidgetRef.current.renderPaymentMethods(
                 "#payment-method",
-                { value: price },
+                { value: totalPay },
                 { variantKey: "DEFAULT" }
             );
 
@@ -43,6 +47,7 @@ export function CheckoutPage() {
                 <div id="payment-method" className="w-100" />
                 <div id="agreement" className="w-100" />
                 <div className="btn-wrapper w-100">
+
                     <button
                         className="btn primary w-100"
                         onClick={async () => {
@@ -53,13 +58,15 @@ export function CheckoutPage() {
                                  * 결제 요청
                                  * @docs https://docs.tosspayments.com/reference/widget-sdk#requestpayment%EA%B2%B0%EC%A0%9C-%EC%A0%95%EB%B3%B4
                                  */
+                                // #TODO 아이템명 [0]번째로 변경
                                 await paymentWidget?.requestPayment({
-                                    orderId: generateRandomString(),
-                                    orderName: "토스 티셔츠 외 2건",
-                                    customerName: "김토스",
+                                    // orderId: generateRandomString(),
+                                    orderId: orderNo,
+                                    orderName: p_no?.length > 1 ? "토스 티셔츠 외 " + (p_no.length - 1) + "건" : "토스 티셔츠",
+                                    customerName: u_id,
                                     customerEmail: "customer123@gmail.com",
                                     successUrl: window.location.origin + "/sandbox/success" + window.location.search,
-                                    failUrl: window.location.origin + "/sandbox/fail" + window.location.search
+                                    failUrl: window.location.origin + "/sandbox/fail" + window.location.search,
                                 });
                             } catch (error) {
                                 // TODO: 에러 처리

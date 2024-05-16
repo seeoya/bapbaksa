@@ -66,7 +66,6 @@
     text-align: left;
 }
 
-
 .form .input-wrap > div input {
     width: 100%;
 }
@@ -366,9 +365,9 @@ nav .link {
     transition: all ease 0.3s;
 }
 
-nav .user-mypage-link .user-info{
-    display: flex;  
-    width: 100%;        
+nav .user-mypage-link .user-info {
+    display: flex;
+    width: 100%;
     padding: 10px 0;
     justify-content: center;
     align-items: center;
@@ -378,9 +377,8 @@ nav .user-mypage-link .user-info{
 }
 
 nav .user-info span {
-    
-    
 }
+
 nav .user-info img {
     width: 50px;
     height: 50px;
@@ -390,7 +388,6 @@ nav .user-info img {
     border: 1px solid var(--gray-green-color);
     border-radius: 35px;
     transition: all ease 0.3s;
-
 }
 
 .scrolled nav {
@@ -405,12 +402,12 @@ nav .user-info img {
     font-size: 1.4rem !important;
 }
 
-.scrolled nav .user-info span {      
+.scrolled nav .user-info span {
     font-size: 1.3rem !important;
 }
 
-.scrolled nav .user-info img{     
-    width: 40px; 
+.scrolled nav .user-info img {
+    width: 40px;
     height: 40px;
 }
 
@@ -443,7 +440,6 @@ nav .user-info img {
     justify-content: right;
     width: 200px;
 }
-
 
 #market-category-wrap .header-category .market {
     display: flex;
@@ -499,8 +495,6 @@ nav .user-info img {
     color: var(--main-light-color);
 }
 
-
-
 /* 페이지 */
 .container {
     position: relative;
@@ -546,7 +540,8 @@ nav .user-info img {
     display: grid;
     grid-template-columns: repeat(3, 2fr);
     grid-template-rows: repeat(3, auto);
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     gap: 50px 10px;
 }
 
@@ -850,18 +845,17 @@ nav .user-info img {
 /* main css end */
 
 /* FindID, FindPW css start */
-#find-result {    
+#find-result {
     display: none;
     flex-direction: column;
     width: 100%;
-    max-width: 600px;   
-
+    max-width: 600px;
 }
 
-#find-result .find-wrap {        
+#find-result .find-wrap {
     display: flex;
     margin-top: 10px;
-    width: 100%;        
+    width: 100%;
     gap: 30px;
     text-align: center;
 }
@@ -874,18 +868,16 @@ nav .user-info img {
     margin-top: 20px;
 }
 
-.find-wrap .result-message.title{
+.find-wrap .result-message.title {
     font-size: 2.0rem;
     font-weight: 600;
-
 }
 
-.find-wrap .result-message.text{
+.find-wrap .result-message.text {
     font-size: 1.5rem;
 }
 
 /* FindID, FindPW css end */
-
 
 /* 푸터 */
 footer {
@@ -1469,6 +1461,162 @@ footer .util_footer .btn {
     display: flex;
     gap: 10px;
     flex-direction: row;
+}
+
+#modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+#modal .modal-wrap {
+    padding: 50px 20px 20px;
+    background-color: #fff;
+    width: 50%;
+    max-width: 700px;
+    min-width: 500px;
+    border-radius: 30px;
+}
+
+.payment-success {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.payment .w-100 {
+    width: 100%;
+}
+
+.payment .h-100 {
+    height: 100%;
+}
+
+.payment .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    overflow: auto;
+}
+
+.payment .max-w-540 {
+    max-width: 540px;
+}
+
+.payment .btn-wrapper {
+    padding: 0 24px;
+}
+
+.payment .btn {
+    padding: 11px 22px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f2f4f6;
+    color: #4e5968;
+    font-weight: 600;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.payment .btn.primary {
+    background-color: #3282f6;
+    color: #f9fcff;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.confirm-loading {
+    margin-top: 72px;
+    height: 400px;
+    justify-content: space-between;
+}
+
+.confirm-success {
+    display: none;
+    margin-top: 72px;
+}
+
+.payment .button-group {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+}
+
+.payment .title {
+    margin-top: 32px;
+    margin-bottom: 0;
+    color: #191f28;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.payment .description {
+    margin-top: 8px;
+    color: #4e5968;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.payment .response-section {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 20px;
+}
+
+.payment .response-section .response-label {
+    font-weight: 600;
+    color: #333d48;
+    font-size: 17px;
+}
+
+.payment .response-section .response-text {
+    font-weight: 500;
+    color: #4e5968;
+    font-size: 17px;
+    padding-left: 16px;
+    word-break: break-word;
+    text-align: right;
+}
+
+.payment .color-grey {
+    color: #b0b8c1;
 }
 
 /* cart css */
@@ -2080,7 +2228,7 @@ background-color: var(--highlight-light-color);
 }
 
 .signup-wrap .input-wrap .pw-view-icon {
-    align-items: center;    
+    align-items: center;
 }
 
 .signup-wrap .input-wrap .pw-view-icon #view {
@@ -2099,7 +2247,6 @@ background-color: var(--highlight-light-color);
 }
 
 .signin-wrap .find-button {
-
     margin-bottom: 5px;
 }
 
@@ -2130,9 +2277,7 @@ background-color: var(--highlight-light-color);
     font-size: 1.8rem;
 }
 
-.signin-wrap .login-link .naver-link,
-.signin-wrap .login-link .google-link,
-.signin-wrap .login-link .kakao-link {
+.signin-wrap .login-link .naver-link, .signin-wrap .login-link .google-link, .signin-wrap .login-link .kakao-link {
     max-width: 120px;
     min-width: 120px;
     min-height: 33.5px;

@@ -1,22 +1,17 @@
+import axios from "axios";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export function SuccessPage() {
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [searchParams] = useSearchParams();
+
     const paymentKey = searchParams.get("paymentKey");
     const orderId = searchParams.get("orderId");
     const amount = searchParams.get("amount");
 
     async function confirmPayment() {
-        // TODO: API를 호출해서 서버에게 paymentKey, orderId, amount를 넘겨주세요.
-        // 서버에선 해당 데이터를 가지고 승인 API를 호출하면 결제가 완료됩니다.
-        // https://docs.tosspayments.com/reference#%EA%B2%B0%EC%A0%9C-%EC%8A%B9%EC%9D%B8
-        const response = await fetch("/sandbox-dev/api/v1/payments/confirm", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+        const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/sandbox-dev/api/v1/payments/confirm", {
             body: JSON.stringify({
                 paymentKey,
                 orderId,
@@ -24,13 +19,20 @@ export function SuccessPage() {
             })
         });
 
-        if (response.ok) {
+        console.log(response);
+        if (response.status === 200) {
             setIsConfirmed(true);
+
+            // #TODO 결제/구매내역 상태 업데이트
+            // let u_no = getToken('loginedUNo');
+            // amount = 가격
+            // orderId
+
         }
     }
 
     return (
-        <div className="wrapper w-100">
+        <div className="wrapper w-100 payment payment-success">
             {isConfirmed ? (
                 <div
                     className="flex-column align-center confirm-success w-100 max-w-540"
@@ -48,7 +50,7 @@ export function SuccessPage() {
                         <div className="flex justify-between">
                             <span className="response-label">결제 금액</span>
                             <span id="amount" className="response-text">
-                                {amount}
+                                {parseInt(amount).toLocaleString()} 원
                             </span>
                         </div>
                         <div className="flex justify-between">
@@ -57,31 +59,12 @@ export function SuccessPage() {
                                 {orderId}
                             </span>
                         </div>
-                        <div className="flex justify-between">
-                            <span className="response-label">paymentKey</span>
-                            <span id="paymentKey" className="response-text">
-                                {paymentKey}
-                            </span>
-                        </div>
                     </div>
 
                     <div className="w-100 button-group">
 
                         <div className="flex" style={{ gap: "16px" }}>
-                            <a
-                                className="btn w-100"
-                                href="https://developers.tosspayments.com/sandbox"
-                            >
-                                다시 테스트하기
-                            </a>
-                            <a
-                                className="btn w-100"
-                                href="https://docs.tosspayments.com/guides/payment-widget/integration"
-                                target="_blank"
-                                rel="noopner noreferer"
-                            >
-                                결제 연동 문서가기
-                            </a>
+                            <Link to={"/market/pay-history"} className="btn w-100">구매내역</Link>
                         </div>
                     </div>
                 </div>

@@ -12,13 +12,6 @@ const LikeRecipe = () => {
         loadMyLikeRecipe();
     }, []);
 
-    useEffect(() => {
-        if (myLikeRecipe && recipeList) {
-            Object.keys(myLikeRecipe).map(el => {
-                console.log(recipeList[el])
-            })
-        }
-    }, [myLikeRecipe, recipeList]);
 
     const loadMyLikeRecipe = async () => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/mypage/like_recipe", {
@@ -37,7 +30,7 @@ const LikeRecipe = () => {
 
             <div className='content'>
                 {
-                    recipeList && myLikeRecipe && myLikeRecipe?.length > 0 ?
+                    recipeList && myLikeRecipe && Object.keys(myLikeRecipe)?.length > 0 ?
                         Object.keys(myLikeRecipe).map((el, idx) => {
                             let item = recipeList[el];
 

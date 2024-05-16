@@ -74,7 +74,6 @@ const AdminUserView = () => {
             alert('휴대폰 번호를 입력해 주세요');
             document.getElementById("u_phone").focus();
         } else {
-            console.log(11111);
             await axios.put(process.env.REACT_APP_SERVER_URL + `/admin/user`, {
                 data: {
                     "u_no": uNo,
@@ -103,7 +102,7 @@ const AdminUserView = () => {
     }
     return (
         <>
-            <div className='title'>
+            <div className='title user-info'>
                 {
                     uNo && uId ?
                         <>{uId}({uNo}) 님 정보</>
@@ -112,52 +111,46 @@ const AdminUserView = () => {
             </div>
 
             {userInfo ?
-                <div className='content'>
-                    <div>state:
-                        uNo: {uNo} /
-                        uId: {uId} /
-                        uMail: {uMail} /
-                        uPhone: {uPhone} /
-                        uZipcode: {uZipcode} /
-                        uFirstAddr: {uFirstAddr} /
-                        uSecondAddr: {uSecondAddr} /
+                <div className='content user-info'>
+                    <div className='input-wrap'>
+                        <label htmlFor="u_id">아이디</label>
+                        <input type="text" id="u_id" name="u_id" defaultValue={uId} onChange={(e) => userInfoChangeHandler(e)} className='input' readOnly />
                     </div>
 
                     <div className='input-wrap'>
-                        <input type="text" name="u_id" defaultValue={uId} onChange={(e) => userInfoChangeHandler(e)} className='input' readOnly />
-                    </div>
-
-                    <div className='input-wrap'>
+                        <label htmlFor="u_mail">이메일</label>
                         <input type="text" id='u_mail' name="u_mail" defaultValue={uMail} onChange={(e) => userInfoChangeHandler(e)} className='input' placeholder="이메일 주소를 입력해 주세요" />
                         <span id="icon_u_mail" class="input-icon"></span>
                         <span id="message_u_mail" class="input-message">유효한 이메일 주소를 입력해 주세요.</span>
                     </div>
 
                     <div className='input-wrap'>
-                        <input type="text" id='u_phone' name="u_phone" defaultValue={uPhone} onChange={(e) => userInfoChangeHandler(e)} placeholder="휴대폰 번호를 입력해 주세요" />
+                        <label htmlFor="u_phone">연락처</label>
+                        <input type="text" id='u_phone' name="u_phone" defaultValue={uPhone} onChange={(e) => userInfoChangeHandler(e)} className='input' placeholder="휴대폰 번호를 입력해 주세요" />
                         <span id="icon_u_phone" class="input-icon"></span>
                         <span id="message_u_phone" class="input-message">전화번호는 숫자 9~12자까지 입력 가능합니다.</span>
                     </div>
 
                     <div className='input-wrap'>
-                        <div>
-                            <input type="text" id="postcode" name="u_zip_code" defaultValue={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readOnly />
+                        <label htmlFor="search_address_btn">주소</label>
+
+                        <div className='address'>
+                            <input type="text" id="postcode" name="u_zip_code" defaultValue={uZipcode} onChange={(e) => userInfoChangeHandler(e)} className='input' placeholder="우편번호" readOnly />
                             <button type="button" id="search_address_btn" onclick="searchAddress()" class="btn sub">
                                 <FontAwesomeIcon icon="fa-solid fa-location-crosshairs" />
                             </button>
                         </div>
 
                         <div className='col'>
-                            <input type="text" id="address" name="u_first_address" defaultValue={uFirstAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="주소" readOnly />
-                            <input type="text" id="detailAddress" name="u_second_address" defaultValue={uSecondAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="상세주소" />
+                            <input type="text" id="address" name="u_first_address" defaultValue={uFirstAddr} onChange={(e) => userInfoChangeHandler(e)} className='input' placeholder="주소" readOnly />
+                            <input type="text" id="detailAddress" name="u_second_address" defaultValue={uSecondAddr} onChange={(e) => userInfoChangeHandler(e)} className='input' placeholder="상세주소" />
 
                             <span id="icon_u_detail_addr" className="input-icon"></span>
-                            <span id="message_u_detail_addr" className="input-message">주소를 입력해 주세요.</span>
                         </div>
                     </div>
 
-                    <div className='input-wrap'>
-                        <button type='button' onClick={(e) => modifyBtnClickEvent()}>수정</button>
+                    <div className='input-wrap btn-wrap'>
+                        <button type='button' className='btn main' onClick={(e) => modifyBtnClickEvent()}>수정</button>
                     </div>
 
                 </div>

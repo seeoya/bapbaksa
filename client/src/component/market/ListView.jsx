@@ -8,7 +8,7 @@ const ListView = () => {
     const { no } = useParams();
     const [num, code] = no.split('_');
 
-    const [quantityInt, setQuantityInt] = useState(0);
+    const [quantityInt, setQuantityInt] = useState(1);
     const [prodInfo, setProdInfo] = useState({});
     const [chartData, setChartData] = useState([]);
     const [viewData, setViewData] = useState([]);

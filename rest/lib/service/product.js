@@ -16,18 +16,42 @@ const product = {
     //         }
     //     });
     // },
+
+    getAllProduct: (req,res) => {
+        DB.query(`SELECT * FROM PRODUCT`,
+            (error,result) => {
+                if(error) {
+                    console.log(error);
+                    res.json(null);
+                } else {
+                    res.json(result);
+                }
+            }
+        )
+    },
+
     getNewDate: (req, res) => {
-        DB.query(`SELECT PROD_YMD FROM PRODUCT ORDER BY PROD_YMD DESC LIMIT 10`,
+        DB.query(`SELECT PROD_YMD FROM PRODUCT ORDER BY PROD_YMD DESC LIMIT 1`,
             (error, data) => {
                 if (error) {
                     console.log(error);
                     res.json(null);
                 } else {
-                    res.json(data);
+                    DB.query(`SELECT * FROM PRODUCT WHERE PROD_YMD = ?`,
+                        [data[0].PROD_YMD], (error,prod) => {
+                            if(error) {
+                                console.log(error);
+                                res.json(null);
+                            } else {
+                                res.json(prod);
+                            }
+                        }
+                    )
                 }
             }
         )
     },
+
     getTwelveProduct: (req, res) => {
         console.log('getTwelveProduct');
         let params = req.query;

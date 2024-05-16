@@ -5,7 +5,7 @@ import { getToken } from "../../storage/loginedToken";
 const MarketHeader = () => {
 
     const [isLogined, setIsLogined] = useState(false);
-    
+    const [searchVal,setSearchVal] = useState('');
     useEffect(() => {
      
         let loginedUId = getToken('loginedUId');
@@ -16,6 +16,11 @@ const MarketHeader = () => {
         }
 
     }, [isLogined]);
+
+    const searchBtnClick = () => {
+        console.log('서치 버튼 클릭');
+        setSearchVal('');
+    }
 
 
   return (
@@ -30,8 +35,10 @@ const MarketHeader = () => {
 
             <div className="search">
                 <form action="" name="search_form" method="get">
-                    <input type="search" name="search" className="input" placeholder="검색어를 입력하세요." />
-                    <button type="submit" className="btn sub">검색</button>
+                    <input type="search" name="search" className="input" placeholder="검색어를 입력하세요." value={searchVal} onChange={(e)=> setSearchVal(e.target.value)}/>
+                    <Link to={`/market/list?search=${searchVal}`} state={{ searchVal: searchVal }}>
+                        <button type="submit" className="btn sub" onClick={searchBtnClick}>검색</button>
+                    </Link>
                 </form>
             </div>
         </div>

@@ -102,7 +102,7 @@ const RecipeView = () => {
                                                     ingreClass += " on"
                                                 }
 
-                                                return <Link to={"/market/list?seacrh=" + recipe.RECP_INGRD[el].RECP_INGRD_NAME} className={'ingre-link ' + ingreClass} key={idx}>
+                                                return <Link to={"/market/list"} state={{ searchVal: recipe.RECP_INGRD[el].RECP_INGRD_NAME }} className={'ingre-link ' + ingreClass} key={idx}>
                                                     {recipe.RECP_INGRD[el].RECP_INGRD_NAME}{ingreText}
                                                     <span><i className="fa-solid fa-magnifying-glass"></i></span>
                                                 </Link>

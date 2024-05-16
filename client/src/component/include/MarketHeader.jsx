@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getToken } from "../../storage/loginedToken";
+import { useDispatch } from "react-redux";
+import { searchMarket } from "../../redux/actions/market"
 
 const MarketHeader = () => {
 
     const [isLogined, setIsLogined] = useState(false);
     const [searchVal,setSearchVal] = useState('');
+    const dispatch = useDispatch();
+    
     useEffect(() => {
-     
+    
         let loginedUId = getToken('loginedUId');
         console.log('loginedUIdString', loginedUId);
 
@@ -17,13 +21,15 @@ const MarketHeader = () => {
 
     }, [isLogined]);
 
-    const searchBtnClick = () => {
-        console.log('서치 버튼 클릭');
-        setSearchVal('');
+    const searchBtnClickEvent = (e) => {
+        document.getElementById("market_search").value = ""
     }
 
+    const marketSearchChangeEvent = (e) => {
+        dispatch(searchMarket(e.target.value))
+    }
 
-  return (
+    return (
     <header>
     <div id="market-header-wrap" className="header-wrap">
         <div className="header-menu">
@@ -34,12 +40,10 @@ const MarketHeader = () => {
             </div>
 
             <div className="search">
-                <form action="" name="search_form" method="get">
-                    <input type="search" name="search" className="input" placeholder="검색어를 입력하세요." value={searchVal} onChange={(e)=> setSearchVal(e.target.value)}/>
-                    <Link to={`/market/list?search=${searchVal}`} state={{ searchVal: searchVal }}>
-                        <button type="submit" className="btn sub" onClick={searchBtnClick}>검색</button>
+                    <input id="market_search" type="search" name="search" className="input" placeholder="검색어를 입력하세요." onChange={(e) => marketSearchChangeEvent(e)}/>
+                    <Link to={`/market/list`} state={{ searchVal: searchVal }} onClick={searchBtnClickEvent} className="btn sub">
+                        검색
                     </Link>
-                </form>
             </div>
         </div>
 

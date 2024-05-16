@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AllProductQuery, NewProductQuery } from "../../query/productQuerys";
+import { useSelector } from "react-redux";
 
 const MarketList = () => {
 const { data: allProductList, isLoading: allProductIsLoading, isError: allProductIsError } = AllProductQuery();
@@ -9,10 +10,11 @@ const [active, setActive] = useState("all");
 const [search, setSearch] = useState("");
 const [viewNumber, setViewNumber] = useState(12);
 const location = useLocation();
+const marketSearch = useSelector((state) => state.market.search);
 
 useEffect(() => {
     if (location.state && location.state.searchVal) {
-    setSearch(location.state.searchVal);
+        setSearch(location.state.searchVal);
     }
 }, [location.state]);
 
@@ -26,34 +28,37 @@ const handleCategoryClick = (category_name) => {
 
 const filteredList = newProductList?.filter((item) => {
     // 검색어 기반 필터링
-    if (search && !item.PROD_NAME.includes(search)) {
+    if (marketSearch && !item.PROD_NAME.includes(marketSearch)) {
     return false;
     }
 
     // 카테고리 기반 필터링
     if (active !== "all") {
-    switch (active) {
+        switch (active) {
         case "carbohydrate":
-        if (item.PROD_CATEGORY !== "탄수화물") return false;
-        break;
+            if (item.PROD_CODE < 100 || item.PROD_CODE >= 200) return false;
+            break;
         case "vegetable":
-        if (item.PROD_CATEGORY !== "채소") return false;
-        break;
+            if (item.PROD_CODE < 200 || item.PROD_CODE >= 400) return false;
+            break;
+        case "fruit":
+            if (item.PROD_CODE < 400 || item.PROD_CODE >= 500) return false;
+            break;
         case "meat":
-        if (item.PROD_CATEGORY !== "육류") return false;
-        break;
+            if (item.PROD_CODE < 500 || item.PROD_CODE >= 600) return false;
+            break;
         case "seaweed":
-        if (item.PROD_CATEGORY !== "해조류") return false;
-        break;
+            if (item.PROD_CODE < 600 || item.PROD_CODE >= 700) return false;
+            break;
         case "processed_meet":
-        if (item.PROD_CATEGORY !== "가공육류") return false;
-        break;
+            if (item.PROD_CODE < 700 || item.PROD_CODE >= 800) return false;
+            break;
         case "processed_food":
-        if (item.PROD_CATEGORY !== "가공식품") return false;
-        break;
+            if (item.PROD_CODE < 800 || item.PROD_CODE >= 900) return false;
+            break;
         default:
-        break;
-    }
+            break;
+        }
     }
 
     return true;
@@ -85,6 +90,13 @@ return (
             onClick={() => handleCategoryClick("vegetable")}
         >
             채소
+        </button>
+        <button
+            className={active === "fruit" ? "fruit btn_clicked" : "fruit"}
+            type="button"
+            onClick={() => handleCategoryClick("fruit")}
+        >
+            과일
         </button>
         <button
             className={active === "meat" ? "meat btn_clicked" : "meat"}

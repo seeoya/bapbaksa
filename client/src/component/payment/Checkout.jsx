@@ -1,9 +1,9 @@
 import { ANONYMOUS, loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { useEffect, useRef } from "react";
 import { getToken } from "../../storage/loginedToken";
+import { NewProductQuery } from "../../query/productQuerys";
 
-const generateRandomString = () => window.btoa(Math.random()).slice(0, 20);
-
+// const { data: newProductList, isLoading: newProductIsLoading, isError: newProductIsError } = NewProductQuery();
 export function CheckoutPage(props) {
     let { p_no, o_count, totalPay, orderNo } = props;
 
@@ -12,6 +12,11 @@ export function CheckoutPage(props) {
     const paymentWidgetRef = useRef(null);
     const paymentMethodsWidgetRef = useRef(null);
     const agreementWidgetRef = useRef(null);
+
+
+    // useEffect(() => {
+    //     console.log("🤍🤍",newProductList);
+    // },[newProductList])
 
     useEffect(() => {
         (async () => {
@@ -54,15 +59,12 @@ export function CheckoutPage(props) {
                             const paymentWidget = paymentWidgetRef.current;
 
                             try {
-                                /**
-                                 * 결제 요청
-                                 * @docs https://docs.tosspayments.com/reference/widget-sdk#requestpayment%EA%B2%B0%EC%A0%9C-%EC%A0%95%EB%B3%B4
-                                 */
+                                
                                 // #TODO 아이템명 [0]번째로 변경
                                 await paymentWidget?.requestPayment({
                                     // orderId: generateRandomString(),
                                     orderId: orderNo,
-                                    orderName: p_no?.length > 1 ? "토스 티셔츠 외 " + (p_no.length - 1) + "건" : "토스 티셔츠",
+                                    orderName: p_no?.length > 1 ? ("무신사") + "외" + (p_no.length - 1) + "건" : "토스 티셔츠",
                                     customerName: u_id,
                                     customerEmail: "customer123@gmail.com",
                                     successUrl: window.location.origin + "/sandbox/success" + window.location.search,

@@ -110,7 +110,6 @@ const Payment = () => {
     }
 
     const axios_paymentGetProd = async (i_no) => {
-        console.log("💘💘💘", i_no);
         try {
             const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/paymentGetProd", {
                 'I_NO': i_no,

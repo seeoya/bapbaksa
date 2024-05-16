@@ -50,7 +50,7 @@ const PaymentHistory = () => {
         setAcceptInfo(accept);
     }
 
-    const cancelPayment = ( p_no, o_id) => {
+    const cancelPayment = (p_no, o_id) => {
         const cancel = {
             'o_id': o_id,
             'p_no' : p_no

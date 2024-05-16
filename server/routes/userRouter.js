@@ -39,4 +39,29 @@ router.delete("/delete_confirm", (req, res) => {
     userService.delete_confirm(req, res);
 });
 
+router.post("/regiest_question", (req, res) => {
+    console.log("regiest_question()");
+
+    userService.regiest_question(req, res);
+});
+
+router.post("/load_question", (req, res) => {
+    console.log("load_question()");
+
+    userService.load_question(req, res);
+});
+
+router.post("/order_no", (req, res) => {
+    console.log("order_no()");
+
+    userService.order_no(req, res);
+});
+
+router.delete("/delete_question", (req, res) => {
+    console.log("delete_question()");
+
+    userService.delete_question(req, res);
+});
+
+
 module.exports = router;

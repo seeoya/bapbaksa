@@ -861,6 +861,205 @@ nav .link {
 /* swiper css end */
 /* main css end */
 
+/* 1:1 문의 css START */
+.question-wrap h2 {
+    margin-bottom: 20px;
+}
+
+.question-wrap .qusetion-form .question-input-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.question-wrap .qusetion-form .question-input-wrap input:nth-child(1) {
+    min-width: 600px; max-width: 600px;
+    height: 40px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border: 1px solid #a8a8a8;
+    border-radius: 5px;
+}
+
+.question-wrap .qusetion-form .question-input-wrap select {
+    min-width: 600px; max-width: 600px;
+    height: 40px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border: 1px solid #a8a8a8;
+    border-radius: 5px;
+}
+
+.question-wrap .qusetion-form .question-input-wrap textarea {
+    min-width: 600px; max-width: 600px;
+    height: 100px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border: 1px solid #a8a8a8;
+    border-radius: 5px;
+}
+
+.question-answer .question-answer-title {
+    margin: 15px 0 15px 0;
+}
+
+.question-answer .question-answer-title p {
+    font-size: 1.4em;
+    color: #3c6300;
+    font-weight: bold;
+    margin-left: 30px;
+}
+
+.question-answer-title {
+    display: flex;
+}
+
+.question-answer-form-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-answer-form-title div:nth-child(1) {
+    height: 40px; width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e8e8;
+    font-weight: bold;
+    font-size: 1.1em;
+    border-top: 1px solid #a8a8a8;
+    border-bottom: 1px solid #a8a8a8;
+}
+
+.question-answer-form-title div:nth-child(2) {
+    display: flex;
+    height: 40px; width: 150px;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e8e8;
+    font-weight: bold;
+    font-size: 1.1em;
+    border-top: 1px solid #a8a8a8;
+    border-bottom: 1px solid #a8a8a8;
+}
+
+.question-answer-form-title div:nth-child(3) {
+    display: flex;
+    height: 40px; width: 150px;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e8e8;
+    font-weight: bold;
+    font-size: 1.1em;
+    border-top: 1px solid #a8a8a8;
+    border-bottom: 1px solid #a8a8a8;
+}
+
+.question-answer-form-title div:nth-child(4) {
+    display: flex;
+    height: 40px; width: 70px;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e8e8;
+    font-weight: bold;
+    font-size: 1.1em;
+    border-top: 1px solid #a8a8a8;
+    border-bottom: 1px solid #a8a8a8;
+}
+
+.question-answer-form-detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-answer-form-detail div:nth-child(1) {
+    display: flex;
+    height: 40px; width: 500px;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-answer-form-detail div:nth-child(2) {
+    display: flex;
+    height: 40px; width: 150px;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-answer-form-detail div:nth-child(3) {
+    display: flex;
+    height: 40px; width: 150px;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-answer-form-detail div:nth-child(4) {
+    display: flex;
+    height: 40px; width: 70px;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: #ededed;
+    width: 800px; min-height: 100px;
+    border-radius: 10px;
+}
+
+.modal-content .modal-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.modal-content .modal-detail {
+    margin-top: 10px;
+}
+
+.modal-content .modal-detail p {
+    margin: 20px 0 0 30px;
+    font-size: 1.2em;
+}
+
+.modal-content .modal-detail p:nth-child(2) {
+    margin: 20px 0 30px 30px;
+}
+
+.modal-content .modal-detail p:nth-child(1) span {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #3c6300;
+}
+
+.modal-content .modal-detail p:nth-child(2) span {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #3c6300;
+}
+
+.no-questions {
+    margin-top: 10px;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 1:1 문의 css END */
+
 /* 푸터 */
 footer {
     width: 100%;

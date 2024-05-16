@@ -325,8 +325,71 @@ const userService = {
             }
         }
     },
+    regiest_question: (req, res) => {
+        console.log('regiest_question');
 
-
+        let post = req.body;
+        console.log('regiest_question post : ', post);
+        db.query(`
+        INSERT INTO 
+        TBL_USER_QUESTIONS(u_id, o_id, ques_title, ques_detail) 
+        VALUES(?, ?, ?, ?)`, 
+        [post.u_id, post.o_id, post.ques_title, post.ques_detail], 
+        (error, result) => {
+            if (error) {
+                res.json(null);
+            } else {
+                res.json(result);
+            }
+        });
+    },
+    load_question: (req, res) => {
+        let params = req.body;
+        db.query(`SELECT * FROM TBL_USER_QUESTIONS WHERE U_ID = ? ORDER BY QUES_NO DESC`, 
+        [params.u_id], 
+        (error, result) => {
+            if (error) {
+                res.json(null);
+            } else {
+                res.json(result);
+            }
+        });
+    },
+    order_no: (req, res) => {
+        let params = req.body;
+        db.query(`SELECT o.O_ID FROM TBL_ORDER o JOIN TBL_USER u ON o.u_no = u.u_no WHERE u.u_id = ?`, 
+        [params.u_id], 
+        (error, result) => {
+            if (error) {
+                res.json(null);
+            } else {
+                res.json(result);
+            }
+        });
+    },
+    delete_question: (req, res) => {
+        let params = req.body;
+        console.log("delete_question params : ", params);
+        console.log("delete_question params.ques_no", params.ques_no);
+        db.query(`DELETE FROM TBL_USER_QUESTIONS WHERE QUES_NO = ? AND U_ID = ?`, 
+        [params.ques_no, params.u_id], 
+        (error, result) => {
+            if (error) {
+                res.json(null);
+            } else {
+                db.query(`SELECT * FROM TBL_USER_QUESTIONS WHERE U_ID = ? ORDER BY QUES_NO DESC`, 
+                [params.u_id], 
+                (error, result1) => {
+                    if (error) {
+                        res.json(null);
+                    } else {
+                        console.log("load_question result1 : ", result1);
+                        res.json(result1);
+                    }
+                });
+            }
+        });
+    }
 }
 
 module.exports = userService;

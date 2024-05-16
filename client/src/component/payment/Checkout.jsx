@@ -1,7 +1,7 @@
 import { ANONYMOUS, loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { useEffect, useRef } from "react";
 import { getToken } from "../../storage/loginedToken";
-import { NewProductQuery } from "../../query/productQuerys";
+// import { NewProductQuery } from "../../query/productQuerys";
 
 // const { data: newProductList, isLoading: newProductIsLoading, isError: newProductIsError } = NewProductQuery();
 export function CheckoutPage(props) {

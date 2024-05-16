@@ -225,6 +225,7 @@ const Modify = () => {
             console.log('files: ', files);
 
             let formData = new FormData();
+            formData.append("u_no", uNo);
             formData.append("u_id", uId);
             formData.append("u_pw", uPw);
             formData.append("u_mail", uMail);
@@ -241,8 +242,7 @@ const Modify = () => {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
-            })
-                .then(res => {
+            }).then(res => {
                     console.log('res: ', res);
                     console.log('res.data: ', res.data);
                     console.log('res.affect: ', res.data.result.affectedRows);
@@ -252,23 +252,23 @@ const Modify = () => {
 
                         alert('정보수정에 성공하였습니다.');
                         navigate('/');
-
-                    }
-
-
-                })
-                .catch(error => {
-                    console.log('AXIOS MODIFY_CONFIRM COMMUNICATION ERROR');
-                    alert('정보수정에 실패하였습니다.');
-                })
-                .finally(data => {
-                    console.log('AXIOS MODIFY_CONFIRM COMMUNICATION FINALLY');
-
-                });
-
-            setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
-            setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');
-
+                    }    
+        
+            
+            })
+            .catch(error => {
+                console.log('AXIOS MODIFY_CONFIRM COMMUNICATION ERROR');
+                alert('정보수정에 실패하였습니다.');  
+            })
+            .finally(data => {
+                console.log('AXIOS MODIFY_CONFIRM COMMUNICATION FINALLY');
+        
+            });
+                   
+                        
+            setUPw(''); setUCheckPw('');
+            
+     
         }
 
     }

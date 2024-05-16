@@ -381,14 +381,44 @@ const userService = {
 
                     } else {
 
-                        if(req.file !== undefined) {                    
+                        if(req.file !== undefined) {             
+                            
+                            db.query(`SELECT * FROM TBL_USER_PROFILE_IMG WHERE u_no = ?`, [post.u_no], (error, user) => {
 
-                            db.query(`UPDATE TBL_USER_PROFILE_IMG SET pi_name = ?  WHERE u_no = ?`,
-                                        [req.file.filename, post.u_no], (error, result) => {
+                                if(user.length > 0) {                            
 
-                                            res.json({result, message: '프로파일 수정 실패!'});
+                                    db.query(`UPDATE TBL_USER_PROFILE_IMG SET pi_name = ? WHERE u_no = ?`,
+                                                [req.file.filename, post.u_no], (error, result) => {
 
-                                        });
+                                                    if(result.affectedRows > 0){
+                                                        res.json({result, message: '정보수정 성공!'});
+
+                                                    } else {
+
+                                                    res.json({result, message: '프로파일 수정 실패!'});
+                                                    }
+
+                                                });
+
+                                } else {
+
+                                    db.query(`INSERT INTO TBL_USER_PROFILE_IMG (pi_name, u_no) VALUES(?, ?)`,
+                                                [req.file.filename, post.u_no], (error, result) => {
+
+                                                    if(result.affectedRows > 0){
+                                                        res.json({result, message: '정보수정 성공!'});
+
+                                                    } else {
+
+                                                    res.json({result, message: '프로파일 수정 실패!'});
+                                                    }
+
+                                                });
+
+                                }
+
+                            });
+
                         } else {
 
                             res.json({result, message: '정보수정 성공!'});
@@ -423,48 +453,85 @@ const userService = {
             const verified = tokenUtils.verify(accessToken);
 
             console.log("verified: ", verified);
-     
+                 
             if(verified.ok){
                     
-                let sql = `DELETE FROM TBL_USER WHERE u_id = ?`;
-                let state = [post.u_id];
+                let now = new Date();
+                now = now.toLocaleString();
+                console.log('🎗🎗', post.u_id + now);
+
+                let sql = `UPDATE TBL_USER SET u_id = ?, u_mail = ?, u_phone = ?, u_google_id = ?, u_kakao_id = ?, 
+                            u_naver_id = ?, u_status = ?, u_zip_code = ?, u_first_address= ?, u_second_address = ?,
+                            pi_name = ?, u_refresh_token = ?, u_mod_date = now() WHERE u_id = ?`;
+                let state = [post.u_id + now, '', '', '', '', '', 0, '', '', '', '', '', post.u_id];
                 
                 db.query(sql, state, (error, result) => {
 
+                    console.log('🎎', result);
+
                     if(error){
                         
-                        res.json({result, message: "회원정보 삭제 에러!"});                
+                        res.json({message: "회원정보 삭제 에러!"});                
 
                     } else {
 
-                        let sql = `DELETE FROM TBL_USER_PROFILE_IMG WHERE u_no = ?`;
-                        let state = [post.u_no];
-                        
-                        db.query(sql, state, (error, result) => {
+                        db.query(`SELECT * FROM  TBL_USER_PROFILE_IMG WHERE u_no = ?`, [post.u_no], (error, user) => {
 
-                            if(error){
+                                    console.log('🎄', user.length);
 
-                                res.json({result, message: "프로파일 이미지 삭제 에러!"});
+                            if(user.length > 0) {
 
+                               let sql = `DELETE p, f, r, c FROM TBL_USER_PROFILE_IMG p, TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
+                                            WHERE p.u_no = ? AND f.u_no = ? AND r.u_no = ? AND c.u_no = ?`;
+                               let state = [post.u_no, post.u_no, post.u_no, post.u_no];
+                
+                                db.query(sql, state, (error, result) => {
 
+                                    console.log('🎆', result);
+
+                                    if(error) {
+                                        res.json({message:  "회원탈퇴 처리 실패"});
+                                    } else {
+
+                                        fs.rmSync(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`, { recursive: true, force: true },
+                                         (error) => {
+
+                                        });
+                                        
+                                            console.log(`${post.u_id} directory deleted!`);
+                                            res.json({result,  message:  "회원탈퇴 처리 성공"});       
+                                    }                                                                                             
+                                                      
+                
+                                });                                                                                                        
+
+                                                           
                             } else {
 
-                                fs.unlink(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`,
-                //                fs.unlink(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}`,
-                                        (error) => {
-                                            
-                                        });
-                     
-                                    res.json({result,  message:  "회원탈퇴 성공"});
-                
-                            }
-                                
-                        });
-                        res.json({result,  message:  "회원정보 삭제 성공"});
-                    } 
-                             
-                });                
+                                let sql = `DELETE FROM f, r, c USING TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
+                                        WHERE f.u_no = r.u_no = c.u_no = ?`;
+                                let state = [post.u_no];
+                        
+                                db.query(sql, state, (error, result) => {
 
+                                    console.log('👓', result);
+
+                                    if(error) {
+                                        res.json({message:  "회원탈퇴 처리 실패"});
+                                    } else {
+                                        res.json({result,  message:  "회원탈퇴 처리 성공"});                      
+                                    }                  
+                
+                                });                                                                           
+
+                            }
+
+                        });                        
+                        
+                    }
+                    
+                });                
+                
             } else {
                 res.status(401).send({message:verified.message});
             }

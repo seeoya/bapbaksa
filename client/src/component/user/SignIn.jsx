@@ -52,10 +52,18 @@ const SignIn = () => {
 
         } else if (input_name === "u_pw") {
             setUPw(input_value);
-        }
+        } 
     }
 
-     
+    const activeEnter = (e) => {
+        console.log('activeEnter()');
+
+        if(e.key === 'Enter') {
+            signinBtnClickHandler();
+        }
+    }
+    
+    
     const signinBtnClickHandler = async () => {
         console.log('signinBtnClickHandler()');
 
@@ -145,11 +153,11 @@ const SignIn = () => {
             <div className='signin-wrap'>            
                 <form name="signin_form" className='form'>
                     <div className='input-wrap'>                    
-                        <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요"/>    
+                        <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="아이디를 입력해 주세요"/>    
                 
                     </div>
                     <div className='input-wrap'>
-                        <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요"/>    
+                        <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="비밀번호를 입력해 주세요"/>    
                         
                     </div>
                     <div className='btn-wrap'>

@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -202,7 +203,7 @@ const RecipeListFilter = (props) => {
 
                 <div>
                     <div>총 {filteredRecipeCount} 건</div>
-                    <button type='button' onClick={resetRecipeEvent}>선택 옵션 되돌리기 <i class="fa-solid fa-rotate-left"></i></button>
+                    <button type='button' onClick={resetRecipeEvent}>선택 옵션 되돌리기 <FontAwesomeIcon icon="fa-solid fa-rotate-left" /></button>
 
                 </div>
             </div>

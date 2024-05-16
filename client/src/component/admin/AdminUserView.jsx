@@ -39,7 +39,7 @@ const AdminUserView = () => {
             setUMail(user.u_mail);
             setUPhone(user.u_phone);
             setUZipCode(user.u_zip_code);
-            setUFirstAddr(user.u_firset_address);
+            setUFirstAddr(user.u_first_address);
             setUSeconAddr(user.u_second_address);
         }).catch((err) => {
             return { type: "error" };
@@ -64,6 +64,25 @@ const AdminUserView = () => {
         }
     }
 
+    const searchAddress = () => {
+        console.log('searchAddress()');
+
+        new window.daum.Postcode({
+            oncomplete: (data) => {
+                let extraRoadAddr = '';
+
+                if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                    extraRoadAddr += data.bname;
+                }
+                if (data.buildingName !== '' && data.apartment === 'Y') {
+                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+
+                setUZipCode(data.zonecode);
+                setUFirstAddr(data.roadAddress + ` (${extraRoadAddr})`);
+            }
+        }).open();
+    }
 
     const modifyBtnClickEvent = async () => {
         console.log(11111);
@@ -136,7 +155,7 @@ const AdminUserView = () => {
 
                         <div className='address'>
                             <input type="text" id="postcode" name="u_zip_code" defaultValue={uZipcode} onChange={(e) => userInfoChangeHandler(e)} className='input' placeholder="우편번호" readOnly />
-                            <button type="button" id="search_address_btn" onclick="searchAddress()" class="btn sub">
+                            <button type="button" id="search_address_btn" onClick={searchAddress} className="btn sub">
                                 <FontAwesomeIcon icon="fa-solid fa-location-crosshairs" />
                             </button>
                         </div>

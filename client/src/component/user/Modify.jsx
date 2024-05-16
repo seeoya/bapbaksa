@@ -225,6 +225,7 @@ const Modify = () => {
             console.log('files: ', files);
 
             let formData = new FormData();
+            formData.append("u_no", uNo);
             formData.append("u_id", uId);
             formData.append("u_pw", uPw);
             formData.append("u_mail", uMail);
@@ -266,9 +267,23 @@ const Modify = () => {
 
                 });
 
-            setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
-            setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');
-
+                }
+        
+            
+            })
+            .catch(error => {
+                console.log('AXIOS MODIFY_CONFIRM COMMUNICATION ERROR');
+                alert('정보수정에 실패하였습니다.');  
+            })
+            .finally(data => {
+                console.log('AXIOS MODIFY_CONFIRM COMMUNICATION FINALLY');
+        
+            });
+                   
+                        
+            setUPw(''); setUCheckPw('');
+            
+     
         }
 
     }

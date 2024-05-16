@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -142,7 +143,7 @@ const AdminUserView = () => {
                         <div>
                             <input type="text" id="postcode" name="u_zip_code" defaultValue={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readOnly />
                             <button type="button" id="search_address_btn" onclick="searchAddress()" class="btn sub">
-                                <i class="fa-solid fa-location-crosshairs"></i>
+                                <FontAwesomeIcon icon="fa-solid fa-location-crosshairs" />
                             </button>
                         </div>
 

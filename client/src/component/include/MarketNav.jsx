@@ -28,10 +28,12 @@ const MarketNav = () => {
                         <Link to="/market/pay-history" className="link">결제 내역 가기</Link>
                     </div>
                     <div className="recipe">
-                        <Link to="/" className="link_recipe">레시피&nbsp;&nbsp;가기</Link>
+                        <Link to="/" className="link link_recipe">레시피&nbsp;&nbsp;가기</Link>
                     </div>
-                    <div className="user-mypage-link">      
-                    
+
+                    { loginedID !== '' ?
+                    <>
+                    <div className="user-mypage-link">                         
                         <Link to="/mypage" className="link_mypage" title="마이페이지 바로가기">
                             <div className="user-info">
                                 <span> {loginedID} </span>
@@ -39,9 +41,13 @@ const MarketNav = () => {
                                 <img src="/imgs/logo/logo.png" alt="마이페이지"/>
                                 {/*<img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />*/}
                             </div>            
-                        </Link>
-                        
+                        </Link>                        
                     </div>
+                     </>
+                     :
+                     <>
+                     </> 
+                     }
                 </div>
             </div>
         </nav>

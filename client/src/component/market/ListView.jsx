@@ -178,8 +178,6 @@ const ListView = () => {
                 'I_NO': i_no,
                 'MC_COUNT': mc_count
             })
-            console.log("장바구니 추가 성공(인서트)", response.data.insertResult);
-            console.log("장바구니 추가 성공(업데이트)", response.data.updateResult);
         } catch (error) {
             console.log(error)
         }

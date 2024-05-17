@@ -20,22 +20,39 @@ export function SuccessPage() {
             })
         });
 
-        console.log(response);
+        let { totalAmount, method } = response.data.data;
         if (response.status === 200) {
             setIsConfirmed(true);
-            axios_deleteCart(orderId);
+            axios_insertPayment(totalAmount, method);
         }
     }
 
-    const axios_deleteCart = async (orderId) => {
+    const axios_insertPayment = async (totalAmount, method) => {
         let u_no = getToken('loginedUNo');
 
         try {
+            await axios.post(process.env.REACT_APP_SERVER_URL + "/market/insertTossPayment", {
+                'u_no': u_no,
+                'o_id': orderId,
+                'pm_price': totalAmount,
+                'pm_method': method
+            }).then((data) => {
+                axios_deleteCart(data.data.insertId);
+            }
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const axios_deleteCart = async (insertId) => {
+        let u_no = getToken('loginedUNo');
+        try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/paymentDeleteCart", {
                 'u_no': u_no,
-                'p_no': orderId
+                'p_no': orderId,
+                'pm_no': insertId
             })
-            console.log("🤍🤍🤍 결제 후 장바구니 삭제 성공");
         } catch (error) {
             console.log(error)
         }

@@ -109,7 +109,7 @@ const adminService = {
                                             fs.rmSync(
                                                 `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`,
                                                 { recursive: true, force: true },
-                                                (error) => {}
+                                                (error) => { }
                                             );
 
                                             console.log(`${post.u_id} directory deleted!`);
@@ -164,8 +164,9 @@ const adminService = {
                     res.json(quests);
                 }
             }
-        );
+        )
     },
+
     answer_question: (req, res) => {
         console.log("answer_question");
         let params = req.body;
@@ -182,8 +183,52 @@ const adminService = {
                     res.json(answer);
                 }
             }
+        )
+    },
+
+    get_all_orders: (req, res) => {
+        DB.query(
+            "SELECT o_id, pm_no, u_no, o_s_no, o_reg_date, o_mod_date FROM TBL_ORDER",
+            [],
+            (error, result) => {
+                if (error) {
+                    console.log("error", error);
+                    return { status: 400 };
+                } else {
+                    let tmpList = {};
+
+                    if (result) {
+                        result.map((el) => {
+                            tmpList[el.o_id] = el;
+                        });
+                    }
+
+                    res.json(tmpList);
+                }
+            }
         );
     },
+    get_order: (req, res) => {
+        DB.query(
+            "SELECT * FROM TBL_ORDER WHERE o_id = ?",
+            [req.query.o_id],
+            (error, result) => {
+                if (error) {
+                    console.log("error", error);
+                    return { status: 400 };
+                } else {
+
+                    let tmpList = {};
+
+                    result.map((el) => {
+                        tmpList[el.o_no] = el;
+                    });
+                    res.json(tmpList);
+                }
+            }
+        );
+    },
+    insert_stock: (req, res) => {},
 };
 
 module.exports = adminService;

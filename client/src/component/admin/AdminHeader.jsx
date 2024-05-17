@@ -40,6 +40,7 @@ const AdminHeader = () => {
             <nav>
                 <div className='admin-link'>회원 관리</div>
                 <Link to={"/admin/user"} className={activeTab === 0 ? "admin-link active" : 'admin-link'}>회원목록</Link>
+                <Link to={"/admin/user/question"} className={activeTab === 0 ? "admin-link active" : 'admin-link'}>1:1 문의 답변</Link>
                 <div className='admin-link'>마켓 관리</div>
                 <Link to={"/admin/market"} className={activeTab === 1 ? "admin-link active" : 'admin-link'}>구매 내역</Link>
                 <Link to={"/admin/market/refund"} className={activeTab === 2 ? "admin-link active" : 'admin-link'}>환불 관리</Link>

@@ -40,6 +40,8 @@ import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
 import Questions from './user/Questions';
+import AdminUserQuestions from './admin/AdminUserQuestions';
+import AdminUserQuestionsWrite from './admin/AdminUserQuestionsWrite';
 
 
 
@@ -104,6 +106,10 @@ const LayoutRouter = () => {
 
                 <Route path="user" element={<Outlet />}>
                     <Route path="" element={<AdminUser />}></Route>
+                    <Route path="question" element={<Outlet />}>
+                        <Route path="" element={<AdminUserQuestions />}></Route>
+                        <Route path=":no" element={<AdminUserQuestionsWrite />}></Route>
+                    </Route>
                     <Route path=":no" element={<AdminUserView />}></Route>
                 </Route>
 

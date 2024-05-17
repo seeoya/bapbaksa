@@ -1006,6 +1006,7 @@ nav .user-info img {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
+    margin: 10px 10px 0 0;
 }
 
 .modal-content .modal-detail {

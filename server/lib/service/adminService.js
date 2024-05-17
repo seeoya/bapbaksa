@@ -72,6 +72,45 @@ const adminService = {
             }
         );
     },
+    get_all_question: (req, res) => {
+        DB.query(`SELECT * FROM TBL_USER_QUESTIONS ORDER BY QUES_NO DESC`, 
+        (error, quests) => {
+            if (error) {
+                res.json(null);
+            } else {
+                res.json(quests);
+            }
+        });
+    },
+    get_question: (req, res) => {
+        let params = req.query;
+        DB.query(`SELECT * FROM TBL_USER_QUESTIONS WHERE QUES_NO = ?`, 
+        [params.ques_no]
+        , (error, quests) => {
+            if (error) {
+                res.json(null);
+            } else {
+                console.log(quests);
+                res.json(quests);
+            }
+        });
+    },
+    answer_question: (req, res) => {
+        console.log('answer_question');
+        let params = req.body;
+        console.log("params.params : ", params.params);
+        console.log("params.params : ", params.params.ques_answer);
+        console.log("params.params : ", params.params.ques_no);
+        DB.query(`UPDATE TBL_USER_QUESTIONS SET QUES_ANSWER = ?, QUES_STATE = 1, QUES_ANSWER_DATE = NOW() WHERE QUES_NO = ?`, 
+        [params.params.ques_answer, params.params.ques_no], 
+        (error, answer) => {
+            if (error) {
+                res.json(null);
+            } else {
+                res.json(answer);
+            }
+        });
+    }
 };
 
 module.exports = adminService;

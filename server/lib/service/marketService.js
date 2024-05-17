@@ -100,7 +100,9 @@ const marketService = {
         let o_count = req.body.o_count;
         let o_price = req.body.o_price;
         let p_no = req.body.p_no;
-
+        let p_code = req.body.postcode;
+        let updatedRoadAddress = req.body.updatedRoadAddress;
+        let detailAddress = req.body.detailAddress;
         function formatDate(date) {
             let year = date.getFullYear();
             let month = date.getMonth() + 1;
@@ -127,13 +129,13 @@ const marketService = {
 
         let currentDate = new Date();
         let formattedDate = formatDate(currentDate);
-
+        
         let flag = true;
         for (let i = 0; i < o_count.length; i++) {
             DB.query(
                 "INSERT INTO TBL_ORDER(" +
-                    "O_ID, U_NO, O_COUNT, O_PRICE, P_NO, O_FINAL_PRICE, O_S_NO) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, -1)",
+                    "O_ID, U_NO, O_COUNT, O_PRICE, P_NO, O_FINAL_PRICE, O_S_NO, P_ZIP_CODE , P_FIRST_ADDRESS, P_SECOND_ADDRESS) " +
+                    "VALUES(?, ?, ?, ?, ?, ?, -1, ? , ? , ?)",
                 [
                     `${formattedDate}${u_no}`,
                     u_no,
@@ -141,6 +143,9 @@ const marketService = {
                     o_price[i],
                     p_no[i],
                     o_count[i] * o_price[i],
+                    p_code,
+                    updatedRoadAddress,
+                    detailAddress
                 ],
                 (error, result) => {
                     if (error) {
@@ -284,10 +289,24 @@ const marketService = {
         );
     },
 
+    insertTossPayment:(req,res) => {
+        let post = req.body
+        console.log("❣❣❣❣💕💕", post.o_no);
+        DB.query(`INSERT INTO TBL_PAYMENT(O_ID, U_NO, PM_PRICE, PM_METHOD) 
+        VALUES(?,?,?,?)`, [post.o_id, post.u_no, post.pm_price, post.pm_method], (error, result) => {
+            if(error) {
+                console.log(error);
+                res.json(null);
+            } else {
+                res.json(result);
+            }
+        })
+
+    },
+
     deleteCart: (req,res) => {
         let post = req.body
-        console.log("❤❤",post);
-
+        console.log("💌💌💌💌",post.pm_no);
         DB.query(`SELECT * FROM TBL_ORDER WHERE O_ID = ?`, [post.p_no],(error,info) => {
             if(error) {
                 console.log(error);
@@ -296,7 +315,7 @@ const marketService = {
                 const oId = info.map((item) => item.o_id);
                 console.log("💘💘💘💘",oId);
                 DB.query(
-                    `UPDATE TBL_ORDER SET O_S_NO = 0 WHERE O_ID = ?`,[oId[0]],(error,result) => {
+                    `UPDATE TBL_ORDER SET O_S_NO = 0, PM_NO = ? WHERE O_ID = ?`,[post.pm_no, oId[0]],(error,result) => {
                         if(error) {
                             console.log(error)
                         } else {

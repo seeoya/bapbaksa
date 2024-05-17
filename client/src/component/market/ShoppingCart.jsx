@@ -9,9 +9,13 @@ const ShoppingCart = () => {
     const [selectAll, setSelectAll] = useState(false);
     const [temp, setTemp] = useState(false);
     const [goToPay, setGoToPay] = useState([]);
+    const u_no = getToken('loginedUNo');
+    
+    useEffect(() => {
+        axios_getCartInfo(u_no);
+    }, []);
 
     useEffect(() => {
-        let u_no = getToken('loginedUNo');
         axios_getCartInfo(u_no);
     }, [temp]);
 

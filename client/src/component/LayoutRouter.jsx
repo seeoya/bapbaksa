@@ -44,6 +44,7 @@ import UserLayout from './user/UserLayout';
 import Questions from './user/Questions';
 import AdminUserQuestions from './admin/AdminUserQuestions';
 import AdminUserQuestionsWrite from './admin/AdminUserQuestionsWrite';
+import AdminMarketRefundView from './admin/AdminMarketRefundView';
 
 
 
@@ -120,7 +121,10 @@ const LayoutRouter = () => {
                 <Route path="market" element={<Outlet />}>
                     <Route path="" element={<AdminMarket />}></Route>
                     <Route path=":id" element={<AdminMarketView />}></Route>
-                    <Route path="refund" element={<AdminMarketRefund />}></Route>
+                    <Route path="refund" element={<Outlet />}>
+                        <Route path="" element={<AdminMarketRefund />}></Route>
+                        <Route path=":id" element={<AdminMarketRefundView />}></Route>
+                    </Route>
                 </Route>
             </Route>
         </Routes>

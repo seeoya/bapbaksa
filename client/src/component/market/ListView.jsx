@@ -1,23 +1,26 @@
 import ApexCharts from 'apexcharts';
 import axios from 'axios';
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getToken } from '../../storage/loginedToken';
 
 const ListView = () => {
     const { no } = useParams();
     const [num, code] = no.split('_');
 
-    const [quantityInt, setQuantityInt] = useState(0);
+    const [quantityInt, setQuantityInt] = useState(1);
     const [prodInfo, setProdInfo] = useState({});
     const [chartData, setChartData] = useState([]);
     const [viewData, setViewData] = useState([]);
     const [goToPay, setGoToPay] = useState([]);
     const chartRef = useRef(null);
 
+    const navigate = useNavigate();
+
+
     useEffect(() => {
         setPaymentInfo()
-    },[quantityInt]);
+    }, [quantityInt]);
 
     useEffect(() => {
         axios_getProdInfo();
@@ -104,15 +107,14 @@ const ListView = () => {
         };
     }
 
-    const goToMarketCartBtn = () => {
+    const goToMarketCartBtn = async () => {
         let u_no = getToken('loginedUNo');
         let i_no = prodInfo.PROD_NO;
         let mc_count = quantityInt;
 
-        axios_goToMarketCart(u_no, i_no, mc_count);
+        await axios_goToMarketCart(u_no, i_no, mc_count);
         setQuantityInt(0);
-        window.location.href = "/market/cart";
-
+        navigate("/market/cart");
     }
 
     const handleCount = (type) => {
@@ -129,12 +131,12 @@ const ListView = () => {
 
     const setPaymentInfo = () => {
         let items = [];
-        
-            items.push({
-                'I_NO': num,
-                'MC_COUNT': quantityInt
-            });
-            setGoToPay(items);
+
+        items.push({
+            'I_NO': num,
+            'MC_COUNT': quantityInt
+        });
+        setGoToPay(items);
     }
 
     async function axios_getProdInfo() {
@@ -214,13 +216,13 @@ const ListView = () => {
                                     </div>
                                     <div className='ingredient-bottom-wrap-btn'>
                                         <button type="button" className='go-cart-btn' onClick={goToMarketCartBtn}>장바구니</button>
-                                            {goToPay.length > 0 ? (
-                                                <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn'>
-                                                    선택 결제
-                                                </Link>
-                                            ) : 
+                                        {goToPay.length > 0 ? (
+                                            <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn'>
+                                                선택 결제
+                                            </Link>
+                                        ) :
                                             <button>선택 결제</button>
-                                            }
+                                        }
                                     </div>
                                 </div>
                             </div>

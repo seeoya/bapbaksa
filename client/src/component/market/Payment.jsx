@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
 import { CheckoutPage } from '../payment/Checkout';
 
@@ -11,9 +12,9 @@ const Payment = () => {
     const [detailAddress, setDetailAddress] = useState('');
     const [payInfo, setPayInfo] = useState([]);
 
+    const { data: newProductList } = NewProductQuery();
+
     const [isPayment, setIsPayment] = useState(false);
-    const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
-    const [isPaymentFail, setIsPaymentFail] = useState(false);
 
     const [totalPay, setTotalPay] = useState(0);
 
@@ -110,7 +111,6 @@ const Payment = () => {
     }
 
     const axios_paymentGetProd = async (i_no) => {
-        console.log("💘💘💘", i_no);
         try {
             const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/paymentGetProd", {
                 'I_NO': i_no,
@@ -125,9 +125,9 @@ const Payment = () => {
         <>
             {
                 isPayment ?
-                    <div id='modal' className='modal' >
+                    <div id='modal' className='modal payment' >
                         <div className="modal-wrap">
-                            <CheckoutPage p_no={p_no} o_count={o_count} totalPay={totalPay} orderNo={orderNo} />
+                            <CheckoutPage p_no={p_no} o_count={o_count} totalPay={totalPay} orderNo={orderNo} newProductList={newProductList} />
                         </div>
                     </div>
                     : null

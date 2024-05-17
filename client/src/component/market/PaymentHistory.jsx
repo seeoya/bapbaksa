@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 
 const PaymentHistory = () => {
+
     const [orderInfo, setOrderInfo] = useState([]);
     const [refundInfo, setRefundInfo] = useState();
     const [acceptInfo, setAcceptInfo] = useState();
@@ -49,7 +50,7 @@ const PaymentHistory = () => {
         setAcceptInfo(accept);
     }
 
-    const cancelPayment = ( p_no, o_id) => {
+    const cancelPayment = (p_no, o_id) => {
         const cancel = {
             'o_id': o_id,
             'p_no' : p_no
@@ -65,33 +66,6 @@ const PaymentHistory = () => {
                 'u_no': u_no,
             })
             console.log("💝💝", response.data.orders);
-
-            // orders = {};
-            // orders[주문번호] = {};
-            // orders[키값][키값].p_no
-            // Object.keys(orders) == [202405141511366791, 202405141524101631] == 배열
-
-            // Object.keys(orders).map((el) => {
-            //     orders[el] => {}
-
-            //     Object.keys(orders[el]) == [284, 292]
-            // })
-
-
-            // Object.keys(orders).map((el) => {
-            //   <div>orders[el].name</div>>
-
-            //   {
-            //     Object.keys(orders[el]).map(ell => {
-            //         return <div>ell.p_no</div>
-            //     })
-            //   }
-            // })
-            // <div>
-                
-
-            // </div>
-
 
             setOrderInfo(response.data.orders);
         } catch (error) {

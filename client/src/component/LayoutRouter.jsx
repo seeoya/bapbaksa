@@ -21,6 +21,8 @@ import Payment from './market/Payment';
 import PaymentDetail from './market/PaymentDetail';
 import PaymentHistory from './market/PaymentHistory';
 import ShoppingCart from './market/ShoppingCart';
+import LikeRecipe from './mypage/LikeRecipe';
+import MyPage from './mypage/MyPage';
 import { CheckoutPage } from './payment/Checkout';
 import { FailPage } from './payment/Fail';
 import { SuccessPage } from './payment/Success';
@@ -67,7 +69,9 @@ const LayoutRouter = () => {
                 </Route>
 
                 <Route path="/mypage" element={<Outlet />}>
+                    <Route path="" element={<MyPage />}></Route>
                     <Route path="myfridge" element={<MyFridge />}></Route>
+                    <Route path="like" element={<LikeRecipe />}></Route>
                 </Route>
 
                 <Route path="/recipe" element={<RecipeLayout />}>

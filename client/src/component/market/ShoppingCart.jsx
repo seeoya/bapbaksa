@@ -72,7 +72,7 @@ const ShoppingCart = () => {
         setGoToPay(items);
         
     }
-
+    
     const handleCheckout = () => {
         const checkedItems = cartInfo.filter(item => item.isSelected);
         if (checkedItems.length === 0) {
@@ -81,6 +81,7 @@ const ShoppingCart = () => {
         }
     
         const mcNos = checkedItems.map(item => item.mc_no);
+        
         axios_deleteCart(mcNos);
     };
     
@@ -109,7 +110,6 @@ const ShoppingCart = () => {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/deleteCart", {
                 'MC_NO': mcNos,
             })
-            console.log("삭제 성공", response.data);
             if (response.data != null) {
                 setTemp((temp) => !temp);
                 alert('삭제 성공');

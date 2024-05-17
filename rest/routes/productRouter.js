@@ -13,6 +13,11 @@ router.get("/", (req, res) => {
     product.loadList(req, res);
 });
 
+router.get("/getAllProduct", (req,res) => {
+    console.log('/product/getAllProduct');
+    product.getAllProduct(req,res);
+})
+
 router.post("/view", (req, res) => {
     console.log('product/view');
     // 상세 뷰

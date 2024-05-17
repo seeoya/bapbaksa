@@ -83,9 +83,8 @@ const marketService = {
             res.json(null);
         }
     },
-    deleteCart: (req, res) => {
+    deleteInCart: (req, res) => {
         let mc_nos = req.body.MC_NO; // 여러 개의 MC_NO 값들을 배열로 받음
-
         DB.query(`DELETE FROM TBL_MARKET_CART WHERE MC_NO IN (?)`, [mc_nos], (error, result) => {
             if (error) {
                 console.log(error);
@@ -134,7 +133,7 @@ const marketService = {
             DB.query(
                 "INSERT INTO TBL_ORDER(" +
                     "O_ID, U_NO, O_COUNT, O_PRICE, P_NO, O_FINAL_PRICE, O_S_NO) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, 0)",
+                    "VALUES(?, ?, ?, ?, ?, ?, -1)",
                 [
                     `${formattedDate}${u_no}`,
                     u_no,
@@ -149,16 +148,8 @@ const marketService = {
                         flag = false;
                         return;
                     } else {
-                        DB.query(
-                            `DELETE FROM TBL_MARKET_CART WHERE U_NO = ? AND I_NO = ?`,
-                            [u_no, p_no[i]],
-                            (error, data) => {
-                                if (error) {
-                                    flag = false;
-                                } else {
-                                }
-                            }
-                        );
+                        flag = true;
+                        
                     }
                 }
             );
@@ -184,7 +175,6 @@ const marketService = {
                         const pNo = orders.map((item) => item.p_no);
                         const prodInfo = await axios_get_product(pNo);
                         let tmp = {};
-
                         orders.map((order, index) => {
                             if (!tmp[order.o_id]) {
                                 tmp[order.o_id] = {};
@@ -263,7 +253,6 @@ const marketService = {
     acceptOrder: (req, res) => {
         let o_id = Number(req.body.acceptInfo.o_id);
         let p_no = Number(req.body.acceptInfo.p_no);
-        console.log("💘💘", o_id);
         DB.query(
             `UPDATE TBL_ORDER SET O_S_NO = 5 WHERE P_NO = ? AND O_ID = ?`,
             [p_no, o_id],
@@ -294,6 +283,45 @@ const marketService = {
             }
         );
     },
+
+    deleteCart: (req,res) => {
+        let post = req.body
+        console.log("❤❤",post);
+
+        DB.query(`SELECT * FROM TBL_ORDER WHERE O_ID = ?`, [post.p_no],(error,info) => {
+            if(error) {
+                console.log(error);
+            } else {
+                console.log("💘💘💘💘",info);
+                const oId = info.map((item) => item.o_id);
+                console.log("💘💘💘💘",oId);
+                DB.query(
+                    `UPDATE TBL_ORDER SET O_S_NO = 0 WHERE O_ID = ?`,[oId[0]],(error,result) => {
+                        if(error) {
+                            console.log(error)
+                        } else {
+                            const pNo = info.map((item) => item.p_no); // [ 283, 289, 293 ] 이렇게 들어옴
+                            const pNoString = pNo.join(','); //283,289,293 이렇게 들어옴
+                            DB.query(
+                                `DELETE FROM TBL_MARKET_CART WHERE U_NO = ? AND I_NO IN (${pNoString})`,
+                                [post.u_no, pNo],
+                                (error, result) => {
+                                    if (error) {
+                                        console.log(error);
+                                        res.json(null);
+                                    } else {
+                                        res.json(result);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                )
+            }
+        })
+        
+    }
+    
 };
 
 async function axios_getCartInfo(i_no) {

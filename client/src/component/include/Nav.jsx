@@ -29,10 +29,11 @@ const Nav = () => {
                         <Link to="/styleguide" className="link">StyleGuide</Link>
                     </div>
                     <div className="market">
-                        <Link to="/market" className="link link_market">Market 가기</Link>
+                        <Link to="/market" className="link link_market">마켓 가기</Link>
                     </div>
-                    <div className="user-mypage-link">      
-                    
+                    { loginedID !== '' ?
+                    <>
+                    <div className="user-mypage-link">                          
                         <Link to="/mypage" className="link_mypage" title="마이페이지 바로가기">
                             <div className="user-info">
                                 <span> {loginedID} </span>
@@ -40,9 +41,14 @@ const Nav = () => {
                                 <img src="/imgs/logo/logo.png" alt="마이페이지"/>
                                 {/*<img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />*/}
                             </div>            
-                        </Link>
-                        
+                        </Link>                        
                     </div>
+                    </>
+                    :
+                    <>
+                    </>
+
+                    }
                 </div>
             </div>
         </nav>

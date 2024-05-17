@@ -12,9 +12,7 @@ const Delete = () => {
 
     useEffect(() => {
         
-        deleteForm();
-        navigate('/');
-        window.location.reload(true);
+        deleteForm();      
 
     }, [])
     
@@ -49,7 +47,7 @@ const Delete = () => {
                     console.log(res.data.result.affectedRows);      
                                  
 
-                    if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {
+                    if (res.data !== null && res.data.result.affectedRows > 0) {
                         
                   
                         console.log('AXIOS USER_DELETE COMMUNICATION SUCCESS ==> ', res.data);                    
@@ -60,21 +58,21 @@ const Delete = () => {
                         removeToken('refreshToken');
                         removeToken('loginedUId');
                         removeToken('loginedUNo');    
-                
-                        navigate('/');                        
+                      
+                        navigate('/');
                         window.location.reload('/');
                         
             
-                    } 
+                   } 
                 
                 })
                 .catch(error => {
-
+                    console.log('AXIOS USER_DELETE COMMUNICATION ERROR', error);
                     alert('회원탈퇴에 실패하였습니다.');                
 
                 })
                 .finally(data => {
-                    console.log('AXIOS USER_DELETE COMMUNICATION FINALLY');
+                    console.log('AXIOS USER_DELETE COMMUNICATION FINALLY', data);
             
                 });
 
@@ -89,7 +87,7 @@ const Delete = () => {
     
     return (
         <>
-            <Link to="/" />
+            <Link to="" />
         </>
     );
 };

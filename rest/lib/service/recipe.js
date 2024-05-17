@@ -39,7 +39,6 @@ const recipe = {
 
         // 선택한 항목이 하나라도 포함된 식재료
 
-        // #TODO -재작업-
         if (params.food && params.foodinclu == 0) {
             if (params.food.length > 1) {
                 // 여러 조건을 OR로 연결
@@ -71,7 +70,6 @@ const recipe = {
 
             // 매개변수 추가
         }
-        // #TODO -여기까지-
 
         // 레시피 검색
         if (params.search) {

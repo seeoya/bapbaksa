@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { getToken } from "../../storage/loginedToken";
 
 export function SuccessPage() {
     const [isConfirmed, setIsConfirmed] = useState(false);
@@ -22,14 +23,23 @@ export function SuccessPage() {
         console.log(response);
         if (response.status === 200) {
             setIsConfirmed(true);
-
-            // #TODO 결제/구매내역 상태 업데이트
-            // let u_no = getToken('loginedUNo');
-            // amount = 가격
-            // orderId
-
+            axios_deleteCart(orderId);
         }
     }
+
+    const axios_deleteCart = async (orderId) => {
+        let u_no = getToken('loginedUNo');
+
+        try {
+            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/paymentDeleteCart", {
+                'u_no': u_no,
+                'p_no': orderId
+            })
+            console.log("🤍🤍🤍 결제 후 장바구니 삭제 성공");
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     return (
         <div className="wrapper w-100 payment payment-success">

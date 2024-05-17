@@ -18,7 +18,7 @@ router.post("/getMarketCart", (req,res) => {
 
 router.post("/deleteCart", (req,res) => {
     console.log('deleteCart');
-    marketService.deleteCart(req,res);
+    marketService.deleteInCart(req,res);
 });
 
 router.post("/payment", (req,res) => {
@@ -54,6 +54,11 @@ router.post("/acceptOrder", (req,res) => {
 router.post("/cancelOrder", (req,res) => {
     console.log('cancelOrder');
     marketService.cancelOrder(req,res);
+})
+
+router.post("/paymentDeleteCart", (req,res) => {
+    console.log("axios_deleteCart");
+    marketService.deleteCart(req,res);
 })
 
 

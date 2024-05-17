@@ -205,12 +205,12 @@ const AdminUserView = () => {
                                 <option value="2">계정 정지</option>
                             </select>
 
-                            <button type='button' className='btn main' onClick={deleteBtnClickEvent}>탈퇴 처리</button>
+                            <button type='button' className='btn sub' onClick={deleteBtnClickEvent}>탈퇴 처리</button>
                         </div>
                     </div>
 
                     <div className='input-wrap btn-wrap'>
-                        <button type='button' className='btn main' onClick={(e) => modifyBtnClickEvent()}>수정</button>
+                        <button type='button' className='btn main full' onClick={(e) => modifyBtnClickEvent()}>수정</button>
                     </div>
 
                 </div>

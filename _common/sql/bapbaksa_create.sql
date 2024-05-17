@@ -31,6 +31,7 @@ CREATE TABLE TBL_USER_STATUS (
 INSERT INTO TBL_USER_STATUS VALUES(0, '탈퇴 회원');
 INSERT INTO TBL_USER_STATUS VALUES(1, '정상 회원');
 INSERT INTO TBL_USER_STATUS VALUES(2, '계정 정지 회원');
+INSERT INTO TBL_USER_STATUS VALUES(999, '관리자');
 
 DROP TABLE IF EXISTS TBL_USER_PROFILE_IMG;
 CREATE TABLE TBL_USER_PROFILE_IMG (
@@ -50,7 +51,7 @@ CREATE TABLE TBL_FRIDGE (
 
 DROP TABLE IF EXISTS TBL_LIKE_RECIPE;
 CREATE TABLE TBL_LIKE_RECIPE (
-    u_no		INT	NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    u_no		INT	NOT NULL PRIMARY KEY,
     r_no		INT	NOT NULL,
     lr_reg_date	TIMESTAMP DEFAULT NOW()
 );
@@ -70,8 +71,8 @@ CREATE TABLE TBL_ORDER (
     p_zip_code          VARCHAR(50),
     p_first_address     VARCHAR(100),
     p_second_address    VARCHAR(100),
-    o_reg_date		TIMESTAMP DEFAULT NOW(),
-    o_mod_date		TIMESTAMP DEFAULT NOW()
+    o_reg_date		    TIMESTAMP DEFAULT NOW(),
+    o_mod_date		    TIMESTAMP DEFAULT NOW()
 );
 
 
@@ -127,3 +128,16 @@ CREATE TABLE TBL_PAYMENT (
     p_reg_date	TIMESTAMP DEFAULT NOW(),
     p_mod_date	TIMESTAMP DEFAULT NOW()
 );
+
+DROP TABLE IF EXISTS TBL_USER_QUESTIONS;
+CREATE TABLE TBL_USER_QUESTIONS (
+    ques_no             INT AUTO_INCREMENT PRIMARY KEY,
+    u_id                VARCHAR(50) NOT NULL,
+    o_id                INT,
+    ques_title          VARCHAR(300) NOT NULL,
+    ques_detail         VARCHAR(1200) NOT NULL,
+    ques_answer         VARCHAR(1200),
+    ques_write_date     TIMESTAMP DEFAULT NOW(),
+    ques_state          INT DEFAULT 0,
+    ques_answer_date    TIMESTAMP
+)

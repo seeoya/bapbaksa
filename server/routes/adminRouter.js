@@ -15,21 +15,9 @@ router.get("/", (req, res) => {
     console.log("params", req.query);
 });
 
-router
-    .get("/user", (req, res) => {
-        if (req.query.u_no) {
-            get_user(req, res);
-        } else {
-            get_all_users(req, res);
-        }
-    })
-    .put("/user", (req, res) => {
-        console.log("modify");
-        modify_user(req, res);
-    })
-    .delete("/user", (req, res) => {
-        console.log("delete", req.body);
-        delete_user(req, res);
+router.get("/get_user", (req, res) => {
+    console.log("get_all_question");
+    get_user(req, res);
     });
 
 router.get("/get_all_question", (req, res) => {

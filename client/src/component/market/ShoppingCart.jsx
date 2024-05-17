@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, json } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getToken } from "../../storage/loginedToken";
 
 const ShoppingCart = () => {
@@ -10,7 +10,6 @@ const ShoppingCart = () => {
     const [temp, setTemp] = useState(false);
     const [goToPay, setGoToPay] = useState([]);
     const u_no = getToken('loginedUNo');
-    
     useEffect(() => {
         axios_getCartInfo(u_no);
     }, []);
@@ -21,7 +20,7 @@ const ShoppingCart = () => {
 
     useEffect(() => {
         setPaymentInfo()
-    },[selectAll]);
+    }, [selectAll]);
 
     const handleCount = (type, index) => {
         const updatedCartInfo = [...cartInfo];
@@ -55,7 +54,6 @@ const ShoppingCart = () => {
     };
 
     const handleItemSelect = (index) => {
-        
         const updatedCartInfo = [...cartInfo];
         updatedCartInfo[index].isSelected = !updatedCartInfo[index].isSelected;
         setCartInfo(updatedCartInfo);
@@ -65,38 +63,36 @@ const ShoppingCart = () => {
     const setPaymentInfo = () => {
         let items = [];
         const checkedItems = cartInfo.filter(item => item.isSelected);
-        
+
         checkedItems.map(item => {
             items.push({
                 'I_NO': item.i_no,
                 'MC_COUNT': item.mc_count
             });
         });
-        console.log("❤❤❤",items);
+        console.log("❤❤❤", items);
         setGoToPay(items);
-        
     }
-    
+
     const handleCheckout = () => {
         const checkedItems = cartInfo.filter(item => item.isSelected);
         if (checkedItems.length === 0) {
             alert('선택된 항목이 없습니다.');
             return;
         }
-    
+
         const mcNos = checkedItems.map(item => item.mc_no);
-        
         axios_deleteCart(mcNos);
     };
-    
+
     // const handlePayment = () => {
     //     const checkedItems = cartInfo.filter(item => item.isSelected);
-        
+
     //     if (checkedItems.length === 0) {
     //         alert('선택된 항목이 없습니다.');
     //         return;
     //     }
-    
+
     //     let items = [];
     //     checkedItems.map(item => {
     //         items.push({
@@ -104,7 +100,7 @@ const ShoppingCart = () => {
     //             'MC_COUNT': item.mc_count
     //         });
     //     });
-    
+
     //     setGoToPay(items);
     // };
 
@@ -201,7 +197,7 @@ const ShoppingCart = () => {
                                 <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn'>
                                     선택 결제
                                 </Link>
-                            ) : 
+                            ) :
                                 <button>선택 결제</button>
                             }
                         </div>

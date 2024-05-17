@@ -10,7 +10,8 @@ const {
     get_all_orders,
     get_order,
     get_all_refund_orders,
-    get_refund_order
+    get_refund_order,
+    insert_stock,
 } = require("../lib/service/adminService");
 
 
@@ -37,6 +38,24 @@ router
         delete_user(req, res);
     });
 
+router
+    .get("/stock", (req, res) => {
+        console.log(req.params);
+        insert_stock(req, res);
+    })
+    .post("/stock", (req, res) => {
+        console.log(req.body);
+        insert_stock(req, res);
+    })
+    .put("/stock", (req, res) => {
+        console.log(req.body);
+        insert_stock(req, res);
+    })
+    .delete("/stock", (req, res) => {
+        console.log(req.body);
+        insert_stock(req, res);
+    });
+
 router.get("/get_all_question", (req, res) => {
     console.log("get_all_question");
     get_all_question(req, res);
@@ -51,7 +70,6 @@ router.put("/answer_question", (req, res) => {
     console.log("answer_question");
     answer_question(req, res);
 });
-
 
 router.get("/get_order", (req, res) => {
     console.log("params", req.query);
@@ -72,6 +90,5 @@ router.get("/get_refund_order", (req, res) => {
         get_all_refund_orders(req, res);
     }
 });
-
 
 module.exports = router;

@@ -10,8 +10,11 @@ import StyleGuide from './StyleGuide';
 import AdminMain from './admin/AdminMain';
 import AdminMarket from './admin/AdminMarket';
 import AdminMarketRefund from './admin/AdminMarketRefund';
+import AdminMarketStock from './admin/AdminMarketStock';
 import AdminMarketView from './admin/AdminMarketView';
 import AdminUser from './admin/AdminUser';
+import AdminUserQuestions from './admin/AdminUserQuestions';
+import AdminUserQuestionsWrite from './admin/AdminUserQuestionsWrite';
 import AdminUserView from './admin/AdminUserView';
 import ListView from './market/ListView';
 import Market from './market/Market';
@@ -42,11 +45,7 @@ import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
 import Questions from './user/Questions';
-import AdminUserQuestions from './admin/AdminUserQuestions';
-import AdminUserQuestionsWrite from './admin/AdminUserQuestionsWrite';
 import AdminMarketRefundView from './admin/AdminMarketRefundView';
-
-
 
 const LayoutRouter = () => {
 
@@ -111,11 +110,11 @@ const LayoutRouter = () => {
 
                 <Route path="user" element={<Outlet />}>
                     <Route path="" element={<AdminUser />}></Route>
+                    <Route path=":no" element={<AdminUserView />}></Route>
                     <Route path="question" element={<Outlet />}>
                         <Route path="" element={<AdminUserQuestions />}></Route>
                         <Route path=":no" element={<AdminUserQuestionsWrite />}></Route>
                     </Route>
-                    <Route path=":no" element={<AdminUserView />}></Route>
                 </Route>
 
                 <Route path="market" element={<Outlet />}>
@@ -125,6 +124,7 @@ const LayoutRouter = () => {
                         <Route path="" element={<AdminMarketRefund />}></Route>
                         <Route path=":id" element={<AdminMarketRefundView />}></Route>
                     </Route>
+                    <Route path="stock" element={<AdminMarketStock />}></Route>
                 </Route>
             </Route>
         </Routes>

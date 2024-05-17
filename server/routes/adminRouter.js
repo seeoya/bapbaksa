@@ -7,6 +7,7 @@ const {
     get_question,
     get_all_question,
     answer_question,
+    insert_stock,
 } = require("../lib/service/adminService");
 
 const router = express.Router();
@@ -30,6 +31,24 @@ router
     .delete("/user", (req, res) => {
         console.log("delete", req.body);
         delete_user(req, res);
+    });
+
+router
+    .get("/stock", (req, res) => {
+        console.log(req.params);
+        insert_stock(req, res);
+    })
+    .post("/stock", (req, res) => {
+        console.log(req.body);
+        insert_stock(req, res);
+    })
+    .put("/stock", (req, res) => {
+        console.log(req.body);
+        insert_stock(req, res);
+    })
+    .delete("/stock", (req, res) => {
+        console.log(req.body);
+        insert_stock(req, res);
     });
 
 router.get("/get_all_question", (req, res) => {

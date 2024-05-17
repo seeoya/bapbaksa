@@ -184,6 +184,7 @@ const adminService = {
             }
         );
     },
+    insert_stock: (req, res) => {},
 };
 
 module.exports = adminService;

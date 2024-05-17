@@ -1,9 +1,8 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import "../css/admin.css";
 import AdminHeader from './admin/AdminHeader';
 import ScrollMoveBtn from './include/ScrollMoveBtn';
-
-import "../css/admin.css";
 
 const AdminLayout = () => {
     return (

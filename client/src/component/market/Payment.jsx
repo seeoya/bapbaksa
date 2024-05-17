@@ -11,6 +11,7 @@ const Payment = () => {
     const [extraAddress, setExtraAddress] = useState('');
     const [detailAddress, setDetailAddress] = useState('');
     const [payInfo, setPayInfo] = useState([]);
+    const [userInfo, setUserInfo] = useState();
 
     const { data: newProductList } = NewProductQuery();
 
@@ -35,6 +36,7 @@ const Payment = () => {
             fors.push(item.I_NO);
         })
         axios_paymentGetProd(fors);
+        axios_getUserInfo();
     }, []);
 
     useEffect(() => {
@@ -49,8 +51,19 @@ const Payment = () => {
         initTotalPay()
     }, [payInfo]);
 
+    useEffect(() => {
+        if (userInfo) {
+            setPostcode(userInfo[0].u_zip_code);
+            setRoadAddress(userInfo[0].u_first_address);
+            setDetailAddress(userInfo[0].u_second_address);
+        }
+    }, [userInfo]);
+
+    useEffect(() => {
+        setDetailAddress('');
+    }, [postcode]);
+
     const payBtnClick = async () => {
-        console.log("payBtnClick clik");
 
         await axios_insertPayment();
         setIsPayment(true);
@@ -93,10 +106,18 @@ const Payment = () => {
 
     const axios_insertPayment = async () => {
         try {
-            console.log("////", u_no, o_count, o_price, p_no);
-
+            let updatedRoadAddress = roadAddress;
+            if (extraAddress !== '') {
+                updatedRoadAddress = roadAddress + extraAddress;
+            }
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/insertPayment", {
-                u_no, o_count, o_price, p_no
+                u_no,
+                o_count,
+                o_price,
+                p_no,
+                postcode,
+                updatedRoadAddress,
+                detailAddress
             })
 
             if (response.status === 200) {
@@ -116,6 +137,19 @@ const Payment = () => {
                 'I_NO': i_no,
             })
             setPayInfo(response.data);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const axios_getUserInfo = async () => {
+        try {
+            const response = await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
+                params: {
+                    u_no: u_no
+                }
+            })
+            setUserInfo(response.data);
         } catch (error) {
             console.log(error)
         }
@@ -166,17 +200,20 @@ const Payment = () => {
                     <div className="payment-price-wrap">
                         <div className="payment-member-info">
                             <span className="ingredient-title">주문자 : {u_id}님</span>
+
                             <div className='find-address-btn'>
                                 <button className='btn main' onClick={execDaumPostcode}>주소 찾기</button>
-                                <input type="text" defaultValue={postcode} placeholder="우편번호"></input>
+                                <input type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
                             </div>
-                            <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소"></input>
+
+                            <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소" readOnly></input>
                             <input
                                 type="text"
                                 defaultValue={detailAddress}
                                 placeholder="상세 주소"
-                                onChange={(e) => setDetailAddress(e.target.value)}
-                            ></input>
+                                onChange={(e) => setDetailAddress(e.target.value)}>
+                            </input>
+
                             <span className="ingredient-title">상품 가격 : {totalPay.toLocaleString()}원</span>
                             <span className="ingredient-title">배송비 : 3,000원</span>
                             <span className="ingredient-title">총 가격 : {(totalPay + 3000).toLocaleString()}원</span>

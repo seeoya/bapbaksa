@@ -11,7 +11,7 @@ const AdminUser = () => {
     }, []);
 
     const initUsers = async () => {
-        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_user", {
+        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
             params: {
             }
         }).then((data) => {

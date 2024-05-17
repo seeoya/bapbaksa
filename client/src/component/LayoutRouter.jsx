@@ -119,7 +119,7 @@ const LayoutRouter = () => {
 
                 <Route path="market" element={<Outlet />}>
                     <Route path="" element={<AdminMarket />}></Route>
-                    <Route path=":no" element={<AdminMarketView />}></Route>
+                    <Route path=":id" element={<AdminMarketView />}></Route>
                     <Route path="refund" element={<AdminMarketRefund />}></Route>
                 </Route>
             </Route>

@@ -172,6 +172,16 @@
     gap: 5px;
 }
 
+#admin .content.user-info .row {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#admin .content.user-info .row .btn {
+    width: 50%;
+}
+
 #admin .content table {
     width: 100%;
 }
@@ -198,17 +208,7 @@
     text-align: center;
 }
 
-#admin .content table .u_id {
-
-    /* width: 150px; */
-}
-
-#admin .content table .u_mail {
-
-    /* width: 200px; */
-}
-
-#admin .content table .u_phon {
+#admin .content table .u_phone {
     width: 150px;
 }
 

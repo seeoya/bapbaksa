@@ -44,6 +44,7 @@ import UserLayout from './user/UserLayout';
 import Questions from './user/Questions';
 import AdminUserQuestions from './admin/AdminUserQuestions';
 import AdminUserQuestionsWrite from './admin/AdminUserQuestionsWrite';
+import AdminChart from './admin/AdminChart';
 
 
 
@@ -121,6 +122,7 @@ const LayoutRouter = () => {
                     <Route path="" element={<AdminMarket />}></Route>
                     <Route path=":no" element={<AdminMarketView />}></Route>
                     <Route path="refund" element={<AdminMarketRefund />}></Route>
+                    <Route path="chart" element={<AdminChart />}></Route>
                 </Route>
             </Route>
         </Routes>

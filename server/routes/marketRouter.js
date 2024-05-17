@@ -61,6 +61,11 @@ router.post("/paymentDeleteCart", (req,res) => {
     marketService.deleteCart(req,res);
 })
 
+router.get("/monthChart", (req,res) => {
+    console.log('monthChart');
+    marketService.monthChart(req,res);
+});
+
 
 // router.get("/allProduct", (req,res) => {
 //     console.log("[server] marketRouter getAllProduct!");

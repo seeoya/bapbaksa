@@ -51,6 +51,7 @@ const AdminHeader = () => {
                 <Link to={"/admin/market"} className={activeTab === 1 ? "admin-link active" : 'admin-link'}>구매 내역</Link>
                 <Link to={"/admin/market/refund"} className={activeTab === 2 ? "admin-link active" : 'admin-link'}>환불 관리</Link>
                 <Link to={"/admin/market/stock"} className={activeTab === 3 ? "admin-link active" : 'admin-link'}>재고 관리</Link>
+                <Link to={"/admin/market/chart"} className={activeTab === 4 ? "admin-link active" : 'admin-link'}>차트</Link>
             </nav>
         </header>
     );

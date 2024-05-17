@@ -12,7 +12,6 @@ const Payment = () => {
     const [detailAddress, setDetailAddress] = useState('');
     const [payInfo, setPayInfo] = useState([]);
     const [userInfo, setUserInfo] = useState();
-    
 
     const { data: newProductList } = NewProductQuery();
 
@@ -62,7 +61,7 @@ const Payment = () => {
 
     useEffect(() => {
         setDetailAddress('');
-    },[postcode]);
+    }, [postcode]);
 
     const payBtnClick = async () => {
 
@@ -120,7 +119,7 @@ const Payment = () => {
                 updatedRoadAddress,
                 detailAddress
             })
-        
+
             if (response.status === 200) {
                 alert("결제 성공");
                 setOrderNo(response.data.orderId);
@@ -201,20 +200,20 @@ const Payment = () => {
                     <div className="payment-price-wrap">
                         <div className="payment-member-info">
                             <span className="ingredient-title">주문자 : {u_id}님</span>
-                            
+
                             <div className='find-address-btn'>
                                 <button className='btn main' onClick={execDaumPostcode}>주소 찾기</button>
                                 <input type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
                             </div>
-                            
+
                             <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소" readOnly></input>
                             <input
                                 type="text"
                                 defaultValue={detailAddress}
                                 placeholder="상세 주소"
-                                onChange={(e) => setDetailAddress(e.target.value)}>       
+                                onChange={(e) => setDetailAddress(e.target.value)}>
                             </input>
-                            
+
                             <span className="ingredient-title">상품 가격 : {totalPay.toLocaleString()}원</span>
                             <span className="ingredient-title">배송비 : 3,000원</span>
                             <span className="ingredient-title">총 가격 : {(totalPay + 3000).toLocaleString()}원</span>

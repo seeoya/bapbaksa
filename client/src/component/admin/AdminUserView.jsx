@@ -1,11 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getToken } from '../../storage/loginedToken';
 
 const AdminUserView = () => {
     const { no } = useParams();
     const [userInfo, setUserInfo] = useState();
+
+    const navigate = useNavigate();
 
     const [uNo, setUNo] = useState(0);
     const [uId, setUId] = useState('');
@@ -14,6 +17,7 @@ const AdminUserView = () => {
     const [uZipcode, setUZipCode] = useState('');
     const [uFirstAddr, setUFirstAddr] = useState('');
     const [uSecondAddr, setUSeconAddr] = useState('');
+    const [uStatus, setUStatus] = useState(-1);
 
     useEffect(() => {
         initUser()
@@ -25,13 +29,12 @@ const AdminUserView = () => {
     }, [no]);
 
     const initUser = async () => {
-        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_user", {
+        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
             params: {
                 u_no: no
             }
         }).then((data) => {
             let user = data.data[0];
-            console.log(user);
 
             setUserInfo(data.data);
             setUNo(user.u_no);
@@ -41,6 +44,7 @@ const AdminUserView = () => {
             setUZipCode(user.u_zip_code);
             setUFirstAddr(user.u_first_address);
             setUSeconAddr(user.u_second_address);
+            setUStatus(user.u_status);
         }).catch((err) => {
             return { type: "error" };
         });
@@ -61,6 +65,8 @@ const AdminUserView = () => {
             setUFirstAddr(input_value);
         } else if (input_name === "u_second_address") {
             setUSeconAddr(input_value);
+        } else if (input_name === "u_status") {
+            setUStatus(input_value);
         }
     }
 
@@ -85,7 +91,6 @@ const AdminUserView = () => {
     }
 
     const modifyBtnClickEvent = async () => {
-        console.log(11111);
         if (uMail === '') {
             alert('이메일을 입력해 주세요');
             document.getElementById("u_mail").focus();
@@ -101,7 +106,8 @@ const AdminUserView = () => {
                     "u_phone": uPhone,
                     "u_zip_code": uZipcode ?? "",
                     "u_first_addr": uFirstAddr ?? "",
-                    "u_second_addr": uSecondAddr ?? ""
+                    "u_second_addr": uSecondAddr ?? "",
+                    "u_status": uStatus ?? 1
                 }
             })
                 .then(res => {
@@ -115,10 +121,32 @@ const AdminUserView = () => {
                 .catch(error => {
                     alert('정보수정에 실패하였습니다.');
                 })
-
         }
-
     }
+
+    const deleteBtnClickEvent = async () => {
+        if (window.confirm('회원탈퇴하시겠습니까?')) {
+            let accessToken = getToken('accessToken');
+
+            await axios.delete(process.env.REACT_APP_SERVER_URL + `/admin/user`, {
+                data: {
+                    "u_id": uId,
+                    "u_no": uNo
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }).then(res => {
+                if (res.data !== null && res.data.result.affectedRows > 0) {
+                    alert('회원탈퇴에 성공했습니다.');
+                    navigate(-1);
+                }
+            }).catch(error => {
+                alert('회원탈퇴에 실패했습니다.');
+            })
+        }
+    }
+
     return (
         <>
             <div className='title user-info'>
@@ -165,6 +193,19 @@ const AdminUserView = () => {
                             <input type="text" id="detailAddress" name="u_second_address" defaultValue={uSecondAddr} onChange={(e) => userInfoChangeHandler(e)} className='input' placeholder="상세주소" />
 
                             <span id="icon_u_detail_addr" className="input-icon"></span>
+                        </div>
+                    </div>
+
+                    <div className='input-wrap'>
+                        <label htmlFor="u_status">상태</label>
+
+                        <div className='row'>
+                            <select name="u_status" id="u_status" className='input' defaultValue={uStatus} onChange={(e) => userInfoChangeHandler(e)} >
+                                <option value="1">활성</option>
+                                <option value="2">계정 정지</option>
+                            </select>
+
+                            <button type='button' className='btn main' onClick={deleteBtnClickEvent}>탈퇴 처리</button>
                         </div>
                     </div>
 

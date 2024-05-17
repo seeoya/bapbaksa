@@ -63,7 +63,6 @@ const adminService = {
             }
         );
     },
-<<<<<<< HEAD
     delete_user: (req, res) => {
         let post = req.body;
 
@@ -110,7 +109,7 @@ const adminService = {
                                             fs.rmSync(
                                                 `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`,
                                                 { recursive: true, force: true },
-                                                (error) => {}
+                                                (error) => { }
                                             );
 
                                             console.log(`${post.u_id} directory deleted!`);
@@ -163,7 +162,30 @@ const adminService = {
                 } else {
                     console.log(quests);
                     res.json(quests);
-=======
+                }
+            }
+        )
+    },
+
+    answer_question: (req, res) => {
+        console.log("answer_question");
+        let params = req.body;
+        console.log("params.params : ", params.params);
+        console.log("params.params : ", params.params.ques_answer);
+        console.log("params.params : ", params.params.ques_no);
+        DB.query(
+            `UPDATE TBL_USER_QUESTIONS SET QUES_ANSWER = ?, QUES_STATE = 1, QUES_ANSWER_DATE = NOW() WHERE QUES_NO = ?`,
+            [params.params.ques_answer, params.params.ques_no],
+            (error, answer) => {
+                if (error) {
+                    res.json(null);
+                } else {
+                    res.json(answer);
+                }
+            }
+        )
+    },
+
     get_all_orders: (req, res) => {
         DB.query(
             "SELECT o_id, pm_no, u_no, o_s_no, o_reg_date, o_mod_date FROM TBL_ORDER",
@@ -182,27 +204,10 @@ const adminService = {
                     }
 
                     res.json(tmpList);
->>>>>>> ad
                 }
             }
         );
     },
-<<<<<<< HEAD
-    answer_question: (req, res) => {
-        console.log("answer_question");
-        let params = req.body;
-        console.log("params.params : ", params.params);
-        console.log("params.params : ", params.params.ques_answer);
-        console.log("params.params : ", params.params.ques_no);
-        DB.query(
-            `UPDATE TBL_USER_QUESTIONS SET QUES_ANSWER = ?, QUES_STATE = 1, QUES_ANSWER_DATE = NOW() WHERE QUES_NO = ?`,
-            [params.params.ques_answer, params.params.ques_no],
-            (error, answer) => {
-                if (error) {
-                    res.json(null);
-                } else {
-                    res.json(answer);
-=======
     get_order: (req, res) => {
         DB.query(
             "SELECT * FROM TBL_ORDER WHERE o_id = ?",
@@ -219,7 +224,6 @@ const adminService = {
                         tmpList[el.o_no] = el;
                     });
                     res.json(tmpList);
->>>>>>> ad
                 }
             }
         );

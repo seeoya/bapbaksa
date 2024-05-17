@@ -1,5 +1,4 @@
 const express = require("express");
-<<<<<<< HEAD
 const {
     get_user,
     get_all_users,
@@ -8,10 +7,9 @@ const {
     get_question,
     get_all_question,
     answer_question,
+    get_all_orders,
+    get_order
 } = require("../lib/service/adminService");
-=======
-const { get_user, get_all_users, modify_user, get_all_orders, get_order } = require("../lib/service/adminService");
->>>>>>> ad
 
 const router = express.Router();
 
@@ -22,7 +20,7 @@ router.get("/", (req, res) => {
 router.get("/get_user", (req, res) => {
     console.log("get_all_question");
     get_user(req, res);
-    });
+});
 
 router.get("/get_all_question", (req, res) => {
     console.log("get_all_question");

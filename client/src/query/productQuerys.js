@@ -7,8 +7,8 @@ export const AllProductQuery = () => {
     return useQuery({
         queryKey: ["all_product"],
         queryFn: async () => {
-            return await axios.get(process.env.REACT_APP_REST_SERVER_URL + "/product/getAllProduct", {
-                })
+            return await axios
+                .get(process.env.REACT_APP_REST_SERVER_URL + "/product/getAllProduct", {})
                 .then((data) => {
                     return data.data;
                 });
@@ -25,8 +25,8 @@ export const NewProductQuery = () => {
     return useQuery({
         queryKey: ["new_product"],
         queryFn: async () => {
-            return await axios.get(process.env.REACT_APP_REST_SERVER_URL + "/product/getNewDate", {
-                })
+            return await axios
+                .get(process.env.REACT_APP_REST_SERVER_URL + "/product/getNewDate", {})
                 .then((data) => {
                     return data.data;
                 });

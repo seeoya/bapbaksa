@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AllFridgeQuery, MyFridgeQuery } from '../../query/fridgeQuerys';
 import { AllRecipeQuery } from '../../query/recipeQuerys';
 import { initIngreDivineAction } from '../../redux/actions/fridge_action';
+import { setTitle } from '../../util/setTitle';
 import RecipeListFilter from './RecipeListFilter';
 import RecipeListItem from './RecipeListItem';
 
@@ -30,6 +31,10 @@ const RecipeList = () => {
     const [sortState, setSortState] = useState("old");
     const [filterInclude, setFilterInclude] = useState(0);
     const [recipeListViewCount, setRecipeListViewCount] = useState(20);
+
+    useEffect(() => {
+        setTitle("레시피 목록");
+    }, []);
 
     useEffect(() => {
         initIngreDivine();

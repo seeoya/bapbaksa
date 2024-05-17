@@ -10,7 +10,6 @@ const Questions = () => {
     const [quesTitle, setQuesTitle] = useState('');
     const [oId, setOId] = useState('');
     const [quesDetail, setQuesDetail] = useState('');
-    const [questionNo, setQuestionNo] = useState('');
 
     const [loadQuest, setLoadQuest] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -70,9 +69,10 @@ const Questions = () => {
                 method: 'post',
                 data: data,
             }).then(res => {
-                console.log('res : ', res);
-                console.log('res.data : ', res.data);
-                loadMyQuestion();
+                if (res.data && Number(parseInt(res.data.affectedRows)) > 0) {
+                    alert('문의 등록에 성공하였습니다.');
+                    loadMyQuestion();
+                }
             }).catch(error => {
                 alert('문의 등록에 실패하였습니다.');
             }).finally(data => {
@@ -159,7 +159,6 @@ const Questions = () => {
                         <textarea name="ques_detail" value={quesDetail} onChange={(e) => { questionChangeHandler(e) }} placeholder="문의 내용을 입력해주세요" ></textarea>
                         <button type="button" onClick={questionClickBtnHandler} className="btn">문의 작성</button>
                     </div>
-
                 </form>
 
                 <div className="question-answer">

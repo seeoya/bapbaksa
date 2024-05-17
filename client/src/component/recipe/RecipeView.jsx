@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { MyFridgeQuery } from '../../query/fridgeQuerys';
 import { AllRecipeQuery } from '../../query/recipeQuerys';
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
 
 const RecipeView = () => {
     let url_params = useParams().no;
@@ -25,8 +26,14 @@ const RecipeView = () => {
     }, [url_params]);
 
     useEffect(() => {
+        if(recipe?.RECP_NAME) {
+            setTitle(recipe.RECP_NAME);
+        }
+    }, [recipe]);
+
+    useEffect(() => {
         if (recipeList && url_params) {
-            setRecipe(recipeList[url_params])
+            setRecipe(recipeList[url_params]);
         }
     }, [recipeList]);
 

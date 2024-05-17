@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AddMyFridgeQuery, AllFridgeQuery, DeleteMyFridgeQuery, MyFridgeQuery } from '../../query/fridgeQuerys';
 import { initIngreDivineAction } from '../../redux/actions/fridge_action';
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
 
 const MyFridge = () => {
     const dispatch = useDispatch();
@@ -14,8 +15,11 @@ const MyFridge = () => {
 
     const myFridgeState = useSelector((state) => state.fridge.myFridgeState);
     const notMyFridgeState = useSelector((state) => state.fridge.notMyFridgeState);
-    // const [myFridgeState, setMyFridgeState] = useState([]);
-    // const [notMyFridgeState, setNotMyFridgeState] = useState([]);
+
+    useEffect(() => {
+        setTitle("나의 냉장고");
+    }, []);
+
 
     useEffect(() => {
         initIngreDivine();

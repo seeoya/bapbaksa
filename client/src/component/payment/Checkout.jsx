@@ -1,11 +1,9 @@
 import { ANONYMOUS, loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getToken } from "../../storage/loginedToken";
-// import { NewProductQuery } from "../../query/productQuerys";
 
-// const { data: newProductList, isLoading: newProductIsLoading, isError: newProductIsError } = NewProductQuery();
 export function CheckoutPage(props) {
-    let { p_no, o_count, totalPay, orderNo } = props;
+    let { p_no, o_count, totalPay, orderNo, newProductList } = props;
 
     let u_id = getToken('loginedUId');
 
@@ -13,10 +11,18 @@ export function CheckoutPage(props) {
     const paymentMethodsWidgetRef = useRef(null);
     const agreementWidgetRef = useRef(null);
 
+    const [pName, setPName] = useState("상품");
 
-    // useEffect(() => {
-    //     console.log("🤍🤍",newProductList);
-    // },[newProductList])
+
+    useEffect(() => {
+        if (newProductList) {
+            newProductList.map((el) => {
+                if (el.PROD_NO == p_no[0]) {
+                    setPName(`${el.PROD_NAME}(${el.PROD_SPCS_NAME})`)
+                }
+            })
+        }
+    }, [newProductList])
 
     useEffect(() => {
         (async () => {
@@ -26,20 +32,12 @@ export function CheckoutPage(props) {
                 paymentWidgetRef.current = paymentWidget;
             }
 
-            /**
-             * 결제창을 렌더링합니다.
-             * @docs https://docs.tosspayments.com/reference/widget-sdk#renderpaymentmethods%EC%84%A0%ED%83%9D%EC%9E%90-%EA%B2%B0%EC%A0%9C-%EA%B8%88%EC%95%A1
-             */
             const paymentMethodsWidget = paymentWidgetRef.current.renderPaymentMethods(
                 "#payment-method",
                 { value: totalPay },
                 { variantKey: "DEFAULT" }
             );
 
-            /**
-             * 약관을 렌더링합니다. 
-             * @docs https://docs.tosspayments.com/reference/widget-sdk#renderagreement%EC%84%A0%ED%83%9D%EC%9E%90-%EC%98%B5%EC%85%98
-             */
             agreementWidgetRef.current = paymentWidgetRef.current.renderAgreement('#agreement', { variantKey: 'DEFAULT' });
 
             paymentMethodsWidgetRef.current = paymentMethodsWidget;
@@ -59,20 +57,15 @@ export function CheckoutPage(props) {
                             const paymentWidget = paymentWidgetRef.current;
 
                             try {
-                                
-                                // #TODO 아이템명 [0]번째로 변경
                                 await paymentWidget?.requestPayment({
-                                    // orderId: generateRandomString(),
                                     orderId: orderNo,
-                                    orderName: p_no?.length > 1 ? ("무신사") + "외" + (p_no.length - 1) + "건" : "토스 티셔츠",
+                                    orderName: p_no?.length > 1 ? (pName) + " 외 " + (p_no.length - 1) + "건" : pName,
                                     customerName: u_id,
                                     customerEmail: "customer123@gmail.com",
                                     successUrl: window.location.origin + "/sandbox/success" + window.location.search,
                                     failUrl: window.location.origin + "/sandbox/fail" + window.location.search,
                                 });
-                            } catch (error) {
-                                // TODO: 에러 처리
-                            }
+                            } catch (error) { }
                         }}
                     >
                         결제하기

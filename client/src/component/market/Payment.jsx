@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
 import { CheckoutPage } from '../payment/Checkout';
 
@@ -12,6 +13,8 @@ const Payment = () => {
     const [payInfo, setPayInfo] = useState([]);
     const [userInfo, setUserInfo] = useState();
     
+
+    const { data: newProductList } = NewProductQuery();
 
     const [isPayment, setIsPayment] = useState(false);
 
@@ -157,9 +160,9 @@ const Payment = () => {
         <>
             {
                 isPayment ?
-                    <div id='modal' className='modal' >
+                    <div id='modal' className='modal payment' >
                         <div className="modal-wrap">
-                            <CheckoutPage p_no={p_no} o_count={o_count} totalPay={totalPay} orderNo={orderNo} />
+                            <CheckoutPage p_no={p_no} o_count={o_count} totalPay={totalPay} orderNo={orderNo} newProductList={newProductList} />
                         </div>
                     </div>
                     : null

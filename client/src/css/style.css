@@ -15,7 +15,7 @@
     padding: 10px 20px;
     width: 100%;
     border: 1px solid #ddd;
-    border-radius: 10px;
+    border-radius: 5px;
     outline: none;
 }
 
@@ -1014,6 +1014,7 @@ nav .user-info img {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
+    margin: 10px 10px 0 0;
 }
 
 .modal-content .modal-detail {

@@ -35,7 +35,6 @@ const RecipeAside = () => {
     }, [windowX, windowY, startX, startY]);
 
     const initMyFridge = async () => {
-        // #TODO 로그인한 회원 u_no로 변경
         let uNo = getToken('loginedUNo');
 
         if (uNo) {

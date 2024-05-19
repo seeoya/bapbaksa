@@ -26,7 +26,7 @@ const AdminMarketRefund = () => {
     return (
         <>
         
-        <div className='title'>환불 내역</div>
+        <div className='title'>환불 관리</div>
             <div className='content'>
 
                 <table>
@@ -48,7 +48,7 @@ const AdminMarketRefund = () => {
                                 return <tr>                                    
                                     <td className='o_reg_date'>{orderList[el].o_reg_date.substr(0, 10)}</td>
                                     <td className='o_id'>{orderList[el].o_id}</td>
-                                    <td className='pm_no'>{orderList[el].p_no}</td>
+                                    <td className='pm_no'>{orderList[el].pm_no}</td>
                                     <td className='u_no'>{orderList[el].u_no}</td>
                                     <td className='o_s_no'>
                                         {                                           

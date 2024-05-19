@@ -1,4 +1,5 @@
 const DB = require("../db/db");
+const { default: axios } = require("axios");
 const { verify } = require("../utils/token");
 
 const adminService = {
@@ -185,23 +186,51 @@ const adminService = {
             });
     },
     get_order: (req, res) => {
+        console.log('get_order()');
+
         DB.query(
-            "SELECT * FROM TBL_ORDER WHERE o_id = ?",
+            `SELECT * FROM TBL_ORDER o JOIN TBL_PAYMENT p ON o.pm_no = p.pm_no WHERE o.o_id = ?`,
             [req.query.o_id],
-            (error, result) => {
+            async (error, orders) => {
+                console.log('🎃🎃', orders[0]);
+                console.log('🎃🎃', orders[1]);
                 if (error) {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
+                    
+                    try {
+                        const pNo = orders.map((item) => item.p_no);
+                        const prodInfo = await axios_getProductInfo(pNo);
+                                console.log('🎃', prodInfo);
+                        let tmp = {};
+                        orders.map((order, index) => {
+                            if (!tmp[order.o_id]){
+                                tmp[order.o_id] = {};
+                            }
 
-                    res.json(result);
+                            tmp[order.o_id][index] = {
+                                ...order,
+                                ...prodInfo[index]
+                            };                            
+
+                        });
+                        console.log('tmp:', tmp);
+                        res.json(tmp);
+
+                    } catch (error) {
+                        console.log(error);
+                        res.json(null);
+                    }
+
+                    
                 }
             }
         );
     },
     get_all_orders: (req, res) => {
         DB.query(
-            "SELECT o_id, pm_no, u_no, o_s_no, o_reg_date, o_mod_date FROM TBL_ORDER",
+            "SELECT o_id, pm_no, u_no, o_s_no, o_reg_date, o_mod_date FROM TBL_ORDER ORDER BY o_reg_date DESC",
             [],
             (error, result) => {
                 if (error) {
@@ -220,18 +249,39 @@ const adminService = {
                 }
             }
         );
-    },
+    },    
     get_refund_order: (req, res) => {
         DB.query(
-            "SELECT * FROM TBL_ORDER WHERE o_id = ?",
+            `SELECT * FROM TBL_ORDER o JOIN TBL_PAYMENT p ON o.pm_no = p.pm_no WHERE o.o_id = ?`,
             [req.query.o_id],
-            (error, result) => {
+            async (error, refunds) => {
                 if (error) {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
+                    try {
+                        const pNo = refunds.map((item) => item.p_no);
+                        const prodInfo = await axios_getProductInfo(pNo);
+                                console.log('🎃', prodInfo);
+                        let tmp = {};
+                        refunds.map((order, index) => {
+                            if (!tmp[order.o_id]){
+                                tmp[order.o_id] = {};
+                            }
 
-                    res.json(result);
+                            tmp[order.o_id][index] = {
+                                ...order,
+                                ...prodInfo[index]
+                            };                            
+
+                        });
+                        console.log('tmp:', tmp);
+                        res.json(tmp);
+
+                    } catch (error) {
+                        console.log(error);
+                        res.json(null);
+                    }
                 }
             }
         );
@@ -258,50 +308,41 @@ const adminService = {
             }
         )
     },
+    put_refund: (req, res) => {
+        let query = req.query;
 
-    get_all_orders: (req, res) => {
-        DB.query(
-            "SELECT o_id, pm_no, u_no, o_s_no, o_reg_date, o_mod_date FROM TBL_ORDER",
-            [],
-            (error, result) => {
-                if (error) {
-                    console.log("error", error);
-                    return { status: 400 };
-                } else {
-                    let tmpList = {};
+        DB.query(`update from TBL_ORDER set o_s_no = ${query.o_s_no} where o_no = ${query.o_no}`,
+                    [], async (error, result) => {
 
-                    if (result) {
-                        result.map((el) => {
-                            tmpList[el.o_id] = el;
-                        });
+                        if (error) {
+                            console.log("error", error);
+                            return { status: 400 };
+                        } else {
+                            res.json(result);
+                        }
+
                     }
 
-                    res.json(tmpList);
-                }
-            }
+                    
         );
-    },
-    get_order: (req, res) => {
-        DB.query(
-            "SELECT * FROM TBL_ORDER WHERE o_id = ?",
-            [req.query.o_id],
-            (error, result) => {
-                if (error) {
-                    console.log("error", error);
-                    return { status: 400 };
-                } else {
 
-                    let tmpList = {};
-
-                    result.map((el) => {
-                        tmpList[el.o_no] = el;
-                    });
-                    res.json(tmpList);
-                }
-            }
-        );
     },
+
+   
+    
     insert_stock: (req, res) => { },
 };
+
+async function axios_getProductInfo(p_no) {
+    try {
+        const response = await axios.post("http://localhost:3002/product/getProductInfo", {
+            P_NO: p_no,
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+    
 
 module.exports = adminService;

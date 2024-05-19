@@ -12,6 +12,7 @@ const {
     get_all_refund_orders,
     get_refund_order,
     insert_stock,
+    put_refund,
 } = require("../lib/service/adminService");
 
 
@@ -90,5 +91,12 @@ router.get("/get_refund_order", (req, res) => {
         get_all_refund_orders(req, res);
     }
 });
+
+router.put("/put_refund", (req, res) => {
+    console.log("params", req.query);
+
+        put_refund(req, res);
+});
+
 
 module.exports = router;

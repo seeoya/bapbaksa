@@ -169,7 +169,9 @@ const marketService = {
     getPaymentHistory: (req, res) => {
         let post = req.body;
         DB.query(
-            `SELECT * FROM TBL_ORDER O JOIN TBL_ORDER_STATUS OS ON O.o_s_no = OS.o_s_no WHERE U_NO = ?`,
+            `SELECT * FROM TBL_ORDER O 
+            JOIN TBL_ORDER_STATUS OS ON O.o_s_no = OS.o_s_no
+            WHERE U_NO = ? AND O.o_s_no != -1`,
             [post.u_no],
             async (error, orders) => {
                 if (error) {
@@ -184,13 +186,11 @@ const marketService = {
                             if (!tmp[order.o_id]) {
                                 tmp[order.o_id] = {};
                             }
-
                             tmp[order.o_id][order.p_no] = {
                                 ...order,
                                 ...prodInfo[index],
                             };
                         });
-
                         res.json({ orders: tmp });
                     } catch (error) {
                         console.log(error);
@@ -203,8 +203,7 @@ const marketService = {
 
     getPaymentDetail: (req, res) => {
         let oId = req.body.O_ID;
-
-        DB.query(`SELECT * FROM TBL_ORDER WHERE O_ID = ?`, [oId], async (error, orders) => {
+        DB.query(`SELECT * FROM TBL_ORDER O JOIN TBL_ORDER_STATUS OS ON O.o_s_no = OS.o_s_no WHERE O.o_id = ?`, [oId], async (error, orders) => {
             if (error) {
                 console.log(error);
                 return res.json(null);
@@ -339,7 +338,7 @@ const marketService = {
             }
         })
         
-    }
+    },
     
 };
 

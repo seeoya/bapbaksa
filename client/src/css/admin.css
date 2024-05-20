@@ -22,11 +22,12 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    position: relative;
+    position: fixed;
     padding: 20px 0;
     width: 200px;
     height: 100%;
     top: 0;
+    left: 0;
     min-height: 100vh;
     background-color: var(--admin-main-dark-color);
     gap: 30px;
@@ -108,12 +109,11 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    margin: 0 auto;
-    padding: 50px;
+    padding: 50px 100px 50px 300px;
     width: 100%;
     height: 100%;
     min-height: 100vh;
-    max-width: 1200px;
+    max-width: 100%;
     gap: 30px;
 }
 
@@ -403,4 +403,30 @@
 #admin .content table .u_status, #admin .content table .u_reg_date, #admin .content table .u_more {
     width: 100px;
     text-align: center;
+}
+
+#admin table .p-code, #admin table .ps-code, #admin table .ps-count {
+    width: 80px;
+    text-align: center;
+}
+
+#admin table .p-btn-wrap {
+    width: 180px;
+    text-align: center;
+}
+
+#admin table .p-btn-wrap .input {
+    margin: 5px;
+    width: 80px;
+}
+
+#admin .admin-btn-wrap {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 10px;
+}
+
+#admin .admin-btn-wrap .btn {
+    padding: 5px 7px;
+    border-radius: 0;
 }

@@ -168,7 +168,7 @@ const product = {
         let prodNo = req.body.PROD_NO;
         let spcsCode = req.body.PROD_SPCS_CODE;
 
-        DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ? AND PROD_SPCS_CODE = ?`,
+        DB.query(`SELECT * FROM PRODUCT WHERE PROD_CODE = ? AND PROD_SPCS_CODE = ?`,
             [prodNo, spcsCode],
             (error, result) => {
                 if (error) {

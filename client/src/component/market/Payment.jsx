@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
 import { CheckoutPage } from '../payment/Checkout';
@@ -27,10 +27,11 @@ const Payment = () => {
 
     let u_id = getToken('loginedUId');
     let u_no = getToken('loginedUNo');
-
+    const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
+        loginCheck();
         let fors = [];
         location.state.goToPay.map(item => {
             fors.push(item.I_NO);
@@ -62,6 +63,15 @@ const Payment = () => {
     useEffect(() => {
         setDetailAddress('');
     }, [postcode]);
+
+    const loginCheck = () => {
+
+        if(u_no === null) {
+            alert('로그인이 필요한 서비스입니다.');
+            navigate('/user/signin')
+        } 
+
+    }
 
     const payBtnClick = async () => {
 

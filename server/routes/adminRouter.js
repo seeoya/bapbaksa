@@ -12,8 +12,17 @@ const {
     get_all_refund_orders,
     get_refund_order,
     insert_stock,
+<<<<<<< HEAD
     put_refund,
     put_reject,
+=======
+    monthChart,
+    curCategoryChart,
+    lastCategoryChart,
+    getStock,
+    insertStock,
+    putStock,
+>>>>>>> 4be6c950335a2060cc51a1b3e6e2c7966cb40c98
 } = require("../lib/service/adminService");
 
 
@@ -42,20 +51,13 @@ router
 
 router
     .get("/stock", (req, res) => {
-        console.log(req.params);
-        insert_stock(req, res);
+        getStock(req, res);
     })
     .post("/stock", (req, res) => {
-        console.log(req.body);
-        insert_stock(req, res);
+        insertStock(req, res);
     })
     .put("/stock", (req, res) => {
-        console.log(req.body);
-        insert_stock(req, res);
-    })
-    .delete("/stock", (req, res) => {
-        console.log(req.body);
-        insert_stock(req, res);
+        putStock(req, res);
     });
 
 router.get("/get_all_question", (req, res) => {
@@ -105,5 +107,20 @@ router.put("/put_reject", (req, res) => {
         put_reject(req, res);
 });
 
+
+router.get("/monthChart", (req, res) => {
+    console.log('monthChart');
+    monthChart(req, res);
+});
+
+router.get("/curCategoryChart", (req, res) => {
+    console.log('categoryChart');
+    curCategoryChart(req, res);
+});
+
+router.get("/lastCategoryChart", (req, res) => {
+    console.log('lastCategoryChart');
+    lastCategoryChart(req, res);
+});
 
 module.exports = router;

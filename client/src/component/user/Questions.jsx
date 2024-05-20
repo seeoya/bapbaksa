@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
@@ -23,6 +24,7 @@ const Questions = () => {
     const [isQuestionNo, setIsQuestionNo] = useState('');
 
     useEffect(() => {
+        loginCheck();
         const loginedUId = getToken('loginedUId');
         setUId(loginedUId);
         setTitle('1:1 문의');
@@ -34,6 +36,18 @@ const Questions = () => {
             loadMyQuestion();
         }
     }, [uId]);
+
+    let u_no = getToken('loginedUNo');
+    const navigate = useNavigate();
+
+    const loginCheck = () => {
+
+        if(u_no === null) {
+            alert('로그인이 필요한 서비스입니다.');
+            navigate('/user/signin')
+        } 
+
+    }
 
     const questionChangeHandler = (e) => {
         console.log('questionChangeHandler()');

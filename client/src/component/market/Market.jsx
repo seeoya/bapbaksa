@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination, A11y, Navigation } from 'swiper/modules';
 import { Link } from 'react-router-dom';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 
 const Market = () => {
@@ -30,9 +31,9 @@ const Market = () => {
             }
         }).then((data) => {
             setRandomIngre(data.data);
-            setIsLoading(false);
         }).catch((error) => {
             return {type: "error", error}
+        }).finally(( )=>{
             setIsLoading(false);
         })
     }
@@ -43,9 +44,9 @@ const Market = () => {
             }
         }).then((data) => {
             setRandomCheepIngre(data.data);
-            setIsLoading(false);
         }).catch((error) => {
             return {type: "error", error}
+        }).finally(( )=>{
             setIsLoading(false);
         })
     }
@@ -64,7 +65,7 @@ const Market = () => {
                     <div className='line'></div>
                         <div className='cheep-recommend-swiper'>
                         {isLoading ? (
-                            <div>Loading Ingredient...</div>
+                            <Loading />
                             ) : (
                                 <Swiper
                                 slidesPerView={2}
@@ -119,7 +120,7 @@ const Market = () => {
                     <div className='line'></div>
                         <div className='cheep-recommend-swiper'>
                         {isLoading ? (
-                            <div>Loading Ingredient...</div>
+                            <Loading />
                         ) : (
                             <Swiper
                             slidesPerView={2}

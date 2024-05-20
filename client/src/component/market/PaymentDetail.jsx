@@ -3,12 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getToken } from '../../storage/loginedToken';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const PaymentDetail = () => {
     let u_id = getToken('loginedUId');
     const { oId } = useParams();
     const [payInfo, setPayInfo] = useState([]);
     let totalPay = 0;
+
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         axios_get_payment_detail();
@@ -25,10 +28,12 @@ const PaymentDetail = () => {
         } catch (error) {
             console.log(error);
         }
+        setIsLoading(false);
     }
 
     return (
-        <div className='content-wrap' id="payment_wrap">
+        <>
+            {isLoading ? <Loading /> : <div className='content-wrap' id="payment_wrap">
             <h2 className='title'>결제 상세 페이지</h2>
             <div className='content flex-wrap'>
                 <div className="payment-ingredient-wrap">
@@ -79,7 +84,9 @@ const PaymentDetail = () => {
                     })}
                 </div>
             </div>
-        </div>
+        </div>}
+        </>
+        
     );
 };
 

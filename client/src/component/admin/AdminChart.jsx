@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from 'apexcharts';
 import axios from "axios";
+import { setTitle } from "../../util/setTitle";
 
 const AdminChart = () => {
 
@@ -20,6 +21,7 @@ const AdminChart = () => {
         axios_getMonthmonthDate();
         axios_getCurCategorymonthDate();
         axios_getLastCategorymonthDate();
+        setTitle('구매 차트');
     }, []);
 
     useEffect(() => {
@@ -223,7 +225,6 @@ const AdminChart = () => {
 
     return (
         <div className="admin-chart-wrap">
-            Admin Chart Page
             <div ref={monthChartRef}></div>
             <div ref={categoryChartRef}></div>
         </div>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getToken } from '../../storage/loginedToken';
 import { getRefreshToken } from '../../util/refreshToken';
+import { setTitle } from '../../util/setTitle';
 
 
 axios.defaults.withCredentials = true;
@@ -25,6 +26,10 @@ const Modify = () => {
     const [accessToken, setAccessToken] = useState('');
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setTitle('정보수정');
+    });
 
     useEffect(() => {
 

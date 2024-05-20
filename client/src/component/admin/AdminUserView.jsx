@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
 
 const AdminUserView = () => {
     const { no } = useParams();
@@ -20,7 +21,8 @@ const AdminUserView = () => {
     const [uStatus, setUStatus] = useState(-1);
 
     useEffect(() => {
-        initUser()
+        initUser();
+        setTitle('유저 상세 정보');
     }, []);
 
     useEffect(() => {

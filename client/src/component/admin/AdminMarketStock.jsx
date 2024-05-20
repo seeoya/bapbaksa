@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
+import { setTitle } from '../../util/setTitle';
 
 const AdminMarketStock = () => {
     const { data: newProductList, isLoading: newProductIsLoading, isError: newProductIsError } = NewProductQuery();
@@ -10,6 +11,7 @@ const AdminMarketStock = () => {
 
     useEffect(() => {
         getStock();
+        setTitle('재고 관리');
     }, []);
 
     const getStock = async () => {

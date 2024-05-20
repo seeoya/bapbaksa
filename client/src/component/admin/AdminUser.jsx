@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
 
 const AdminUser = () => {
 
@@ -8,6 +9,7 @@ const AdminUser = () => {
 
     useEffect(() => {
         initUsers();
+        setTitle('회원 목록');
     }, []);
 
     const initUsers = async () => {

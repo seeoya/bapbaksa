@@ -50,7 +50,7 @@ const Header = () => {
                     <div className="nav">
                         {isLogined ? (
                             <>
-                                <Link to="/admin/qna" className="link">고객문의</Link>
+                                <Link to="/question" className="link">고객문의</Link>
                                 <Link to="/user/modify" className="link">정보수정</Link>
                                 <Link to="/user/signout" className="link">로그아웃</Link>
                             </>

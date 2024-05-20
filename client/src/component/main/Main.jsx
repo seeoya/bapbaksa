@@ -9,6 +9,7 @@ import 'swiper/css/navigation';
 import "swiper/css/pagination";
 
 import { Autoplay, Pagination, A11y, Navigation } from 'swiper/modules';
+import { setTitle } from '../../util/setTitle';
 
 const Main = () => {
 
@@ -17,6 +18,7 @@ const Main = () => {
 
     useEffect(() => {
         randomRecipeAxios();
+        setTitle("레시피 홈");
     }, []);
 
     const randomRecipeAxios = async () => {

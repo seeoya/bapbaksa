@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { setToken } from '../../storage/loginedToken';
 import $ from 'jquery';
+import { setTitle } from '../../util/setTitle';
 
 
 axios.defaults.withCredentials = true;
@@ -36,7 +37,7 @@ const SignIn = () => {
     
 
     useEffect(() => {
-
+        setTitle('로그인');
     }, []);
 
     const userInfoChangeHandler = (e) => {

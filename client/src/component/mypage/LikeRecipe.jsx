@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AllRecipeQuery } from '../../query/recipeQuerys';
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
 
 const LikeRecipe = () => {
     const { data: recipeList, isLoading: recipeIsLoading, isError: recipeIsError } = AllRecipeQuery();
@@ -10,6 +11,7 @@ const LikeRecipe = () => {
 
     useEffect(() => {
         loadMyLikeRecipe();
+        setTitle('좋아요 한 레시피');
     }, []);
 
 

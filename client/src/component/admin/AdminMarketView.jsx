@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { setTitle } from '../../util/setTitle';
+import axios from 'axios';
 
 const AdminMarketView = () => {
     const { id } = useParams();

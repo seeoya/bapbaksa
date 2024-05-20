@@ -127,104 +127,122 @@ const AdminMarketRefundView = () => {
 
     return (
         <>
-        <div className='title order-info'>환불 상세 내역</div>
-                
-            <div>
-                <table>
-                    <tr>
-                        <td className='refund-list-link'>
-                            <Link to={"/admin/market"}>환불리스트</Link>
-                        </td>
-                    </tr>
+        <div className='title'>환불 상세 내역</div>
+            
+            <div id='refund-detail'>
 
-                {orderFlag && prodFlag ? 
-                <>
-                    <tr>
-                        <td className='o_id'>주문번호</td>
-                        <td className='o_s_no'>상태</td>                         
-                    </tr>
-                    <tr>    
-                        <td className='o_id'>{oId}</td>                           
-                        <td className='o_s_no'>
-                        {
-                            oSNo === -1 ? "결제 대기중" : 
-                            oSNo === 0 ? "배송 준비중" : 
-                            oSNo === 1 ? "배송중" : 
-                            oSNo === 2 ? "환불 요청" : 
-                            oSNo === 3 ? "환불 완료" : 
-                            oSNo === 4 ? "구매 취소" : 
-                            oSNo === 5 ? "구매 확정" : 
-                            oSNo === 6 ? "배송 완료" : ""
-                                
-                        }
-                        </td>
-                    </tr>
-
-                    <tr>                        
-                        <td className='o_reg_date'>주문일</td>
-                        <td className='o_mod_date'>주문 수정일</td>                        
-                    </tr>
-                    <tr>
-                        <td className='o_reg_date'>{oRegDate.substring(0, 10)}</td>                        
-                        <td className='o_mod_date'>{oModDate.substring(0, 10)}</td>
-                    </tr>
-                    <tr>
-                        <td className='no'>회원번호</td>
-                        <td className='pm_no'>결제번호</td>
-                    </tr>
-                    <tr>
-                        <td className='no'>{uNo}</td>
-                        <td className='pm_no'>{pmNo}</td>                       
-                    </tr>
-                    <tr>                       
-                        <td className='pm_method'>결제방법</td>
-                        <td className='pm_price'>결제금액</td>
-                    </tr>
-                    <tr>                        
-                        <td className='pm_method'>{pmMethod}</td>                        
-                        <td className='pm_price'>{pmPrice.toLocaleString('ko-KR')}</td>                      
-                    </tr>
-                    <tr>                        
-                        <td className='p_reg_date'>결제일</td>                        
-                        <td className='p_mod_date'>결제 수정일</td>                        
-                    </tr>
-                    <tr>    
-                        <td className='p_reg_date'>{pRegDate.substring(0, 10)}</td>
-                        <td className='p_mod_date'>{pModDate.substring(0, 10)}</td>
-                    </tr>
-                    <tr>
-                        <td className='no'>구매번호</td>
-                        <td className='no'>{no}</td>
-                    </tr>
-                    <tr>
-                        <td className='name'>상품명</td>
-                        <td className='name'>{PROD_NAME + ' ' + PROD_SPCS_NAME}</td>
-                    </tr>
-                    <tr>
-                        <td className='no'>구매수량</td>
-                        <td className='no'>{oCount}</td>
-                    </tr>
-                    <tr>
-                        <td className='price'>단가</td>
-                        <td className='price'>{oPrice.toLocaleString('ko-KR')}</td>
-                    </tr>
-                    <tr>
-                        <td className='price'>합계</td>
-                        <td className='price'>{oFinalPrice.toLocaleString('ko-KR')}</td>
-                    </tr>
-                
-                    <tr className='tr-btn'>
-                        <td><button type='button' className='btn sub' onClick={(e) => refundApproveClick(order)}>환불 승인</button></td>
-                        <td><button type='button' className='btn sub' onClick={(e) => refundRejectClick(no)}>승인 불가</button></td>                        
-                    </tr>            
-                    </>
-                    :
+            <div className='content'>           
                     
-                    <tr><td>구매 상세 내역이 없습니다.</td></tr>
-            }
+                <div className='refund-list-link'>
+                        <Link to={"/admin/market"} className='link'>환불관리</Link>
+                </div>
                 
-                </table>                
-            </div>        
+                {orderFlag && prodFlag ? 
+                    <>
+                    <table className='refund-table'>
+                   
+                        <tr>
+                            <td className='t1'>회원번호</td>
+                            <td className='t2'>{uNo}</td>
+
+                            <td className='t3'>결제번호</td>
+                            <td className='t4'>{pmNo}</td>                       
+                        </tr>        
+                        <tr>
+                            <td className='t1'>주문번호</td>
+                            <td className='t2'>{oId}</td>                                                   
+                        
+                            <td className='t3'>구매상태</td>    
+                            <td className='t4'>
+                            {
+                                oSNo === -1 ? "결제 대기중" : 
+                                oSNo === 0 ? "배송 준비중" : 
+                                oSNo === 1 ? "배송중" : 
+                                oSNo === 2 ? "환불 요청" : 
+                                oSNo === 3 ? "환불 완료" : 
+                                oSNo === 4 ? "구매 취소" : 
+                                oSNo === 5 ? "구매 확정" : 
+                                oSNo === 6 ? "배송 완료" : ""
+                                    
+                            }
+                            </td>
+                        </tr>    
+                        <tr>
+                            <td className='t1'>주문일자</td>
+                            <td className='t2'>{oRegDate.substring(0, 10)}</td>                        
+                            <td className='t3'>결제일자</td>                        
+                            <td className='t4'>{pRegDate.substring(0, 10)}</td>                            
+                        </tr>
+                        <tr>    
+                            <td className='t1'>주문 수정일</td>                            
+                            <td className='t2'>{oModDate.substring(0, 10)}</td>
+                            <td className='t3'>결제 수정일</td>                        
+                            <td className='t4'>{pModDate.substring(0, 10)}</td>
+                        </tr>
+                        <tr>    
+                            <td className='t1'>구매번호</td>
+                            <td className='t2'>{no}</td>
+                            <td className='t3'>결제방법</td>
+                            <td className='t4'>{pmMethod}</td>                        
+                        </tr>    
+                        <tr>    
+                            <td className='t1'>구매수량</td>
+                            <td className='t2'>{oCount}</td>
+                            <td className='t3'>결제금액</td>
+                            <td className='t4'>{pmPrice.toLocaleString('ko-KR')}</td>                      
+                        </tr>
+                        <tr>                        
+                            <td className='t1'>상품단가</td>
+                            <td className='t2'>{oPrice.toLocaleString('ko-KR')}</td>                            
+                            <td className='t3'>합계금액</td>                                                        
+                            <td className='t4'>{oFinalPrice.toLocaleString('ko-KR')}</td>
+                            
+                        </tr>
+                        <tr>                            
+                            <td className='t1'>구입상품</td>
+                            <td colSpan='3' className='t5'>{PROD_NAME + ' ' + PROD_SPCS_NAME}</td>
+
+                        </tr>
+                        <tr>
+
+                            
+                            
+                        </tr>
+                        <tr>
+                            
+                            
+                        </tr>
+                        <tr>                        
+                            
+                            
+                        </tr>                        
+                        <tr>
+                            
+                            
+                        </tr>
+                        <tr>
+                            
+                            
+                        </tr>
+                        <tr>
+                            
+                            
+                            
+                        </tr>
+
+                    </table>
+                        
+                        <div className='btn-wrap'>
+                            <button type='button' className='btn sub half' onClick={(e) => refundApproveClick(order)}>환불 승인</button>
+                            <button type='button' className='btn sub half' onClick={(e) => refundRejectClick(no)}>승인 불가</button>                        
+                        </div>            
+                        </>
+                        :
+                        
+                        <tr><td>구매 상세 내역이 없습니다.</td></tr>
+                }                    
+            </div>
+        </div>        
     </>
     );
 };

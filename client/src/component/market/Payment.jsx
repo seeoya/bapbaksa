@@ -33,10 +33,14 @@ const Payment = () => {
     useEffect(() => {
         loginCheck();
         let fors = [];
+        let spcs = [];
         location.state.goToPay.map(item => {
             fors.push(item.I_NO);
         })
-        axios_paymentGetProd(fors);
+        location.state.goToPay.map(item => {
+            spcs.push(item.PROD_SPCS_CODE);
+        })
+        axios_paymentGetProd(fors,spcs);
         axios_getUserInfo();
     }, []);
 
@@ -93,7 +97,7 @@ const Payment = () => {
 
         setTotalPay(sum);
 
-    }
+    };
 
     const execDaumPostcode = () => {
         new window.daum.Postcode({
@@ -141,10 +145,12 @@ const Payment = () => {
         }
     }
 
-    const axios_paymentGetProd = async (i_no) => {
+    const axios_paymentGetProd = async (i_no, p_spcs_code) => {
         try {
             const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/paymentGetProd", {
                 'I_NO': i_no,
+                'PROD_YMD': location.state.goToPay[0].PROD_YMD,
+                'PROD_SPCS_CODE': p_spcs_code
             })
             setPayInfo(response.data);
         } catch (error) {
@@ -188,7 +194,7 @@ const Payment = () => {
 
                                 return (
                                     <div className="flex-item" key={idx}>
-                                        <Link to={`/market/view/${info.PROD_NO}_${info.PROD_SPCS_CODE}`}>
+                                        <Link to={`/market/view/${info.PROD_CODE}_${info.PROD_SPCS_CODE}`}>
                                             <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} alt="ingredient" />
                                             <span className="ingredient-title">{info.PROD_NAME}</span>
                                         </Link>

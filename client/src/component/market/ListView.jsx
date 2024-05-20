@@ -13,17 +13,23 @@ const ListView = () => {
     const [chartData, setChartData] = useState([]);
     const [viewData, setViewData] = useState([]);
     const [goToPay, setGoToPay] = useState([]);
+    const [pYmd, setPYmd] = useState(null); // 상태로 p_ymd 관리
 
     const [stock, setStock] = useState(0);
 
     const chartRef = useRef(null);
-
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (prodInfo) {
+            console.log("❤❤❤❤", prodInfo);
+            setPYmd(prodInfo.PROD_YMD); // p_ymd 값 설정
+        }
+    }, [prodInfo]);
 
     useEffect(() => {
-        setPaymentInfo()
-    }, [quantityInt]);
+        setPaymentInfo();
+    }, [quantityInt, pYmd]); // pYmd도 의존성 배열에 추가
 
     useEffect(() => {
         axios_getProdInfo();
@@ -102,7 +108,6 @@ const ListView = () => {
             chartRef.current.chart = chart;
         }
 
-        // 이전 차트가 존재하면 파기
         return () => {
             if (chartRef.current.chart) {
                 chartRef.current.chart.destroy();
@@ -111,13 +116,7 @@ const ListView = () => {
     }
 
     const goToMarketCartBtn = async () => {
-        let u_no = getToken('loginedUNo');
-        let i_no = prodInfo.PROD_NO;
-        let mc_count = quantityInt;
-
-        await axios_goToMarketCart(u_no, i_no, mc_count);
-        setQuantityInt(0);
-        navigate("/market/cart");
+        await getStock("MarketCart");
     }
 
     const handleCount = (type) => {
@@ -133,11 +132,13 @@ const ListView = () => {
     };
 
     const setPaymentInfo = () => {
+        if (!pYmd) return; // pYmd가 설정되지 않았으면 리턴
         let items = [];
-
         items.push({
             'I_NO': num,
-            'MC_COUNT': quantityInt
+            'MC_COUNT': quantityInt,
+            'PROD_SPCS_CODE': code,
+            'PROD_YMD': pYmd
         });
         setGoToPay(items);
     }
@@ -147,7 +148,7 @@ const ListView = () => {
             const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/postSelectedProduct", {
                 'PROD_NO': num,
                 'PROD_SPCS_CODE': code
-            })
+            });
 
             setProdInfo(response.data[0]);
             getStock();
@@ -156,17 +157,33 @@ const ListView = () => {
         }
     }
 
-    const getStock = async () => {
-        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
-            params: {
-                p_code: num,
-                ps_code: code
+    const getStock = async (type = "") => {
+        try {
+            const response = await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
+                params: {
+                    p_code: num,
+                    ps_code: code
+                }
+            });
+
+            setStock(response.data);
+
+            if (type === "MarketCart") {
+                let u_no = getToken('loginedUNo');
+                let i_no = prodInfo.PROD_CODE;
+                let mc_count = quantityInt;
+
+                if (response.data > 0) {
+                    await axios_goToMarketCart(u_no, i_no, mc_count);
+                    setQuantityInt(0);
+                    navigate("/market/cart");
+                } else {
+                    alert('품절된 상품입니다.');
+                }
             }
-        }).then((data) => {
-            setStock(data.data);
-        }).catch((err) => {
-            return { type: "error" };
-        });
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async function axiox_getChartData() {
@@ -189,12 +206,11 @@ const ListView = () => {
 
     async function axios_goToMarketCart(u_no, i_no, mc_count) {
         try {
-
-            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/goToMarketCart", {
+            await axios.post(process.env.REACT_APP_SERVER_URL + "/market/goToMarketCart", {
                 'U_NO': u_no,
                 'I_NO': i_no,
                 'MC_COUNT': mc_count
-            })
+            });
         } catch (error) {
             console.log(error)
         }

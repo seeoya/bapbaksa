@@ -10,10 +10,12 @@ const ShoppingCart = () => {
     const [temp, setTemp] = useState(false);
     const [goToPay, setGoToPay] = useState([]);
     const u_no = getToken('loginedUNo');
+    const [stockList, setStockList] = useState({});
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        getStock();
         loginCheck();
         axios_getCartInfo(u_no);
     }, []);
@@ -23,8 +25,21 @@ const ShoppingCart = () => {
     }, [temp]);
 
     useEffect(() => {
+        console.log("❤❤❤❤❤", cartInfo);
+    }, [cartInfo])
+
+    useEffect(() => {
         setPaymentInfo()
     }, [selectAll]);
+
+    const getStock = async () => {
+        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", { params: {} })
+            .then((data) => {
+                setStockList(data.data);
+            }).catch((err) => {
+                return { type: "error" };
+            });
+    }
 
     const handleCount = (type, index) => {
         const updatedCartInfo = [...cartInfo];
@@ -67,14 +82,14 @@ const ShoppingCart = () => {
     const setPaymentInfo = () => {
         let items = [];
         const checkedItems = cartInfo.filter(item => item.isSelected);
-
         checkedItems.map(item => {
             items.push({
                 'I_NO': item.i_no,
-                'MC_COUNT': item.mc_count
+                'PROD_SPCS_CODE': item.productInfo.PROD_SPCS_CODE,
+                'MC_COUNT': item.mc_count,
+                'PROD_YMD': item.productInfo.PROD_YMD
             });
         });
-        console.log("❤❤❤", items);
         setGoToPay(items);
     }
 
@@ -110,13 +125,12 @@ const ShoppingCart = () => {
 
     const loginCheck = () => {
 
-        if(u_no === null) {
+        if (u_no === null) {
             alert('로그인이 필요한 서비스입니다.');
             navigate('/user/signin')
-        } 
+        }
 
     }
-
 
     async function axios_deleteCart(mcNos) {
         try {
@@ -146,6 +160,21 @@ const ShoppingCart = () => {
         }
     }
 
+    // const getStock = async () => {
+    //     await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
+    //         params: {
+    //             p_code: num, // PROD_CODE
+    //             ps_code: code // PROD_ISBN_CODE
+    //         }
+    //     }).then((data) => {
+
+    //         setStock(data.data);
+    //         return data.data;
+    //     }).catch((err) => {
+    //         return { type: "error" };
+    //     });
+    // }
+
     return (
         <div id="shopping_cart_wrap" className='content-wrap'>
             <h2 className='title'>장바구니</h2>
@@ -164,44 +193,57 @@ const ShoppingCart = () => {
                         {cartInfo.map((item, index) => (
                             <div key={index} className='ingredient-view-wrap'>
                                 <div className="ingredient-img-wrap">
-                                    <input
-                                        type="checkbox"
-                                        checked={item.isSelected}
-                                        onChange={() => handleItemSelect(index)}
-                                    />
+
+                                    {
+                                        stockList[item.i_no][item.productInfo.PROD_SPCS_CODE] > 0 ?
+                                            <input
+                                                type="checkbox"
+                                                checked={item.isSelected}
+                                                onChange={() => handleItemSelect(index)}
+                                            />
+                                            : null
+                                    }
+
                                     <Link to={`/market/view/${item.i_no}_${item.productInfo.PROD_SPCS_CODE}`}>
                                         <img className="ingredient-img" src={`/imgs/product/${item.productInfo.PROD_IMG}`} alt="ingredient" />
                                     </Link>
                                     <Link to={`/market/view/${item.i_no}_${item.productInfo.PROD_SPCS_CODE}`}>
                                         <div className="ingredient-title-wrap">
-                                            <span className="ingredient-title">{item.productInfo.PROD_NAME}</span>
+                                            <span className="ingredient-tSitle">{item.productInfo.PROD_NAME}</span>
                                             <span className="ingredient-sub-title">{item.productInfo.PROD_SPCS_NAME}</span>
                                         </div>
                                     </Link>
                                 </div>
-                                <div className="ingredient-info-wrap">
-                                    <div className="ingredient-top-wrap">
-                                        <span className="ingredient-unit">{item.productInfo.DSBN_STEP_ACTO_WT + item.productInfo.DSBN_STEP_ACTO_UNIT_NM}</span>
-                                        <span className="ingredient-price">{item.productInfo.PROD_AVRG_PRCE.toLocaleString()}원</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="ingredient-middle-wrap">
-                                        <input type="button" onClick={() => handleCount("minus", index)} value="-" />
-                                        <input
-                                            type="number"
-                                            value={item.mc_count}
-                                            onChange={(event) => handleInputChange(event, index)}
-                                        />
-                                        <input type="button" onClick={() => handleCount("plus", index)} value="+" />
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="ingredient-bottom-wrap">
-                                        <span className="ingredient-info">총액 : </span>
-                                        <span className="ingredient-price">{(item.productInfo.PROD_AVRG_PRCE * item.mc_count).toLocaleString()}원</span>
-                                    </div>
-                                </div>
+                                {
+
+                                    stockList[item.i_no][item.productInfo.PROD_SPCS_CODE] > 0 ?
+                                        <>
+                                            <div className="ingredient-info-wrap">
+                                                <div className="ingredient-top-wrap">
+                                                    <span className="ingredient-unit">{item.productInfo.DSBN_STEP_ACTO_WT + item.productInfo.DSBN_STEP_ACTO_UNIT_NM}</span>
+                                                    <span className="ingredient-price">{item.productInfo.PROD_AVRG_PRCE.toLocaleString()}원</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="ingredient-middle-wrap">
+                                                    <input type="button" onClick={() => handleCount("minus", index)} value="-" />
+                                                    <input
+                                                        type="number"
+                                                        value={item.mc_count}
+                                                        onChange={(event) => handleInputChange(event, index)}
+                                                    />
+                                                    <input type="button" onClick={() => handleCount("plus", index)} value="+" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="ingredient-bottom-wrap">
+                                                    <span className="ingredient-info">총액 : </span>
+                                                    <span className="ingredient-price">{(item.productInfo.PROD_AVRG_PRCE * item.mc_count).toLocaleString()}원</span>
+                                                </div>
+                                            </div>
+                                        </>
+                                        : <div>품절 상품입니다.</div>
+                                }
                             </div>
                         ))}
                         <div className="cart-payment-btn">

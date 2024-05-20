@@ -16,8 +16,8 @@ const RecipeView = () => {
 
     const [recipe, setRecipe] = useState({});
     const [isLike, setIsLike] = useState(false);
-
     const [isLoading, setIsLoading] = useState(true);
+    const [recipeNo, setRecipeNo] = useState(0);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -36,20 +36,21 @@ const RecipeView = () => {
         }
     }, [recipeList, url_params]);
 
-    const initIsLike = async () => {
+    const initIsLike = async (urlParams) => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/mypage/check_like_recipe", {
             params: {
                 u_no: getToken("loginedUNo"),
-                rf_no: url_params
+                rf_no: urlParams
             }
         }).then((data) => {
-            console.log("////", data.data);
-            if (data.data?.length > 0) {
+            if (data.data > 0) {
                 setIsLike(true);
+            } else {
+                setIsLike(false);
             }
         }).finally(() => {
             setIsLoading(false);
-        })
+        });
     }
 
     const likeBtnClickEvent = async () => {

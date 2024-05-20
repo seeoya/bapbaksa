@@ -4,11 +4,15 @@ import { AllFridgeQuery, MyFridgeQuery } from '../../query/fridgeQuerys';
 import { AllRecipeQuery } from '../../query/recipeQuerys';
 import { initIngreDivineAction } from '../../redux/actions/fridge_action';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 import RecipeListFilter from './RecipeListFilter';
 import RecipeListItem from './RecipeListItem';
 
 const RecipeList = () => {
     const dispatch = useDispatch();
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [isFilterLoading, setIsFilterLoading] = useState(true);
 
     // 재료
     const { data: myFridgeList, isLoading: myFridgeIsLoading, isError: myFridgeIsError } = MyFridgeQuery();
@@ -37,30 +41,38 @@ const RecipeList = () => {
     }, []);
 
     useEffect(() => {
-        initIngreDivine();
+        setIsLoading(true);
+        if (allFridgeList && Object?.keys(allFridgeList)?.length > 0 && myFridgeList) {
+            initIngreDivine();
+        }
     }, [allFridgeList, myFridgeList]);
+
+    useEffect(() => {
+        setIsLoading(false);
+    }, [filteredRecipeList]);
 
     useEffect(() => {
         filterRecipe();
     }, [recipeList]);
 
     useEffect(() => {
+        setIsFilterLoading(true);
         filterRecipe();
         setRecipeListViewCount(20);
     }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch]);
 
     useEffect(() => {
+        setIsFilterLoading(true);
         filteredRecipeCount > recipeListViewCount ? setMoreBtnState(true) : setMoreBtnState(false);
+        setIsFilterLoading(false);
     }, [filteredRecipeCount, recipeListViewCount]);
 
     const initIngreDivine = () => {
-        if (allFridgeList && myFridgeList) {
-            dispatch(initIngreDivineAction(allFridgeList, myFridgeList));
-        }
+        dispatch(initIngreDivineAction(allFridgeList, myFridgeList));
     }
 
     const filterRecipe = async () => {
-        console.log("recipe filter");
+        setIsFilterLoading(true);
 
         if (recipeList) {
             let keys = Object.keys(recipeList);
@@ -166,17 +178,22 @@ const RecipeList = () => {
             setFilteredRecipeList(tmp);
             setFilteredRecipeCount(tmp.length);
         }
+        setIsFilterLoading(false);
     }
 
     const moreBtnClickEvent = () => {
-        console.log('more');
-
+        setIsFilterLoading(true);
         setRecipeListViewCount((prev) => prev + 20);
     }
 
     return (
         <>
+            {isLoading || isFilterLoading ? <Loading /> : null}
+
+
             <h2 className='title'>
+                {isLoading ? "로딩중" : ""} {isFilterLoading ? "필터로딩중" : ""}
+
                 {
                     recipeSearch ?
                         `"${recipeSearch}" 검색 결과 ${filteredRecipeCount} 건`
@@ -189,7 +206,7 @@ const RecipeList = () => {
                     activeIngreList={activeIngreList} activeRegionList={activeRegionList} activeCateList={activeCateList} activeDifficultList={activeDifficultList}
                     setActiveIngreList={setActiveIngreList} setActiveRegionList={setActiveRegionList} setActiveCateList={setActiveCateList} setActiveDifficultList={setActiveDifficultList}
                     setSortState={setSortState} filterInclude={filterInclude} setFilterInclude={setFilterInclude}
-                    filteredRecipeCount={filteredRecipeCount}
+                    filteredRecipeCount={filteredRecipeCount} setIsFilterLoading={setIsFilterLoading}
                 />
 
                 <div className='recipe-list'>

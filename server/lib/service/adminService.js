@@ -109,7 +109,7 @@ const adminService = {
                                             fs.rmSync(
                                                 `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`,
                                                 { recursive: true, force: true },
-                                                (error) => { }
+                                                (error) => {}
                                             );
 
                                             console.log(`${post.u_id} directory deleted!`);
@@ -164,7 +164,7 @@ const adminService = {
                     res.json(quests);
                 }
             }
-        )
+        );
     },
 
     answer_question: (req, res) => {
@@ -183,7 +183,7 @@ const adminService = {
                     res.json(answer);
                 }
             }
-        )
+        );
     },
 
     get_all_orders: (req, res) => {
@@ -209,26 +209,145 @@ const adminService = {
         );
     },
     get_order: (req, res) => {
+        DB.query("SELECT * FROM TBL_ORDER WHERE o_id = ?", [req.query.o_id], (error, result) => {
+            if (error) {
+                console.log("error", error);
+                return { status: 400 };
+            } else {
+                let tmpList = {};
+
+                result.map((el) => {
+                    tmpList[el.o_no] = el;
+                });
+                res.json(tmpList);
+            }
+        });
+    },
+    getStock: (req, res) => {
+        if (req.params.p_code) {
+            DB.query(
+                "SELECT * FROM TBL_PROD_STOCK WHERE p_code = ? AND ps_code = ?",
+                [req.params.p_code, req.params.ps_code ?? 0],
+                (error, result) => {
+                    if (error) {
+                        console.log("error", error);
+                        return { status: 400 };
+                    } else {
+                        res.json(result);
+                    }
+                }
+            );
+        } else {
+            DB.query("SELECT * FROM TBL_PROD_STOCK", [], (error, result) => {
+                if (error) {
+                    console.log("error", error);
+                    return { status: 400 };
+                } else {
+                    let tmp = {};
+
+                    result.map((el) => {
+                        if (!tmp[el.p_code]) {
+                            tmp[el.p_code] = {};
+                        }
+
+                        tmp[el.p_code][el.ps_code] = el.ps_count;
+                    });
+
+                    res.json(tmp);
+                }
+            });
+        }
+    },
+    insertStock: (req, res) => {
+        if (req.body.list) {
+            DB.query("TRUNCATE TBL_PROD_STOCK", [], (error, result) => {
+                if (error) {
+                    console.log("error", error);
+                    return { status: 400 };
+                } else {
+                    let list = req.body.list;
+                    let qs = "INSERT INTO TBL_PROD_STOCK(p_code, ps_code, ps_count) VALUES ";
+
+                    list.map((el, idx) => {
+                        if (idx != 0) {
+                            qs += ", ";
+                        }
+                        qs += `(${el.p_code}, ${el.ps_code}, 100)`;
+                    });
+
+                    DB.query(qs, [], (error, result) => {
+                        if (error) {
+                            console.log("error", error);
+                            return { status: 400 };
+                        } else {
+                            res.json(result);
+                        }
+                    });
+                }
+            });
+        } else {
+            DB.query(
+                "INSERT INTO TBL_PROD_STOCK(p_code, ps_code) VALUES(?, ?)",
+                [req.body.p_code, req.body.ps_code],
+                (error, result) => {
+                    if (error) {
+                        console.log("error", error);
+                        return { status: 400 };
+                    } else {
+                        res.json(result);
+                    }
+                }
+            );
+        }
+    },
+    putStock: (req, res) => {
+        let p_code = req.body.p_code;
+        let ps_code = req.body.ps_code;
+        let ps_count = req.body.ps_count;
+
+        console.log(p_code, ps_code, ps_count);
+
         DB.query(
-            "SELECT * FROM TBL_ORDER WHERE o_id = ?",
-            [req.query.o_id],
+            "SELECT * FROM TBL_PROD_STOCK WHERE p_code = ? AND ps_code = ?",
+            [p_code, ps_code],
             (error, result) => {
                 if (error) {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
+                    if (result.length > 0) {
+                        let countSum = parseInt(result[0].ps_count) + parseInt(ps_count);
 
-                    let tmpList = {};
-
-                    result.map((el) => {
-                        tmpList[el.o_no] = el;
-                    });
-                    res.json(tmpList);
+                        DB.query(
+                            "UPDATE TBL_PROD_STOCK SET ps_count = ? WHERE p_code = ? AND ps_code = ?",
+                            [countSum, p_code, ps_code],
+                            (error, updateResult) => {
+                                if (error) {
+                                    console.log("error", error);
+                                    return { status: 400 };
+                                } else {
+                                    res.json(updateResult);
+                                }
+                            }
+                        );
+                    } else {
+                        DB.query(
+                            "INSERT INTO TBL_PROD_STOCK(p_code, ps_code, ps_count) VALUES(?, ?, ?)",
+                            [p_code, ps_code, ps_count],
+                            (error, insertResult) => {
+                                if (error) {
+                                    console.log("error", error);
+                                    return { status: 400 };
+                                } else {
+                                    res.json(insertResult);
+                                }
+                            }
+                        );
+                    }
                 }
             }
         );
     },
-    insert_stock: (req, res) => {},
 };
 
 module.exports = adminService;

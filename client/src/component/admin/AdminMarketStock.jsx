@@ -1,39 +1,67 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
 
 const AdminMarketStock = () => {
     const { data: newProductList, isLoading: newProductIsLoading, isError: newProductIsError } = NewProductQuery();
 
-    useEffect(() => {
+    const [stockList, setStockList] = useState({});
 
+    useEffect(() => {
+        getStock();
     }, []);
 
-    useEffect(() => {
-        if (newProductList) {
-            console.log(newProductList)
-        }
-    }, [newProductList]);
-
     const getStock = async () => {
-        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
-            params: {
+        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", { params: {} })
+            .then((data) => {
+                setStockList(data.data);
+            }).catch((err) => {
+                return { type: "error" };
+            });
+    }
 
-            }
+    const changeStock = async (e) => {
+        let item = e.target;
+
+        let p_code = item.dataset.pCode,
+            ps_code = item.dataset.psCode,
+            ps_count = item.previousSibling.value;
+
+        await axios.put(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
+            p_code: p_code,
+            ps_code: ps_code,
+            ps_count: ps_count
         }).then((data) => {
-
+            if (data.data.affectedRows > 0) {
+                getStock();
+                item.previousSibling.value = 0;
+            } else {
+                alert("재고 변경에 실패했습니다.");
+            }
         }).catch((err) => {
             return { type: "error" };
         });
     }
 
-    const insertStock = async () => {
+    const initCount = () => {
+        if (newProductList) {
+            let tmp = [];
+            newProductList.map((el) => {
+                tmp.push({ p_code: el.PROD_CODE, ps_code: el.PROD_SPCS_CODE });
+            })
+
+            insertAllStock(tmp)
+        } else {
+            alert("상품 목록이 없습니다.");
+        }
+    }
+
+    const insertAllStock = async (list) => {
         await axios.post(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
-            body: {
-
-            }
+            list: list
         }).then((data) => {
-
+            getStock();
         }).catch((err) => {
             return { type: "error" };
         });
@@ -43,44 +71,39 @@ const AdminMarketStock = () => {
         <>
             <div className='title'>재고 목록</div>
 
-            <button type='button' onClick={insertStock}>
-                재고 추가
-            </button>
-
             <div className='content'>
+                <div className="admin-btn-wrap">
+                    <button type='button' onClick={initCount} className='btn main'>재고 초기화(전체 100으로 변경)</button>
+                </div>
+
                 <table>
                     <tr>
-                        <th className='u_no'>번호</th>
-                        <th className='u_id'>아이디</th>
-                        <th className='u_mail'>이메일</th>
-                        <th className='u_phone'>전화번호</th>
-                        <th className='u_status'>상태</th>
-                        <th className='u_reg_date'>가입일</th>
-                        <th className='u_more'>상세보기</th>
+                        <th className='p-code'>상품 코드</th>
+                        <th className='ps-code'>상품 상세 코드</th>
+                        <th className=''>상품명</th>
+                        <th className='ps-count'>재고</th>
+                        <th className='p-btn-wrap'>재고 수정</th>
                     </tr>
 
                     {
-                        // userList ?
-                        //     Object.keys(userList).map((el) => {
-                        //         return <tr>
-                        //             <td className='u_no'>{userList[el].u_no}</td>
-                        //             <td className='u_id'>{userList[el].u_id}</td>
-                        //             <td className='u_mail'>{userList[el].u_mail}</td>
-                        //             <td className='u_phone'>{userList[el].u_phone}</td>
-                        //             <td className='u_status'>
-                        //                 {
-                        //                     userList[el].u_status == 0 ? "탈퇴" :
-                        //                         userList[el].u_status == 1 ? "활동" :
-                        //                             userList[el].u_status == 2 ? "정지" : "관리자"
-                        //                 }
-                        //             </td>
-                        //             <td className='u_reg_date'>{userList[el].u_reg_date.substr(0, 10)}</td>
-                        //             <td className='u_more'>
-                        //                 <Link to={"/admin/user/" + userList[el].u_no}>상세보기</Link>
-                        //             </td>
-                        //         </tr>
-                        //     })
-                        //     : <tr><td>회원이 없습니다.</td></tr>
+                        newProductList?.length > 0 && Object.keys(stockList)?.length > 0 ?
+                            newProductList.map((el) => {
+                                return <tr>
+                                    <td className='p-code'>{el.PROD_CODE}</td>
+                                    <td className='ps-code'>{el.PROD_SPCS_CODE}</td>
+                                    <td className=''>
+                                        <Link to={`/market/view/${el.PROD_CODE}_${el.PROD_SPCS_CODE}`}>
+                                            {el.PROD_SPCS_NAME}
+                                        </Link>
+                                    </td>
+                                    <td className='ps-count'>{stockList[el.PROD_CODE][el.PROD_SPCS_CODE]}</td>
+                                    <td className='p-btn-wrap'>
+                                        <input type="number" className='input' defaultValue={0} />
+                                        <button type='button' className='btn sub' data-p-code={el.PROD_CODE} data-ps-code={el.PROD_SPCS_CODE} onClick={(e) => changeStock(e)}>수정</button>
+                                    </td>
+                                </tr>
+                            })
+                            : <tr><td colSpan={5}>아이템이 없습니다.</td></tr>
                     }
                 </table>
             </div>

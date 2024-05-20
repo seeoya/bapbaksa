@@ -224,16 +224,15 @@ const adminService = {
         });
     },
     getStock: (req, res) => {
-        if (req.params.p_code) {
+        if (req.query.p_code) {
             DB.query(
-                "SELECT * FROM TBL_PROD_STOCK WHERE p_code = ? AND ps_code = ?",
-                [req.params.p_code, req.params.ps_code ?? 0],
+                "SELECT ps_count FROM TBL_PROD_STOCK WHERE p_code = ? AND ps_code = ?",
+                [req.query.p_code, req.query.ps_code],
                 (error, result) => {
                     if (error) {
-                        console.log("error", error);
                         return { status: 400 };
                     } else {
-                        res.json(result);
+                        res.json(result[0].ps_count);
                     }
                 }
             );

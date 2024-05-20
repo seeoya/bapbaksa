@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from 'apexcharts';
 import axios from "axios";
 import { setTitle } from "../../util/setTitle";
+import Loading from "../include/Loading";
 
 const AdminChart = () => {
 
@@ -13,6 +14,8 @@ const AdminChart = () => {
 
     const [lastCtegoryDate, setLastCtegoryDate] = useState([]);
     const [lastCtegoryViewData, setLastCtegoryViewData] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const monthChartRef = useRef(null);
     const categoryChartRef = useRef(null);
@@ -188,6 +191,7 @@ const AdminChart = () => {
                 y: item.total_final_price
             }));
             setMonthDate(chartInfo);
+            setIsLoading(false);
         } catch (error) {
             console.log('error : ', error);
         }
@@ -202,6 +206,7 @@ const AdminChart = () => {
                 y: item.total_final_price
             }));
             setCurCtegoryDate(curChartInfo);
+            setIsLoading(false);
         } catch (error) {
             console.log('error : ', error);
         }
@@ -217,6 +222,7 @@ const AdminChart = () => {
                 y: item.total_final_price
             }));
             setLastCtegoryDate(lastChartInfo);
+            setIsLoading(false);
         } catch (error) {
             console.log('error : ', error);
         }
@@ -225,8 +231,8 @@ const AdminChart = () => {
 
     return (
         <div className="admin-chart-wrap">
-            <div ref={monthChartRef}></div>
-            <div ref={categoryChartRef}></div>
+            {isLoading ? <Loading /> : <div ref={monthChartRef}></div>}
+            {isLoading ? <Loading /> : <div ref={categoryChartRef}></div>}
         </div>
     )
 }

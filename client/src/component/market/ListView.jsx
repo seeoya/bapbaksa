@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getToken } from '../../storage/loginedToken';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const ListView = () => {
     const { no } = useParams();
@@ -16,6 +17,8 @@ const ListView = () => {
     const [goToPay, setGoToPay] = useState([]);
 
     const [stock, setStock] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const chartRef = useRef(null);
 
@@ -155,6 +158,7 @@ const ListView = () => {
 
             setProdInfo(response.data[0]);
             getStock();
+            setIsLoading(false);
         } catch (error) {
             console.log(error)
         }
@@ -170,7 +174,9 @@ const ListView = () => {
             setStock(data.data);
         }).catch((err) => {
             return { type: "error" };
-        });
+        }).finally(( )=>{
+            setIsLoading(false);
+        })
     }
 
     async function axiox_getChartData() {
@@ -186,6 +192,7 @@ const ListView = () => {
                 y: item.PROD_AVRG_PRCE
             }));
             setChartData(chartInfo);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -199,13 +206,14 @@ const ListView = () => {
                 'I_NO': i_no,
                 'MC_COUNT': mc_count
             })
+            setIsLoading(false);
         } catch (error) {
             console.log(error)
         }
     }
 
-    return (
-        <div className='content-wrap' id="market_list_view">
+    return (<>
+    {isLoading ? <Loading /> : <div className='content-wrap' id="market_list_view">
             <h2 className='title'>품목 상세</h2>
             <div className='content'>
 
@@ -261,7 +269,9 @@ const ListView = () => {
                     <div id="price-chart-wrap" ref={chartRef}></div>
                 </div>
             </div>
-        </div>
+        </div>}
+    </>
+        
     );
 };
 

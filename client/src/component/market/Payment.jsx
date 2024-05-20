@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
-import { CheckoutPage } from '../payment/Checkout';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
+import { CheckoutPage } from '../payment/Checkout';
 
 const Payment = () => {
     const [postcode, setPostcode] = useState('');
@@ -25,6 +26,8 @@ const Payment = () => {
     const [p_no, setPNo] = useState([]);
 
     const [orderNo, setOrderNo] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     let u_id = getToken('loginedUId');
     let u_no = getToken('loginedUNo');
@@ -67,16 +70,13 @@ const Payment = () => {
     }, [postcode]);
 
     const loginCheck = () => {
-
-        if(u_no === null) {
+        if (u_no === null) {
             alert('로그인이 필요한 서비스입니다.');
             navigate('/user/signin')
-        } 
-
+        }
     }
 
     const payBtnClick = async () => {
-
         await axios_insertPayment();
         setIsPayment(true);
     };
@@ -141,6 +141,7 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     const axios_paymentGetProd = async (i_no) => {
@@ -152,6 +153,7 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     const axios_getUserInfo = async () => {
@@ -165,6 +167,11 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
+    }
+
+    const locationBack = () => {
+        navigate(-1);
     }
 
     return (
@@ -178,8 +185,7 @@ const Payment = () => {
                     </div>
                     : null
             }
-
-            <div className='content-wrap' id="payment_wrap">
+            {isLoading ? <Loading /> : <div className='content-wrap' id="payment_wrap">
                 <h2 className='title'>결제창</h2>
                 <div className='content flex-wrap'>
                     <div className="payment-ingredient-wrap">
@@ -229,12 +235,13 @@ const Payment = () => {
                             <span className="ingredient-title">총 가격 : {(totalPay + 3000).toLocaleString()}원</span>
                         </div>
                         <div className="payment-btn">
-                            <a href="#none">뒤로 가기</a>
+                            <button type='button' onClick={locationBack}>뒤로 가기</button>
                             <button type="button" onClick={payBtnClick}>결제</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
+
         </>
     );
 }

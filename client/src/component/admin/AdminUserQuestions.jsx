@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const AdminUserQuestions = () => {
 
@@ -21,6 +22,8 @@ const AdminUserQuestions = () => {
             setLoadQuest(data.data);
         }).catch((error) => {
             return { type: "error", error }
+        }).finally(( )=>{
+            setIsLoading(false);
         })
     }
 
@@ -35,7 +38,7 @@ const AdminUserQuestions = () => {
                 <div>답변 완료일</div>
                 <div>답변 등록</div>
             </div>
-            {
+            {isLoading ? <Loading /> : <>{
                 loadQuest.length > 0 
                 ? (Object.keys(loadQuest).map((el) => (
                     <div key={loadQuest[el].ques_no} className='admin-question-detail'>
@@ -54,7 +57,7 @@ const AdminUserQuestions = () => {
                     </div>
                 )))
                 : <div>작성된 문의가 없습니다.</div>
-            }
+            }</>}
         </div>
     );
 };

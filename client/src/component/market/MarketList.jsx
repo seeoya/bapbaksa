@@ -135,7 +135,7 @@ return (
         <ul>
             {displayedList?.map((item, index) => (
             <li key={index}>
-                <Link to={`/market/view/${item.PROD_NO}_${item.PROD_SPCS_CODE}`}>
+                <Link to={`/market/view/${item.PROD_CODE}_${item.PROD_SPCS_CODE}`}>
                 <div>
                     <img className="product-item-img" src={`/imgs/product/${item.PROD_IMG}`} alt={item.PROD_NAME} />
                     <p className="product-item-name">{`${item.PROD_NAME} (${item.PROD_SPCS_NAME})`}</p>

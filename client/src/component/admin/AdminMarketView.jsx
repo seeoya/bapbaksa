@@ -64,11 +64,10 @@ const AdminMarketView = () => {
     }
 
     return (
-        <>
-        <div id='order-detail'>
+        <>      
             <div className='title'>구매 상세 내역</div>
 
-                <div className='content'> 
+                <div className='content' id='order-detail'> 
                     
                         
                     <div className='order-list-link'>
@@ -77,82 +76,75 @@ const AdminMarketView = () => {
                     
                     <table>
                         <tr>
-                            <td className='id'>주문번호</td>
-                            <td className='no'>상태</td>
-                        </tr>
-                        <tr>    
-                            <td className='id'>{oId}</td>
-                            <td className='no'>
-                                {
-                                    oSNo === -1 ? "결제 대기중" :
-                                        oSNo === 0 ? "배송 준비중" :
-                                            oSNo === 1 ? "배송중" :
-                                                oSNo === 2 ? "환불 요청" :
-                                                    oSNo === 3 ? "환불 완료" :
-                                                        oSNo === 4 ? "구매 취소" :
-                                                            oSNo === 5 ? "구매 확정" :
-                                                                oSNo === 6 ? "배송 완료" : ""
-
-                                }
-                            </td>
+                            <td className='t1'>회원번호</td>                            
+                            <td colSpan='2' className='t2'>주문번호</td>                            
+                            <td colSpan='2' className='t4'>주문일</td>                            
+                            <td colSpan='2' className='t6'>주문 수정일</td>
+                            
                         </tr>
                         <tr>
-                            <td className='date'>주문일</td>                            
-                            <td className='date'>주문 수정일</td>
-                        </tr>
-                        <tr>    
-                            <td className='date'>{oRegDate.substring(0, 10)}</td>
-                            <td className='date'>{oModDate.substring(0, 10)}</td>
-                        </tr>
-                        
-                        <tr>
-                            <td className='no'>회원번호</td>                            
-                            <td className='no'>결제번호</td>                            
+                            <td className='t1'>{uNo}</td>                            
+                            <td colSpan='2' className='t2'>{oId}</td>                            
+                            <td colSpan='2' className='t4'>{oRegDate.substring(0, 10)}</td>
+                            <td colSpan='2' className='t6'>{oModDate.substring(0, 10)}</td>                       
+                            
                         </tr>
                         <tr>
-                            <td className='no'>{uNo}</td>                            
-                            <td className='no'>{pmNo}</td>
+                            <td className='t1'>결제 번호</td>                                              
+                            <td className='t2'>결제금액</td>
+                            <td className='t4'>결제방법</td>
+                            <td colSpan='2' className='t6'>결제일</td>                            
+                            <td colSpan='2' className='t7'>결제 수정일</td>                
+                            
                         </tr>
                         <tr>
-                            <td className='price'>결제금액</td>
-                            <td className='method'>결제방법</td>
+                            <td className='t1'>{pmNo}</td>                                
+                            <td className='t2'>{Number(pmPrice).toLocaleString('ko-KR')}</td>
+                            <td className='t4'>{pmMethod}</td>                            
+                            <td colSpan='2' className='t6'>{pRegDate.substring(0, 10)}</td>
+                            <td colSpan='2' className='t7'>{pModDate.substring(0, 10)}</td>                        
                         </tr>
-                        <tr>    
-                            <td className='price'>{Number(pmPrice).toLocaleString('ko-KR')}</td>
-                            <td className='method'>{pmMethod}</td>
-                        </tr>   
-
-                        <tr>                        
-                            <td className='date'>결제일</td>                            
-                            <td className='date'>결제 수정일</td>                
+                        <tr>                           
+                            <td className='t1'>우편번호</td>                            
+                            <td colSpan='6' className='t2'>주소</td>                            
+                        </tr>                                                   
+                        <tr>
+                            <td className='t1'>{pZipcode}</td>
+                            <td colSpan='6' className='t2'>{pFirstAddr + ' ' + pSecondAddr}</td>
                         </tr>
-                        <tr>            
-                            <td className='date'>{pRegDate.substring(0, 10)}</td>
-                            <td className='date'>{pModDate.substring(0, 10)}</td>
-                        </tr>
-                        <tr>                          
-                            <td colSpan='2' className='p_zip_code'>우편번호 | 주소</td>                            
-                        </tr>
-                        <tr>                               
-                            <td colSpan='2' className='p_zip_code'>{pZipcode} | {pFirstAddr + ' ' + pSecondAddr}</td>
-                        </tr>
+                    </table>
+                    <table>
                         <tr className='order-no-list'>
-                                <th>구매번호</th>
-                                <th>상품명</th>
-                                <th>구매수량</th>
-                                <th>단가</th>
-                                <th>합계</th>
+                                <th className='no'>구매번호</th>
+                                <th className='name' colSpan='2'>상품명</th>
+                                <th className='no'>구매수량</th>
+                                <th className='price'>단가</th>
+                                <th className='price'>합계</th>
+                                <th className='o_s_no'>상태</th>          
                         </tr>
 
 
                         {orderList ?
                             Object.keys(orderList).map((el) => {
-                                return <tr>
+                                return <tr className='order-no-list'>
                                     <td className='no'>{orderList[el].o_no}</td>
-                                    <td className='name'>{orderList[el].PROD_NAME + ' ' + orderList[el].PROD_SPCS_NAME}</td>                                                           
+                                    <td colSpan='2' className='name'>{orderList[el].PROD_NAME + ' ' + orderList[el].PROD_SPCS_NAME}</td>                                                           
                                     <td className='no'>{orderList[el].o_count}</td>
                                     <td className='price'>{Number(orderList[el].o_price).toLocaleString('ko-KR')}</td>
                                     <td className='price'>{Number(orderList[el].o_final_price).toLocaleString('ko-KR')}</td>
+                                    <td className='o_s_no'>
+                                    {
+                                        orderList[el].o_s_no === -1 ? "결제 대기중" :
+                                        orderList[el].o_s_no === 0 ? "배송 준비중" :
+                                        orderList[el].o_s_no === 1 ? "배송중" :
+                                        orderList[el].o_s_no === 2 ? "환불 요청" :
+                                        orderList[el].o_s_no === 3 ? "환불 완료" :
+                                        orderList[el].o_s_no === 4 ? "구매 취소" :
+                                        orderList[el].o_s_no === 5 ? "구매 확정" :
+                                        orderList[el].o_s_no === 6 ? "배송 완료" : ""
+
+                                    }
+                                    </td>
                                 </tr>
                             })
                             
@@ -163,7 +155,7 @@ const AdminMarketView = () => {
                         }
                     </table>
                 </div>         
-            </div>
+            
         </>                
     );
 };

@@ -29,17 +29,17 @@ const AdminMarket = () => {
         <>
         
         <div className='title'>구매 내역</div>
-            <div className='content'>
+            <div className='content' id='order-list'>
 
                 <table>
                     <tr>                        
-                        <th className='o_reg_date'>주문일</th>
-                        <th className='o_id'>주문번호</th>                        
-                        <th className='pm_no'>결제번호</th>
-                        <th className='u_no'>회원번호</th>
+                        <th className='date'>주문일</th>
+                        <th className='id'>주문번호</th>                        
+                        <th className='no'>결제번호</th>
+                        <th className='no'>회원번호</th>
                         <th className='o_s_no'>상태</th>                         
-                        <th className='o_mod_date'>수정일</th>
-                        <th className='o_more'>상세보기</th>
+                        <th className='date'>수정일</th>
+                        <th className='u_more'>상세보기</th>
                     </tr>
 
                     
@@ -47,10 +47,10 @@ const AdminMarket = () => {
                         orderList ?
                             Object.keys(orderList).map((el) => {
                                 return <tr>                                    
-                                    <td className='o_reg_date'>{orderList[el].o_reg_date.substr(0, 10)}</td>
-                                    <td className='o_id'>{orderList[el].o_id}</td>
-                                    <td className='pm_no'>{orderList[el].pm_no}</td>
-                                    <td className='u_no'>{orderList[el].u_no}</td>
+                                    <td className='date'>{orderList[el].o_reg_date.substr(0, 10)}</td>
+                                    <td className='id'>{orderList[el].o_id}</td>
+                                    <td className='no'>{orderList[el].pm_no}</td>
+                                    <td className='no'>{orderList[el].u_no}</td>
                                     <td className='o_s_no'>
                                         {
                                             orderList[el].o_s_no === -1 ? "결제 대기중" : 
@@ -65,7 +65,7 @@ const AdminMarket = () => {
                                         }
                                     </td>                                                                       
                                     
-                                    <td className='o_mod_date'>{orderList[el].o_mod_date.substr(0, 10)}</td>
+                                    <td className='date'>{orderList[el].o_mod_date.substr(0, 10)}</td>
                                     <td className='u_more'>
                                         <Link to={"/admin/market/" + orderList[el].o_id}>상세보기</Link>
                                     </td>
@@ -77,6 +77,7 @@ const AdminMarket = () => {
 
                 </table>
             </div>
+           
         </>
     );
 };

@@ -435,3 +435,173 @@
     padding: 5px 7px;
     border-radius: 0;
 }
+
+/*구매내역*/
+#order-list table .date {
+    width: 150px;
+    text-align: center;
+}
+
+#order-list table .id {
+    width: 180px;
+    text-align: center;
+}
+
+#order-list table .no {
+    width: 100px;
+    text-align: center;
+}
+
+#order-list table .o_s_no {
+    width: 120px;
+    text-align: center;
+}
+
+#order-detail {
+    width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;        
+    gap: 15px;
+}
+
+#order-detail .order-list-link{    
+    display: flex;     
+    justify-content: end;
+    
+    
+}
+#order-detail .order-list-link .link{   
+    color: var(--admin-main-color);
+    text-decoration: none;    
+    font-weight: bold;   
+    font-size: 1.6rem;
+    margin: 0 5px;    
+}
+
+#order-detail table .t1{
+    width: 100px;
+    text-align: center;
+}
+#order-detail table .t2{
+    width: 120px;
+    text-align: center;
+}
+#order-detail table .t4{
+    width: 120px;
+    text-align: center;
+}
+#order-detail table .t6{
+    width: 120px;
+    text-align: center;
+}
+#order-detail table .t7{
+    width: 120px;
+    text-align: center;
+}
+
+#order-detail table .order-no-list .no {
+    width: 90px;
+    text-align: center;
+}
+#order-detail table .order-no-list .name {
+    width: 200px;
+    text-align: center;
+}
+#order-detail table .order-no-list .price {
+    width: 100px;
+    text-align: center;
+}
+#order-detail table .order-no-list .o_s_no {
+    width: 90px;
+    text-align: center;
+}
+	
+/*환불내역*/
+#refund-list table .date {
+    width: 150px;
+    text-align: center;
+}
+
+#refund-list table .id {
+    width: 180px;
+    text-align: center;
+}
+
+#refund-list table .no {
+    width: 100px;
+    text-align: center;
+}
+
+#refund-list table .o_s_no {
+    width: 120px;
+    text-align: center;
+}
+
+#refund-detail .content{
+    width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;        
+    gap: 15px;
+}
+
+#refund-detail .refund-list-link{    
+    display: flex;     
+    justify-content: end;   
+}
+
+#refund-detail .refund-list-link .link{    
+    color: var(--admin-main-color);
+    text-decoration: none;        
+    font-weight: bold;   
+    font-size: 1.6rem;
+    margin: 0 5px;    
+}
+
+#refund-detail table .t1{
+    width: 100px;
+    text-align: center;
+}
+#refund-detail table .t2{
+    width: 150px;
+    text-align: center;
+}
+
+#refund-detail table .t3{
+    width: 100px;
+    text-align: center;
+}
+
+#refund-detail table .t4{
+    width: 150px;
+    text-align: center;
+}
+
+#refund-detail table .t5{        
+    text-align: center;
+}
+
+#refund-detail .content table td {
+    padding: 10px;
+    border: 1px solid var(--gray-color);
+}
+
+#refund-detail .content .refund-table .t2,
+#refund-detail .content .refund-table .t4 {
+    background-color: #fff;    
+}
+
+#refund-detail .content table td:nth-child(2n-1) {
+    background-color: var(--gray-light-color);
+    font-weight: 500;
+}
+
+#refund-detail .content .btn-wrap{
+    width: 50%;
+    margin: 0 auto;
+}
+
+#refund-detail .content .btn-wrap .btn{
+    
+}

@@ -32,7 +32,7 @@ const AdminMarket = () => {
                 <table>
                     <tr>                        
                         <th className='o_reg_date'>주문일</th>
-                        <th className='o_id'>주문번호</th>
+                        <th className='o_id'>주문번호</th>                        
                         <th className='pm_no'>결제번호</th>
                         <th className='u_no'>회원번호</th>
                         <th className='o_s_no'>상태</th>                         

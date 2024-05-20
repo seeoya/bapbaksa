@@ -13,6 +13,7 @@ const {
     get_refund_order,
     insert_stock,
     put_refund,
+    put_reject,
 } = require("../lib/service/adminService");
 
 
@@ -85,7 +86,7 @@ router.get("/get_order", (req, res) => {
 router.get("/get_refund_order", (req, res) => {
     console.log("params", req.query);
 
-    if (req.query.o_id) {
+    if (req.query.o_no) {
         get_refund_order(req, res);
     } else {
         get_all_refund_orders(req, res);
@@ -93,9 +94,15 @@ router.get("/get_refund_order", (req, res) => {
 });
 
 router.put("/put_refund", (req, res) => {
-    console.log("params", req.query);
+    console.log("params", req.body);
 
         put_refund(req, res);
+});
+
+router.put("/put_reject", (req, res) => {
+    console.log("params", req.body);
+
+        put_reject(req, res);
 });
 
 

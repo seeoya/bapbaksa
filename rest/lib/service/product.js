@@ -385,6 +385,7 @@ const product = {
     },
     getProductInfo: (req, res) => {
         let p_no = req.body.P_NO;
+        console.log('🎗🎗', p_no);
 
         if (Array.isArray(p_no)) {
             // p_no가 배열인 경우

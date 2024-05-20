@@ -4,11 +4,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const AdminMarketRefundView = () => {
-    const { id } = useParams();      
-    const [orderList, setOrderList] = useState({});        
-    const [pNameList, setPNameList] = useState({});        
-    const [oId, setOId] = useState('');
-    const [pNo, setPNo] = useState(0);    
+    const { no } = useParams();                  
+    const [oId, setOId] = useState('');       
     const [pmNo, setPmNo] = useState(0);    
     const [pmPrice, setPmPrice] = useState(0);
     const [pmMethod, setPmMethod] = useState('');
@@ -16,11 +13,15 @@ const AdminMarketRefundView = () => {
     const [pModDate, setPModDate] = useState('');   
     const [uNo, setUNo] = useState(0);    
     const [oSNo, setOSNo] = useState(0);    
+    const [oCount, setOCount] = useState(0);    
+    const [oPrice, setOPrice] = useState(0);    
+    const [oFinalPrice, setOFinalPrice] = useState(0);    
     const [oRegDate, setORegDate] = useState('');
     const [oModDate, setOModDate] = useState('');   
-    const [pZipcode, setPZipCode] = useState('');
-    const [pFirstAddr, setPFirstAddr] = useState('');
-    const [pSecondAddr, setPSeconAddr] = useState('');    
+    const [PROD_NAME, setPROD_NAME] = useState('');
+    const [PROD_SPCS_NAME, setPROD_SPCS_NAME] = useState('');
+    const [dataFlag, setDataFlag] = useState(false);
+    const [order, setOrder] = useState({});
  
 
     useEffect(() => {
@@ -28,36 +29,40 @@ const AdminMarketRefundView = () => {
     }, []);
 
     useEffect(() => {
-        console.log(id);
+        console.log(no);
         initOrder();
-    }, [id]);
+    }, [no]);
 
     const initOrder = async () => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_refund_order", {
             params: {
-                o_id: id,
+                o_no: no,               
             }
         }).then((data) => {
             console.log('🎈', data.data);        
 
-            let order = data.data[id][0];
+            let order = data.data[no];
             console.log(order);
+            if(order){ 
+                setDataFlag(true);
+                setOrder(order);
+                setORegDate(order.o_reg_date);
+                setOId(order.o_id);            
+                setUNo(order.u_no);               
+                setOSNo(order.o_s_no);            
+                setOCount(order.o_count);
+                setOPrice(order.o_price);
+                setOFinalPrice(order.o_final_price);            
+                setOModDate(order.o_mod_date);                                
+                setPmNo(order.pm_no);            
+                setPmPrice(order.pm_price);            
+                setPmMethod(order.pm_method);            
+                setPRegDate(order.p_reg_date);            
+                setPModDate(order.p_mod_date);            
+                setPROD_NAME(order.PROD_NAME);
+                setPROD_SPCS_NAME(order.PROD_SPCS_NAME);
 
-            setOrderList(data.data[id]);            
-            setORegDate(order.o_reg_date);
-            setOId(order.o_id);            
-            setUNo(order.u_no);
-            setPNo(order.p_no);
-            setOSNo(order.o_s_no);            
-            setOModDate(order.o_mod_date);
-            setPZipCode(order.p_zip_code);
-            setPFirstAddr(order.p_first_address);
-            setPSeconAddr(order.p_second_address);
-            setPmNo(order.pm_no);            
-            setPmPrice(order.pm_price);            
-            setPmMethod(order.pm_method);            
-            setPRegDate(order.p_reg_date);            
-            setPModDate(order.p_mod_date);            
+            }
 
         }).catch((err) => {
             return { type: "error" };
@@ -65,14 +70,17 @@ const AdminMarketRefundView = () => {
     } 
    
 
-    const refundApproveClick = (oNo) => {
-        console.log('refundApproveClick()');
+    const refundApproveClick = async (e) => {
+        console.log('refundApproveClick()');       
     
-        const refundApprove = async () => {
-            await axios.put(process.env.REACT_APP_SERVER_URL + "/admin/put_refund", {
+        await axios.put(process.env.REACT_APP_SERVER_URL + "/admin/put_refund", {
                 params: {
-                    o_no: oNo,
-                    o_s_no: 3,
+                    o_no: e.o_no,
+                    o_id: e.o_id,
+                    u_no: e.u_no,
+                    o_s_no: 3,                    
+                    pm_method: e.pm_method,
+                    o_final_price: e.o_final_price,                
                 }
             }).then((data) => {
                 console.log('🎈', data.data);        
@@ -82,14 +90,27 @@ const AdminMarketRefundView = () => {
                 alert('환불처리에 실패하였습니다.');
                 return { type: "error" };
             });
-        } 
+    } 
        
     
-    }
     
-    const refundRejectClick = (e) => {
+    
+    const refundRejectClick = async (e) => {
         console.log('refundRejectClick()');
         
+        await axios.put(process.env.REACT_APP_SERVER_URL + "/admin/put_reject", {
+            params: {
+                o_no: e.o_no,                                
+                o_s_no: 6,                                    
+            }
+        }).then((data) => {
+            console.log('🎈', data.data);        
+            alert('환불 승인불가 처리가 완료되었습니다.');
+
+        }).catch((err) => {
+            alert('환불 승인불가 처리에 실패하였습니다.');
+            return { type: "error" };
+        });
 
     }
 
@@ -106,12 +127,14 @@ const AdminMarketRefundView = () => {
                             <Link to={"/admin/market"}>환불리스트</Link>
                         </td>
                     </tr>
-                    
+                    {dataFlag ? 
+                    <>
                     <tr>
                         <td className='o_id'>주문번호</td>
-                        <td className='o_id'>{oId}</td>                   
-
                         <td className='o_s_no'>상태</td>                         
+                    </tr>
+                    <tr>    
+                        <td className='o_id'>{oId}</td>                           
                         <td className='o_s_no'>
                         {
                             oSNo === -1 ? "결제 대기중" : 
@@ -129,18 +152,22 @@ const AdminMarketRefundView = () => {
 
                     <tr>                        
                         <td className='o_reg_date'>주문일</td>
-                        <td className='o_reg_date'>{oRegDate.substring(0, 10)}</td>
                         <td className='o_mod_date'>주문 수정일</td>                        
+                    </tr>
+                    <tr>
+                        <td className='o_reg_date'>{oRegDate.substring(0, 10)}</td>                        
                         <td className='o_mod_date'>{oModDate.substring(0, 10)}</td>
                     </tr>
 
                     <tr>
                         <td className='pm_no'>결제번호</td>
-                        <td className='pm_no'>{pmNo}</td>
                         <td className='pm_method'>결제방법</td>
-                        <td className='pm_method'>{pmMethod}</td>
                         <td className='pm_price'>결제금액</td>
-                        <td className='pm_price'>{pmPrice}</td>                      
+                    </tr>
+                    <tr>    
+                        <td className='pm_no'>{pmNo}</td>                       
+                        <td className='pm_method'>{pmMethod}</td>                        
+                        <td className='pm_price'>{pmPrice.toLocaleString('ko-KR')}</td>                      
                     </tr>
 
                     <tr>                        
@@ -149,41 +176,37 @@ const AdminMarketRefundView = () => {
                         <td className='p_mod_date'>결제 수정일</td>                        
                         <td className='p_mod_date'>{pModDate.substring(0, 10)}</td>
                     </tr>
-
                     <tr>
-                        <td className='p_zip_code'>우편번호</td>
-                        <td className='p_zip_code'>{pZipcode}</td>
-
-                        <td className='u_no'>회원번호</td>
-                        <td className='u_no'>{uNo}</td>
+                        <td className='no'>회원번호</td>
+                        <td className='no'>{uNo}</td>
                     </tr>
                     <tr>
-                        <td className='p_address_text'>주소</td>
-                        <td className='p_address'>{pFirstAddr + ' ' + pSecondAddr}</td>
+                        <td className='no'>구매번호</td>
+                        <td className='no'>{no}</td>
                     </tr>
-                    <tr className='order-no-list'>
-                        <th>구매번호</th>                        
-                        <th>상품명</th>
-                        <th>구매수량</th>
-                        <th>단가</th>
-                        <th>합계</th>
+                    <tr>
+                        <td className='name'>상품명</td>
+                        <td className='name'>{PROD_NAME + ' ' + PROD_SPCS_NAME}</td>
                     </tr>
-                    
-
-            {orderList ?
-                Object.keys(orderList).map((el) => {
-                    return <tr>                                    
-                              <td className='o_no'>{orderList[el].o_no}</td>
-                              <td className='p_no'>{orderList[el].PROD_NAME + ' ' + orderList[el].PROD_SPCS_NAME}</td>                              
-                              <td className='o_count'>{orderList[el].o_count}</td>
-                              <td className='o_price'>{Number(orderList[el].o_price).toLocaleString('ko-KR')}</td>
-                              <td className='o_final_price'>{Number(orderList[el].o_final_price).toLocaleString('ko-KR')}</td>
-                              <td className='o_count'><button type='button' className='btn sub' onClick={(e) => refundApproveClick(orderList[el].o_no)}>승인</button></td>
-                              <td className='o_count'><button type='button' className='btn sub' onClick={(e) => refundRejectClick(orderList[el].o_no)}>승인불가</button></td>
-                          </tr>
-
-                })                
-                : <tr><td>구매 상세 내역이 없습니다.</td></tr>
+                    <tr>
+                        <td className='no'>구매수량</td>
+                        <td className='no'>{oCount}</td>
+                    </tr>
+                    <tr>
+                        <td className='price'>단가</td>
+                        <td className='price'>{oPrice.toLocaleString('ko-KR')}</td>
+                    </tr>
+                    <tr>
+                        <td className='price'>합계</td>
+                        <td className='price'>{oFinalPrice.toLocaleString('ko-KR')}</td>
+                    </tr>
+                    <tr>                                                           
+                        <td className='refund'><button type='button' className='btn sub' onClick={(e) => refundApproveClick(order)}>승인</button></td>
+                        <td className='reject'><button type='button' className='btn sub' onClick={(e) => refundRejectClick(no)}>승인불가</button></td>
+                    </tr>
+                    </>
+                    :
+                    <tr><td>구매 상세 내역이 없습니다.</td></tr>
             }
                 </table>
 

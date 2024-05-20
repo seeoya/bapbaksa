@@ -22,7 +22,7 @@ router.post("/deleteCart", (req,res) => {
 });
 
 router.post("/payment", (req,res) => {
-    console.log('payment');
+    console.log('payment');    
     marketService.payment(req,res);
 })
 

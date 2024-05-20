@@ -252,26 +252,28 @@ const adminService = {
     },    
     get_refund_order: (req, res) => {
         DB.query(
-            `SELECT * FROM TBL_ORDER o JOIN TBL_PAYMENT p ON o.pm_no = p.pm_no WHERE o.o_id = ?`,
-            [req.query.o_id],
-            async (error, refunds) => {
+            `SELECT * FROM TBL_ORDER o JOIN TBL_PAYMENT p ON o.pm_no = p.pm_no WHERE o.o_no = ?`,
+            [req.query.o_no],
+            async (error, refund) => {
                 if (error) {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
                     try {
-                        const pNo = refunds.map((item) => item.p_no);
+                        const pNo = refund[0].p_no;
+                        console.log("pNo: ", pNo);
+
                         const prodInfo = await axios_getProductInfo(pNo);
                                 console.log('🎃', prodInfo);
                         let tmp = {};
-                        refunds.map((order, index) => {
-                            if (!tmp[order.o_id]){
-                                tmp[order.o_id] = {};
+                        refund.map((order, index) => {
+                            if (!tmp[order.o_no]){
+                                tmp[order.o_no] = {};
                             }
 
-                            tmp[order.o_id][index] = {
+                            tmp[order.o_no] = {
                                 ...order,
-                                ...prodInfo[index]
+                                ...prodInfo,
                             };                            
 
                         });
@@ -288,47 +290,74 @@ const adminService = {
     },
     get_all_refund_orders: (req, res) => {
         DB.query(
-            "SELECT o_id, pm_no, u_no, o_s_no, o_reg_date, o_mod_date FROM TBL_ORDER WHERE o_s_no = 2 or o_s_no = 3 order by o_s_no asc, o_mod_date desc",
+            `SELECT o_no, o_id, pm_no, u_no, o_s_no, o_reg_date, o_mod_date FROM TBL_ORDER WHERE o_s_no = 2 or o_s_no = 3 ORDER BY o_s_no ASC, o_id ASC, o_mod_date DESC`,
             [],
             (error, result) => {
                 if (error) {
                     console.log("error", error);
                     return { status: 400 };
-                } else {
-                    let tmpList = {};
+                } else {                    
 
                     if (result) {
-                        result.map((el) => {
-                            tmpList[el.o_id] = el;
-                        });
+                        res.json(result);    
                     }
-
-                    res.json(tmpList);
                 }
-            }
-        )
-    },
-    put_refund: (req, res) => {
-        let query = req.query;
 
-        DB.query(`update from TBL_ORDER set o_s_no = ${query.o_s_no} where o_no = ${query.o_no}`,
-                    [], async (error, result) => {
+            }
+        );
+    },
+    put_refund: async (req, res) => {
+        let query = req.body.params;
+        o_no = query.o_no;
+        o_id = query.o_id;
+        o_s_no = query.o_s_no;
+        u_no = query.u_no;        
+        pm_price = -query.o_final_price;
+        pm_method = query.pm_method;               
+
+        DB.query(`UPDATE TBL_ORDER SET o_s_no = ?, o_mod_date = now() WHERE o_no = ?`,
+                    [o_s_no, o_no], (error, result) => {
 
                         if (error) {
                             console.log("error", error);
                             return { status: 400 };
-                        } else {
-                            res.json(result);
+                        } else {                           
+
+                            DB.query(`INSERT INTO TBL_PAYMENT (o_id, u_no, pm_price, pm_method) values(?, ?, ?, ?)`,
+                                [o_id, u_no, pm_price, pm_method], (error, result) => {
+
+                                    if (error) {
+                                        console.log("error", error);
+                                        return { status: 400 };
+                                    } else {
+                                        res.json(result);
+                                    }
+                                }
+                            );
+                              
                         }
 
+                    });
+   },
+
+    put_reject: async (req, res) => {
+        let query = req.body.params;
+        o_no = query.o_no;    
+        o_s_no = query.o_s_no;          
+
+        DB.query(`UPDATE TBL_ORDER SET o_s_no = ?, o_mod_date = now() WHERE o_no = ?`,
+                    [o_s_no, o_no], (error, result) => {
+
+                        if (error) {
+                            console.log("error", error);
+                            return { status: 400 };
+                        } else {                           
+                            res.json(result);
+                        }
                     }
-
-                    
-        );
-
-    },
-
-   
+                );
+                              
+    },  
     
     insert_stock: (req, res) => { },
 };

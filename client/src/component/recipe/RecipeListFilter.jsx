@@ -9,7 +9,7 @@ const RecipeListFilter = (props) => {
     let {
         activeIngreList, activeRegionList, activeCateList, activeDifficultList,
         setActiveIngreList, setActiveRegionList, setActiveCateList, setActiveDifficultList,
-        setSortState, filterInclude, setFilterInclude, filteredRecipeCount } = props;
+        setSortState, filterInclude, setFilterInclude, filteredRecipeCount, setIsFilterLoading } = props;
 
     const dispatch = useDispatch();
 
@@ -23,9 +23,15 @@ const RecipeListFilter = (props) => {
     const [categoryList, setCategoryList] = useState({});
 
     useEffect(() => {
+        setIsFilterLoading(true);
         initCategoryList();
     }, []);
 
+    useEffect(() => {
+        if (regionList && categoryList) {
+            setIsFilterLoading(false);
+        }
+    }, [regionList, categoryList]);
     const initCategoryList = async () => {
         // category
         await axios
@@ -99,7 +105,6 @@ const RecipeListFilter = (props) => {
 
     const sortChangeEvent = () => {
         let sortFilter = document.getElementById("sort_filter").value;
-        console.log(sortFilter);
         setSortState(sortFilter);
     }
 

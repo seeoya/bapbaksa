@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getToken } from "../../storage/loginedToken";
+import { setTitle } from "../../util/setTitle";
 
 const ShoppingCart = () => {
 
@@ -18,6 +19,7 @@ const ShoppingCart = () => {
         getStock();
         loginCheck();
         axios_getCartInfo(u_no);
+        setTitle('장바구니');
     }, []);
 
     useEffect(() => {

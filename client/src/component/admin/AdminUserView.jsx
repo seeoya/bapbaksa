@@ -3,6 +3,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const AdminUserView = () => {
     const { no } = useParams();
@@ -18,9 +20,11 @@ const AdminUserView = () => {
     const [uFirstAddr, setUFirstAddr] = useState('');
     const [uSecondAddr, setUSeconAddr] = useState('');
     const [uStatus, setUStatus] = useState(-1);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        initUser()
+        initUser();
+        setTitle('유저 상세 정보');
     }, []);
 
     useEffect(() => {
@@ -29,6 +33,7 @@ const AdminUserView = () => {
     }, [no]);
 
     const initUser = async () => {
+        setIsLoading(true);
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
             params: {
                 u_no: no
@@ -47,6 +52,8 @@ const AdminUserView = () => {
             setUStatus(user.u_status);
         }).catch((err) => {
             return { type: "error" };
+        }).finally(() => {
+            setIsLoading(false);
         });
     }
 
@@ -71,8 +78,6 @@ const AdminUserView = () => {
     }
 
     const searchAddress = () => {
-        console.log('searchAddress()');
-
         new window.daum.Postcode({
             oncomplete: (data) => {
                 let extraRoadAddr = '';
@@ -98,6 +103,7 @@ const AdminUserView = () => {
             alert('휴대폰 번호를 입력해 주세요');
             document.getElementById("u_phone").focus();
         } else {
+            setIsLoading(true);
             await axios.put(process.env.REACT_APP_SERVER_URL + `/admin/user`, {
                 data: {
                     "u_no": uNo,
@@ -109,18 +115,16 @@ const AdminUserView = () => {
                     "u_second_addr": uSecondAddr ?? "",
                     "u_status": uStatus ?? 1
                 }
+            }).then(res => {
+                if (res.data && Number(parseInt(res.data.affectedRows)) > 0) {
+                    alert('정보수정에 성공하였습니다.');
+                    initUser();
+                }
+            }).catch(error => {
+                alert('정보수정에 실패하였습니다.');
+            }).finally(() => {
+                setIsLoading(false);
             })
-                .then(res => {
-                    console.log('res: ', res);
-
-                    if (res.data && Number(parseInt(res.data.affectedRows)) > 0) {
-                        alert('정보수정에 성공하였습니다.');
-                        initUser();
-                    }
-                })
-                .catch(error => {
-                    alert('정보수정에 실패하였습니다.');
-                })
         }
     }
 
@@ -128,6 +132,7 @@ const AdminUserView = () => {
         if (window.confirm('회원탈퇴하시겠습니까?')) {
             let accessToken = getToken('accessToken');
 
+            setIsLoading(true);
             await axios.delete(process.env.REACT_APP_SERVER_URL + `/admin/user`, {
                 data: {
                     "u_id": uId,
@@ -143,12 +148,16 @@ const AdminUserView = () => {
                 }
             }).catch(error => {
                 alert('회원탈퇴에 실패했습니다.');
+            }).finally(() => {
+                setIsLoading(false);
             })
         }
     }
 
     return (
         <>
+            {isLoading ? <Loading /> : null}
+
             <div className='title user-info'>
                 {
                     uNo && uId ?

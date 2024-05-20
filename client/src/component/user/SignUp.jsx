@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import $ from 'jquery';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
 
 axios.defaults.withCredentials = true;
 
@@ -18,6 +19,10 @@ const SignUp = () => {
     const [uFirstAddr, setUFirstAddr] = useState('');
     const [uSecondAddr, setUSeconAddr] = useState('');
     const [isMemberFlag, setIsMemberFlag] = useState(false);
+
+    useEffect(() => {
+        setTitle('회원가입');
+    });
 
     const navigate = useNavigate();
 

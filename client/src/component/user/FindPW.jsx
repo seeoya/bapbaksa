@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import $ from 'jquery';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
 
 
 const FindPW = () => {
@@ -10,6 +11,9 @@ const FindPW = () => {
     const [uPhone, setUPhone] = useState('');
     const [uId, setUId] = useState('');
 
+    useEffect(() => {
+        setTitle('비밀번호 찾기');
+    });
 
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');

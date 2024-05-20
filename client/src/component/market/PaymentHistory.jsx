@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getToken } from "../../storage/loginedToken";
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
+import { setTitle } from "../../util/setTitle";
 
 const PaymentHistory = () => {
 
@@ -16,6 +17,7 @@ const PaymentHistory = () => {
 
     useEffect(() => {
         loginCheck();
+        setTitle('결제 내역');
     },[])
 
 

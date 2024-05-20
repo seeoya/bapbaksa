@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
 
 const ListView = () => {
     const { no } = useParams();
@@ -26,6 +27,10 @@ const ListView = () => {
             setPYmd(prodInfo.PROD_YMD); // p_ymd 값 설정
         }
     }, [prodInfo]);
+
+    useEffect(() => {
+        setTitle(viewData?.PROD_NAME);
+    }, []);
 
     useEffect(() => {
         setPaymentInfo();

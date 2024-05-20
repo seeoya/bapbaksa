@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 
 import { Autoplay, Pagination, A11y, Navigation } from 'swiper/modules';
 import { Link } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
 
 
 const Market = () => {
@@ -20,6 +21,7 @@ const Market = () => {
     useEffect(() => {
         IngreAxios();
         cheepIngreAxios();
+        setTitle("마켓 홈");
     }, []);
 
     const IngreAxios = async () => {
@@ -90,9 +92,9 @@ const Market = () => {
                             >
                                 {randomIngre.length > 0 ? (
                                     randomIngre.map((ingre) => (
-                                        <SwiperSlide key={ingre.PROD_NO}>
+                                        <SwiperSlide key={ingre.PROD_CODE}>
                                             <div className='random-ingre-info'>
-                                                <Link to={`/market/view/${ingre.PROD_NO}_${ingre.PROD_SPCS_CODE}`}>
+                                                <Link to={`/market/view/${ingre.PROD_CODE}_${ingre.PROD_SPCS_CODE}`}>
                                                     <img src={`/imgs/product/${ingre.PROD_IMG}`} alt={ingre.PROD_NAME} />
                                                     <div className='random-ingre-detail'>
                                                         <h3>{ingre.PROD_NAME}({ingre.PROD_SPCS_NAME})</h3> {/* ${} 대신 {} */}
@@ -145,9 +147,9 @@ const Market = () => {
                             >
                                 {randomCheepIngre.length > 0 ? (
                                     randomCheepIngre.map((ingre) => (
-                                        <SwiperSlide key={ingre.PROD_NO}>
+                                        <SwiperSlide key={ingre.PROD_CODE}>
                                             <div className='random-ingre-info'>
-                                                <Link to={`/market/view/${ingre.PROD_NO}_${ingre.PROD_SPCS_CODE}`}>
+                                                <Link to={`/market/view/${ingre.PROD_CODE}_${ingre.PROD_SPCS_CODE}`}>
                                                     <div className='img-container'>
                                                         <img src={`/imgs/product/${ingre.PROD_IMG}`} alt={ingre.PROD_NAME} />
                                                     </div>

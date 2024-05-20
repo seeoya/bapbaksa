@@ -45,6 +45,7 @@ import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
+import AdminChart from './admin/AdminChart';
 
 
 
@@ -122,6 +123,7 @@ const LayoutRouter = () => {
                     <Route path="" element={<AdminMarket />}></Route>
                     <Route path=":id" element={<AdminMarketView />}></Route>
                     <Route path="refund" element={<AdminMarketRefund />}></Route>
+                    <Route path="chart" element={<AdminChart />}></Route>
                     <Route path="stock" element={<AdminMarketStock />}></Route>
                 </Route>
             </Route>

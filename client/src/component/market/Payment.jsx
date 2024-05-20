@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
 import { CheckoutPage } from '../payment/Checkout';
+import { setTitle } from '../../util/setTitle';
 
 const Payment = () => {
     const [postcode, setPostcode] = useState('');
@@ -42,6 +43,7 @@ const Payment = () => {
         })
         axios_paymentGetProd(fors,spcs);
         axios_getUserInfo();
+        setTitle('결제창');
     }, []);
 
     useEffect(() => {

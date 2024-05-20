@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { setTitle } from '../../util/setTitle';
 
 const AdminMarket = () => {
 
@@ -9,6 +10,7 @@ const AdminMarket = () => {
 
     useEffect(() => {
         initOrders();
+        setTitle('구매 내역');
     }, []);
 
     const initOrders = async () => {

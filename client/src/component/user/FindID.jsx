@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import $ from 'jquery';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
 
 const FindID = () => {
 
@@ -9,6 +10,9 @@ const FindID = () => {
     const [uPhone, setUPhone] = useState('');
     const [uId, setUId] = useState('');
 
+    useEffect(() => {
+        setTitle('아이디 찾기');
+    });
 
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');

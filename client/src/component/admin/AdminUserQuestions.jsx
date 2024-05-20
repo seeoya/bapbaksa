@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
 
 const AdminUserQuestions = () => {
 
@@ -9,6 +10,7 @@ const AdminUserQuestions = () => {
 
     useEffect(() => {
         loadQuestion();
+        setTitle('고객 문의 LIST');
     }, []);
 
     const loadQuestion = async () => {

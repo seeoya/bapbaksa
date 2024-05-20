@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import LayoutRouter from "./component/LayoutRouter";
+import Loading from "./component/include/Loading";
+import { set_loading } from "./redux/actions/common_action";
 import { loadFridgeAction } from "./redux/actions/fridge_action";
 
 const queryClient = new QueryClient();
@@ -11,6 +13,7 @@ function App() {
     const dispatch = useDispatch();
 
     const [isScrolled, setIsScrolled] = useState(false);
+    const isLoading = useSelector((state) => state.common.isLoading);
 
     useEffect(() => {
         console.log("App.js");
@@ -18,12 +21,13 @@ function App() {
     }, []);
 
     const initBapbaksa = async () => {
-        // 스크롤 이벤트
         initScrollEvent();
         initAllFridge();
+        initLoading();
     };
 
     const initScrollEvent = () => {
+        // 스크롤 이벤트
         document.addEventListener("scroll", () => {
             if (window.scrollY > 0) {
                 setIsScrolled(true);
@@ -39,11 +43,17 @@ function App() {
         dispatch(await loadFridgeAction());
     };
 
+    const initLoading = () => {
+        // 로딩 스피너
+        dispatch(set_loading(false));
+    };
+
     return (
         <>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <QueryClientProvider client={queryClient}>
                     <div className={isScrolled ? "wrap scrolled" : "wrap"}>
+                        {isLoading ? <Loading /> : null}
                         <LayoutRouter />
                     </div>
                 </QueryClientProvider>

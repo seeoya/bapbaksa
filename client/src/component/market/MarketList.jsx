@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AllProductQuery, NewProductQuery } from "../../query/productQuerys";
 import { useSelector } from "react-redux";
+import { setTitle } from "../../util/setTitle";
 
 const MarketList = () => {
 const { data: allProductList, isLoading: allProductIsLoading, isError: allProductIsError } = AllProductQuery();
@@ -17,6 +18,10 @@ useEffect(() => {
         setSearch(location.state.searchVal);
     }
 }, [location.state]);
+
+useEffect(() => { 
+    setTitle("제품 리스트"); 
+}, []); 
 
 const moreProductBtn = () => {
     setViewNumber((prev) => prev + 12);

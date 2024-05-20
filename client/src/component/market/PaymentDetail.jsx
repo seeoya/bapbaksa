@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
 
 const PaymentDetail = () => {
     let u_id = getToken('loginedUId');
@@ -11,6 +12,7 @@ const PaymentDetail = () => {
 
     useEffect(() => {
         axios_get_payment_detail();
+        setTitle('결제 상세 내역');
     }, []);
 
 

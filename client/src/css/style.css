@@ -453,7 +453,6 @@ nav .user-info img {
     align-items: center;
     justify-content: end;
     width: 200px;
-   
 }
 
 #market-category-wrap .header-category .user-mypage-link {
@@ -865,7 +864,8 @@ nav .user-info img {
 }
 
 .question-wrap .qusetion-form .question-input-wrap input:nth-child(1) {
-    min-width: 600px; max-width: 600px;
+    min-width: 600px;
+    max-width: 600px;
     height: 40px;
     margin-bottom: 10px;
     padding-left: 10px;
@@ -874,7 +874,8 @@ nav .user-info img {
 }
 
 .question-wrap .qusetion-form .question-input-wrap select {
-    min-width: 600px; max-width: 600px;
+    min-width: 600px;
+    max-width: 600px;
     height: 40px;
     margin-bottom: 10px;
     padding-left: 10px;
@@ -883,7 +884,8 @@ nav .user-info img {
 }
 
 .question-wrap .qusetion-form .question-input-wrap textarea {
-    min-width: 600px; max-width: 600px;
+    min-width: 600px;
+    max-width: 600px;
     height: 100px;
     margin-bottom: 10px;
     padding-left: 10px;
@@ -913,7 +915,8 @@ nav .user-info img {
 }
 
 .question-answer-form-title div:nth-child(1) {
-    height: 40px; width: 500px;
+    height: 40px;
+    width: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -926,7 +929,8 @@ nav .user-info img {
 
 .question-answer-form-title div:nth-child(2) {
     display: flex;
-    height: 40px; width: 150px;
+    height: 40px;
+    width: 150px;
     align-items: center;
     justify-content: center;
     background-color: #e8e8e8;
@@ -938,7 +942,8 @@ nav .user-info img {
 
 .question-answer-form-title div:nth-child(3) {
     display: flex;
-    height: 40px; width: 150px;
+    height: 40px;
+    width: 150px;
     align-items: center;
     justify-content: center;
     background-color: #e8e8e8;
@@ -950,7 +955,8 @@ nav .user-info img {
 
 .question-answer-form-title div:nth-child(4) {
     display: flex;
-    height: 40px; width: 70px;
+    height: 40px;
+    width: 70px;
     align-items: center;
     justify-content: center;
     background-color: #e8e8e8;
@@ -968,28 +974,32 @@ nav .user-info img {
 
 .question-answer-form-detail div:nth-child(1) {
     display: flex;
-    height: 40px; width: 500px;
+    height: 40px;
+    width: 500px;
     align-items: center;
     justify-content: center;
 }
 
 .question-answer-form-detail div:nth-child(2) {
     display: flex;
-    height: 40px; width: 150px;
+    height: 40px;
+    width: 150px;
     align-items: center;
     justify-content: center;
 }
 
 .question-answer-form-detail div:nth-child(3) {
     display: flex;
-    height: 40px; width: 150px;
+    height: 40px;
+    width: 150px;
     align-items: center;
     justify-content: center;
 }
 
 .question-answer-form-detail div:nth-child(4) {
     display: flex;
-    height: 40px; width: 70px;
+    height: 40px;
+    width: 70px;
     align-items: center;
     justify-content: center;
 }
@@ -1005,7 +1015,8 @@ nav .user-info img {
     flex-direction: column;
     justify-content: flex-end;
     background-color: #ededed;
-    width: 800px; min-height: 100px;
+    width: 800px;
+    min-height: 100px;
     border-radius: 10px;
 }
 
@@ -1051,6 +1062,7 @@ nav .user-info img {
 }
 
 /* 1:1 문의 css END */
+
 /* FindID, FindPW css start */
 #find-result {
     display: none;
@@ -2502,6 +2514,21 @@ background-color: var(--highlight-light-color);
     gap: 10px;
 }
 
+.mypage-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 500px;
+    gap: 20px;
+}
+
+.mypage-list .btn {
+    width: 100%;
+    height: 300px;
+    font-size: 2rem;
+}
+
 .recipe-item img {
     width: 200px;
 }
@@ -2582,23 +2609,42 @@ background-color: var(--highlight-light-color);
     font-size: 2rem;
 }
 
-#order-detail {
-    width: 800px;    
-}
-
-#order-detail .content {
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
     width: 100%;
-    display: flex;   
-    flex-direction: column;
-    margin-top: 20px;
-    gap: 15px;
+    height: 100%;
+    z-index: 9999;
 }
 
-#order-detail .order-list-link {
-    
+.loader {
+    width: 100px;
+    height: 202px;
+    display: inline-block;
+    left: 5px;
+    position: relative;
+    border: 2px solid #FFF;
+    box-sizing: border-box;
+    animation: animloader 2s linear infinite alternate;
+    color: var(--highlight-dark-color);
+    border-radius: 0 0 4px 4px;
+    transform: perspective(240px) rotateX(-45deg);
 }
 
-#order-detail .order-list-link .link{
-    
+@keyframes animloader {
+    0% {
+        box-shadow: 0 0 inset;
+    }
+
+    100% {
+        box-shadow: 0 -200px inset;
+    }
 
 }

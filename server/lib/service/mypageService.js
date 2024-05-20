@@ -36,8 +36,7 @@ const mypageService = {
                 if (error) {
                     res.json({ status: 400 });
                 } else {
-                    console.log("111", result?.length);
-                    res.json(result);
+                    res.json(result.length);
                 }
             }
         );

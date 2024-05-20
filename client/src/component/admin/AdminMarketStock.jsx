@@ -2,32 +2,43 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
+import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const AdminMarketStock = () => {
     const { data: newProductList, isLoading: newProductIsLoading, isError: newProductIsError } = NewProductQuery();
 
     const [stockList, setStockList] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         getStock();
+        setTitle('재고 관리');
     }, []);
 
+    useEffect(() => {
+        if (newProductList?.length > 0 && stockList) {
+            setIsLoading(false);
+        }
+    }, [stockList, newProductList]);
+
     const getStock = async () => {
+        setIsLoading(true);
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", { params: {} })
             .then((data) => {
                 setStockList(data.data);
             }).catch((err) => {
                 return { type: "error" };
-            });
+            })
     }
 
     const changeStock = async (e) => {
         let item = e.target;
-
         let p_code = item.dataset.pCode,
             ps_code = item.dataset.psCode,
             ps_count = item.previousSibling.value;
 
+        setIsLoading(true);
         await axios.put(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
             p_code: p_code,
             ps_code: ps_code,
@@ -41,6 +52,8 @@ const AdminMarketStock = () => {
             }
         }).catch((err) => {
             return { type: "error" };
+        }).finally(() => {
+            setIsLoading(false);
         });
     }
 
@@ -58,17 +71,22 @@ const AdminMarketStock = () => {
     }
 
     const insertAllStock = async (list) => {
+        setIsLoading(true);
         await axios.post(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
             list: list
         }).then((data) => {
             getStock();
         }).catch((err) => {
             return { type: "error" };
+        }).finally(() => {
+            setIsLoading(false);
         });
     }
 
     return (
         <>
+            {isLoading ? <Loading /> : null}
+
             <div className='title'>재고 목록</div>
 
             <div className='content'>
@@ -99,7 +117,7 @@ const AdminMarketStock = () => {
                                     <td className='ps-count'>{stockList[el.PROD_CODE][el.PROD_SPCS_CODE]}</td>
                                     <td className='p-btn-wrap'>
                                         <input type="number" className='input' defaultValue={0} />
-                                        <button type='button' className='btn sub' data-p-code={el.PROD_CODE} data-ps-code={el.PROD_SPCS_CODE} onClick={(e) => changeStock(e)}>수정</button>
+                                        <button type='button' className='btn sub' data-p-code={el.PROD_CODE} data-ps-code={el.PROD_SPCS_CODE} onClick={(e) => changeStock(e)}>추가/삭제</button>
                                     </td>
                                 </tr>
                             })

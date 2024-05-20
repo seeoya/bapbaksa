@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 
 import { Autoplay, Pagination, A11y, Navigation } from 'swiper/modules';
 import { Link } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
 
 
 const Market = () => {
@@ -20,6 +21,7 @@ const Market = () => {
     useEffect(() => {
         IngreAxios();
         cheepIngreAxios();
+        setTitle("마켓 홈");
     }, []);
 
     const IngreAxios = async () => {

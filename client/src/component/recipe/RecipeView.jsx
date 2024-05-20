@@ -6,6 +6,7 @@ import { MyFridgeQuery } from '../../query/fridgeQuerys';
 import { AllRecipeQuery } from '../../query/recipeQuerys';
 import { getToken } from '../../storage/loginedToken';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const RecipeView = () => {
     let url_params = useParams().no;
@@ -14,19 +15,16 @@ const RecipeView = () => {
     const { data: recipeList, isLoading: recipeIsLoading, isError: recipeIsError } = AllRecipeQuery();
 
     const [recipe, setRecipe] = useState({});
-
     const [isLike, setIsLike] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [recipeNo, setRecipeNo] = useState(0);
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, []);
-
-    useEffect(() => {
-        initIsLike(url_params);
     }, [url_params]);
 
     useEffect(() => {
-        if(recipe?.RECP_NAME) {
+        if (recipe?.RECP_NAME) {
             setTitle(recipe.RECP_NAME);
         }
     }, [recipe]);
@@ -34,32 +32,41 @@ const RecipeView = () => {
     useEffect(() => {
         if (recipeList && url_params) {
             setRecipe(recipeList[url_params]);
+            initIsLike(url_params);
         }
-    }, [recipeList]);
+    }, [recipeList, url_params]);
 
-    const initIsLike = async () => {
+    const initIsLike = async (urlParams) => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/mypage/check_like_recipe", {
             params: {
                 u_no: getToken("loginedUNo"),
-                rf_no: url_params
+                rf_no: urlParams
             }
         }).then((data) => {
-            console.log("////", data.data);
-            if (data.data?.length > 0) {
+            if (data.data > 0) {
                 setIsLike(true);
+            } else {
+                setIsLike(false);
             }
-        })
+        }).finally(() => {
+            setIsLoading(false);
+        });
     }
 
     const likeBtnClickEvent = async () => {
-        if (isLike) {
-            deleteLikeRecipe();
+        if (getToken("loginedUNo")) {
+            if (isLike) {
+                deleteLikeRecipe();
+            } else {
+                addLikeRecipe();
+            }
         } else {
-            addLikeRecipe();
+            alert("로그인 후 가능한 서비스입니다.")
         }
     }
 
     const addLikeRecipe = async () => {
+        setIsLoading(true);
         await axios.post(process.env.REACT_APP_SERVER_URL + "/mypage/add_like_recipe",
             {
                 u_no: getToken("loginedUNo"),
@@ -67,10 +74,13 @@ const RecipeView = () => {
             }
         ).then((data) => {
             setIsLike(prev => !prev);
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
 
     const deleteLikeRecipe = async () => {
+        setIsLoading(true);
         await axios.delete(process.env.REACT_APP_SERVER_URL + "/mypage/delete_like_recipe", {
             data: {
                 u_no: getToken("loginedUNo"),
@@ -78,11 +88,15 @@ const RecipeView = () => {
             }
         }).then((data) => {
             setIsLike(prev => !prev);
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
 
     return (
         <>
+            {isLoading ? <Loading /> : null}
+
             {recipe ?
                 <>
                     <h2 className='title'>{recipe.RECP_NAME}</h2>

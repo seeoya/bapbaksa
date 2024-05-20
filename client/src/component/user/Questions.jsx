@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getToken } from "../../storage/loginedToken";
+import { setTitle } from "../../util/setTitle";
 
 axios.defaults.withCredentials = true;
 
@@ -24,6 +25,7 @@ const Questions = () => {
     useEffect(() => {
         const loginedUId = getToken('loginedUId');
         setUId(loginedUId);
+        setTitle('1:1 문의');
     }, []);
 
     useEffect(() => {

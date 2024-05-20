@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
 
 const AdminUserQuestions = () => {
 
@@ -15,8 +16,8 @@ const AdminUserQuestions = () => {
     const [loadQuest, setLoadQuest] = useState([]);
 
     useEffect(() => {
-        console.log(no);
         initQuestion();
+        setTitle('1:1 문의 답변');
     }, [no]);
 
     const initQuestion = async () => {

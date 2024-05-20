@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
 
 const ListView = () => {
     const { no } = useParams();
@@ -20,6 +21,9 @@ const ListView = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setTitle(viewData?.PROD_NAME);
+    });
 
     useEffect(() => {
         setPaymentInfo()

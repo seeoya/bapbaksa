@@ -1,27 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { setTitle } from '../../util/setTitle';
 
 const AdminMarketRefund = () => {
 
-    const [orderList, setOrderList] = useState({});
-    
-
     useEffect(() => {
-        initRefundOrders();
-    }, []);
-
-    const initRefundOrders = async () => {
-        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_refund_order", {
-            params: {
-            }
-        }).then((data) => {
-            setOrderList(data.data);
-        }).catch((err) => {
-            return { type: "error" };
-        });
-    }
-
+        setTitle('물품 환불승인');
+    });
 
     return (
         <>

@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 import { CheckoutPage } from '../payment/Checkout';
 
 const Payment = () => {
@@ -25,6 +26,8 @@ const Payment = () => {
     const [p_no, setPNo] = useState([]);
 
     const [orderNo, setOrderNo] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     let u_id = getToken('loginedUId');
     let u_no = getToken('loginedUNo');
@@ -138,6 +141,7 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     const axios_paymentGetProd = async (i_no) => {
@@ -149,6 +153,7 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     const axios_getUserInfo = async () => {
@@ -162,6 +167,7 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     const locationBack = () => {
@@ -179,8 +185,7 @@ const Payment = () => {
                     </div>
                     : null
             }
-
-            <div className='content-wrap' id="payment_wrap">
+            {isLoading ? <Loading /> : <div className='content-wrap' id="payment_wrap">
                 <h2 className='title'>결제창</h2>
                 <div className='content flex-wrap'>
                     <div className="payment-ingredient-wrap">
@@ -237,7 +242,8 @@ const Payment = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
+
         </>
     );
 }

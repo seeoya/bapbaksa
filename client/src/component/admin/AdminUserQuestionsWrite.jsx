@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const AdminUserQuestions = () => {
 
@@ -12,6 +13,8 @@ const AdminUserQuestions = () => {
     const [oId, setOId] = useState('');
     const [quesDetail, setQuesDetail] = useState('');
     const [quesAnswer, setQuesAnswer] = useState('');
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const [loadQuest, setLoadQuest] = useState([]);
 
@@ -37,7 +40,9 @@ const AdminUserQuestions = () => {
             setQuesAnswer(question.ques_answer);
         }).catch((err) => {
             return { type: "error" };
-        });
+        }).finally(( )=>{
+            setIsLoading(false);
+        })
     }
 
     const questionClickBtnHandler = async () => {
@@ -73,7 +78,8 @@ const AdminUserQuestions = () => {
     }
 
     return (
-        <div className='admin-question-answer-wrap'>
+    <>
+        {isLoading ? <Loading /> :  <div className='admin-question-answer-wrap'>
             <h2>1:1 고객 문의 답변</h2>
             <div className="question-answer-wrap, form">
                 <h3>고객 ID</h3>
@@ -90,7 +96,8 @@ const AdminUserQuestions = () => {
                     <button type="button" onClick={questionClickBtnHandler} className="btn main">문의 작성</button>
                 </Link>
             </div>
-        </div>
+        </div>}
+    </>
     );
 };
 

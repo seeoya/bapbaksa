@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
+import Loading from "../include/Loading";
 
 const ShoppingCart = () => {
 
@@ -11,6 +12,8 @@ const ShoppingCart = () => {
     const [temp, setTemp] = useState(false);
     const [goToPay, setGoToPay] = useState([]);
     const u_no = getToken('loginedUNo');
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -134,6 +137,7 @@ const ShoppingCart = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     async function axios_getCartInfo(u_no) {
@@ -146,10 +150,12 @@ const ShoppingCart = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     return (
-        <div id="shopping_cart_wrap" className='content-wrap'>
+        <>
+            {isLoading ? <Loading /> : <div id="shopping_cart_wrap" className='content-wrap'>
             <h2 className='title'>장바구니</h2>
 
             {/* {Object.keys(goToPay).map(item => {
@@ -229,7 +235,9 @@ const ShoppingCart = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </div>}
+        </>
+        
     );
 }
 

@@ -20,6 +20,8 @@ const SignUp = () => {
     const [uSecondAddr, setUSeconAddr] = useState('');
     const [isMemberFlag, setIsMemberFlag] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         setTitle('회원가입');
     });
@@ -170,6 +172,7 @@ const SignUp = () => {
             })
             .finally(data => {
                 console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION FINALLY');
+                setIsLoading(false);
             });
 
     }
@@ -265,7 +268,7 @@ const SignUp = () => {
                 })
                 .finally(data => {
                     console.log('AXIOS SIGN_UP COMMUNICATION FINALLY');
-
+                    setIsLoading(false);
                 });
 
 

@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 
 import { A11y, Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const Main = () => {
 
@@ -76,7 +77,7 @@ const Main = () => {
                     <div className='line'></div>
                     <div className='today-recommend-swiper'>
                         {isLoading ? (
-                            <div>Loading recipes...</div>
+                            <Loading />
                         ) : (
                             <Swiper
                                 spaceBetween={40}

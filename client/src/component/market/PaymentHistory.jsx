@@ -3,6 +3,7 @@ import { getToken } from "../../storage/loginedToken";
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
 import { setTitle } from "../../util/setTitle";
+import Loading from "../include/Loading";
 
 const PaymentHistory = () => {
 
@@ -11,6 +12,9 @@ const PaymentHistory = () => {
     const [acceptInfo, setAcceptInfo] = useState();
     const [cancelInfo, setCancelInfo] = useState();
     const [temp, setTemp] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(true);
+
     let u_no = getToken('loginedUNo');
 
     const navigate = useNavigate();
@@ -89,6 +93,7 @@ const PaymentHistory = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     };
 
     const axios_refund_order = async () => {
@@ -102,6 +107,7 @@ const PaymentHistory = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     };
 
     const axios_accept_order = async () => {
@@ -115,6 +121,7 @@ const PaymentHistory = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     };
 
     const axios_cancel_order = async () => {
@@ -128,10 +135,12 @@ const PaymentHistory = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     };
 
     return (
-        <div className='content-wrap' id="payment_history_wrap">
+        <>
+            {isLoading ? <Loading /> : <div className='content-wrap' id="payment_history_wrap">
             <h2 className='title'>결제 내역</h2>
             <div id="payment_total_wrap">
                 <div className='content ingredient-cart-wrap'>
@@ -185,7 +194,9 @@ const PaymentHistory = () => {
                     })}
                 </div>
             </div>
-        </div>
+        </div>}
+        </>
+        
     );
 }
 export default PaymentHistory;

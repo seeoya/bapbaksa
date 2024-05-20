@@ -45,9 +45,6 @@ import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
-import Questions from './user/Questions';
-import AdminUserQuestions from './admin/AdminUserQuestions';
-import AdminUserQuestionsWrite from './admin/AdminUserQuestionsWrite';
 import AdminChart from './admin/AdminChart';
 
 

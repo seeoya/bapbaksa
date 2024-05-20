@@ -10,6 +10,9 @@ const {
     get_all_orders,
     get_order,
     insert_stock,
+    monthChart,
+    curCategoryChart,
+    lastCategoryChart,
 } = require("../lib/service/adminService");
 
 const router = express.Router();
@@ -76,6 +79,21 @@ router.get("/get_order", (req, res) => {
     } else {
         get_all_orders(req, res);
     }
+});
+
+router.get("/monthChart", (req, res) => {
+    console.log('monthChart');
+    monthChart(req, res);
+});
+
+router.get("/curCategoryChart", (req, res) => {
+    console.log('categoryChart');
+    curCategoryChart(req, res);
+});
+
+router.get("/lastCategoryChart", (req, res) => {
+    console.log('lastCategoryChart');
+    lastCategoryChart(req, res);
 });
 
 module.exports = router;

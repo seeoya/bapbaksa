@@ -340,52 +340,6 @@ const marketService = {
         })
         
     },
-    monthChart: (req, res) => {
-        console.log('monthChart');
-        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 0 GROUP BY formatted_date`, 
-        (error, cur) => {
-            if (error) {
-                res.json(null);
-            } else {
-                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 0 GROUP BY formatted_date;`, 
-                (error1, last) => {
-                    if (error1) {
-                        res.json(null);
-                    } else {
-                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 2 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 2 MONTH) AND O_S_NO = 0 GROUP BY formatted_date;`, 
-                        (error2, last2) => {
-                            if (error2) {
-                                res.json(null);
-                            } else {
-                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 3 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 3 MONTH) AND O_S_NO = 0 GROUP BY formatted_date;`, 
-                                (error3, last3) => {
-                                    if (error3) {
-                                        res.json(null);
-                                    } else {
-                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 4 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 4 MONTH) AND O_S_NO = 0 GROUP BY formatted_date;`, 
-                                        (error4, last4) => {
-                                            if (error4) {
-                                                res.json(null);
-                                            } else {
-                                                let data = {
-                                                    cur, 
-                                                    last, 
-                                                    last2, 
-                                                    last3, 
-                                                    last4
-                                                }
-                                                res.json(data);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        })
-                    }
-                });
-            }
-        });
-    },
     
 };
 

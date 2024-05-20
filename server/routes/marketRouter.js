@@ -61,10 +61,6 @@ router.post("/paymentDeleteCart", (req, res) => {
     marketService.deleteCart(req, res);
 })
 
-router.get("/monthChart", (req, res) => {
-    console.log('monthChart');
-    marketService.monthChart(req, res);
-});
 router.post("/insertTossPayment", (req, res) => {
     console.log("insertTossPayment");
     marketService.insertTossPayment(req, res);

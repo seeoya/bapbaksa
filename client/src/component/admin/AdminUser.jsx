@@ -2,10 +2,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const AdminUser = () => {
 
     const [userList, setUserList] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         initUsers();
@@ -13,6 +15,7 @@ const AdminUser = () => {
     }, []);
 
     const initUsers = async () => {
+        setIsLoading(true);
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
             params: {
             }
@@ -20,11 +23,15 @@ const AdminUser = () => {
             setUserList(data.data);
         }).catch((err) => {
             return { type: "error" };
+        }).finally(() => {
+            setIsLoading(false);
         });
     }
 
     return (
         <>
+            {isLoading ? <Loading /> : null}
+
             <div className='title'>회원 목록</div>
 
             <div className='content'>

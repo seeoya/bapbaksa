@@ -17,7 +17,7 @@ const AdminMarketStock = () => {
     }, []);
 
     useEffect(() => {
-        if (stockList && newProductList) {
+        if (newProductList?.length > 0 && stockList) {
             setIsLoading(false);
         }
     }, [stockList, newProductList]);
@@ -34,7 +34,6 @@ const AdminMarketStock = () => {
 
     const changeStock = async (e) => {
         let item = e.target;
-
         let p_code = item.dataset.pCode,
             ps_code = item.dataset.psCode,
             ps_count = item.previousSibling.value;
@@ -118,7 +117,7 @@ const AdminMarketStock = () => {
                                     <td className='ps-count'>{stockList[el.PROD_CODE][el.PROD_SPCS_CODE]}</td>
                                     <td className='p-btn-wrap'>
                                         <input type="number" className='input' defaultValue={0} />
-                                        <button type='button' className='btn sub' data-p-code={el.PROD_CODE} data-ps-code={el.PROD_SPCS_CODE} onClick={(e) => changeStock(e)}>수정</button>
+                                        <button type='button' className='btn sub' data-p-code={el.PROD_CODE} data-ps-code={el.PROD_SPCS_CODE} onClick={(e) => changeStock(e)}>추가/삭제</button>
                                     </td>
                                 </tr>
                             })

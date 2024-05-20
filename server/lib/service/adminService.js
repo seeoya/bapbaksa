@@ -391,7 +391,7 @@ const adminService = {
                                         formattedDate = `${year}-${String(month).padStart(2, '0')}`;
                                         data.push(last3.length > 0 ? last3[0] : {"total_final_price": 0, "formatted_date": formattedDate});
                                         
-                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 0 GROUP BY formatted_date`, 
+                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 GROUP BY formatted_date`, 
                                         (error4, last4) => {
                                             if (error4) {
                                                 res.json(null);
@@ -428,7 +428,7 @@ const adminService = {
                 res.json(null);
             } else {
                 data.push(curCar.length > 0 ? curCar[0] : {"total_final_price": 0, "P_NO": 100, "formatted_date": formattedDate});
-                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 0 AND P_NO < 400 AND P_NO >= 200 GROUP BY formatted_date`, 
+                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 400 AND P_NO >= 200 GROUP BY formatted_date`, 
                 (error1, curVeg) => {
                     if (error1) {
                         res.json(null);

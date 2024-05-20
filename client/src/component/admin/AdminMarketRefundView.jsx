@@ -20,8 +20,10 @@ const AdminMarketRefundView = () => {
     const [oModDate, setOModDate] = useState('');   
     const [PROD_NAME, setPROD_NAME] = useState('');
     const [PROD_SPCS_NAME, setPROD_SPCS_NAME] = useState('');
-    const [dataFlag, setDataFlag] = useState(false);
+    const [orderFlag, setOrderFlag] = useState(false);
+    const [prodFlag, setProdFlag] = useState(false);
     const [order, setOrder] = useState({});
+    const [prod, setProd] = useState({});
  
 
     useEffect(() => {
@@ -41,10 +43,13 @@ const AdminMarketRefundView = () => {
         }).then((data) => {
             console.log('🎈', data.data);        
 
-            let order = data.data[no];
+            let order = data.data.refund;
+            let prod = data.data.prod;
+            
             console.log(order);
+            console.log(prod);
             if(order){ 
-                setDataFlag(true);
+                setOrderFlag(true);
                 setOrder(order);
                 setORegDate(order.o_reg_date);
                 setOId(order.o_id);            
@@ -58,10 +63,14 @@ const AdminMarketRefundView = () => {
                 setPmPrice(order.pm_price);            
                 setPmMethod(order.pm_method);            
                 setPRegDate(order.p_reg_date);            
-                setPModDate(order.p_mod_date);            
-                setPROD_NAME(order.PROD_NAME);
-                setPROD_SPCS_NAME(order.PROD_SPCS_NAME);
+                setPModDate(order.p_mod_date);                           
+            }
 
+            if(prod){ 
+                setProdFlag(true);
+                setProd(prod);
+                setPROD_NAME(prod.PROD_NAME);
+                setPROD_SPCS_NAME(prod.PROD_SPCS_NAME);
             }
 
         }).catch((err) => {
@@ -100,7 +109,7 @@ const AdminMarketRefundView = () => {
         
         await axios.put(process.env.REACT_APP_SERVER_URL + "/admin/put_reject", {
             params: {
-                o_no: e.o_no,                                
+                o_no: e,                                
                 o_s_no: 6,                                    
             }
         }).then((data) => {
@@ -127,8 +136,9 @@ const AdminMarketRefundView = () => {
                             <Link to={"/admin/market"}>환불리스트</Link>
                         </td>
                     </tr>
-                    {dataFlag ? 
-                    <>
+
+                {orderFlag && prodFlag ? 
+                <>
                     <tr>
                         <td className='o_id'>주문번호</td>
                         <td className='o_s_no'>상태</td>                         
@@ -158,27 +168,29 @@ const AdminMarketRefundView = () => {
                         <td className='o_reg_date'>{oRegDate.substring(0, 10)}</td>                        
                         <td className='o_mod_date'>{oModDate.substring(0, 10)}</td>
                     </tr>
-
                     <tr>
+                        <td className='no'>회원번호</td>
                         <td className='pm_no'>결제번호</td>
+                    </tr>
+                    <tr>
+                        <td className='no'>{uNo}</td>
+                        <td className='pm_no'>{pmNo}</td>                       
+                    </tr>
+                    <tr>                       
                         <td className='pm_method'>결제방법</td>
                         <td className='pm_price'>결제금액</td>
                     </tr>
-                    <tr>    
-                        <td className='pm_no'>{pmNo}</td>                       
+                    <tr>                        
                         <td className='pm_method'>{pmMethod}</td>                        
                         <td className='pm_price'>{pmPrice.toLocaleString('ko-KR')}</td>                      
                     </tr>
-
                     <tr>                        
-                        <td className='p_reg_date'>결제일</td>
-                        <td className='p_reg_date'>{pRegDate.substring(0, 10)}</td>
+                        <td className='p_reg_date'>결제일</td>                        
                         <td className='p_mod_date'>결제 수정일</td>                        
-                        <td className='p_mod_date'>{pModDate.substring(0, 10)}</td>
                     </tr>
-                    <tr>
-                        <td className='no'>회원번호</td>
-                        <td className='no'>{uNo}</td>
+                    <tr>    
+                        <td className='p_reg_date'>{pRegDate.substring(0, 10)}</td>
+                        <td className='p_mod_date'>{pModDate.substring(0, 10)}</td>
                     </tr>
                     <tr>
                         <td className='no'>구매번호</td>
@@ -200,16 +212,18 @@ const AdminMarketRefundView = () => {
                         <td className='price'>합계</td>
                         <td className='price'>{oFinalPrice.toLocaleString('ko-KR')}</td>
                     </tr>
-                    <tr>                                                           
-                        <td className='refund'><button type='button' className='btn sub' onClick={(e) => refundApproveClick(order)}>승인</button></td>
-                        <td className='reject'><button type='button' className='btn sub' onClick={(e) => refundRejectClick(no)}>승인불가</button></td>
-                    </tr>
+                
+                    <tr className='tr-btn'>
+                        <td><button type='button' className='btn sub' onClick={(e) => refundApproveClick(order)}>환불 승인</button></td>
+                        <td><button type='button' className='btn sub' onClick={(e) => refundRejectClick(no)}>승인 불가</button></td>                        
+                    </tr>            
                     </>
                     :
+                    
                     <tr><td>구매 상세 내역이 없습니다.</td></tr>
             }
-                </table>
-
+                
+                </table>                
             </div>        
     </>
     );

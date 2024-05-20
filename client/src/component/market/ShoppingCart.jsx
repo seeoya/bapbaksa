@@ -10,12 +10,9 @@ const ShoppingCart = () => {
     const [temp, setTemp] = useState(false);
     const [goToPay, setGoToPay] = useState([]);
     const u_no = getToken('loginedUNo');
-<<<<<<< HEAD
-=======
 
     const navigate = useNavigate();
 
->>>>>>> 4be6c950335a2060cc51a1b3e6e2c7966cb40c98
     useEffect(() => {
         loginCheck();
         axios_getCartInfo(u_no);

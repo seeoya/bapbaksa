@@ -10,19 +10,15 @@ const {
     get_all_orders,
     get_order,
     get_all_refund_orders,
-    get_refund_order,
-    insert_stock,
-<<<<<<< HEAD
+    get_refund_order,    
     put_refund,
     put_reject,
-=======
     monthChart,
     curCategoryChart,
     lastCategoryChart,
     getStock,
     insertStock,
     putStock,
->>>>>>> 4be6c950335a2060cc51a1b3e6e2c7966cb40c98
 } = require("../lib/service/adminService");
 
 

@@ -44,14 +44,11 @@ import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
-<<<<<<< HEAD
 import Questions from './user/Questions';
 import AdminMarketRefundView from './admin/AdminMarketRefundView';
-=======
 import AdminChart from './admin/AdminChart';
 
 
->>>>>>> 4be6c950335a2060cc51a1b3e6e2c7966cb40c98
 
 const LayoutRouter = () => {
 

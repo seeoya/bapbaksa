@@ -201,7 +201,7 @@ const adminService = {
                     
                     try {
                         const pNo = orders.map((item) => item.p_no);
-                        const prodInfo = await axios_getProductInfo(pNo);
+                        const prodInfo = await axios_getProdName(pNo);
                                 console.log('🎃', prodInfo);
                         let tmp = {};
                         orders.map((order, index) => {
@@ -222,7 +222,6 @@ const adminService = {
                         console.log(error);
                         res.json(null);
                     }
-
                     
                 }
             }
@@ -264,22 +263,10 @@ const adminService = {
                         const pNo = refund[0].p_no;
                         console.log("pNo: ", pNo);
 
-                        const prodInfo = await axios_getProductInfo(pNo);
+                        const prodInfo = await axios_getProdName(pNo);
                                 console.log('🎃', prodInfo);
-                        let tmp = {};
-                        refund.map((order, index) => {
-                            if (!tmp[order.o_no]){
-                                tmp[order.o_no] = {};
-                            }
-
-                            tmp[order.o_no] = {
-                                ...order,
-                                ...prodInfo,
-                            };                            
-
-                        });
-                        console.log('tmp:', tmp);
-                        res.json(tmp);
+                        
+                        res.json({refund: refund[0], prod: prodInfo[0]});
                     } catch (error) {
                         console.log(error);
                         res.json(null);
@@ -305,7 +292,7 @@ const adminService = {
 
             });
     },
-    put_refund: async (req, res) => {
+    put_refund: (req, res) => {
         let query = req.body.params;
         o_no = query.o_no;
         o_id = query.o_id;
@@ -337,11 +324,13 @@ const adminService = {
 
                     });
    },
-
-    put_reject: async (req, res) => {
+    put_reject: (req, res) => {
         let query = req.body.params;
-        o_no = query.o_no;    
-        o_s_no = query.o_s_no;          
+        let o_no = query.o_no;    
+        let o_s_no = query.o_s_no;      
+        
+        console.log("o_s_no", o_s_no);
+        console.log("o_no", o_no);
 
         DB.query(`UPDATE TBL_ORDER SET o_s_no = ?, o_mod_date = now() WHERE o_no = ?`,
                     [o_s_no, o_no], (error, result) => {
@@ -447,10 +436,7 @@ const adminService = {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
-
-                    } catch (error) {
-                        console.log(error);
-                        res.json(null);
+                  
                     if (result.length > 0) {
                         let countSum = parseInt(result[0].ps_count) + parseInt(ps_count);
 
@@ -485,22 +471,6 @@ const adminService = {
         );
     },    
     
-};
-
-async function axios_getProductInfo(p_no) {
-    try {
-        const response = await axios.post("http://localhost:3002/product/getProductInfo", {
-            P_NO: p_no,
-        });
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-    
-
-module.exports = adminService;
-    insert_stock: (req, res) => {},
     monthChart: (req, res) => {
         console.log('monthChart');
         let data = [];
@@ -715,5 +685,16 @@ module.exports = adminService;
         });
     },
 };
+
+async function axios_getProdName(p_no) {
+    try {
+        const response = await axios.post("http://localhost:3002/product/getProdName", {
+            P_NO : p_no,
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 module.exports = adminService;

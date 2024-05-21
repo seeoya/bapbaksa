@@ -19,7 +19,7 @@ const MarketNav = () => {
     }, [loginedID]);
 
     return (
-    <nav>            
+    <nav id="market-nav">            
             <div id="market-category-wrap" className="category-wrap">
                 <div className="header-category">            
                     <div className="market">                        

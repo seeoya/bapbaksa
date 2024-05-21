@@ -190,10 +190,7 @@ const RecipeList = () => {
         <>
             {isLoading || isFilterLoading ? <Loading /> : null}
 
-
             <h2 className='title'>
-                {isLoading ? "로딩중" : ""} {isFilterLoading ? "필터로딩중" : ""}
-
                 {
                     recipeSearch ?
                         `"${recipeSearch}" 검색 결과 ${filteredRecipeCount} 건`
@@ -221,7 +218,7 @@ const RecipeList = () => {
 
                     {
                         moreBtnState ?
-                            <button type='button' className='btn main btn-more' onClick={moreBtnClickEvent}>더보기</button>
+                            <button type='button' className='btn sub btn-more' onClick={moreBtnClickEvent}>더보기</button>
                             : null
                     }
                 </div>

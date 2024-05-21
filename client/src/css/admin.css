@@ -211,6 +211,10 @@
     background-color: #eaeaea;
 }
 
+.admin-question-detail:hover {
+    background-color: #dbdbdb;
+}
+
 .admin-question-wrap .admin-question-detail div:first-child {
     margin: 0 0.5px 0 0;
     display: flex;

@@ -61,8 +61,8 @@ const Main = () => {
                         className="my-swiper"
                     >
                         <div className='banner'>
-                            <SwiperSlide>
-                                <img src='/imgs/banner/recipe/grandopen.png' />
+                        <SwiperSlide>
+                                <img src='/imgs/banner/recipe/main.png' />
                             </SwiperSlide>
                             <SwiperSlide>
                                 <img src='/imgs/banner/recipe/bapbaksaEvent.png' />

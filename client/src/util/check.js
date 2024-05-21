@@ -14,7 +14,7 @@ export const loginCheck = async () => {
             },
         })
         .then((data) => {
-            if (data.data.u_status) {
+            if (data.data[0].u_status) {
                 result = data.data[0].u_status;
             } else {
                 result = -1;

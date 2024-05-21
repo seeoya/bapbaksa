@@ -630,7 +630,7 @@ nav .user-info img {
 }
 
 .container .recipe-grid .recommend-container .today-recommend h3 {
-    font-size: 1.4em;
+    font-size: 2.0em;
 }
 
 .container .recipe-grid .recommend-container .today-recommend .line {
@@ -657,29 +657,26 @@ nav .user-info img {
 }
 
 .random-recipe-info {
-    width: 600px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%; height: 100%;
 }
 
 .random-recipe-info a {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
 }
 
 .random-recipe-detail {
-    justify-content: center;
-    align-items: center;
+    margin-left: 20px;
+}
+
+.random-recipe-detail .detail-title {
+    font-size: 2em;
 }
 
 .random-recipe-detail p {
+    margin-top: 10px;
+    font-size: 1.1em;
     max-width: 450px;
     word-break: keep-all;
-    text-align: center;
 }
 
 .random-recipe-info img {
@@ -802,8 +799,10 @@ nav .user-info img {
     width: 100%;
 }
 
-.container .market-grid .cheep-container .today-recommend .today-recommend-swiper {
+.market-grid .cheep-container .today-recommend .today-recommend-swiper {
     height: 500px;
+    display: flex;
+    flex-direction: row;
 }
 
 .container .market-grid .cheep-container .today-recommend .today-recommend-swiper .my-swiper {

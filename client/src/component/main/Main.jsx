@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import "swiper/css/pagination";
 
-import { Autoplay, Pagination, A11y, Navigation } from 'swiper/modules';
+import { A11y, Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';
 
@@ -30,7 +30,7 @@ const Main = () => {
             setRandomRecipe(data.data);
             setIsLoading(false);
         }).catch((error) => {
-            return {type: "error", error}
+            return { type: "error", error }
             setIsLoading(false);
         });
     }

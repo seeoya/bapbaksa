@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
-import { CheckoutPage } from '../payment/Checkout';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';
+import { CheckoutPage } from '../payment/Checkout';
 
 const Payment = () => {
     const [postcode, setPostcode] = useState('');
@@ -70,16 +70,13 @@ const Payment = () => {
     }, [postcode]);
 
     const loginCheck = () => {
-
-        if(u_no === null) {
+        if (u_no === null) {
             alert('로그인이 필요한 서비스입니다.');
             navigate('/user/signin')
-        } 
-
+        }
     }
 
     const payBtnClick = async () => {
-
         await axios_insertPayment();
         setIsPayment(true);
     };
@@ -175,6 +172,10 @@ const Payment = () => {
         setIsLoading(false);
     }
 
+    const locationBack = () => {
+        navigate(-1);
+    }
+
     return (
         <>
         {isLoading ? <Loading /> : null}
@@ -220,12 +221,10 @@ const Payment = () => {
                     <div className="payment-price-wrap">
                         <div className="payment-member-info">
                             <span className="ingredient-title">주문자 : {u_id}님</span>
-
                             <div className='find-address-btn'>
                                 <button className='btn main' onClick={execDaumPostcode}>주소 찾기</button>
                                 <input type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
                             </div>
-
                             <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소" readOnly></input>
                             <input
                                 type="text"
@@ -239,7 +238,7 @@ const Payment = () => {
                             <span className="ingredient-title">총 가격 : {(totalPay + 3000).toLocaleString()}원</span>
                         </div>
                         <div className="payment-btn">
-                            <a href="#none">뒤로 가기</a>
+                            <button type='button' onClick={locationBack}>뒤로 가기</button>
                             <button type="button" onClick={payBtnClick}>결제</button>
                         </div>
                     </div>

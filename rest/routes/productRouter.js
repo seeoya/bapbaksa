@@ -67,7 +67,13 @@ router.post('/getProduct', (req, res) => {
 router.post('/getProductInfo', (req,res) => {
     console.log('/product/getProductInfo');
     product.getProductInfo(req,res);
-})
+});
+
+router.post('/getProdName', (req,res) => {
+    console.log('/product/getProdName');
+    product.getProdName(req,res);
+});
+
 router.get('/random', (req, res) => {
     console.log('/product/random');
     product.random(req, res);

@@ -9,7 +9,10 @@ const {
     answer_question,
     get_all_orders,
     get_order,
-    insert_stock,
+    get_all_refund_orders,
+    get_refund_order,    
+    put_refund,
+    put_reject,
     monthChart,
     curCategoryChart,
     lastCategoryChart,
@@ -17,6 +20,7 @@ const {
     insertStock,
     putStock,
 } = require("../lib/service/adminService");
+
 
 const router = express.Router();
 
@@ -76,6 +80,29 @@ router.get("/get_order", (req, res) => {
         get_all_orders(req, res);
     }
 });
+
+router.get("/get_refund_order", (req, res) => {
+    console.log("params", req.query);
+
+    if (req.query.o_no) {
+        get_refund_order(req, res);
+    } else {
+        get_all_refund_orders(req, res);
+    }
+});
+
+router.put("/put_refund", (req, res) => {
+    console.log("params", req.body);
+
+        put_refund(req, res);
+});
+
+router.put("/put_reject", (req, res) => {
+    console.log("params", req.body);
+
+        put_reject(req, res);
+});
+
 
 router.get("/monthChart", (req, res) => {
     console.log('monthChart');

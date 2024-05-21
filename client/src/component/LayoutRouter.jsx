@@ -40,11 +40,12 @@ import Google from './user/Google';
 import Kakao from './user/Kakao';
 import Modify from './user/Modify';
 import Naver from './user/Naver';
-import Questions from './user/Questions';
 import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
+import Questions from './user/Questions';
+import AdminMarketRefundView from './admin/AdminMarketRefundView';
 import AdminChart from './admin/AdminChart';
 
 
@@ -123,6 +124,7 @@ const LayoutRouter = () => {
                     <Route path="" element={<AdminMarket />}></Route>
                     <Route path=":id" element={<AdminMarketView />}></Route>
                     <Route path="refund" element={<AdminMarketRefund />}></Route>
+                    <Route path="refund/:no" element={<AdminMarketRefundView />}></Route>
                     <Route path="chart" element={<AdminChart />}></Route>
                     <Route path="stock" element={<AdminMarketStock />}></Route>
                 </Route>

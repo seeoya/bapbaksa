@@ -111,7 +111,7 @@ const AdminMarketStock = () => {
                                     <td className='ps-code'>{el.PROD_SPCS_CODE}</td>
                                     <td className=''>
                                         <Link to={`/market/view/${el.PROD_CODE}_${el.PROD_SPCS_CODE}`}>
-                                            {el.PROD_SPCS_NAME}
+                                            {el.PROD_NAME + " / " + el.PROD_SPCS_NAME}
                                         </Link>
                                     </td>
                                     <td className='ps-count'>{stockList[el.PROD_CODE][el.PROD_SPCS_CODE]}</td>

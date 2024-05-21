@@ -811,7 +811,7 @@ nav .user-info img {
     grid-row-start: 3;
     grid-row-end: 4;
     height: 400px;
-    max-width: 900px;
+    max-width: 100%;
 }
 
 .container .market-grid .swiper-container .my-swiper {
@@ -832,13 +832,18 @@ nav .user-info img {
 
 /* market 1st swiper start */
 .container .market-grid .cheep-container .cheep-recommend {
-    width: 960px;
+    width: 100%;
     height: auto;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .container .market-grid .cheep-container .cheep-recommend h2 {
     padding: 10px 0 5px 10px;
+    display: flex;
     justify-content: center;
     align-items: center;
     font-size: 2em;
@@ -853,6 +858,10 @@ nav .user-info img {
     width: 940px;
     margin: 20px 0 40px 0;
     border-bottom: 2px dashed #d0cfcf;
+}
+
+.cheep-recommend-swiper {
+    width: 100%;
 }
 
 .container .market-grid .cheep-container .today-recommend .today-recommend-swiper {

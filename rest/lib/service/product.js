@@ -471,7 +471,7 @@ const product = {
                 res.json(null);
             } else {
                 cur_date = date[0].PROD_YMD;
-                DB.query(`SELECT * FROM PRODUCT WHERE PROD_YMD = ${cur_date} ORDER BY RAND() LIMIT 9`, 
+                DB.query(`SELECT * FROM PRODUCT WHERE PROD_YMD = ${cur_date} ORDER BY RAND() LIMIT 10`, 
                 (error, random) => {
                     if (error) {
                         res.json(null);

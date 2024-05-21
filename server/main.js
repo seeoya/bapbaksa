@@ -37,9 +37,9 @@ app.use(
 const userRouter = require("./routes/userRouter");
 const adminRouter = require("./routes/adminRouter");
 const marketRouter = require("./routes/marketRouter");
-const recipeRouter = require("./routes/recipeRouter");
 const fridgeRouter = require("./routes/fridgeRouter");
 const mypageRouter = require("./routes/mypageRouter");
+const commonRouter = require("./routes/commonRouter");
 
 app.use("/auth", userRouter);
 app.use("/oauth", userRouter);
@@ -48,9 +48,9 @@ app.use("/api/oauth", userRouter);
 app.use("/api/user", userRouter);
 app.use("/admin", adminRouter);
 app.use("/market", marketRouter);
-app.use("/recipe", recipeRouter);
 app.use("/fridge", fridgeRouter);
 app.use("/mypage", mypageRouter);
+app.use("/common", commonRouter);
 
 // payment
 const paymentRouter = require("./lib/payment/payments.router");

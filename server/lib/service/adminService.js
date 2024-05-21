@@ -526,149 +526,229 @@ const adminService = {
     },
     curCategoryChart: (req, res) => {
         console.log('categoryChart');
-        let data = [];
-        let currentDate = new Date();
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth() + 1;
-        let formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-        console.log('formattedDate : ', formattedDate);
 
-        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 200 AND P_NO >= 100 GROUP BY formatted_date`, 
-        (error, curCar) => {
+        DB.query(`
+                SELECT 
+                    '탄수화물' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 100 AND P.PROD_CODE < 200 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5 
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '채소' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 200 AND P.PROD_CODE < 400 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5 
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '과일' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 400 AND P.PROD_CODE < 500 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5 
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '육류' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 500 AND P.PROD_CODE < 600 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5 
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '어패류' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 600 AND P.PROD_CODE < 700 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5 
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '가공 육류' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 700 AND P.PROD_CODE < 800 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5 
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '가공 식품' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 800 AND P.PROD_CODE < 900 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5 
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+        `, 
+        (error, curCtg) => {
             if (error) {
                 res.json(null);
             } else {
-                data.push(curCar.length > 0 ? curCar[0] : {"total_final_price": 0, "P_NO": 100, "formatted_date": formattedDate});
-                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 400 AND P_NO >= 200 GROUP BY formatted_date`, 
-                (error1, curVeg) => {
-                    if (error1) {
-                        res.json(null);
-                    } else {
-                        data.push(curVeg.length > 0 ? curVeg[0] : {"total_final_price": 0, "P_NO": 200, "formatted_date": formattedDate});
-                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 500 AND P_NO >= 400 GROUP BY formatted_date`, 
-                        (error2, curfru) => {
-                            if (error2) {
-                                res.json(null);
-                            } else {
-                                data.push(curfru.length > 0 ? curfru[0] : {"total_final_price": 0, "P_NO": 400, "formatted_date": formattedDate});
-                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 600 AND P_NO >= 500 GROUP BY formatted_date`, 
-                                (error3, curMeat) => {
-                                    if (error3) {
-                                        res.json(null);
-                                    } else {
-                                        data.push(curMeat.length > 0 ? curMeat[0] : {"total_final_price": 0, "P_NO": 500, "formatted_date": formattedDate});
-                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 700 AND P_NO >= 600 GROUP BY formatted_date`, 
-                                        (error4, curFish) => {
-                                            if (error4) {
-                                                res.json(null);
-                                            } else {
-                                                data.push(curFish.length > 0 ? curFish[0] : {"total_final_price": 0, "P_NO": 600, "formatted_date": formattedDate});
-                                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 800 AND P_NO >= 700 GROUP BY formatted_date`, 
-                                                (error5, curProm) => {
-                                                    if (error5) {
-                                                        res.json(null);
-                                                    } else {
-                                                        data.push(curProm.length > 0 ? curProm[0] : {"total_final_price": 0, "P_NO": 700, "formatted_date": formattedDate});
-                                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 900 AND P_NO >= 800 GROUP BY formatted_date`, 
-                                                        (error6, curProc) => {
-                                                            if (error6) {
-                                                                res.json(null);
-                                                            } else {
-                                                                data.push(curProc.length > 0 ? curProc[0] : {"total_final_price": 0, "P_NO": 800, "formatted_date": formattedDate});
-                                                                data[0].P_NO = '탄수화물';
-                                                                data[1].P_NO = '채소';
-                                                                data[2].P_NO = '과일';
-                                                                data[3].P_NO = '육류';
-                                                                data[4].P_NO = '어패류';
-                                                                data[5].P_NO = '가공 육류';
-                                                                data[6].P_NO = '가공 식품';
-                                                                res.json(data);
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                const categories = curCtg.map(result => ({
+                    P_NO: result.P_NO,
+                    total_final_price: result.total_final_price || 0
+                }));
+                res.json(categories);
             }
         });
     },
     lastCategoryChart: (req, res) => {
         console.log('lastCategoryChart');
-        let data = [];
-        let currentDate = new Date();
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth();
-        let formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-        console.log('formattedDate : ', formattedDate);
 
-        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 200 AND P_NO >= 100 GROUP BY formatted_date`, 
-        (error, lastCar) => {
+        DB.query(`
+                SELECT 
+                    '탄수화물' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 100 AND P.PROD_CODE < 200 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '채소' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 200 AND P.PROD_CODE < 400 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '과일' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 400 AND P.PROD_CODE < 500 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '육류' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 500 AND P.PROD_CODE < 600 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '어패류' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 600 AND P.PROD_CODE < 700 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '가공 육류' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 700 AND P.PROD_CODE < 800 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                UNION ALL
+                SELECT 
+                    '가공 식품' AS P_NO,
+                    SUM(CASE WHEN P.PROD_CODE >= 800 AND P.PROD_CODE < 900 THEN O.o_final_price ELSE 0 END) AS total_final_price
+                FROM 
+                    DB_BAPBAKSA.TBL_ORDER O
+                JOIN 
+                    REST.PRODUCT P 
+                ON 
+                    O.p_no = P.PROD_NO
+                WHERE 
+                    O.o_s_no = 5
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
+        `, 
+        (error, lastCtg) => {
             if (error) {
                 res.json(null);
-            } else {
-                data.push(lastCar.length > 0 ? lastCar[0] : {"total_final_price": 0, "P_NO": 100, "formatted_date": formattedDate});
-                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 400 AND P_NO >= 200 GROUP BY formatted_date`, 
-                (error1, lastVeg) => {
-                    if (error1) {
-                        res.json(null);
-                    } else {
-                        data.push(lastVeg.length > 0 ? lastVeg[0] : {"total_final_price": 0, "P_NO": 200, "formatted_date": formattedDate});
-                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 500 AND P_NO >= 400 GROUP BY formatted_date`, 
-                        (error2, lastfru) => {
-                            if (error2) {
-                                res.json(null);
-                            } else {
-                                data.push(lastfru.length > 0 ? lastfru[0] : {"total_final_price": 0, "P_NO": 400, "formatted_date": formattedDate});
-                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 600 AND P_NO >= 500 GROUP BY formatted_date`, 
-                                (error3, lastMeat) => {
-                                    if (error3) {
-                                        res.json(null);
-                                    } else {
-                                        data.push(lastMeat.length > 0 ? lastMeat[0] : {"total_final_price": 0, "P_NO": 500, "formatted_date": formattedDate});
-                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 700 AND P_NO >= 600 GROUP BY formatted_date`, 
-                                        (error4, lastFish) => {
-                                            if (error4) {
-                                                res.json(null);
-                                            } else {
-                                                data.push(lastFish.length > 0 ? lastFish[0] : {"total_final_price": 0, "P_NO": 600, "formatted_date": formattedDate});
-                                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 800 AND P_NO >= 700 GROUP BY formatted_date`, 
-                                                (error5, lastProm) => {
-                                                    if (error5) {
-                                                        res.json(null);
-                                                    } else {
-                                                        data.push(lastProm.length > 0 ? lastProm[0] : {"total_final_price": 0, "P_NO": 700, "formatted_date": formattedDate});
-                                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 900 AND P_NO >= 800 GROUP BY formatted_date`, 
-                                                        (error6, lastProc) => {
-                                                            if (error6) {
-                                                                res.json(null);
-                                                            } else {
-                                                                data.push(lastProc.length > 0 ? lastProc[0] : {"total_final_price": 0, "P_NO": 800, "formatted_date": formattedDate});
-                                                                data[0].P_NO = '탄수화물';
-                                                                data[1].P_NO = '채소';
-                                                                data[2].P_NO = '과일';
-                                                                data[3].P_NO = '육류';
-                                                                data[4].P_NO = '어패류';
-                                                                data[5].P_NO = '가공 육류';
-                                                                data[6].P_NO = '가공 식품';
-                                                                res.json(data);
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+            } else { 
+                const categories = lastCtg.map(result => ({
+                    P_NO: result.P_NO,
+                    total_final_price: result.total_final_price || 0
+                }));
+                res.json(categories);
             }
         });
     },

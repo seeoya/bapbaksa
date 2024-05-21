@@ -32,6 +32,8 @@ const AdminChart = () => {
             createMonthChart();
             createCategoryChart();
             console.log('monthDate  : ', monthDate);
+            console.log('curCtegoryDate  : ', curCtegoryDate);
+            console.log('lastCtegoryDate  : ', lastCtegoryDate);
         }
     }, [monthDate, curCtegoryDate, lastCtegoryDate]);
 

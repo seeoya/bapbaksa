@@ -2643,8 +2643,12 @@ background-color: var(--highlight-light-color);
         box-shadow: 0 0 inset;
     }
 
-    100% {
+    50% {
         box-shadow: 0 -200px inset;
+    }
+
+    100% {
+        box-shadow: 0 0 inset;
     }
 
 }

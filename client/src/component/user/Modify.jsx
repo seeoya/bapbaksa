@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getToken } from '../../storage/loginedToken';
 import { getRefreshToken } from '../../util/refreshToken';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 
 axios.defaults.withCredentials = true;
@@ -24,6 +25,8 @@ const Modify = () => {
     const [uFirstAddr, setUFirstAddr] = useState('');
     const [uSecondAddr, setUSeconAddr] = useState('');
     const [accessToken, setAccessToken] = useState('');
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -67,7 +70,7 @@ const Modify = () => {
                 if (res.data !== null && res.data.message === undefined) {
 
                     console.log('AXIOS MODIFY_FORM COMMUNICATION SUCCESS ==> ', res.data);
-
+                    setIsLoading(false);
                     setUNo(res.data.user.u_no);
                     setUId(res.data.user.u_id);
                     setUMail(res.data.user.u_mail);
@@ -91,7 +94,7 @@ const Modify = () => {
             })
             .finally(data => {
                 console.log('AXIOS MODIFY_FORM COMMUNICATION FINALLY');
-
+                setIsLoading(true);
             });
     }
 
@@ -251,7 +254,7 @@ const Modify = () => {
                     console.log('res: ', res);
                     console.log('res.data: ', res.data);
                     console.log('res.affect: ', res.data.result.affectedRows);
-
+                    setIsLoading(false);
                     if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {
                         console.log('AXIOS MODIFY_CONFIRM COMMUNICATION SUCCESS ==> ', res.data);
 
@@ -267,7 +270,7 @@ const Modify = () => {
             })
             .finally(data => {
                 console.log('AXIOS MODIFY_CONFIRM COMMUNICATION FINALLY');
-        
+                setIsLoading(true);
             });
                    
                         
@@ -280,88 +283,86 @@ const Modify = () => {
 
 
     return (
-        <div className='content-wrap'>
+        <>
+            {isLoading ? null : <Loading />}
+            <div className='content-wrap'>
 
-            <h2 className='title'>정보수정</h2>
+                <h2 className='title'>정보수정</h2>
 
-            <div className='content'>
+                <div className='content'>
 
-                <div className='modify-wrap'>
-                    <form name="modify_form" className='form'>
-                        <div className='input-wrap'>
-                            <input type="hidden" name="u_no" value={uNo} />
-                            <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} readOnly />
-                        </div>
-
-                        <div className='input-wrap'>
-                            <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요" />
-                            <span id="message_u_pw" className="input-message">비밀번호는 8 ~ 20자,&nbsp;&nbsp;영문과 숫자, 특수문자를 1개 이상 포함해야 합니다.</span>
-                        </div>
-
-                        <div className='input-wrap'>
-                            <input type="password" name="u_check_pw" value={uCheckPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 한번 더 입력해 주세요" />
-                            <span id="message_u_check_pw" className="input-message">비밀번호가 일치하지 않습니다.</span>
-                        </div>
-
-                        <div className='input-wrap'>
-                            <input type="text" name="u_mail" value={uMail} onChange={(e) => userInfoChangeHandler(e)} placeholder="이메일 주소를 입력해 주세요" />
-                            <span id="message_u_mail" className="input-message">이메일 형식으로 입력해 주세요.</span>
-                        </div>
-
-                        <div className='input-wrap'>
-                            <input type="text" name="u_phone" value={uPhone} onChange={(e) => userInfoChangeHandler(e)} placeholder="휴대폰 번호를 입력해 주세요" />
-                            <span id="message_u_phone" className="input-message">예: 010-1234-5678</span>
-                        </div>
-
-                        <div className='input-wrap'>
-                            <div>
-                                <input type="text" id="postcode" name="u_zip_code" value={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readOnly />
-                                <button type="button" id="search_address_btn" onClick={searchAddrClickHandler} className="btn sub">
-                                    <FontAwesomeIcon icon="fa-solid fa-location-crosshairs" />
-                                </button>
+                    <div className='modify-wrap'>
+                        <form name="modify_form" className='form'>
+                            <div className='input-wrap'>
+                                <input type="hidden" name="u_no" value={uNo} />
+                                <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} readOnly />
                             </div>
 
-                            <div className='col'>
-                                <input type="text" id="address" name="u_first_address" value={uFirstAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="주소" readOnly />
-                                <input type="text" id="detailAddress" name="u_second_address" value={uSecondAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="상세주소" />
-
-                                <span id="icon_u_detail_addr" className="input-icon"></span>
-                                <span id="message_u_detail_addr" className="input-message">주소를 입력해 주세요.</span>
-                            </div>
-                        </div>
-
-                        <div className='input-wrap' id='profile'>
-                            <div className="profile-img">
-
-                                {/*<img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />*/}
-                                <img src="/imgs/logo/logo.png" alt="밥박사" />
-
-                            </div>
-                            <div>
-                                <span id="icon_u_profile" className="input-icon"></span>
-                                <span id="message_u_profile" className="input-message">프로필 사진을 선택해 주세요.</span>
-                                <input type="file" name="u_profile" value={uProfile} onChange={(e) => userInfoChangeHandler(e)} />
+                            <div className='input-wrap'>
+                                <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 입력해 주세요" />
+                                <span id="message_u_pw" className="input-message">비밀번호는 8 ~ 20자,&nbsp;&nbsp;영문과 숫자, 특수문자를 1개 이상 포함해야 합니다.</span>
                             </div>
 
-                        </div>
+                            <div className='input-wrap'>
+                                <input type="password" name="u_check_pw" value={uCheckPw} onChange={(e) => userInfoChangeHandler(e)} placeholder="비밀번호를 한번 더 입력해 주세요" />
+                                <span id="message_u_check_pw" className="input-message">비밀번호가 일치하지 않습니다.</span>
+                            </div>
 
-                        <div className='btn-wrap'>
-                            <button type="button" onClick={modifyBtnClickHandler} className="btn main full">정보수정</button>
-                            <Link to='/user/delete' className="btn sub full" >회원탈퇴</Link>
+                            <div className='input-wrap'>
+                                <input type="text" name="u_mail" value={uMail} onChange={(e) => userInfoChangeHandler(e)} placeholder="이메일 주소를 입력해 주세요" />
+                                <span id="message_u_mail" className="input-message">이메일 형식으로 입력해 주세요.</span>
+                            </div>
 
-                        </div>
+                            <div className='input-wrap'>
+                                <input type="text" name="u_phone" value={uPhone} onChange={(e) => userInfoChangeHandler(e)} placeholder="휴대폰 번호를 입력해 주세요" />
+                                <span id="message_u_phone" className="input-message">예: 010-1234-5678</span>
+                            </div>
 
+                            <div className='input-wrap'>
+                                <div>
+                                    <input type="text" id="postcode" name="u_zip_code" value={uZipcode} onChange={(e) => userInfoChangeHandler(e)} placeholder="우편번호" readOnly />
+                                    <button type="button" id="search_address_btn" onClick={searchAddrClickHandler} className="btn sub">
+                                        <FontAwesomeIcon icon="fa-solid fa-location-crosshairs" />
+                                    </button>
+                                </div>
 
-                    </form>
+                                <div className='col'>
+                                    <input type="text" id="address" name="u_first_address" value={uFirstAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="주소" readOnly />
+                                    <input type="text" id="detailAddress" name="u_second_address" value={uSecondAddr} onChange={(e) => userInfoChangeHandler(e)} placeholder="상세주소" />
+
+                                    <span id="icon_u_detail_addr" className="input-icon"></span>
+                                    <span id="message_u_detail_addr" className="input-message">주소를 입력해 주세요.</span>
+                                </div>
+                            </div>
+
+                            <div className='input-wrap' id='profile'>
+                                <div className="profile-img">
+
+                                    {/*<img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />*/}
+                                    <img src="/imgs/logo/logo.png" alt="밥박사" />
+
+                                </div>
+                                <div>
+                                    <span id="icon_u_profile" className="input-icon"></span>
+                                    <span id="message_u_profile" className="input-message">프로필 사진을 선택해 주세요.</span>
+                                    <input type="file" name="u_profile" value={uProfile} onChange={(e) => userInfoChangeHandler(e)} />
+                                </div>
+
+                            </div>
+
+                            <div className='btn-wrap'>
+                                <button type="button" onClick={modifyBtnClickHandler} className="btn main full">정보수정</button>
+                                <Link to='/user/delete' className="btn sub full" >회원탈퇴</Link>
+                            </div>
+                        </form>
+
+                    </div>
 
                 </div>
 
-
-
             </div>
-
-
-        </div>
+        </>
+        
     );
 };
 

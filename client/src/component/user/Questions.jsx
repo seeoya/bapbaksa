@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
 import { useNavigate } from "react-router-dom";
+import Loading from "../include/Loading";
 
 axios.defaults.withCredentials = true;
 
@@ -99,6 +100,7 @@ const Questions = () => {
     }
 
     const getOrderNo = async () => {
+        setIsLoading(true);
         let data = {
             "u_id": uId,
         }
@@ -108,13 +110,15 @@ const Questions = () => {
             data: data,
         }).then((data) => {
             setLoadQrderNo(data.data);
-            setIsLoading(false);
         }).catch((error) => {
             return { type: "error", error }
+        }).finally(( )=>{
+            setIsLoading(false);
         })
     }
 
     const loadMyQuestion = async () => {
+        setIsLoading(true);
         let data = {
             "u_id": uId,
         }
@@ -124,9 +128,10 @@ const Questions = () => {
             data: data,
         }).then((data) => {
             setLoadQuest(data.data);
-            setIsLoading(false);
         }).catch((error) => {
             return { type: "error", error }
+        }).finally(( )=>{
+            setIsLoading(false);
         })
     }
 
@@ -141,6 +146,7 @@ const Questions = () => {
     }
 
     const deleteQuestion = async (question) => {
+        setIsLoading(true);
         let data = {
             "u_id": uId,
             "ques_no": question.ques_no,
@@ -152,85 +158,88 @@ const Questions = () => {
             data: data,
         }).then((data) => { 
             setLoadQuest(data.data);
-            setIsLoading(false);
         }).catch((error) => {
             return { type: "error", error }
+        }).finally(( )=>{
+            setIsLoading(false);
         })
     }
 
     return (
-        <div className="content-wrap">
-
-            <div className="question-wrap">
-                <h2 className="title">1:1 문의</h2>
-                <form name="question_form" className="qusetion-form" method="post">
-                    <div className="question-input-wrap">
-                        <input type="text" name="ques_title" value={quesTitle} onChange={(e) => { questionChangeHandler(e) }} placeholder="제목을 입력해주세요" />
-                        <select name="o_id" value={oId} onChange={(e) => questionChangeHandler(e)}>
-                            <option>주문번호 선택</option> {/* DB에서 값을 받은 뒤 map 돌려서 사용 */}
-                            {loadQrderNo.length > 0 ? (loadQrderNo.map((order) => (
-                                <option key={order.O_ID} value={order.O_ID}>{order.O_ID}</option>
-                            ))) : (<option>주문 목록이 없습니다.</option>)}
-                        </select>
-                        <textarea name="ques_detail" value={quesDetail} onChange={(e) => { questionChangeHandler(e) }} placeholder="문의 내용을 입력해주세요" ></textarea>
-                        <button type="button" onClick={questionClickBtnHandler} className="btn">문의 작성</button>
-                    </div>
-                </form>
-
-                <div className="question-answer">
-                    <div className="question-answer-title">{/* flex로 적용 */}
-                        <h2>1:1 문의 내역</h2>
-                        <p className="user-name">{uId}님</p>
-                    </div>
-                    <div className="question-answer-form">
-                        {/* flex로 적용 */}
-                        <div className="question-answer-form-title">
-                            <div>제목</div>
-                            <div>작성일</div>
-                            <div>답변상태</div>
-                            <div>삭제</div>
+        <>
+            {isLoading ? <Loading /> : null}
+            <div className="content-wrap">
+                <div className="question-wrap">
+                    <h2 className="title">1:1 문의</h2>
+                    <form name="question_form" className="qusetion-form" method="post">
+                        <div className="question-input-wrap">
+                            <input type="text" name="ques_title" value={quesTitle} onChange={(e) => { questionChangeHandler(e) }} placeholder="제목을 입력해주세요" />
+                            <select name="o_id" value={oId} onChange={(e) => questionChangeHandler(e)}>
+                                <option>주문번호 선택</option> {/* DB에서 값을 받은 뒤 map 돌려서 사용 */}
+                                {loadQrderNo.length > 0 ? (loadQrderNo.map((order) => (
+                                    <option key={order.O_ID} value={order.O_ID}>{order.O_ID}</option>
+                                ))) : (<option>주문 목록이 없습니다.</option>)}
+                            </select>
+                            <textarea name="ques_detail" value={quesDetail} onChange={(e) => { questionChangeHandler(e) }} placeholder="문의 내용을 입력해주세요" ></textarea>
+                            <button type="button" onClick={questionClickBtnHandler} className="btn">문의 작성</button>
                         </div>
-                        {loadQuest.length > 0 ? (
-                            loadQuest.map((question) => (
-                                <div key={question.ques_no}>
-                                    <div className="question-answer-form-detail">
-                                        <div onClick={() => titleClickHandler(question)} style={{ cursor: 'pointer' }}>
-                                            {question.ques_title}
+                    </form>
+
+                    <div className="question-answer">
+                        <div className="question-answer-title">{/* flex로 적용 */}
+                            <h2>1:1 문의 내역</h2>
+                            <p className="user-name">{uId}님</p>
+                        </div>
+                        <div className="question-answer-form">
+                            {/* flex로 적용 */}
+                            <div className="question-answer-form-title">
+                                <div>제목</div>
+                                <div>작성일</div>
+                                <div>답변상태</div>
+                                <div>삭제</div>
+                            </div>
+                            {loadQuest.length > 0 ? (
+                                loadQuest.map((question) => (
+                                    <div key={question.ques_no}>
+                                        <div className="question-answer-form-detail">
+                                            <div onClick={() => titleClickHandler(question)} style={{ cursor: 'pointer' }}>
+                                                {question.ques_title}
+                                            </div>
+                                            <div>{question.ques_write_date}</div>
+                                            <div>{question.ques_state === 0 ? '답변 안됨' : '답변 완료'}</div>
+                                            <div><button onClick={() => deleteQuestion(question)}>삭제</button></div>
                                         </div>
-                                        <div>{question.ques_write_date}</div>
-                                        <div>{question.ques_state === 0 ? '답변 안됨' : '답변 완료'}</div>
-                                        <div><button onClick={() => deleteQuestion(question)}>삭제</button></div>
-                                    </div>
-                                    {selectedQuestion === question && (
-                                        <div className="modal-wrap">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    {selectedQuestion.ques_answer ? (<p className="question-reply-date">
-                                                        답변일 : {selectedQuestion.ques_answer_date}
-                                                    </p>) : ""}
-                                                </div>
-                                                <div className="modal-detail">
-                                                    <p><span>Q : </span>{selectedQuestion.ques_detail}</p>
-                                                    {selectedQuestion.ques_answer ? (
-                                                        <p><span>A : </span>{selectedQuestion.ques_answer}</p>
-                                                    ) : (
-                                                        <p><span>A : </span>아직 답변이 없습니다.</p>
-                                                    )}
+                                        {selectedQuestion === question && (
+                                            <div className="modal-wrap">
+                                                <div className="modal-content">
+                                                    <div className="modal-header">
+                                                        {selectedQuestion.ques_answer ? (<p className="question-reply-date">
+                                                            답변일 : {selectedQuestion.ques_answer_date}
+                                                        </p>) : ""}
+                                                    </div>
+                                                    <div className="modal-detail">
+                                                        <p><span>Q : </span>{selectedQuestion.ques_detail}</p>
+                                                        {selectedQuestion.ques_answer ? (
+                                                            <p><span>A : </span>{selectedQuestion.ques_answer}</p>
+                                                        ) : (
+                                                            <p><span>A : </span>아직 답변이 없습니다.</p>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="no-questions">
+                                    작성된 문의 내용이 없습니다.
                                 </div>
-                            ))
-                        ) : (
-                            <div className="no-questions">
-                                작성된 문의 내용이 없습니다.
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

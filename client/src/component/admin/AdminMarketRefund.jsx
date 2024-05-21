@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const AdminMarketRefund = () => {
 
     const [orderList, setOrderList] = useState({});
-    
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         initRefundOrders();
         setTitle('물품 환불승인');
-    }, []);
+    }, [isLoading]);
 
     const initRefundOrders = async () => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_refund_order", {
@@ -19,6 +20,7 @@ const AdminMarketRefund = () => {
             }
         }).then((data) => {
             setOrderList(data.data);
+            setIsLoading(false);
         }).catch((err) => {
             return { type: "error" };
         });
@@ -29,7 +31,9 @@ const AdminMarketRefund = () => {
         
         <div className='title'>환불 관리</div>
             <div className='content' id='refund-list'>
-
+            {isLoading ? (
+                    <Loading />)
+                    :(
                 <table>
                     <tr>                        
                         <th className='date'>주문일</th>
@@ -71,7 +75,7 @@ const AdminMarketRefund = () => {
                             : <tr><td>환불 내역이 없습니다.</td></tr>
                     }
 
-                </table>
+                </table> )}
             </div>
         
     </>

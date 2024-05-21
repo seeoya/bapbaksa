@@ -9,7 +9,7 @@ const DB = mysql.createConnection({
     // password: "1234",
     database: "REST",
     dateStrings: true,
-});;
+});
 
 DB.connect();
 

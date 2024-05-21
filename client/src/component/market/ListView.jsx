@@ -212,8 +212,10 @@ const ListView = () => {
         }
     }
 
-    return (<>
-    {isLoading ? <Loading /> : <div className='content-wrap' id="market_list_view">
+    return (
+    <>
+        {isLoading ? <Loading /> : null}
+        <div className='content-wrap' id="market_list_view">
             <h2 className='title'>품목 상세</h2>
             <div className='content'>
 
@@ -269,9 +271,8 @@ const ListView = () => {
                     <div id="price-chart-wrap" ref={chartRef}></div>
                 </div>
             </div>
-        </div>}
+        </div>
     </>
-        
     );
 };
 

@@ -124,13 +124,13 @@ const ShoppingCart = () => {
 
 
     async function axios_deleteCart(mcNos) {
+        setIsLoading(true);
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/deleteCart", {
                 'MC_NO': mcNos,
             })
             if (response.data != null) {
                 setTemp((temp) => !temp);
-                alert('삭제 성공');
             } else {
                 alert('삭제 실패');
             }
@@ -141,6 +141,7 @@ const ShoppingCart = () => {
     }
 
     async function axios_getCartInfo(u_no) {
+        setIsLoading(true);
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/getMarketCart", {
                 'U_NO': u_no,
@@ -155,7 +156,8 @@ const ShoppingCart = () => {
 
     return (
         <>
-            {isLoading ? <Loading /> : <div id="shopping_cart_wrap" className='content-wrap'>
+            {isLoading ? <Loading /> : null}
+            <div id="shopping_cart_wrap" className='content-wrap'>
             <h2 className='title'>장바구니</h2>
 
             {/* {Object.keys(goToPay).map(item => {
@@ -235,7 +237,7 @@ const ShoppingCart = () => {
                     </div>
                 </div>
             )}
-        </div>}
+        </div>
         </>
         
     );

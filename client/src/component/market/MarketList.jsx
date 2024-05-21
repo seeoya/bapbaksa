@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AllProductQuery, NewProductQuery } from "../../query/productQuerys";
 import { useSelector } from "react-redux";
 import { setTitle } from "../../util/setTitle";
+import Loading from "../include/Loading";
 
 const MarketList = () => {
 const { data: allProductList, isLoading: allProductIsLoading, isError: allProductIsError } = AllProductQuery();
@@ -13,6 +14,8 @@ const [viewNumber, setViewNumber] = useState(12);
 const location = useLocation();
 const marketSearch = useSelector((state) => state.market.search);
 
+const [isLoading, setIsLoading] = useState(true);
+
 useEffect(() => {
     if (location.state && location.state.searchVal) {
         setSearch(location.state.searchVal);
@@ -22,6 +25,12 @@ useEffect(() => {
 useEffect(() => { 
     setTitle("제품 리스트"); 
 }, []); 
+
+useEffect(() => {
+    if (allProductList && newProductList) {
+        setIsLoading(false);
+    }
+}, [allProductList, newProductList]);
 
 const moreProductBtn = () => {
     setViewNumber((prev) => prev + 12);
@@ -72,7 +81,9 @@ const filteredList = newProductList?.filter((item) => {
 const displayedList = filteredList?.slice(0, viewNumber);
 
 return (
-    <div id="market_list">
+    <>
+        {isLoading ? <Loading /> : null}
+        <div id="market_list">
     <div className="ingredient-category">
         <div className="ingredient-category-btn">
         <button
@@ -158,6 +169,7 @@ return (
         </div>
     </div>
     </div>
+    </>
 );
 };
 

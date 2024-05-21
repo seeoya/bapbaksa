@@ -34,13 +34,13 @@ const MarketHeader = () => {
                 <div className="header-menu">
                     <div className="logo">
                         <Link to="/" className="link">
-                            <img src="/imgs/logo/logo.png" alt="밥박사" />
+                            <img src="/imgs/logo/market_logo.png" alt="밥박사" />
                         </Link>
                     </div>
 
                     <div className="search">
                         <input id="market_search" type="search" name="search" className="input" placeholder="검색어를 입력하세요." onChange={(e) => marketSearchChangeEvent(e)} />
-                        <Link to={`/market/list`} state={{ searchVal: searchVal }} onClick={searchBtnClickEvent} className="btn sub">
+                        <Link to={`/market/list`} state={{ searchVal: searchVal }} onClick={searchBtnClickEvent} className="btn highlight">
                             검색
                         </Link>
                     </div>

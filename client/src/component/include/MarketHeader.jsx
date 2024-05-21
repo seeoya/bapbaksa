@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getToken } from "../../storage/loginedToken";
 import { useDispatch } from "react-redux";
-import { searchMarket } from "../../redux/actions/market"
+import { Link } from "react-router-dom";
+import { searchMarket } from "../../redux/actions/market";
+import { getToken } from "../../storage/loginedToken";
 
 const MarketHeader = () => {
 
@@ -29,14 +29,14 @@ const MarketHeader = () => {
     }
 
     return (
-    <header id="market-header">
-    <div id="market-header-wrap" className="header-wrap">
-        <div className="header-menu">
-            <div className="logo">
-                <Link to="/" className="link">
-                    <img src="/imgs/logo/logo.png" alt="밥박사" />
-                </Link>
-            </div>
+        <header id="market-header">
+            <div id="market-header-wrap" className="header-wrap">
+                <div className="header-menu">
+                    <div className="logo">
+                        <Link to="/" className="link">
+                            <img src="/imgs/logo/logo.png" alt="밥박사" />
+                        </Link>
+                    </div>
 
                     <div className="search">
                         <input id="market_search" type="search" name="search" className="input" placeholder="검색어를 입력하세요." onChange={(e) => marketSearchChangeEvent(e)} />

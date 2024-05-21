@@ -11,7 +11,7 @@ const RecipeListItem = ({ itemNo, idx }) => {
         <>
             {
                 recipeList ?
-                    <Link to={"/recipe/view/" + itemNo} className='recipe-item' key={idx} >
+                    <Link to={"/recipe/view/" + itemNo} className='recipe-item c-box' key={idx} >
                         <div className='recipe-info'>
                             <div>
                                 <div>{item.RECP_CODE}</div>

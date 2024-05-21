@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const AdminMarket = () => {
 
     const [orderList, setOrderList] = useState({});
-    
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         initOrders();
         setTitle('구매 내역');
-    }, []);
+    }, [isLoading]);   
+    
 
     const initOrders = async () => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_order", {
@@ -19,6 +21,7 @@ const AdminMarket = () => {
             }
         }).then((data) => {
             setOrderList(data.data);
+            setIsLoading(false);
         }).catch((err) => {
             return { type: "error" };
         });
@@ -31,6 +34,9 @@ const AdminMarket = () => {
         <div className='title'>구매 내역</div>
             <div className='content' id='order-list'>
 
+                {isLoading ? (
+                    <Loading />)
+                    :(
                 <table>
                     <tr>                        
                         <th className='date'>주문일</th>
@@ -75,7 +81,7 @@ const AdminMarket = () => {
                             : <tr><td>구매 내역이 없습니다.</td></tr>
                     }
 
-                </table>
+                </table> )} 
             </div>
            
         </>

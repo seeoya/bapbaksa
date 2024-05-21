@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { setTitle } from '../../util/setTitle';
 import axios from 'axios';
+import Loading from '../include/Loading';
 
 const AdminMarketView = () => {
+
+    const [isLoading, setIsLoading] = useState(true);
+
     const { id } = useParams();
     const [orderList, setOrderList] = useState({});    
     const [oId, setOId] = useState('');
@@ -42,6 +46,7 @@ const AdminMarketView = () => {
             let order = data.data[id][0];
             console.log('🎈🧨', order);
 
+            setIsLoading(false);
             setOrderList(data.data[id]);            
             setOId(order.o_id);            
             setUNo(order.u_no);
@@ -74,6 +79,9 @@ const AdminMarketView = () => {
                             <Link to={"/admin/market"} className='link'>구매내역리스트</Link>
                     </div>
                     
+                    {isLoading ? (
+                    <Loading />)
+                    :(
                     <table>
                         <tr>
                             <td className='t1'>회원번호</td>                            
@@ -112,7 +120,10 @@ const AdminMarketView = () => {
                             <td className='t1'>{pZipcode}</td>
                             <td colSpan='6' className='t2'>{pFirstAddr + ' ' + pSecondAddr}</td>
                         </tr>
-                    </table>
+                    </table>)}
+                    {isLoading ? (
+                    <Loading />)
+                    :(
                     <table>
                         <tr className='order-no-list'>
                                 <th className='no'>구매번호</th>
@@ -153,7 +164,7 @@ const AdminMarketView = () => {
                             <tr><td>구매 상세 내역이 없습니다.</td></tr>
                             </>
                         }
-                    </table>
+                    </table> )}
                 </div>         
             
         </>                

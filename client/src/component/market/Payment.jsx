@@ -120,6 +120,7 @@ const Payment = () => {
     };
 
     const axios_insertPayment = async () => {
+        setIsLoading(true);
         try {
             let updatedRoadAddress = roadAddress;
             if (extraAddress !== '') {
@@ -136,7 +137,6 @@ const Payment = () => {
             })
 
             if (response.status === 200) {
-                alert("결제 성공");
                 setOrderNo(response.data.orderId);
             } else {
                 alert("결제 실패");
@@ -148,6 +148,7 @@ const Payment = () => {
     }
 
     const axios_paymentGetProd = async (i_no) => {
+        setIsLoading(true);
         try {
             const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/paymentGetProd", {
                 'I_NO': i_no,
@@ -160,6 +161,7 @@ const Payment = () => {
     }
 
     const axios_getUserInfo = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
                 params: {
@@ -175,6 +177,7 @@ const Payment = () => {
 
     return (
         <>
+        {isLoading ? <Loading /> : null}
             {
                 isPayment ?
                     <div id='modal' className='modal payment' >
@@ -184,7 +187,7 @@ const Payment = () => {
                     </div>
                     : null
             }
-            {isLoading ? <Loading /> : <div className='content-wrap' id="payment_wrap">
+            <div className='content-wrap' id="payment_wrap">
                 <h2 className='title'>결제창</h2>
                 <div className='content flex-wrap'>
                     <div className="payment-ingredient-wrap">
@@ -241,7 +244,7 @@ const Payment = () => {
                         </div>
                     </div>
                 </div>
-            </div>}
+            </div>
             
         </>
     );

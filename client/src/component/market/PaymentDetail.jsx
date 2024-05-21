@@ -20,6 +20,7 @@ const PaymentDetail = () => {
 
 
     async function axios_get_payment_detail() {
+        setIsLoading(true);
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/getPaymentDetail", {
                 'O_ID': oId,
@@ -33,7 +34,8 @@ const PaymentDetail = () => {
 
     return (
         <>
-            {isLoading ? <Loading /> : <div className='content-wrap' id="payment_wrap">
+        {isLoading ? <Loading /> : null}
+            <div className='content-wrap' id="payment_wrap">
             <h2 className='title'>결제 상세 페이지</h2>
             <div className='content flex-wrap'>
                 <div className="payment-ingredient-wrap">
@@ -84,7 +86,7 @@ const PaymentDetail = () => {
                     })}
                 </div>
             </div>
-        </div>}
+        </div>
         </>
         
     );

@@ -207,6 +207,10 @@
     border-bottom: 1px solid #eaeaea;
 }
 
+.admin-question-detail:nth-child(even) {
+    background-color: #eaeaea;
+}
+
 .admin-question-wrap .admin-question-detail div:first-child {
     margin: 0 0.5px 0 0;
     display: flex;

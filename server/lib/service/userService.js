@@ -458,7 +458,14 @@ const userService = {
             if (verified.ok) {
 
                 let now = new Date();
-                now = now.toLocaleString();
+                let year = now.getFullYear();
+                let month = now.getMonth() +1;
+                    month = "00" + month.toString();                    
+                let date = now.getDate();
+                    date = "00" + date.toString();
+
+                now = `${year}${month.slice(-2)}${date.slice(-2)}`;                
+
                 console.log('🎗🎗', post.u_id + now);
 
                 let sql = `UPDATE TBL_USER SET u_id = ?, u_mail = ?, u_phone = ?, u_google_id = ?, u_kakao_id = ?, 

@@ -1349,7 +1349,8 @@ footer .util_footer .btn {
 
 #market_list_view .ingredient-middle-wrap {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: end;
 }
 
 #shopping_cart_wrap .ingredient-middle-wrap {
@@ -1489,10 +1490,13 @@ footer .util_footer .btn {
 
 #market_list_view .go-cart-btn, #shopping_cart_wrap .go-cart-btn {
     background-color: var(--sub-dark-color);
+    height: 41px;
 }
 
 #market_list_view .go-payment-btn, #shopping_cart_wrap .go-payment-btn {
     background-color: var(--highlight-color);
+    width: 100px;
+    height: 41px;
 }
 
 #market_list_view select {
@@ -1588,6 +1592,10 @@ footer .util_footer .btn {
 #payment_wrap {
     display: flex;
     flex-direction: column;
+}
+
+#payment_wrap .find_address-postcode {
+    width: 436px;
 }
 
 #payment_wrap .find-address-btn {
@@ -1883,6 +1891,16 @@ footer .util_footer .btn {
 #shopping_cart_wrap .all-select-btn {
     display: flex;
     gap: 5px;
+    margin-bottom: 10px;
+}
+
+#shopping_cart_wrap .sold-out-wrap {
+    width: 310px;
+    font-size: 2rem;
+}
+
+#shopping_cart_wrap .cart-checkbox-warp {
+    width: 10px;
 }
 
 #shopping_cart_wrap input[type="checkbox"] {
@@ -1925,21 +1943,35 @@ footer .util_footer .btn {
     padding: 10px;
     display: flex;
     align-items: center;
+    flex-direction: column;
     gap: 10px;
     width: 900px;
     justify-content: space-between;
+    margin: 10px 0;
+}
+
+#payment_history_wrap .payment-history-name {
+    display: flex;
+    gap: 5px;
 }
 
 #payment_history_wrap .payment-history-check {
     display: flex;
     align-items: center;
     gap: 10px;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    border-top: 1px solid #dadada;
+    border-bottom: 2px solid #dadada;
+    border-radius: 10px;
 }
 
 #payment_history_wrap .ingredient-cart-btn {
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-direction: row-reverse;
 }
 
 #payment_history_wrap .payment-history-btn-status {

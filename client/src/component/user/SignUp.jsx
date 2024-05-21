@@ -64,9 +64,9 @@ const SignUp = () => {
     }
 
     function idCheck(input_value) {
-        // 아이디 검증: 영어 소문자와 숫자로만 구성되어야 함
+        // 아이디 검증: 5~20 영어 소문자와 숫자 조합으로 구성되어야 함
         let regex = new RegExp();
-        regex = /^[a-z0-9]{5,19}$/g;
+        regex = /^(?=.*[a-z])(?=.*[0-9]).{5,20}$/;
 
         if (regex.test(input_value)) {
             $('#message_u_id').css('display', 'none');
@@ -297,7 +297,7 @@ const SignUp = () => {
                                     <button type="button" className="btn sub" onClick={isMemberClickHandler}>중복확인</button>
                                 </div>
 
-                                <span id="message_u_id" className="input-message">아이디는 6 ~ 20자,&nbsp;&nbsp;영문과 숫자를 조합해야 합니다.</span>
+                                <span id="message_u_id" className="input-message">아이디는 5 ~ 20자,&nbsp;&nbsp;영문과 숫자를 조합해야 합니다.</span>
                             </div>
 
                             <div className='input-wrap'>

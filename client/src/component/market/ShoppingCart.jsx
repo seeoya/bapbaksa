@@ -16,8 +16,6 @@ const ShoppingCart = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const [isLoading, setIsLoading] = useState(true);
-
     const navigate = useNavigate();
 
     useEffect(() => {

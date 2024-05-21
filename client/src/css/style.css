@@ -2604,6 +2604,10 @@ background-color: var(--highlight-light-color);
     width: 200px;
 }
 
+.signup-wrap .form {
+    width: 450px;
+}
+
 .signup-wrap .input-wrap .pw-view-icon {
     align-items: center;
 }

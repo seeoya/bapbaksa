@@ -108,7 +108,6 @@ const Main = () => {
                                         </SwiperSlide>
                                     )}
                                 </Swiper>
-                            )
                         </div>
                     </div>
                 </div>

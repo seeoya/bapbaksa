@@ -241,11 +241,14 @@ const ListView = () => {
                                 {
                                     stock > 0 ? <>
                                         <div className="ingredient-middle-wrap">
-                                            <span>재고: {stock}</span>
-
-                                            <input type="button" onClick={() => handleCount("minus")} value="-" />
-                                            <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
-                                            <input type="button" onClick={() => handleCount("plus")} value="+" />
+                                            <div>
+                                                재고: {stock}
+                                            </div>
+                                            <div>
+                                                <input type="button" onClick={() => handleCount("minus")} value="-" />
+                                                <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
+                                                <input type="button" onClick={() => handleCount("plus")} value="+" />
+                                            </div>
                                         </div>
                                         <div>
                                         </div>
@@ -257,7 +260,7 @@ const ListView = () => {
                                             <div className='ingredient-bottom-wrap-btn'>
                                                 <button type="button" className='go-cart-btn' onClick={goToMarketCartBtn}>장바구니</button>
                                                 {goToPay.length > 0 ? (
-                                                    <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn'>
+                                                    <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn main btn'>
                                                         선택 결제
                                                     </Link>
                                                 ) :

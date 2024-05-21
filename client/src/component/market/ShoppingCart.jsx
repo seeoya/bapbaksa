@@ -83,7 +83,7 @@ const ShoppingCart = () => {
 
     const setPaymentInfo = () => {
         let items = [];
-        const checkedItems = cartInfo.filter(item => item.isSelected);
+        const checkedItems = cartInfo.filter(item => item.isSelected && stockList[item.i_no][item.productInfo.PROD_SPCS_CODE] > 0);
         checkedItems.map(item => {
             items.push({
                 'I_NO': item.i_no,
@@ -198,12 +198,16 @@ const ShoppingCart = () => {
 
                                     {
                                         stockList[item.i_no][item.productInfo.PROD_SPCS_CODE] > 0 ?
+                                            <span className="cart-checkbox-warp">
                                             <input
                                                 type="checkbox"
                                                 checked={item.isSelected}
                                                 onChange={() => handleItemSelect(index)}
                                             />
-                                            : null
+                                            </span>
+                                            : <span className="cart-checkbox-warp">
+
+                                            </span>
                                     }
 
                                     <Link to={`/market/view/${item.i_no}_${item.productInfo.PROD_SPCS_CODE}`}>
@@ -211,7 +215,7 @@ const ShoppingCart = () => {
                                     </Link>
                                     <Link to={`/market/view/${item.i_no}_${item.productInfo.PROD_SPCS_CODE}`}>
                                         <div className="ingredient-title-wrap">
-                                            <span className="ingredient-tSitle">{item.productInfo.PROD_NAME}</span>
+                                            <span className="ingredient-title">{item.productInfo.PROD_NAME}</span>
                                             <span className="ingredient-sub-title">{item.productInfo.PROD_SPCS_NAME}</span>
                                         </div>
                                     </Link>
@@ -244,14 +248,14 @@ const ShoppingCart = () => {
                                                 </div>
                                             </div>
                                         </>
-                                        : <div>품절 상품입니다.</div>
+                                        : <div className="sold-out-wrap">품절 상품입니다.</div>
                                 }
                             </div>
                         ))}
                         <div className="cart-payment-btn">
                             <button type="button" className='go-cart-btn' onClick={handleCheckout}>선택 삭제</button>
                             {goToPay.length > 0 ? (
-                                <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn'>
+                                <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn main btn'>
                                     선택 결제
                                 </Link>
                             ) :

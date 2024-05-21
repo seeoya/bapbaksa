@@ -66,10 +66,6 @@ const Payment = () => {
         }
     }, [userInfo]);
 
-    useEffect(() => {
-        setDetailAddress('');
-    }, [postcode]);
-
     const loginCheck = () => {
 
         if(u_no === null) {
@@ -94,7 +90,7 @@ const Payment = () => {
 
             setOCount(prev => [...prev, mcCount]);
             setOPrice(prev => [...prev, info.PROD_AVRG_PRCE]);
-            setPNo(prev => [...prev, info.PROD_NO]);
+            setPNo(prev => [...prev, info.PROD_CODE]);
         })
 
         setTotalPay(sum);
@@ -102,6 +98,7 @@ const Payment = () => {
     };
 
     const execDaumPostcode = () => {
+        setDetailAddress('');
         new window.daum.Postcode({
             oncomplete: (data) => {
                 let extraRoadAddr = '';
@@ -198,7 +195,7 @@ const Payment = () => {
                                     <div className="flex-item" key={idx}>
                                         <Link to={`/market/view/${info.PROD_CODE}_${info.PROD_SPCS_CODE}`}>
                                             <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} alt="ingredient" />
-                                            <span className="ingredient-title">{info.PROD_NAME}</span>
+                                            <span className="ingredient-title">{info.PROD_NAME}<br/>{info.PROD_SPCS_NAME}</span>
                                         </Link>
                                         <span className="ingredient-unit">
                                             {info.DSBN_STEP_ACTO_WT}
@@ -218,10 +215,10 @@ const Payment = () => {
                     <div className="payment-price-wrap">
                         <div className="payment-member-info">
                             <span className="ingredient-title">주문자 : {u_id}님</span>
-
+                        <form className='form'>
                             <div className='find-address-btn'>
                                 <button className='btn main' onClick={execDaumPostcode}>주소 찾기</button>
-                                <input type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
+                                <input className='find_address-postcode' type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
                             </div>
 
                             <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소" readOnly></input>
@@ -231,7 +228,7 @@ const Payment = () => {
                                 placeholder="상세 주소"
                                 onChange={(e) => setDetailAddress(e.target.value)}>
                             </input>
-
+                        </form>
                             <span className="ingredient-title">상품 가격 : {totalPay.toLocaleString()}원</span>
                             <span className="ingredient-title">배송비 : 3,000원</span>
                             <span className="ingredient-title">총 가격 : {(totalPay + 3000).toLocaleString()}원</span>

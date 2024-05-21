@@ -12,7 +12,6 @@ const MarketList = () => {
     const [viewNumber, setViewNumber] = useState(12);
     const [filteredList, setFilteredList] = useState([]);
     const [displayedList, setDisplayedList] = useState([]);
-
     const marketSearch = useSelector((state) => state.market.search);
 
     const location = useLocation();
@@ -22,8 +21,10 @@ const MarketList = () => {
         if (location.state && location.state.searchVal) {
             dispatch(searchMarket(location.state.searchVal));
             document.getElementById("market_search").value = location.state.searchVal;
+        } else {
+            dispatch(searchMarket(''));
         }
-    }, [location.state]);
+    }, [location]);
 
     useEffect(() => {
         setTitle("제품 리스트");

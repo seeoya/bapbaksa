@@ -43,18 +43,34 @@ const userService = {
         let post = req.body;
         console.log('post:', post);
 
-        db.query(`SELECT * FROM TBL_USER WHERE u_id = ?`,
-            [post.u_id], (error, user) => {
-                console.log('user', user);
+        if(post.u_id !== ''){
 
-                if (user.length > 0) {
-                    res.json({ isMember: true });
-                } else {
-                    res.json({ isMember: false });
-                }
+            let regex = new RegExp();
+            regex = /^(?=.*[a-z])(?=.*[0-9]).{5,20}$/;
+            let pass = regex.test(post.u_id);
+            console.log('++++++', pass);
 
-            });
+            if(pass) {
 
+                db.query(`SELECT * FROM TBL_USER WHERE u_id = ?`,
+                    [post.u_id], (error, user) => {
+                        console.log('user', user);
+
+                        if (user.length > 0) {
+                            res.json({ isMember: true });
+                        } else {
+                            res.json({ isMember: false });
+                        }
+
+                    });
+
+            } else {
+                res.json({ pass: false });
+            }
+
+        } else {
+            res.json({ isMember: null });
+        }
     },
 
     findid_confirm: (req, res) => {
@@ -265,7 +281,7 @@ const userService = {
 
                         console.log('user[0]', user[0]);
                         console.log('user[0]====', user[0].u_status === 2);
-                        if(user[0].u_status === 1) {                                                 
+                        if(user[0].u_status === 1 || user[0].u_status === 999) {                                                 
 
                             if (bcrypt.compareSync(post.u_pw, user[0].u_pw)) {
                 

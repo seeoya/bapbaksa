@@ -32,7 +32,7 @@ const SignIn = () => {
 
     const [uId, setUId] = useState('');
     const [uPw, setUPw] = useState('');    
-    const [message, setMessage] = useState('');
+    
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -41,7 +41,7 @@ const SignIn = () => {
 
     useEffect(() => {
         setTitle('로그인');
-    }, [message, uId]);
+    }, [setUId, setUPw, setIsLoading]);
 
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');
@@ -95,8 +95,7 @@ const SignIn = () => {
                 })
                 .then(res => {        
                     console.log('AXIOS SIGN_IN COMMUNICATION SUCCESS ==> ', res.data);   
-                    let message = res.data.message; 
-                    setMessage(message);
+                                                
                     setIsLoading(false);
                     
                     console.log('res.data: ', res.data);      
@@ -116,27 +115,23 @@ const SignIn = () => {
                             alert('로그인에 성공하였습니다.');                        
                             navigate('/');                        
                             window.location.reload(true);
-                    } else if (res.data.message !== null){
-                        alert(message);
-                    }                    
-                
+                    }
+
+                    setIsLoading(true); 
+                   
                 })
                 .catch(error => {
                     console.log('AXIOS SIGN_IN COMMUNICATION ERROR');                                      
                     
                 })
                 .finally(data => {
-                    console.log('AXIOS SIGN_IN COMMUNICATION FINALLY');  
-                    if(message !== ''){
-                        alert(message);
-                        setUId(''); setUPw('');     
-                    }                  
-                    
-                    setIsLoading(true);
+                    console.log('AXIOS SIGN_IN COMMUNICATION FINALLY');                                                     
+                                 
                 });                
-                            
-            }     
-               
+                                       
+            }   
+              
+           
     }
 
           

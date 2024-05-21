@@ -272,55 +272,47 @@ const userService = {
 
         db.query(`SELECT * FROM TBL_USER WHERE u_id = ?`,
             [post.u_id], (error, user) => {
-
-                if (error) {
-                    return res.json(error);
-                } else {
-
-                    if (user !== undefined) {
-
-                        console.log('user[0]', user[0]);
-                        console.log('user[0]====', user[0].u_status === 2);
-                        if(user[0].u_status === 1 || user[0].u_status === 999) {                                                 
-
-                            if (bcrypt.compareSync(post.u_pw, user[0].u_pw)) {
                 
-                                let accessToken = tokenUtils.makeToken({ id: post.u_id });
-                                     console.log("accessToken:", accessToken);
-                                let refreshToken = tokenUtils.makeRefreshToken();
-                                     console.log("refreshToken:", refreshToken);
+                if (user[0] !== undefined && user[0].u_id === post.u_id) {                         
 
-                                db.query(`UPDATE TBL_USER SET u_refresh_token= ? WHERE u_id = ?`,
-                                    [refreshToken, post.u_id], (error, result) => {
+                    console.log('user[0]=id', user[0].u_id === post.u_id);
+                    
+                    if(user[0].u_status === 1 || user[0].u_status === 999) {                                                 
 
-                                        if (result.affectedRows > 0) {
-                                            return res.json({ result, uId: post.u_id, uNo: user[0].u_no, accessToken, refreshToken });
+                        if (bcrypt.compareSync(post.u_pw, user[0].u_pw)) {
+            
+                            let accessToken = tokenUtils.makeToken({ id: post.u_id });
+                                    console.log("accessToken:", accessToken);
+                            let refreshToken = tokenUtils.makeRefreshToken();
+                                    console.log("refreshToken:", refreshToken);
 
-                                        } else {
-                                            return res.json({ result, message: 'DB 에러! 관리자에게 문의하세요.' });
-                                        }
+                            db.query(`UPDATE TBL_USER SET u_refresh_token= ? WHERE u_id = ?`,
+                                [refreshToken, post.u_id], (error, result) => {
 
-                                    });
+                                    if (result.affectedRows > 0) {
+                                        return res.json({ result, uId: post.u_id, uNo: user[0].u_no, accessToken, refreshToken });
 
-                            } else {
+                                    } else {
+                                        return res.json({ result, message: 'DB 에러! 관리자에게 문의하세요.' });
+                                    }
 
-                                return res.json({ message: '비밀번호가 일치하지 않습니다.' });
+                                });
 
-                            }
+                        } else {
 
-                        } else if (user[0].u_status === 2){
-
-                            return res.json({ message: '계정 정지된 회원입니다. 관리자에게 문의해 주세요.' });
+                            return res.json({ message: '비밀번호가 일치하지 않습니다.' });
 
                         }
-                        
-                    } else {
 
-                        return res.json({ message: '아이디가 일치하지 않습니다.' });
+                    } else if (user[0].u_status === 2){
+
+                        return res.json({ message: '계정 정지된 회원입니다. 관리자에게 문의해 주세요.' });
 
                     }
-
-                }
+                    
+                } else {
+                    return res.json({ message: '아이디가 일치하지 않습니다.' });
+                }              
 
             });
 

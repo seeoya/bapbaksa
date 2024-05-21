@@ -402,15 +402,16 @@ const product = {
             }
         });
     },
-    getProductInfo: (req, res) => {
-        let p_no = req.body.P_NO;
+    getProductInfo: async (req, res) => {
+        let p_no = req.body.P_NO;        
+        console.log('🎀🎀', p_no);
 
         if (Array.isArray(p_no)) {
             // p_no가 배열인 경우
             const placeholders = p_no.map(() => '?').join(', ');
             const sql = `SELECT * FROM PRODUCT WHERE PROD_NO IN (${placeholders})`;
 
-            DB.query(sql, p_no, (error, result) => {
+            await DB.query(sql, p_no, (error, result) => {
                 if (error) {
                     console.log(error);
                     res.json(null);
@@ -420,7 +421,7 @@ const product = {
             });
         } else {
             // p_no가 단일 값인 경우
-            DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, [p_no], (error, result) => {
+            await DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, [p_no], (error, result) => {
                 if (error) {
                     console.log(error);
                     res.json(null);
@@ -430,6 +431,37 @@ const product = {
             });
         }
         },
+
+        getProdName: async (req, res) => {
+            let p_no = req.body.P_NO;        
+            console.log('p_no: ', p_no);
+
+            if (Array.isArray(p_no)) {
+                // p_no가 배열인 경우
+                const placeholders = p_no.map(() => '?').join(', ');
+                const sql = `SELECT PROD_NAME, PROD_SPCS_NAME FROM PRODUCT WHERE PROD_NO IN (${placeholders})`;
+    
+                await DB.query(sql, p_no, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        res.json(null);
+                    } else {
+                        res.json(result);
+                    }
+                });
+            } else {
+    
+                // p_no가 단일 값인 경우
+                await DB.query(`SELECT PROD_NAME, PROD_SPCS_NAME FROM PRODUCT WHERE PROD_NO = ?`, [p_no], (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        res.json(null);
+                    } else {
+                        res.json(result);
+                    }
+                });
+            }
+            },
     random: (req, res) => {
         console.log("random");
         let cur_date = ""; 

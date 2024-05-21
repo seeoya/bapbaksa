@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
+import Loading from "../include/Loading";
 
 const ShoppingCart = () => {
 
@@ -12,6 +13,8 @@ const ShoppingCart = () => {
     const [goToPay, setGoToPay] = useState([]);
     const u_no = getToken('loginedUNo');
     const [stockList, setStockList] = useState({});
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -135,22 +138,24 @@ const ShoppingCart = () => {
     }
 
     async function axios_deleteCart(mcNos) {
+        setIsLoading(true);
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/deleteCart", {
                 'MC_NO': mcNos,
             })
             if (response.data != null) {
                 setTemp((temp) => !temp);
-                alert('삭제 성공');
             } else {
                 alert('삭제 실패');
             }
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     async function axios_getCartInfo(u_no) {
+        setIsLoading(true);
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/getMarketCart", {
                 'U_NO': u_no,
@@ -160,6 +165,7 @@ const ShoppingCart = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     // const getStock = async () => {
@@ -178,7 +184,9 @@ const ShoppingCart = () => {
     // }
 
     return (
-        <div id="shopping_cart_wrap" className='content-wrap'>
+        <>
+            {isLoading ? <Loading /> : null}
+            <div id="shopping_cart_wrap" className='content-wrap'>
             <h2 className='title'>장바구니</h2>
 
             {/* {Object.keys(goToPay).map(item => {
@@ -276,6 +284,8 @@ const ShoppingCart = () => {
                 </div>
             )}
         </div>
+        </>
+        
     );
 }
 

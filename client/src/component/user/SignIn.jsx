@@ -4,6 +4,7 @@ import axios from 'axios';
 import { setToken } from '../../storage/loginedToken';
 import $ from 'jquery';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 
 axios.defaults.withCredentials = true;
@@ -32,6 +33,8 @@ const SignIn = () => {
     const [uId, setUId] = useState('');
     const [uPw, setUPw] = useState('');    
     const [message, setMessage] = useState('');
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate(); 
     
@@ -94,7 +97,7 @@ const SignIn = () => {
                     console.log('AXIOS SIGN_IN COMMUNICATION SUCCESS ==> ', res.data);   
                     let message = res.data.message; 
                     setMessage(message);
-
+                    setIsLoading(false);
                     console.log('res: ', res);
                     console.log('res.data: ', res.data);      
                     console.log('message: ', res.data.message);          
@@ -132,7 +135,7 @@ const SignIn = () => {
                 })
                 .finally(data => {
                     console.log('AXIOS SIGN_IN COMMUNICATION FINALLY');
-            
+                    setIsLoading(true);
                 });                
                    
                 setUId(''); setUPw('');
@@ -146,52 +149,56 @@ const SignIn = () => {
 
 
     return (
-        <div className='content-wrap'>
+        <>
+            {isLoading ? null : <Loading />}
+            <div className='content-wrap'>
 
-        <h2 className='title'>로그인</h2>
+                <h2 className='title'>로그인</h2>
 
-        <div className='content'>
-            <div className='signin-wrap'>            
-                <form name="signin_form" className='form'>
-                    <div className='input-wrap'>                    
-                        <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="아이디를 입력해 주세요"/>    
-                
-                    </div>
-                    <div className='input-wrap'>
-                        <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="비밀번호를 입력해 주세요"/>    
+                <div className='content'>
+                    <div className='signin-wrap'>            
+                        <form name="signin_form" className='form'>
+                            <div className='input-wrap'>                    
+                                <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="아이디를 입력해 주세요"/>    
                         
+                            </div>
+                            <div className='input-wrap'>
+                                <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="비밀번호를 입력해 주세요"/>    
+                                
+                            </div>
+                            <div className='btn-wrap'>
+                                <button type="button" onClick={signinBtnClickHandler} className="btn main full">로그인</button>
+                            </div>
+
+                            <div className='login-find'>
+                        
+                                <Link to="/user/findid" className='find-id'>아이디 찾기</Link>
+                                <span>|</span>
+                                <Link to="/user/findpw" className='find-pw'>비밀번호 찾기</Link>
+                                
+                            </div>
+
+                            <div className='login-link'>
+                        
+                                <Link to={googleURL}>
+                                <img src="/imgs/logo/login/web_neutral_sq_SU@1x.png" className='google-link' alt=''/>                                                  
+                                </Link>
+
+                                <Link to={kakaoURL}>
+                                <img src="/imgs/logo/login/kakao_login_medium_narrow.png" className='kakao-link' alt=''/>                         
+                                </Link>
+
+                                <Link to={naverURL}>                         
+                                <img src="/imgs/logo/login/btnG_완성형.png" className='naver-link' alt='' />
+                                </Link>                         
+                            </div>
+
+                        </form>                
                     </div>
-                    <div className='btn-wrap'>
-                        <button type="button" onClick={signinBtnClickHandler} className="btn main full">로그인</button>
-                    </div>
-
-                    <div className='login-find'>
-                   
-                         <Link to="/user/findid" className='find-id'>아이디 찾기</Link>
-                         <span>|</span>
-                         <Link to="/user/findpw" className='find-pw'>비밀번호 찾기</Link>
-                         
-                    </div>
-
-                    <div className='login-link'>
-                   
-                         <Link to={googleURL}>
-                         <img src="/imgs/logo/login/web_neutral_sq_SU@1x.png" className='google-link' alt=''/>                                                  
-                         </Link>
-
-                         <Link to={kakaoURL}>
-                         <img src="/imgs/logo/login/kakao_login_medium_narrow.png" className='kakao-link' alt=''/>                         
-                         </Link>
-
-                         <Link to={naverURL}>                         
-                         <img src="/imgs/logo/login/btnG_완성형.png" className='naver-link' alt='' />
-                         </Link>                         
-                    </div>
-
-                </form>                
+                </div>
             </div>
-        </div>
-    </div>
+        </>
+        
     );
 };
 

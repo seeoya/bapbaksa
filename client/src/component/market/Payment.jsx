@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
-import { CheckoutPage } from '../payment/Checkout';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
+import { CheckoutPage } from '../payment/Checkout';
 
 const Payment = () => {
     const [postcode, setPostcode] = useState('');
@@ -26,6 +27,8 @@ const Payment = () => {
 
     const [orderNo, setOrderNo] = useState(0);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     let u_id = getToken('loginedUId');
     let u_no = getToken('loginedUNo');
     const navigate = useNavigate();
@@ -41,7 +44,7 @@ const Payment = () => {
         location.state.goToPay.map(item => {
             spcs.push(item.PROD_SPCS_CODE);
         })
-        axios_paymentGetProd(fors,spcs);
+        axios_paymentGetProd(fors, spcs);
         axios_getUserInfo();
         setTitle('결제창');
     }, []);
@@ -67,16 +70,13 @@ const Payment = () => {
     }, [userInfo]);
 
     const loginCheck = () => {
-
-        if(u_no === null) {
+        if (u_no === null) {
             alert('로그인이 필요한 서비스입니다.');
             navigate('/user/signin')
-        } 
-
+        }
     }
 
     const payBtnClick = async () => {
-
         await axios_insertPayment();
         setIsPayment(true);
     };
@@ -118,6 +118,7 @@ const Payment = () => {
     };
 
     const axios_insertPayment = async () => {
+        setIsLoading(true);
         try {
             let updatedRoadAddress = roadAddress;
             if (extraAddress !== '') {
@@ -134,7 +135,6 @@ const Payment = () => {
             })
 
             if (response.status === 200) {
-                alert("결제 성공");
                 setOrderNo(response.data.orderId);
             } else {
                 alert("결제 실패");
@@ -142,9 +142,13 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
+
     const axios_paymentGetProd = async (i_no, p_spcs_code) => {
+        setIsLoading(true);
+
         try {
             const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/paymentGetProd", {
                 'I_NO': i_no,
@@ -155,9 +159,11 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
     }
 
     const axios_getUserInfo = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
                 params: {
@@ -168,10 +174,16 @@ const Payment = () => {
         } catch (error) {
             console.log(error)
         }
+        setIsLoading(false);
+    }
+
+    const locationBack = () => {
+        navigate(-1);
     }
 
     return (
         <>
+            {isLoading ? <Loading /> : null}
             {
                 isPayment ?
                     <div id='modal' className='modal payment' >
@@ -181,7 +193,6 @@ const Payment = () => {
                     </div>
                     : null
             }
-
             <div className='content-wrap' id="payment_wrap">
                 <h2 className='title'>결제창</h2>
                 <div className='content flex-wrap'>
@@ -195,7 +206,7 @@ const Payment = () => {
                                     <div className="flex-item" key={idx}>
                                         <Link to={`/market/view/${info.PROD_CODE}_${info.PROD_SPCS_CODE}`}>
                                             <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} alt="ingredient" />
-                                            <span className="ingredient-title">{info.PROD_NAME}<br/>{info.PROD_SPCS_NAME}</span>
+                                            <span className="ingredient-title">{info.PROD_NAME}<br />{info.PROD_SPCS_NAME}</span>
                                         </Link>
                                         <span className="ingredient-unit">
                                             {info.DSBN_STEP_ACTO_WT}
@@ -215,31 +226,30 @@ const Payment = () => {
                     <div className="payment-price-wrap">
                         <div className="payment-member-info">
                             <span className="ingredient-title">주문자 : {u_id}님</span>
-                        <form className='form'>
                             <div className='find-address-btn'>
                                 <button className='btn main' onClick={execDaumPostcode}>주소 찾기</button>
-                                <input className='find_address-postcode' type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
+                                <input className='find_address-postcode input' type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
                             </div>
-
-                            <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소" readOnly></input>
+                            <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소" className='input' readOnly></input>
                             <input
                                 type="text"
                                 defaultValue={detailAddress}
                                 placeholder="상세 주소"
+                                className='input'
                                 onChange={(e) => setDetailAddress(e.target.value)}>
                             </input>
-                        </form>
                             <span className="ingredient-title">상품 가격 : {totalPay.toLocaleString()}원</span>
                             <span className="ingredient-title">배송비 : 3,000원</span>
                             <span className="ingredient-title">총 가격 : {(totalPay + 3000).toLocaleString()}원</span>
                         </div>
                         <div className="payment-btn">
-                            <a href="#none">뒤로 가기</a>
+                            <button type='button' onClick={locationBack}>뒤로 가기</button>
                             <button type="button" onClick={payBtnClick}>결제</button>
                         </div>
                     </div>
                 </div>
             </div>
+
         </>
     );
 }

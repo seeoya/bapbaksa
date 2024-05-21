@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getToken } from '../../storage/loginedToken';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const ListView = () => {
     const { no } = useParams();
@@ -17,6 +18,8 @@ const ListView = () => {
     const [pYmd, setPYmd] = useState(null); // 상태로 p_ymd 관리
 
     const [stock, setStock] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const chartRef = useRef(null);
     const navigate = useNavigate();
@@ -157,6 +160,7 @@ const ListView = () => {
 
             setProdInfo(response.data[0]);
             getStock();
+            setIsLoading(false);
         } catch (error) {
             console.log(error)
         }
@@ -184,7 +188,9 @@ const ListView = () => {
                     navigate("/market/cart");
                 } else {
                     alert('품절된 상품입니다.');
-                }
+                }  
+                
+                setIsLoading(false);
             }
         } catch (err) {
             console.log(err);
@@ -204,6 +210,7 @@ const ListView = () => {
                 y: item.PROD_AVRG_PRCE
             }));
             setChartData(chartInfo);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -215,13 +222,16 @@ const ListView = () => {
                 'U_NO': u_no,
                 'I_NO': i_no,
                 'MC_COUNT': mc_count
-            });
+            })
+            setIsLoading(false);
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
+    <>
+        {isLoading ? <Loading /> : null}
         <div className='content-wrap' id="market_list_view">
             <h2 className='title'>품목 상세</h2>
             <div className='content'>
@@ -282,6 +292,7 @@ const ListView = () => {
                 </div>
             </div>
         </div>
+    </>
     );
 };
 

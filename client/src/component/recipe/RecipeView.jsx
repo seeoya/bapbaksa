@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { MyFridgeQuery } from '../../query/fridgeQuerys';
 import { AllRecipeQuery } from '../../query/recipeQuerys';
 import { getToken } from '../../storage/loginedToken';
+import { loginCheck } from '../../util/check';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';
 
@@ -54,7 +55,7 @@ const RecipeView = () => {
     }
 
     const likeBtnClickEvent = async () => {
-        if (getToken("loginedUNo")) {
+        if (await loginCheck() > 0) {
             if (isLike) {
                 deleteLikeRecipe();
             } else {
@@ -179,7 +180,7 @@ const RecipeView = () => {
                                                         break;
                                                 }
 
-                                                if (myFridgeList && Object.keys(myFridgeList).includes(parseInt(recipe.RECP_INGRD[el].RECP_INGRD_CODE))) {
+                                                if (myFridgeList && Object.keys(myFridgeList).includes(`${recipe.RECP_INGRD[el].RECP_INGRD_CODE}`)) {
                                                     ingreClass += " on"
                                                 }
 

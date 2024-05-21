@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { setToken } from '../../storage/loginedToken';
-import $ from 'jquery';
+import $, { error } from 'jquery';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';
 
@@ -41,7 +41,7 @@ const SignIn = () => {
 
     useEffect(() => {
         setTitle('로그인');
-    }, []);
+    }, [message, uId]);
 
     const userInfoChangeHandler = (e) => {
         console.log('userInfoChangeHandler()');
@@ -98,12 +98,9 @@ const SignIn = () => {
                     let message = res.data.message; 
                     setMessage(message);
                     setIsLoading(false);
-                    console.log('res: ', res);
+                    
                     console.log('res.data: ', res.data);      
-                    console.log('message: ', res.data.message);          
-                    console.log(res.data.accessToken);
-                    console.log(res.data.refreshToken);
-                    console.log(res.data.uId);
+                    console.log('message: ', res.data.message);                                                                 
                     console.log('res.data.result.affectedRows', res.data.result.affectedRows);
                                                            
                     if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {                                   
@@ -119,28 +116,25 @@ const SignIn = () => {
                             alert('로그인에 성공하였습니다.');                        
                             navigate('/');                        
                             window.location.reload(true);
+                    } else if (res.data.message !== null){
+                        alert(message);
                     }                    
                 
                 })
                 .catch(error => {
-                    console.log('AXIOS SIGN_IN COMMUNICATION ERROR');
-                    
-                    if(message.includes('아이디')){
-                        alert('아이디가 일치하지 않습니다.');
-                    } else {
-                        alert('비밀번호가 일치하지 않습니다.'); 
-                    }
-                    
+                    console.log('AXIOS SIGN_IN COMMUNICATION ERROR');                                      
                     
                 })
                 .finally(data => {
-                    console.log('AXIOS SIGN_IN COMMUNICATION FINALLY');
+                    console.log('AXIOS SIGN_IN COMMUNICATION FINALLY');  
+                    if(message !== ''){
+                        alert(message);
+                        setUId(''); setUPw('');     
+                    }                  
+                    
                     setIsLoading(true);
                 });                
-                   
-                setUId(''); setUPw('');
-                window.location.reload(true); 
-                               
+                            
             }     
                
     }

@@ -26,20 +26,29 @@ const Modify = () => {
     const [uSecondAddr, setUSeconAddr] = useState('');
     const [accessToken, setAccessToken] = useState('');
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);    
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        
+        let loginedUId = getToken('loginedUId');      
+
+        if (loginedUId === null) {
+            setIsLoading(false);
+            alert('로그인이 필요한 서비스입니다.');                   
+            navigate('/user/signin');
+        }  
+
+    }, []);
+          
+    useEffect(() => {    
+       
         setTitle('정보수정');
-    });
-
-    useEffect(() => {
-
         setUser();
-        modifyForm();
+        modifyForm();        
 
-    }, [accessToken]);
+    }, [accessToken]);   
 
 
     const setUser = async () => {
@@ -258,6 +267,7 @@ const Modify = () => {
                     if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {
                         console.log('AXIOS MODIFY_CONFIRM COMMUNICATION SUCCESS ==> ', res.data);
 
+                        setIsLoading(true);
                         alert('정보수정에 성공하였습니다.');
                         navigate('/');
                     }    
@@ -283,8 +293,9 @@ const Modify = () => {
 
 
     return (
+        
         <>
-            {isLoading ? null : <Loading />}
+            {isLoading ? 
             <div className='content-wrap'>
 
                 <h2 className='title'>정보수정</h2>
@@ -360,8 +371,10 @@ const Modify = () => {
 
                 </div>
 
-            </div>
+            </div>            
+            : <Loading />}            
         </>
+        
         
     );
 };

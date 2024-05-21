@@ -258,39 +258,46 @@ const userService = {
             [post.u_id], (error, user) => {
 
                 if (error) {
-
+                    return res.json(error);
                 } else {
-
-                    console.log('user=====', user);
 
                     if (user !== undefined) {
 
-                        if (bcrypt.compareSync(post.u_pw, user[0].u_pw)) {
-                            
+                        console.log('user[0]', user[0]);
+                        console.log('user[0]====', user[0].u_status === 2);
+                        if(user[0].u_status === 1) {                                                 
 
-                            let accessToken = tokenUtils.makeToken({ id: post.u_id });
-                            console.log("accessToken:", accessToken);
-                            let refreshToken = tokenUtils.makeRefreshToken();
-                            console.log("refreshToken:", refreshToken);
+                            if (bcrypt.compareSync(post.u_pw, user[0].u_pw)) {
+                
+                                let accessToken = tokenUtils.makeToken({ id: post.u_id });
+                                     console.log("accessToken:", accessToken);
+                                let refreshToken = tokenUtils.makeRefreshToken();
+                                     console.log("refreshToken:", refreshToken);
 
-                            db.query(`UPDATE TBL_USER SET u_refresh_token= ? WHERE u_id = ?`,
-                                [refreshToken, post.u_id], (error, result) => {
+                                db.query(`UPDATE TBL_USER SET u_refresh_token= ? WHERE u_id = ?`,
+                                    [refreshToken, post.u_id], (error, result) => {
 
-                                    if (result.affectedRows > 0) {
-                                        return res.json({ result, uId: post.u_id, uNo: user[0].u_no, accessToken, refreshToken });
+                                        if (result.affectedRows > 0) {
+                                            return res.json({ result, uId: post.u_id, uNo: user[0].u_no, accessToken, refreshToken });
 
-                                    } else {
-                                        return res.json({ result, message: 'DB 에러! 관리자에게 문의하세요.' });
-                                    }
+                                        } else {
+                                            return res.json({ result, message: 'DB 에러! 관리자에게 문의하세요.' });
+                                        }
 
-                                });
+                                    });
 
-                        } else {
+                            } else {
 
-                            return res.json({ message: '비밀번호가 일치하지 않습니다.' });
+                                return res.json({ message: '비밀번호가 일치하지 않습니다.' });
+
+                            }
+
+                        } else if (user[0].u_status === 2){
+
+                            return res.json({ message: '계정 정지된 회원입니다. 관리자에게 문의해 주세요.' });
 
                         }
-
+                        
                     } else {
 
                         return res.json({ message: '아이디가 일치하지 않습니다.' });

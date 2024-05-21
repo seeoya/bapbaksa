@@ -4,19 +4,21 @@
 /* reset */
 :root {
     --text-color: #333;
-    --gray-color: #b3b3b3;
+    --gray-color: #c7c7c7;
     --gray-light-color: #f4f4f4;
+    --gray-middle-color: #dddddd;
+    --gray-deep-color: #a6a6a6;
     --gray-dark-color: #838383;
     --gray-green-color: #d3dfce;
-    --main-color: #6ba543;
+    --main-color: #5f963a;
     --main-light-color: #8fc769;
-    --main-dark-color: #40783e;
+    --main-dark-color: #447722;
     --sub-color: #fe990ccc;
-    --sub-light-color: #fec344de;
+    --sub-light-color: #fec344;
     --sub-dark-color: #fa792f;
-    --highlight-color: #f2644f;
-    --highlight-light-color: #f2644fba;
-    --highlight-dark-color: #EA4329;
+    --highlight-color: #f86c57;
+    --highlight-light-color: #f98674;
+    --highlight-dark-color: #f14c33;
     --highlight-red-color: #be271d;
     --admin-main-color: #4a557a;
     --admin-main-light-color: #7c86ae;

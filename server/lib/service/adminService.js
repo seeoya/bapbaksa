@@ -1,6 +1,6 @@
 const DB = require("../db/db");
 const { default: axios } = require("axios");
-const { verify } = require("../utils/token");
+const tokenUtils = require("../utils/token");
 
 const adminService = {
     get_all_users: (req, res) => {
@@ -71,65 +71,88 @@ const adminService = {
         console.log("post.u_id: ", post.u_id);
         console.log("post.u_no: ", post.u_no);
 
-        let now = new Date();
-        now = now.toLocaleString();
+        
+        if (req.headers.authorization) {
+            const accessToken = req.headers.authorization.split(' ')[1];
 
-        let sql = `UPDATE TBL_USER SET u_id = ?, u_mail = ?, u_phone = ?, u_google_id = ?, u_kakao_id = ?, 
-                    u_naver_id = ?, u_status = ?, u_zip_code = ?, u_first_address= ?, u_second_address = ?,
-                    pi_name = ?, u_refresh_token = ?, u_mod_date = now() WHERE u_id = ?`;
-        let state = [post.u_id + now, "", "", "", "", "", 0, "", "", "", "", "", post.u_id];
+            const verified = tokenUtils.verify(accessToken);
 
-        DB.query(sql, state, (error, result) => {
-            if (error) {
-                res.json({ message: "회원정보 삭제 에러!" });
-            } else {
-                DB.query(
-                    `SELECT * FROM  TBL_USER_PROFILE_IMG WHERE u_no = ?`,
-                    [post.u_no],
-                    (error, user) => {
-                        console.log("🎄", user.length);
+            console.log("verified: ", verified);
 
-                        if (user.length > 0) {
-                            let sql = `DELETE p, f, r, c FROM TBL_USER_PROFILE_IMG p, TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
-                                    WHERE p.u_no = ? AND f.u_no = ? AND r.u_no = ? AND c.u_no = ?`;
-                            let state = [post.u_no, post.u_no, post.u_no, post.u_no];
+            if (verified.ok) {
 
-                            DB.query(sql, state, (error, result) => {
-                                console.log("🎆", result);
+                let now = new Date();
+                let year = now.getFullYear();
+                let month = now.getMonth() +1;
+                    month = "00" + month.toString();                    
+                let date = now.getDate();
+                    date = "00" + date.toString();
 
-                                if (error) {
-                                    res.json({ message: "회원탈퇴 처리 실패" });
+                now = `${year}${month.slice(-2)}${date.slice(-2)}`;                
+
+                let sql = `UPDATE TBL_USER SET u_id = ?, u_mail = ?, u_phone = ?, u_google_id = ?, u_kakao_id = ?, 
+                            u_naver_id = ?, u_status = ?, u_zip_code = ?, u_first_address= ?, u_second_address = ?,
+                            pi_name = ?, u_refresh_token = ?, u_mod_date = now() WHERE u_id = ?`;
+                let state = [post.u_id + now, "", "", "", "", "", 0, "", "", "", "", "", post.u_id];
+
+                DB.query(sql, state, (error, result) => {
+                    if (error) {
+                        res.json({ message: "회원정보 삭제 에러!" });
+                    } else {
+                        DB.query(
+                            `SELECT * FROM  TBL_USER_PROFILE_IMG WHERE u_no = ?`,
+                            [post.u_no],
+                            (error, user) => {
+                                
+                                if (user.length > 0) {
+                                    let sql = `DELETE p, f, r, c FROM TBL_USER_PROFILE_IMG p, TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
+                                            WHERE p.u_no = ? AND f.u_no = ? AND r.u_no = ? AND c.u_no = ?`;
+                                    let state = [post.u_no, post.u_no, post.u_no, post.u_no];
+
+                                    DB.query(sql, state, (error, result) => {
+                                        console.log("🎆", result);
+
+                                        if (error) {
+                                            res.json({ message: "회원탈퇴 처리 실패" });
+                                        } else {
+                                            fs.rmSync(
+                                                `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`,
+                                                { recursive: true, force: true },
+                                                (error) => {}
+                                            );
+
+                                            console.log(`${post.u_id} directory deleted!`);
+                                            res.json({ result, message: "회원탈퇴 처리 성공" });
+                                        }
+                                    });
                                 } else {
-                                    fs.rmSync(
-                                        `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`,
-                                        { recursive: true, force: true },
-                                        (error) => {}
-                                    );
+                                    let sql = `DELETE FROM f, r, c USING TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
+                                        WHERE f.u_no = r.u_no = c.u_no = ?`;
+                                    let state = [post.u_no];
 
-                                    console.log(`${post.u_id} directory deleted!`);
-                                    res.json({ result, message: "회원탈퇴 처리 성공" });
+                                    DB.query(sql, state, (error, result) => {
+                                        console.log("👓", result);
+
+                                        if (error) {
+                                            res.json({ message: "회원탈퇴 처리 실패" });
+                                        } else {
+                                            res.json({ result, message: "회원탈퇴 처리 성공" });
+                                        }
+                                    });
                                 }
-                            });
-                        } else {
-                            let sql = `DELETE FROM f, r, c USING TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
-                                WHERE f.u_no = r.u_no = c.u_no = ?`;
-                            let state = [post.u_no];
-
-                            DB.query(sql, state, (error, result) => {
-                                console.log("👓", result);
-
-                                if (error) {
-                                    res.json({ message: "회원탈퇴 처리 실패" });
-                                } else {
-                                    res.json({ result, message: "회원탈퇴 처리 성공" });
-                                }
-                            });
-                        }
+                            }
+                        );
                     }
-                );
+                });
+            } else {
+                res.status(401).send({ message: verified.message });
             }
-        });
-            
+
+        } else {
+            res.json({ message: "No accessToken!" });
+        }
+
+                    
     },
     get_all_question: (req, res) => {
         DB.query(`SELECT * FROM TBL_USER_QUESTIONS ORDER BY QUES_NO DESC`, (error, quests) => {

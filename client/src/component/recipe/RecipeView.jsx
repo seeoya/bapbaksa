@@ -192,6 +192,8 @@ const RecipeView = () => {
                                             : null
                                     }
                                 </div>
+
+                                <div className='desc'>* 재료 버튼을 클릭하면 마켓으로 이동합니다.</div>
                             </div>
 
                             <div className='recipe-progress'>

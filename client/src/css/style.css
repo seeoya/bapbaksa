@@ -97,6 +97,13 @@
     text-align: right;
 }
 
+button:has(i), button:has(svg), a:has(i), a:has(svg) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
 .btn-wrap {
     display: flex;
     margin-top: 10px;
@@ -131,7 +138,6 @@
     padding: 10px;
     border-radius: 5px;
     background-color: var(--gray-light-color);
-    gap: 5px;
 }
 
 .btn:hover {
@@ -415,6 +421,14 @@ nav .link {
     transition: all ease 0.3s;
 }
 
+#main-category-wrap .link:hover {
+    color: var(--sub-light-color);
+}
+
+#market-category-wrap .link:hover {
+    color: var(--highlight-dark-color);
+}
+
 nav .user-mypage-link .user-info {
     display: flex;
     width: 100%;
@@ -576,12 +590,10 @@ nav .user-info img {
     flex-direction: row;
     text-shadow: -1px 0px #a8a8a8, 0px 1px #a8a8a8, 1px 0px #a8a8a8, 0px -1px #a8a8a8;
     font-size: 1.3em;
-    font-weight: bolder;
-    padding-left: 10px;
+    font-weight: 500;
 }
 
 .container .recipe-grid .menu a .icon {
-    padding-left: 10px;
     font-size: 28px;
 }
 

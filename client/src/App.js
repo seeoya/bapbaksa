@@ -6,6 +6,7 @@ import LayoutRouter from "./component/LayoutRouter";
 import Loading from "./component/include/Loading";
 import { set_loading } from "./redux/actions/common_action";
 import { loadFridgeAction } from "./redux/actions/fridge_action";
+import { adminCheck, loginCheck } from "./util/check";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,9 @@ function App() {
         initScrollEvent();
         initAllFridge();
         initLoading();
+
+        console.log("user: ", await loginCheck());
+        console.log("admin: ", await adminCheck());
     };
 
     const initScrollEvent = () => {

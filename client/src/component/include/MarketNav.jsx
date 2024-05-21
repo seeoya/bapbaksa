@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getToken } from "../../storage/loginedToken";
@@ -23,13 +24,21 @@ const MarketNav = () => {
             <div id="market-category-wrap" className="category-wrap">
                 <div className="header-category">
                     <div className="main">
-                        <Link to="/market/list" className="link">상품 모두보기</Link>
-                        <Link to="/" className="link link_recipe">레시피 보러가기</Link>
+                        <Link to="/market/list" className="link">
+                            <FontAwesomeIcon icon="fa-solid fa-store" />
+                            <span>상품 모두보기</span></Link>
+                        <Link to="/" className="link link_recipe">
+                            <FontAwesomeIcon icon="fa-solid fa-bowl-food" />
+                            <span>레시피 보러가기</span></Link>
                     </div>
 
                     <div className="sub">
-                        <Link to="/market/cart" className="link">장바구니</Link>
-                        <Link to="/market/pay-history" className="link">결제 내역</Link>
+                        <Link to="/market/cart" className="link">
+                            <FontAwesomeIcon icon="fa-solid fa-cart-shopping" />
+                            <span>장바구니</span></Link>
+                        <Link to="/market/pay-history" className="link">
+                            <FontAwesomeIcon icon="fa-solid fa-receipt" />
+                            <span>구매 내역</span></Link>
                     </div>
 
                     {

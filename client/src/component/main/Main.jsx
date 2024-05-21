@@ -50,18 +50,18 @@ const Main = () => {
                         spaceBetween={30}
                         centeredSlides={true}
                         autoplay={{
-                        delay: 4000,
-                        disableOnInteraction: false,
+                            delay: 4000,
+                            disableOnInteraction: false,
                         }}
                         pagination={{
-                        clickable: true,
+                            clickable: true,
                         }}
                         navigation={true}
                         modules={[Autoplay, Pagination, A11y, Navigation]}
                         className="my-swiper"
                     >
                         <div className='banner'>
-                        <SwiperSlide>
+                            <SwiperSlide>
                                 <img src='/imgs/banner/recipe/main.png' />
                             </SwiperSlide>
                             <SwiperSlide>
@@ -77,49 +77,54 @@ const Main = () => {
                     <div className='today-recommend'>
                         <h2>오늘의 추천 요리</h2>
                         <div className='line'></div>
-                            <div className='today-recommend-swiper'>
+                        <div className='today-recommend-swiper'>
                             <Swiper
-                                    spaceBetween={40}
-                                    autoplay={{
-                                        delay: 4000,
-                                        disableOnInteraction: false,
-                                    }}
-                                    centeredSlides={true}
-                                    modules={[Autoplay]}
-                                    className="my-swiper"
-                                >
-                                    {randomRecipe.length > 0 ? (
-                                        randomRecipe.map((recipe) => (
-                                            <SwiperSlide key={recipe.RECP_CODE}>
-                                                <div className='random-recipe-info'>
-                                                    <Link to={`/recipe/view/${recipe.RECP_CODE}`}>
-                                                        <img src={recipe.RECP_MAIN_IMG} alt={recipe.RECP_NAME} />
-                                                        <div className='random-recipe-detail'>
-                                                            <h3>{recipe.RECP_NAME}</h3>
-                                                            <p>{recipe.RECP_INTRO}</p>
-                                                        </div>
-                                                    </Link>
-                                                </div>
-                                            </SwiperSlide>
-                                        ))
-                                    ) : (
-                                        <SwiperSlide>
-                                            <p>No recipes found.</p>
+                                spaceBetween={40}
+                                autoplay={{
+                                    delay: 4000,
+                                    disableOnInteraction: false,
+                                }}
+                                centeredSlides={true}
+                                modules={[Autoplay]}
+                                className="my-swiper"
+                            >
+                                {randomRecipe.length > 0 ? (
+                                    randomRecipe.map((recipe) => (
+                                        <SwiperSlide key={recipe.RECP_CODE}>
+                                            <div className='random-recipe-info'>
+                                                <Link to={`/recipe/view/${recipe.RECP_CODE}`}>
+                                                    <img src={recipe.RECP_MAIN_IMG} alt={recipe.RECP_NAME} />
+                                                    <div className='random-recipe-detail'>
+                                                        <h3>{recipe.RECP_NAME}</h3>
+                                                        <p>{recipe.RECP_INTRO}</p>
+                                                    </div>
+                                                </Link>
+                                            </div>
                                         </SwiperSlide>
-                                    )}
-                                </Swiper>
+                                    ))
+                                ) : (
+                                    <SwiperSlide>
+                                        <p>No recipes found.</p>
+                                    </SwiperSlide>
+                                )}
+                            </Swiper>
                         </div>
                     </div>
                 </div>
                 <div className='menu-wrap'>
                     <div className='menu'>
-                        <a href='/market' className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-store"/><div className='banner'>마켓으로 이동</div></a>
-                        <a href='/recipe/list' className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-bowl-rice"/><div className='banner'>레시피 보러가기</div></a>
+                        <h2>오늘의 추천 요리</h2>
+                        <div className='line'></div>
+
+                        <Link to={'/market'} className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-store" /><div className='banner'>마켓으로 이동</div></Link>
+                        <Link to={'/recipe/list'} className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-bowl-rice" /><div className='banner'>레시피 보러가기</div></Link>
+                        <Link to={'/recipe/list'} className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-bowl-rice" /><div className='banner'>레시피 보러가기</div></Link>
+                        <Link to={'/recipe/list'} className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-bowl-rice" /><div className='banner'>레시피 보러가기</div></Link>
                     </div>
                 </div>
             </div>
         </>
-        
+
     );
 };
 

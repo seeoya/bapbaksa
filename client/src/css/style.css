@@ -421,6 +421,14 @@ nav .link {
     transition: all ease 0.3s;
 }
 
+#main-category-wrap .link:hover {
+    color: var(--sub-light-color);
+}
+
+#market-category-wrap .link:hover {
+    color: var(--highlight-dark-color);
+}
+
 nav .user-mypage-link .user-info {
     display: flex;
     width: 100%;

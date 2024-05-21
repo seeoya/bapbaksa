@@ -23,7 +23,7 @@ const Nav = () => {
                 <div className="header-category">
                     <div className="main">
                         <Link to="/recipe/list" className="link">
-                            <FontAwesomeIcon icon="fa-solid fa-scroll" />
+                            <FontAwesomeIcon icon="fa-solid fa-bowl-food" />
                             <span>레시피 모두보기</span>
                         </Link>
                         <Link to="/market" className="link link_market">
@@ -34,7 +34,7 @@ const Nav = () => {
 
                     <div className="sub">
                         <Link to="/mypage/myfridge" className="link">
-
+                            <FontAwesomeIcon icon="fa-solid fa-carrot" />
                             <span>내 냉장고</span></Link>
                         <Link to="/mypage/like" className="link">
                             <FontAwesomeIcon icon="fa-solid fa-bookmark" />

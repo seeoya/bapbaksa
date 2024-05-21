@@ -589,7 +589,8 @@ nav .user-info img {
 .container .recipe-grid .swiper-container {
     grid-column-start: 1;
     grid-column-end: 4;
-    height: 300px;
+    height: 600px;
+    margin-top: -115px;
 }
 
 .container .recipe-grid .swiper-container .my-swiper {
@@ -625,7 +626,7 @@ nav .user-info img {
 
 .container .recipe-grid .recommend-container .today-recommend h2 {
     padding: 10px 0 5px 10px;
-    font-size: 2em;
+    font-size: 2.5em;
     text-align: center;
 }
 
@@ -710,7 +711,17 @@ nav .user-info img {
 }
 
 .random-ingre-detail {
+    margin-top: 10px;
     text-align: center;
+}
+
+.random-ingre-detail h3 {
+    font-size: 1.3em;
+}
+
+.random-ingre-detail p {
+    margin-top: 10px;
+    font-size: 1.3em;
 }
 
 /* market grid start */
@@ -781,11 +792,16 @@ nav .user-info img {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2em;
+    font-size: 2.5em;
 }
 
 .container .market-grid .cheep-container .cheep-recommend h3 {
-    font-size: 1.2em;
+    font-size: 1.3em;
+}
+
+.container .market-grid .cheep-container .cheep-recommend p {
+    margin-top: 10px;
+    font-size: 1.3em;
 }
 
 .container .market-grid .cheep-container .cheep-recommend .line {

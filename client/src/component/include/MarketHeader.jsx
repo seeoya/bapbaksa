@@ -30,7 +30,7 @@ const MarketHeader = () => {
     }
 
     return (
-    <header>
+    <header id="market-header">
     <div id="market-header-wrap" className="header-wrap">
         <div className="header-menu">
             <div className="logo">

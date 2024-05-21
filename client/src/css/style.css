@@ -292,7 +292,7 @@ header .header-menu .search {
 }
 
 header .header-menu .search input {
-    width: 500px;
+    width: 500px;       
 }
 
 header .header-menu .search .btn {
@@ -327,13 +327,57 @@ header, .header-wrap, header .logo {
     height: 50px;
 }
 
+/*레시피 헤더*/
+#recipe-header .header-menu .search input {
+    height: 50px;
+    border: 1px solid var(--main-color);
+    border-radius: 20px; 
+}
+
+#recipe-header .header-wrap .btn.main {
+    background-color: var(--main-color);    
+    height: 50px;
+    border-radius: 50%;
+    color: #fff;
+}
+
+#recipe-header .header-wrap .btn.main:hover {
+    background-color: var(--main-light-color);        
+}
+
+
+/* 마켓 헤더*/
+#market-header {
+    display: flex;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 999;
+    background-color: var(--main-light-color);
+    justify-content: center;
+    transition: all ease 0.3s;
+}
+
+
+#market-header, .header-wrap, #market-header .logo {
+    transition: all ease 0.3s;
+}
+
+#market-header .header-menu .search input {    
+    width: 500px;    
+    border-radius: 5%;
+}
+
 #market-header-wrap .btn.sub {
-    background-color: var(--main-color);
+    background-color: var(--sub-dark-color);    
+    border-radius: 5%;
     color: #fff;
 }
 
 #market-header-wrap .btn.sub:hover {
-    background-color: var(--main-light-color);
+    background-color: var(--sub-color);
 }
 
 nav {
@@ -408,6 +452,15 @@ nav .user-info img {
 .scrolled nav .user-info img {
     width: 40px;
     height: 40px;
+}
+
+#market-nav{
+    background-color: #fafafa;
+}
+
+#market-container{
+    width: 100%;
+    background-color: var(--gray-green-color);
 }
 
 .category-wrap .header-category {

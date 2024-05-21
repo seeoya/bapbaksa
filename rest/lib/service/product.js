@@ -339,7 +339,7 @@ const product = {
         console.log("123", req.body.I_NO);
         let i_no = req.body.I_NO;
         DB.query(
-            `SELECT PROD_NO, PROD_SPCS_CODE, PROD_IMG, PROD_NAME, PROD_SPCS_NAME, PROD_AVRG_PRCE, DSBN_STEP_ACTO_WT, DSBN_STEP_ACTO_UNIT_NM FROM PRODUCT WHERE PROD_NO = ?`,
+            `SELECT PROD_YMD, PROD_NO, PROD_SPCS_CODE, PROD_IMG, PROD_NAME, PROD_SPCS_NAME, PROD_AVRG_PRCE, DSBN_STEP_ACTO_WT, DSBN_STEP_ACTO_UNIT_NM FROM PRODUCT WHERE PROD_CODE = ?`,
             [i_no],
             (error, data) => {
                 if (error) {
@@ -348,6 +348,7 @@ const product = {
                 } else {
                     if (data.length > 0) {
                         const productData = {
+                            PROD_YMD: data[0].PROD_YMD,
                             PROD_CODE: data[0].PROD_CODE,
                             PROD_SPCS_CODE: data[0].PROD_SPCS_CODE,
                             PROD_IMG: data[0].PROD_IMG,
@@ -367,21 +368,39 @@ const product = {
     },
     paymentGetProd: (req, res) => {
         let post = req.body;
+    
+        // 초기 쿼리 문자열
         let query = `SELECT * FROM PRODUCT WHERE `;
+        
+        // 바인딩 값들을 저장할 배열
+        let queryValues = [];
+    
         if (post.I_NO.length === 1) {
-            query += `PROD_NO = ?`;
+            // post.I_NO의 길이가 1인 경우
+            query += `PROD_CODE = ? AND PROD_YMD = ? AND PROD_SPCS_CODE = ?`;
+            queryValues.push(post.I_NO[0], post.PROD_YMD, post.PROD_SPCS_CODE);
         } else {
-            query += post.I_NO.map(item => `PROD_NO = ?`).join(" OR ");
+            // post.I_NO의 길이가 1보다 큰 경우
+            let conditions = post.I_NO.map((item, index) => {
+                queryValues.push(post.I_NO[index], post.PROD_YMD, post.PROD_SPCS_CODE[index]);
+                return `PROD_CODE = ? AND PROD_YMD = ? AND PROD_SPCS_CODE = ?`;
+            });
+            query += conditions.join(" OR ");
         }
-
-        DB.query(query, post.I_NO, (error, result) => {
+    
+        // 디버그를 위한 쿼리와 값 출력
+        console.log("쿼리:", query);
+        console.log("바인딩 값:", queryValues);
+    
+        // 데이터베이스 쿼리 실행
+        DB.query(query, queryValues, (error, result) => {
             if (error) {
                 console.log(error);
                 res.json(null);
             } else {
                 res.json(result);
             }
-        })
+        });
     },
     getProductInfo: async (req, res) => {
         let p_no = req.body.P_NO;        

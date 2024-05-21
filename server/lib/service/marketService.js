@@ -129,13 +129,12 @@ const marketService = {
 
         let currentDate = new Date();
         let formattedDate = formatDate(currentDate);
-        
         let flag = true;
         for (let i = 0; i < o_count.length; i++) {
             DB.query(
                 "INSERT INTO TBL_ORDER(" +
-                    "O_ID, U_NO, O_COUNT, O_PRICE, P_NO, O_FINAL_PRICE, O_S_NO, P_ZIP_CODE , P_FIRST_ADDRESS, P_SECOND_ADDRESS) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, -1, ? , ? , ?)",
+                "O_ID, U_NO, O_COUNT, O_PRICE, P_NO, O_FINAL_PRICE, O_S_NO, P_ZIP_CODE , P_FIRST_ADDRESS, P_SECOND_ADDRESS) " +
+                "VALUES(?, ?, ?, ?, ?, ?, -1, ? , ? , ?)",
                 [
                     `${formattedDate}${u_no}`,
                     u_no,
@@ -154,7 +153,6 @@ const marketService = {
                         return;
                     } else {
                         flag = true;
-                        
                     }
                 }
             );
@@ -256,10 +254,9 @@ const marketService = {
     },
     acceptOrder: (req, res) => {
         let o_id = Number(req.body.acceptInfo.o_id);
-        let p_no = Number(req.body.acceptInfo.p_no);
         DB.query(
-            `UPDATE TBL_ORDER SET O_S_NO = 5 WHERE P_NO = ? AND O_ID = ?`,
-            [p_no, o_id],
+            `UPDATE TBL_ORDER SET O_S_NO = 5 WHERE O_ID = ?`,
+            [o_id],
             (error, result) => {
                 if (error) {
                     console.log(error);
@@ -273,10 +270,9 @@ const marketService = {
 
     cancelOrder: (req, res) => {
         let o_id = Number(req.body.cancelInfo.o_id);
-        let p_no = Number(req.body.cancelInfo.p_no);
         DB.query(
-            `UPDATE TBL_ORDER SET O_S_NO = 4 WHERE P_NO = ? AND O_ID = ?`,
-            [p_no, o_id],
+            `UPDATE TBL_ORDER SET O_S_NO = 4 WHERE O_ID = ?`,
+            [o_id],
             (error, result) => {
                 if (error) {
                     console.log(error);
@@ -288,12 +284,12 @@ const marketService = {
         );
     },
 
-    insertTossPayment:(req,res) => {
+    insertTossPayment: (req, res) => {
         let post = req.body
         console.log("❣❣❣❣💕💕", post.o_no);
         DB.query(`INSERT INTO TBL_PAYMENT(O_ID, U_NO, PM_PRICE, PM_METHOD) 
         VALUES(?,?,?,?)`, [post.o_id, post.u_no, post.pm_price, post.pm_method], (error, result) => {
-            if(error) {
+            if (error) {
                 console.log(error);
                 res.json(null);
             } else {
@@ -303,26 +299,23 @@ const marketService = {
 
     },
 
-    deleteCart: (req,res) => {
+    deleteCart: (req, res) => {
         let post = req.body
-        console.log("💌💌💌💌",post.pm_no);
-        DB.query(`SELECT * FROM TBL_ORDER WHERE O_ID = ?`, [post.p_no],(error,info) => {
-            if(error) {
+        DB.query(`SELECT * FROM TBL_ORDER WHERE O_ID = ?`, [post.p_no], (error, info) => {
+            if (error) {
                 console.log(error);
             } else {
-                console.log("💘💘💘💘",info);
                 const oId = info.map((item) => item.o_id);
-                console.log("💘💘💘💘",oId);
                 DB.query(
-                    `UPDATE TBL_ORDER SET O_S_NO = 0, PM_NO = ? WHERE O_ID = ?`,[post.pm_no, oId[0]],(error,result) => {
-                        if(error) {
+                    `UPDATE TBL_ORDER SET O_S_NO = 0, PM_NO = ? WHERE O_ID = ?`, [post.pm_no, oId[0]], (error, result) => {
+                        if (error) {
                             console.log(error)
                         } else {
                             const pNo = info.map((item) => item.p_no); // [ 283, 289, 293 ] 이렇게 들어옴
                             const pNoString = pNo.join(','); //283,289,293 이렇게 들어옴
                             DB.query(
                                 `DELETE FROM TBL_MARKET_CART WHERE U_NO = ? AND I_NO IN (${pNoString})`,
-                                [post.u_no, pNo],
+                                [post.u_no],
                                 (error, result) => {
                                     if (error) {
                                         console.log(error);
@@ -337,9 +330,9 @@ const marketService = {
                 )
             }
         })
-        
+
     },
-    
+
 };
 
 async function axios_getCartInfo(i_no) {

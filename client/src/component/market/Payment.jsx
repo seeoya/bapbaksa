@@ -37,10 +37,14 @@ const Payment = () => {
     useEffect(() => {
         loginCheck();
         let fors = [];
+        let spcs = [];
         location.state.goToPay.map(item => {
             fors.push(item.I_NO);
         })
-        axios_paymentGetProd(fors);
+        location.state.goToPay.map(item => {
+            spcs.push(item.PROD_SPCS_CODE);
+        })
+        axios_paymentGetProd(fors, spcs);
         axios_getUserInfo();
         setTitle('결제창');
     }, []);
@@ -65,10 +69,6 @@ const Payment = () => {
         }
     }, [userInfo]);
 
-    useEffect(() => {
-        setDetailAddress('');
-    }, [postcode]);
-
     const loginCheck = () => {
         if (u_no === null) {
             alert('로그인이 필요한 서비스입니다.');
@@ -90,14 +90,15 @@ const Payment = () => {
 
             setOCount(prev => [...prev, mcCount]);
             setOPrice(prev => [...prev, info.PROD_AVRG_PRCE]);
-            setPNo(prev => [...prev, info.PROD_NO]);
+            setPNo(prev => [...prev, info.PROD_CODE]);
         })
 
         setTotalPay(sum);
 
-    }
+    };
 
     const execDaumPostcode = () => {
+        setDetailAddress('');
         new window.daum.Postcode({
             oncomplete: (data) => {
                 let extraRoadAddr = '';
@@ -117,6 +118,7 @@ const Payment = () => {
     };
 
     const axios_insertPayment = async () => {
+        setIsLoading(true);
         try {
             let updatedRoadAddress = roadAddress;
             if (extraAddress !== '') {
@@ -133,7 +135,6 @@ const Payment = () => {
             })
 
             if (response.status === 200) {
-                alert("결제 성공");
                 setOrderNo(response.data.orderId);
             } else {
                 alert("결제 실패");
@@ -144,10 +145,15 @@ const Payment = () => {
         setIsLoading(false);
     }
 
-    const axios_paymentGetProd = async (i_no) => {
+
+    const axios_paymentGetProd = async (i_no, p_spcs_code) => {
+        setIsLoading(true);
+
         try {
             const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/paymentGetProd", {
                 'I_NO': i_no,
+                'PROD_YMD': location.state.goToPay[0].PROD_YMD,
+                'PROD_SPCS_CODE': p_spcs_code
             })
             setPayInfo(response.data);
         } catch (error) {
@@ -157,6 +163,7 @@ const Payment = () => {
     }
 
     const axios_getUserInfo = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
                 params: {
@@ -176,6 +183,7 @@ const Payment = () => {
 
     return (
         <>
+            {isLoading ? <Loading /> : null}
             {
                 isPayment ?
                     <div id='modal' className='modal payment' >
@@ -185,7 +193,7 @@ const Payment = () => {
                     </div>
                     : null
             }
-            {isLoading ? <Loading /> : <div className='content-wrap' id="payment_wrap">
+            <div className='content-wrap' id="payment_wrap">
                 <h2 className='title'>결제창</h2>
                 <div className='content flex-wrap'>
                     <div className="payment-ingredient-wrap">
@@ -196,9 +204,9 @@ const Payment = () => {
 
                                 return (
                                     <div className="flex-item" key={idx}>
-                                        <Link to={`/market/view/${info.PROD_NO}_${info.PROD_SPCS_CODE}`}>
+                                        <Link to={`/market/view/${info.PROD_CODE}_${info.PROD_SPCS_CODE}`}>
                                             <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} alt="ingredient" />
-                                            <span className="ingredient-title">{info.PROD_NAME}</span>
+                                            <span className="ingredient-title">{info.PROD_NAME}<br />{info.PROD_SPCS_NAME}</span>
                                         </Link>
                                         <span className="ingredient-unit">
                                             {info.DSBN_STEP_ACTO_WT}
@@ -220,16 +228,16 @@ const Payment = () => {
                             <span className="ingredient-title">주문자 : {u_id}님</span>
                             <div className='find-address-btn'>
                                 <button className='btn main' onClick={execDaumPostcode}>주소 찾기</button>
-                                <input type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
+                                <input className='find_address-postcode input' type="text" defaultValue={postcode} placeholder="우편번호" readOnly></input>
                             </div>
-                            <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소" readOnly></input>
+                            <input type="text" defaultValue={roadAddress + extraAddress} placeholder="도로명 주소" className='input' readOnly></input>
                             <input
                                 type="text"
                                 defaultValue={detailAddress}
                                 placeholder="상세 주소"
+                                className='input'
                                 onChange={(e) => setDetailAddress(e.target.value)}>
                             </input>
-
                             <span className="ingredient-title">상품 가격 : {totalPay.toLocaleString()}원</span>
                             <span className="ingredient-title">배송비 : 3,000원</span>
                             <span className="ingredient-title">총 가격 : {(totalPay + 3000).toLocaleString()}원</span>
@@ -240,8 +248,7 @@ const Payment = () => {
                         </div>
                     </div>
                 </div>
-            </div>}
-
+            </div>
         </>
     );
 }

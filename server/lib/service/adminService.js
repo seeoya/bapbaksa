@@ -10,7 +10,7 @@ const adminService = {
             (error, result) => {
                 if (error) {
                     console.log("error", error);
-                    return { status: 400 };
+                    res.json({ status: 400 });
                 } else {
                     let tmpList = {};
 
@@ -32,7 +32,7 @@ const adminService = {
             (error, result) => {
                 if (error) {
                     console.log("error", error);
-                    return { status: 400 };
+                    res.json({ status: 400 });
                 } else {
                     res.json(result);
                 }
@@ -56,7 +56,7 @@ const adminService = {
             (error, result) => {
                 if (error) {
                     console.log("error", error);
-                    return { status: 400 };
+                    res.json({ status: 400 });
                 } else {
                     console.log(result);
                     res.json(result);
@@ -171,46 +171,43 @@ const adminService = {
                 } else {
                     res.json(answer);
                 }
-            });
+            }
+        );
     },
     get_order: (req, res) => {
-        console.log('get_order()');
+        console.log("get_order()");
 
         DB.query(
             `SELECT * FROM TBL_ORDER o JOIN TBL_PAYMENT p ON o.pm_no = p.pm_no WHERE o.o_id = ?`,
             [req.query.o_id],
             async (error, orders) => {
-                console.log('🎃🎃', orders[0]);
-                console.log('🎃🎃', orders[1]);
+                console.log("🎃🎃", orders[0]);
+                console.log("🎃🎃", orders[1]);
                 if (error) {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
-                    
                     try {
                         const pNo = orders.map((item) => item.p_no);
                         const prodInfo = await axios_getProdName(pNo);
-                                console.log('🎃', prodInfo);
+                        console.log("🎃", prodInfo);
                         let tmp = {};
                         orders.map((order, index) => {
-                            if (!tmp[order.o_id]){
+                            if (!tmp[order.o_id]) {
                                 tmp[order.o_id] = {};
                             }
 
                             tmp[order.o_id][index] = {
                                 ...order,
-                                ...prodInfo[index]
-                            };                            
-
+                                ...prodInfo[index],
+                            };
                         });
-                        console.log('tmp:', tmp);
+                        console.log("tmp:", tmp);
                         res.json(tmp);
-
                     } catch (error) {
                         console.log(error);
                         res.json(null);
                     }
-                    
                 }
             }
         );
@@ -232,11 +229,11 @@ const adminService = {
                         });
                     }
 
-                    res.json(tmpList);                    
+                    res.json(tmpList);
                 }
             }
         );
-    },    
+    },
     get_refund_order: (req, res) => {
         DB.query(
             `SELECT * FROM TBL_ORDER o JOIN TBL_PAYMENT p ON o.pm_no = p.pm_no WHERE o.o_no = ?`,
@@ -246,23 +243,21 @@ const adminService = {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
-     
                     try {
                         const pNo = refund[0].p_no;
                         console.log("pNo: ", pNo);
 
                         const prodInfo = await axios_getProdName(pNo);
-                                console.log('🎃', prodInfo);
-                        
-                        res.json({refund: refund[0], prod: prodInfo[0]});
+                        console.log("🎃", prodInfo);
+
+                        res.json({ refund: refund[0], prod: prodInfo[0] });
                     } catch (error) {
                         console.log(error);
                         res.json(null);
                     }
-
                 }
-            });
-
+            }
+        );
     },
     get_all_refund_orders: (req, res) => {
         DB.query(
@@ -272,67 +267,67 @@ const adminService = {
                 if (error) {
                     console.log("error", error);
                     return { status: 400 };
-                } else {                    
-
-                    res.json(result);    
-             
+                } else {
+                    res.json(result);
                 }
-
-            });
+            }
+        );
     },
     put_refund: (req, res) => {
         let query = req.body.params;
         o_no = query.o_no;
         o_id = query.o_id;
         o_s_no = query.o_s_no;
-        u_no = query.u_no;        
+        u_no = query.u_no;
         pm_price = -query.o_final_price;
-        pm_method = query.pm_method;               
+        pm_method = query.pm_method;
 
-        DB.query(`UPDATE TBL_ORDER SET o_s_no = ?, o_mod_date = now() WHERE o_no = ?`,
-                    [o_s_no, o_no], (error, result) => {
-
-                        if (error) {
-                            console.log("error", error);
-                            return { status: 400 };
-                        } else {                           
-
-                            DB.query(`INSERT INTO TBL_PAYMENT (o_id, u_no, pm_price, pm_method) values(?, ?, ?, ?)`,
-                                [o_id, u_no, pm_price, pm_method], (error, result) => {
-
-                                    if (error) {
-                                        console.log("error", error);
-                                        return { status: 400 };
-                                    } else {
-                                        res.json(result);
-                                    }
-                            });
-                              
+        DB.query(
+            `UPDATE TBL_ORDER SET o_s_no = ?, o_mod_date = now() WHERE o_no = ?`,
+            [o_s_no, o_no],
+            (error, result) => {
+                if (error) {
+                    console.log("error", error);
+                    return { status: 400 };
+                } else {
+                    DB.query(
+                        `INSERT INTO TBL_PAYMENT (o_id, u_no, pm_price, pm_method) values(?, ?, ?, ?)`,
+                        [o_id, u_no, pm_price, pm_method],
+                        (error, result) => {
+                            if (error) {
+                                console.log("error", error);
+                                return { status: 400 };
+                            } else {
+                                res.json(result);
+                            }
                         }
-
-                    });
-   },
+                    );
+                }
+            }
+        );
+    },
     put_reject: (req, res) => {
         let query = req.body.params;
-        let o_no = query.o_no;    
-        let o_s_no = query.o_s_no;      
-        
+        let o_no = query.o_no;
+        let o_s_no = query.o_s_no;
+
         console.log("o_s_no", o_s_no);
         console.log("o_no", o_no);
 
-        DB.query(`UPDATE TBL_ORDER SET o_s_no = ?, o_mod_date = now() WHERE o_no = ?`,
-                    [o_s_no, o_no], (error, result) => {
+        DB.query(
+            `UPDATE TBL_ORDER SET o_s_no = ?, o_mod_date = now() WHERE o_no = ?`,
+            [o_s_no, o_no],
+            (error, result) => {
+                if (error) {
+                    console.log("error", error);
+                    return { status: 400 };
+                } else {
+                    res.json(result);
+                }
+            }
+        );
+    },
 
-                        if (error) {
-                            console.log("error", error);
-                            return { status: 400 };
-                        } else {                           
-                            res.json(result);
-                        }
-        });
-                              
-    },     
-    
     getStock: (req, res) => {
         if (req.query.p_code) {
             DB.query(
@@ -350,7 +345,7 @@ const adminService = {
             DB.query("SELECT * FROM TBL_PROD_STOCK", [], (error, result) => {
                 if (error) {
                     console.log("error", error);
-                    return { status: 400 };
+                    res.json({ status: 400 });
                 } else {
                     let tmp = {};
 
@@ -372,7 +367,7 @@ const adminService = {
             DB.query("TRUNCATE TBL_PROD_STOCK", [], (error, result) => {
                 if (error) {
                     console.log("error", error);
-                    return { status: 400 };
+                    res.json({ status: 400 });
                 } else {
                     let list = req.body.list;
                     let qs = "INSERT INTO TBL_PROD_STOCK(p_code, ps_code, ps_count) VALUES ";
@@ -387,7 +382,7 @@ const adminService = {
                     DB.query(qs, [], (error, result) => {
                         if (error) {
                             console.log("error", error);
-                            return { status: 400 };
+                            res.json({ status: 400 });
                         } else {
                             res.json(result);
                         }
@@ -401,7 +396,7 @@ const adminService = {
                 (error, result) => {
                     if (error) {
                         console.log("error", error);
-                        return { status: 400 };
+                        res.json({ status: 400 });
                     } else {
                         res.json(result);
                     }
@@ -422,9 +417,8 @@ const adminService = {
             (error, result) => {
                 if (error) {
                     console.log("error", error);
-                    return { status: 400 };
+                    res.json({ status: 400 });
                 } else {
-                  
                     if (result.length > 0) {
                         let countSum = parseInt(result[0].ps_count) + parseInt(ps_count);
 
@@ -434,7 +428,7 @@ const adminService = {
                             (error, updateResult) => {
                                 if (error) {
                                     console.log("error", error);
-                                    return { status: 400 };
+                                    res.json({ status: 400 });
                                 } else {
                                     res.json(updateResult);
                                 }
@@ -447,7 +441,7 @@ const adminService = {
                             (error, insertResult) => {
                                 if (error) {
                                     console.log("error", error);
-                                    return { status: 400 };
+                                    res.json({ status: 400 });
                                 } else {
                                     res.json(insertResult);
                                 }
@@ -457,227 +451,449 @@ const adminService = {
                 }
             }
         );
-    },    
-    
+    },
+
     monthChart: (req, res) => {
-        console.log('monthChart');
+        console.log("monthChart");
         let data = [];
         let currentDate = new Date();
         let year = currentDate.getFullYear();
         let month = currentDate.getMonth() - 3;
-        let formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-        console.log('formattedDate : ', formattedDate);
-        
-        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 4 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 4 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`, 
-        (error, cur) => {
-            if (error) {
-                res.json(null);
-            } else {
-                data.push(cur.length > 0 ? cur[0] : {"total_final_price": 0, "formatted_date": formattedDate});
-                
-                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 3 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 3 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`, 
-                (error1, last) => {
-                    if (error1) {
-                        res.json(null);
-                    } else {
-                        month = currentDate.getMonth() - 2;
-                        formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-                        data.push(last.length > 0 ? last[0] : {"total_final_price": 0, "formatted_date": formattedDate});
-                        
-                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 2 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 2 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`, 
-                        (error2, last2) => {
-                            if (error2) {
+        let formattedDate = `${year}-${String(month).padStart(2, "0")}`;
+        console.log("formattedDate : ", formattedDate);
+
+        DB.query(
+            `SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 4 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 4 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`,
+            (error, cur) => {
+                if (error) {
+                    res.json(null);
+                } else {
+                    data.push(
+                        cur.length > 0
+                            ? cur[0]
+                            : { total_final_price: 0, formatted_date: formattedDate }
+                    );
+
+                    DB.query(
+                        `SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 3 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 3 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`,
+                        (error1, last) => {
+                            if (error1) {
                                 res.json(null);
                             } else {
-                                month = currentDate.getMonth() - 1;
-                                formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-                                data.push(last2.length > 0 ? last2[0] : {"total_final_price": 0, "formatted_date": formattedDate});
-                                
-                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`, 
-                                (error3, last3) => {
-                                    if (error3) {
-                                        res.json(null);
-                                    } else {
-                                        month = currentDate.getMonth();
-                                        formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-                                        data.push(last3.length > 0 ? last3[0] : {"total_final_price": 0, "formatted_date": formattedDate});
-                                        
-                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 GROUP BY formatted_date`, 
-                                        (error4, last4) => {
-                                            if (error4) {
-                                                res.json(null);
-                                            } else {
-                                                month = currentDate.getMonth() + 1;
-                                                formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-                                                data.push(last4.length > 0 ? last4[0] : {"total_final_price": 0, "formatted_date": formattedDate});
-                                                
-                                                // 모든 쿼리가 완료되었으므로 데이터를 반환합니다.
-                                                res.json(data);
-                                            }
-                                        });
+                                month = currentDate.getMonth() - 2;
+                                formattedDate = `${year}-${String(month).padStart(2, "0")}`;
+                                data.push(
+                                    last.length > 0
+                                        ? last[0]
+                                        : { total_final_price: 0, formatted_date: formattedDate }
+                                );
+
+                                DB.query(
+                                    `SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 2 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 2 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`,
+                                    (error2, last2) => {
+                                        if (error2) {
+                                            res.json(null);
+                                        } else {
+                                            month = currentDate.getMonth() - 1;
+                                            formattedDate = `${year}-${String(month).padStart(
+                                                2,
+                                                "0"
+                                            )}`;
+                                            data.push(
+                                                last2.length > 0
+                                                    ? last2[0]
+                                                    : {
+                                                          total_final_price: 0,
+                                                          formatted_date: formattedDate,
+                                                      }
+                                            );
+
+                                            DB.query(
+                                                `SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`,
+                                                (error3, last3) => {
+                                                    if (error3) {
+                                                        res.json(null);
+                                                    } else {
+                                                        month = currentDate.getMonth();
+                                                        formattedDate = `${year}-${String(
+                                                            month
+                                                        ).padStart(2, "0")}`;
+                                                        data.push(
+                                                            last3.length > 0
+                                                                ? last3[0]
+                                                                : {
+                                                                      total_final_price: 0,
+                                                                      formatted_date: formattedDate,
+                                                                  }
+                                                        );
+
+                                                        DB.query(
+                                                            `SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 GROUP BY formatted_date`,
+                                                            (error4, last4) => {
+                                                                if (error4) {
+                                                                    res.json(null);
+                                                                } else {
+                                                                    month =
+                                                                        currentDate.getMonth() + 1;
+                                                                    formattedDate = `${year}-${String(
+                                                                        month
+                                                                    ).padStart(2, "0")}`;
+                                                                    data.push(
+                                                                        last4.length > 0
+                                                                            ? last4[0]
+                                                                            : {
+                                                                                  total_final_price: 0,
+                                                                                  formatted_date:
+                                                                                      formattedDate,
+                                                                              }
+                                                                    );
+
+                                                                    // 모든 쿼리가 완료되었으므로 데이터를 반환합니다.
+                                                                    res.json(data);
+                                                                }
+                                                            }
+                                                        );
+                                                    }
+                                                }
+                                            );
+                                        }
                                     }
-                                });
+                                );
                             }
-                        });
-                    }
-                });
+                        }
+                    );
+                }
             }
-        });
+        );
     },
     curCategoryChart: (req, res) => {
-        console.log('categoryChart');
+        console.log("categoryChart");
         let data = [];
         let currentDate = new Date();
         let year = currentDate.getFullYear();
         let month = currentDate.getMonth() + 1;
-        let formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-        console.log('formattedDate : ', formattedDate);
+        let formattedDate = `${year}-${String(month).padStart(2, "0")}`;
+        console.log("formattedDate : ", formattedDate);
 
-        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 200 AND P_NO >= 100 GROUP BY formatted_date`, 
-        (error, curCar) => {
-            if (error) {
-                res.json(null);
-            } else {
-                data.push(curCar.length > 0 ? curCar[0] : {"total_final_price": 0, "P_NO": 100, "formatted_date": formattedDate});
-                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 400 AND P_NO >= 200 GROUP BY formatted_date`, 
-                (error1, curVeg) => {
-                    if (error1) {
-                        res.json(null);
-                    } else {
-                        data.push(curVeg.length > 0 ? curVeg[0] : {"total_final_price": 0, "P_NO": 200, "formatted_date": formattedDate});
-                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 500 AND P_NO >= 400 GROUP BY formatted_date`, 
-                        (error2, curfru) => {
-                            if (error2) {
+        DB.query(
+            `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 200 AND P_NO >= 100 GROUP BY formatted_date`,
+            (error, curCar) => {
+                if (error) {
+                    res.json(null);
+                } else {
+                    data.push(
+                        curCar.length > 0
+                            ? curCar[0]
+                            : { total_final_price: 0, P_NO: 100, formatted_date: formattedDate }
+                    );
+                    DB.query(
+                        `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 400 AND P_NO >= 200 GROUP BY formatted_date`,
+                        (error1, curVeg) => {
+                            if (error1) {
                                 res.json(null);
                             } else {
-                                data.push(curfru.length > 0 ? curfru[0] : {"total_final_price": 0, "P_NO": 400, "formatted_date": formattedDate});
-                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 600 AND P_NO >= 500 GROUP BY formatted_date`, 
-                                (error3, curMeat) => {
-                                    if (error3) {
-                                        res.json(null);
-                                    } else {
-                                        data.push(curMeat.length > 0 ? curMeat[0] : {"total_final_price": 0, "P_NO": 500, "formatted_date": formattedDate});
-                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 700 AND P_NO >= 600 GROUP BY formatted_date`, 
-                                        (error4, curFish) => {
-                                            if (error4) {
-                                                res.json(null);
-                                            } else {
-                                                data.push(curFish.length > 0 ? curFish[0] : {"total_final_price": 0, "P_NO": 600, "formatted_date": formattedDate});
-                                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 800 AND P_NO >= 700 GROUP BY formatted_date`, 
-                                                (error5, curProm) => {
-                                                    if (error5) {
+                                data.push(
+                                    curVeg.length > 0
+                                        ? curVeg[0]
+                                        : {
+                                              total_final_price: 0,
+                                              P_NO: 200,
+                                              formatted_date: formattedDate,
+                                          }
+                                );
+                                DB.query(
+                                    `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 500 AND P_NO >= 400 GROUP BY formatted_date`,
+                                    (error2, curfru) => {
+                                        if (error2) {
+                                            res.json(null);
+                                        } else {
+                                            data.push(
+                                                curfru.length > 0
+                                                    ? curfru[0]
+                                                    : {
+                                                          total_final_price: 0,
+                                                          P_NO: 400,
+                                                          formatted_date: formattedDate,
+                                                      }
+                                            );
+                                            DB.query(
+                                                `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 600 AND P_NO >= 500 GROUP BY formatted_date`,
+                                                (error3, curMeat) => {
+                                                    if (error3) {
                                                         res.json(null);
                                                     } else {
-                                                        data.push(curProm.length > 0 ? curProm[0] : {"total_final_price": 0, "P_NO": 700, "formatted_date": formattedDate});
-                                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 900 AND P_NO >= 800 GROUP BY formatted_date`, 
-                                                        (error6, curProc) => {
-                                                            if (error6) {
-                                                                res.json(null);
-                                                            } else {
-                                                                data.push(curProc.length > 0 ? curProc[0] : {"total_final_price": 0, "P_NO": 800, "formatted_date": formattedDate});
-                                                                data[0].P_NO = '탄수화물';
-                                                                data[1].P_NO = '채소';
-                                                                data[2].P_NO = '과일';
-                                                                data[3].P_NO = '육류';
-                                                                data[4].P_NO = '어패류';
-                                                                data[5].P_NO = '가공 육류';
-                                                                data[6].P_NO = '가공 식품';
-                                                                res.json(data);
+                                                        data.push(
+                                                            curMeat.length > 0
+                                                                ? curMeat[0]
+                                                                : {
+                                                                      total_final_price: 0,
+                                                                      P_NO: 500,
+                                                                      formatted_date: formattedDate,
+                                                                  }
+                                                        );
+                                                        DB.query(
+                                                            `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 700 AND P_NO >= 600 GROUP BY formatted_date`,
+                                                            (error4, curFish) => {
+                                                                if (error4) {
+                                                                    res.json(null);
+                                                                } else {
+                                                                    data.push(
+                                                                        curFish.length > 0
+                                                                            ? curFish[0]
+                                                                            : {
+                                                                                  total_final_price: 0,
+                                                                                  P_NO: 600,
+                                                                                  formatted_date:
+                                                                                      formattedDate,
+                                                                              }
+                                                                    );
+                                                                    DB.query(
+                                                                        `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 800 AND P_NO >= 700 GROUP BY formatted_date`,
+                                                                        (error5, curProm) => {
+                                                                            if (error5) {
+                                                                                res.json(null);
+                                                                            } else {
+                                                                                data.push(
+                                                                                    curProm.length >
+                                                                                        0
+                                                                                        ? curProm[0]
+                                                                                        : {
+                                                                                              total_final_price: 0,
+                                                                                              P_NO: 700,
+                                                                                              formatted_date:
+                                                                                                  formattedDate,
+                                                                                          }
+                                                                                );
+                                                                                DB.query(
+                                                                                    `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE()) AND MONTH(O_REG_DATE) = MONTH(CURDATE()) AND O_S_NO = 5 AND P_NO < 900 AND P_NO >= 800 GROUP BY formatted_date`,
+                                                                                    (
+                                                                                        error6,
+                                                                                        curProc
+                                                                                    ) => {
+                                                                                        if (
+                                                                                            error6
+                                                                                        ) {
+                                                                                            res.json(
+                                                                                                null
+                                                                                            );
+                                                                                        } else {
+                                                                                            data.push(
+                                                                                                curProc.length >
+                                                                                                    0
+                                                                                                    ? curProc[0]
+                                                                                                    : {
+                                                                                                          total_final_price: 0,
+                                                                                                          P_NO: 800,
+                                                                                                          formatted_date:
+                                                                                                              formattedDate,
+                                                                                                      }
+                                                                                            );
+                                                                                            data[0].P_NO =
+                                                                                                "탄수화물";
+                                                                                            data[1].P_NO =
+                                                                                                "채소";
+                                                                                            data[2].P_NO =
+                                                                                                "과일";
+                                                                                            data[3].P_NO =
+                                                                                                "육류";
+                                                                                            data[4].P_NO =
+                                                                                                "어패류";
+                                                                                            data[5].P_NO =
+                                                                                                "가공 육류";
+                                                                                            data[6].P_NO =
+                                                                                                "가공 식품";
+                                                                                            res.json(
+                                                                                                data
+                                                                                            );
+                                                                                        }
+                                                                                    }
+                                                                                );
+                                                                            }
+                                                                        }
+                                                                    );
+                                                                }
                                                             }
-                                                        });
+                                                        );
                                                     }
-                                                });
-                                            }
-                                        });
+                                                }
+                                            );
+                                        }
                                     }
-                                });
+                                );
                             }
-                        });
-                    }
-                });
+                        }
+                    );
+                }
             }
-        });
+        );
     },
     lastCategoryChart: (req, res) => {
-        console.log('lastCategoryChart');
+        console.log("lastCategoryChart");
         let data = [];
         let currentDate = new Date();
         let year = currentDate.getFullYear();
         let month = currentDate.getMonth();
-        let formattedDate = `${year}-${String(month).padStart(2, '0')}`;
-        console.log('formattedDate : ', formattedDate);
+        let formattedDate = `${year}-${String(month).padStart(2, "0")}`;
+        console.log("formattedDate : ", formattedDate);
 
-        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 200 AND P_NO >= 100 GROUP BY formatted_date`, 
-        (error, lastCar) => {
-            if (error) {
-                res.json(null);
-            } else {
-                data.push(lastCar.length > 0 ? lastCar[0] : {"total_final_price": 0, "P_NO": 100, "formatted_date": formattedDate});
-                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 400 AND P_NO >= 200 GROUP BY formatted_date`, 
-                (error1, lastVeg) => {
-                    if (error1) {
-                        res.json(null);
-                    } else {
-                        data.push(lastVeg.length > 0 ? lastVeg[0] : {"total_final_price": 0, "P_NO": 200, "formatted_date": formattedDate});
-                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 500 AND P_NO >= 400 GROUP BY formatted_date`, 
-                        (error2, lastfru) => {
-                            if (error2) {
+        DB.query(
+            `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 200 AND P_NO >= 100 GROUP BY formatted_date`,
+            (error, lastCar) => {
+                if (error) {
+                    res.json(null);
+                } else {
+                    data.push(
+                        lastCar.length > 0
+                            ? lastCar[0]
+                            : { total_final_price: 0, P_NO: 100, formatted_date: formattedDate }
+                    );
+                    DB.query(
+                        `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 400 AND P_NO >= 200 GROUP BY formatted_date`,
+                        (error1, lastVeg) => {
+                            if (error1) {
                                 res.json(null);
                             } else {
-                                data.push(lastfru.length > 0 ? lastfru[0] : {"total_final_price": 0, "P_NO": 400, "formatted_date": formattedDate});
-                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 600 AND P_NO >= 500 GROUP BY formatted_date`, 
-                                (error3, lastMeat) => {
-                                    if (error3) {
-                                        res.json(null);
-                                    } else {
-                                        data.push(lastMeat.length > 0 ? lastMeat[0] : {"total_final_price": 0, "P_NO": 500, "formatted_date": formattedDate});
-                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 700 AND P_NO >= 600 GROUP BY formatted_date`, 
-                                        (error4, lastFish) => {
-                                            if (error4) {
-                                                res.json(null);
-                                            } else {
-                                                data.push(lastFish.length > 0 ? lastFish[0] : {"total_final_price": 0, "P_NO": 600, "formatted_date": formattedDate});
-                                                DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 800 AND P_NO >= 700 GROUP BY formatted_date`, 
-                                                (error5, lastProm) => {
-                                                    if (error5) {
+                                data.push(
+                                    lastVeg.length > 0
+                                        ? lastVeg[0]
+                                        : {
+                                              total_final_price: 0,
+                                              P_NO: 200,
+                                              formatted_date: formattedDate,
+                                          }
+                                );
+                                DB.query(
+                                    `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 500 AND P_NO >= 400 GROUP BY formatted_date`,
+                                    (error2, lastfru) => {
+                                        if (error2) {
+                                            res.json(null);
+                                        } else {
+                                            data.push(
+                                                lastfru.length > 0
+                                                    ? lastfru[0]
+                                                    : {
+                                                          total_final_price: 0,
+                                                          P_NO: 400,
+                                                          formatted_date: formattedDate,
+                                                      }
+                                            );
+                                            DB.query(
+                                                `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 600 AND P_NO >= 500 GROUP BY formatted_date`,
+                                                (error3, lastMeat) => {
+                                                    if (error3) {
                                                         res.json(null);
                                                     } else {
-                                                        data.push(lastProm.length > 0 ? lastProm[0] : {"total_final_price": 0, "P_NO": 700, "formatted_date": formattedDate});
-                                                        DB.query(`SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 900 AND P_NO >= 800 GROUP BY formatted_date`, 
-                                                        (error6, lastProc) => {
-                                                            if (error6) {
-                                                                res.json(null);
-                                                            } else {
-                                                                data.push(lastProc.length > 0 ? lastProc[0] : {"total_final_price": 0, "P_NO": 800, "formatted_date": formattedDate});
-                                                                data[0].P_NO = '탄수화물';
-                                                                data[1].P_NO = '채소';
-                                                                data[2].P_NO = '과일';
-                                                                data[3].P_NO = '육류';
-                                                                data[4].P_NO = '어패류';
-                                                                data[5].P_NO = '가공 육류';
-                                                                data[6].P_NO = '가공 식품';
-                                                                res.json(data);
+                                                        data.push(
+                                                            lastMeat.length > 0
+                                                                ? lastMeat[0]
+                                                                : {
+                                                                      total_final_price: 0,
+                                                                      P_NO: 500,
+                                                                      formatted_date: formattedDate,
+                                                                  }
+                                                        );
+                                                        DB.query(
+                                                            `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 700 AND P_NO >= 600 GROUP BY formatted_date`,
+                                                            (error4, lastFish) => {
+                                                                if (error4) {
+                                                                    res.json(null);
+                                                                } else {
+                                                                    data.push(
+                                                                        lastFish.length > 0
+                                                                            ? lastFish[0]
+                                                                            : {
+                                                                                  total_final_price: 0,
+                                                                                  P_NO: 600,
+                                                                                  formatted_date:
+                                                                                      formattedDate,
+                                                                              }
+                                                                    );
+                                                                    DB.query(
+                                                                        `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 800 AND P_NO >= 700 GROUP BY formatted_date`,
+                                                                        (error5, lastProm) => {
+                                                                            if (error5) {
+                                                                                res.json(null);
+                                                                            } else {
+                                                                                data.push(
+                                                                                    lastProm.length >
+                                                                                        0
+                                                                                        ? lastProm[0]
+                                                                                        : {
+                                                                                              total_final_price: 0,
+                                                                                              P_NO: 700,
+                                                                                              formatted_date:
+                                                                                                  formattedDate,
+                                                                                          }
+                                                                                );
+                                                                                DB.query(
+                                                                                    `SELECT SUM(O_FINAL_PRICE) AS total_final_price, P_NO, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND O_S_NO = 5 AND P_NO < 900 AND P_NO >= 800 GROUP BY formatted_date`,
+                                                                                    (
+                                                                                        error6,
+                                                                                        lastProc
+                                                                                    ) => {
+                                                                                        if (
+                                                                                            error6
+                                                                                        ) {
+                                                                                            res.json(
+                                                                                                null
+                                                                                            );
+                                                                                        } else {
+                                                                                            data.push(
+                                                                                                lastProc.length >
+                                                                                                    0
+                                                                                                    ? lastProc[0]
+                                                                                                    : {
+                                                                                                          total_final_price: 0,
+                                                                                                          P_NO: 800,
+                                                                                                          formatted_date:
+                                                                                                              formattedDate,
+                                                                                                      }
+                                                                                            );
+                                                                                            data[0].P_NO =
+                                                                                                "탄수화물";
+                                                                                            data[1].P_NO =
+                                                                                                "채소";
+                                                                                            data[2].P_NO =
+                                                                                                "과일";
+                                                                                            data[3].P_NO =
+                                                                                                "육류";
+                                                                                            data[4].P_NO =
+                                                                                                "어패류";
+                                                                                            data[5].P_NO =
+                                                                                                "가공 육류";
+                                                                                            data[6].P_NO =
+                                                                                                "가공 식품";
+                                                                                            res.json(
+                                                                                                data
+                                                                                            );
+                                                                                        }
+                                                                                    }
+                                                                                );
+                                                                            }
+                                                                        }
+                                                                    );
+                                                                }
                                                             }
-                                                        });
+                                                        );
                                                     }
-                                                });
-                                            }
-                                        });
+                                                }
+                                            );
+                                        }
                                     }
-                                });
+                                );
                             }
-                        });
-                    }
-                });
+                        }
+                    );
+                }
             }
-        });
+        );
     },
 };
 
 async function axios_getProdName(p_no) {
     try {
         const response = await axios.post("http://localhost:3002/product/getProdName", {
-            P_NO : p_no,
+            P_NO: p_no,
         });
         return response.data;
     } catch (error) {

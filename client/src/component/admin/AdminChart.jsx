@@ -230,10 +230,13 @@ const AdminChart = () => {
 
 
     return (
-        <div className="admin-chart-wrap">
-            {isLoading ? <Loading /> : <div ref={monthChartRef}></div>}
-            {isLoading ? <Loading /> : <div ref={categoryChartRef}></div>}
-        </div>
+        <>
+            {isLoading ? <Loading /> : null}
+            <div className="admin-chart-wrap">
+                <div ref={monthChartRef}></div>
+                <div ref={categoryChartRef}></div>
+            </div>
+        </>
     )
 }
 

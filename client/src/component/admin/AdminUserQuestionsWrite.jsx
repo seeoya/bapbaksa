@@ -79,7 +79,8 @@ const AdminUserQuestions = () => {
 
     return (
     <>
-        {isLoading ? <Loading /> :  <div className='admin-question-answer-wrap'>
+        {isLoading ? <Loading /> : null}
+        <div className='admin-question-answer-wrap'>
             <h2>1:1 고객 문의 답변</h2>
             <div className="question-answer-wrap, form">
                 <h3>고객 ID</h3>
@@ -96,7 +97,7 @@ const AdminUserQuestions = () => {
                     <button type="button" onClick={questionClickBtnHandler} className="btn main">문의 작성</button>
                 </Link>
             </div>
-        </div>}
+        </div>
     </>
     );
 };

@@ -4,12 +4,15 @@ import $ from 'jquery';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 
 const FindPW = () => {
     const [uMail, setUMail] = useState('');
     const [uPhone, setUPhone] = useState('');
     const [uId, setUId] = useState('');
+
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setTitle('비밀번호 찾기');
@@ -79,7 +82,7 @@ const FindPW = () => {
         console.log('findPWMailBtnClickHandler()');
 
         let form = document.findpw_mail_form;
-
+        setIsLoading(true);
         if (uId === '') {
             alert('아이디를 입력해 주세요');
             form.u_id.focus();
@@ -102,7 +105,7 @@ const FindPW = () => {
                 console.log('AXIOS FIND_ID COMMUNICATION SUCCESS ==> ', res.data);                                
                 console.log('res.data: ', res.data);
                 console.log(res.data.findPW);
-    
+                setIsLoading(false);
                 if (res.data.findPW !== true) {                       
                     alert('가입시 등록한 회원정보가 맞는지 확인해 주세요.');                   
                     setUId('');
@@ -122,7 +125,7 @@ const FindPW = () => {
             })
             .finally(data => {
                 console.log('AXIOS FIND_ID COMMUNICATION FINALLY');
-        
+                setIsLoading(true);
             });                
                                     
         }       
@@ -133,7 +136,7 @@ const FindPW = () => {
         console.log('findPWSmsBtnClickHandler()');
 
         let form = document.findpw_sms_form;
-
+        setIsLoading(true);
         if (uId === '') {
             alert('아이디를 입력해 주세요');
             form.u_id.focus();
@@ -156,7 +159,7 @@ const FindPW = () => {
                 console.log('AXIOS FIND_ID COMMUNICATION SUCCESS ==> ', res.data);                                
                 console.log('res.data: ', res.data);
                 console.log(res.data.findPW);
-    
+                setIsLoading(false);
                 if (res.data.findPW !== true) {                       
                     alert('가입시 등록한 회원정보가 맞는지 확인해 주세요.');                   
                     setUId('');
@@ -176,7 +179,7 @@ const FindPW = () => {
             })
             .finally(data => {
                 console.log('AXIOS FIND_ID COMMUNICATION FINALLY');
-        
+                setIsLoading(true);
             });                
          
                            
@@ -202,67 +205,67 @@ const FindPW = () => {
         
     }
 
-  return (
-    <div className='content-wrap'>
+    return (
+        <>
+            {isLoading ? null : <Loading />}
+            <div className='content-wrap'>
 
-        <h2 className='title'>비밀번호 찾기</h2>
+                <h2 className='title'>비밀번호 찾기</h2>
 
-        <div className='content'>
-            <div className='signin-wrap'>   
-                <div className='find-button'>
-                    <button id='mail' type='button' onClick={findMailClickHandler} className='btn main-light half mail'>이메일로 찾기</button>
-                    <button id='sms' type='button' onClick={findSmsClickHandler} className='btn half sms'>문자메시지로 찾기</button>
+                <div className='content'>
+                    <div className='signin-wrap'>   
+                        <div className='find-button'>
+                            <button id='mail' type='button' onClick={findMailClickHandler} className='btn main-light half mail'>이메일로 찾기</button>
+                            <button id='sms' type='button' onClick={findSmsClickHandler} className='btn half sms'>문자메시지로 찾기</button>
 
+                        </div>
+                        <div className='find-mail'>         
+                            <form id='find-input' name='findpw_mail_form' className='form'>
+                                <div className='input-wrap'>
+                                    <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요"/>                         
+                                    <span id="message_u_id" className="input-message">가입시 등록한 아이디를 입력해 주세요.</span>
+                                </div>
+                                <div className='input-wrap'>
+                                    <input type="text" name="u_mail" value={uMail} onChange={(e) => userInfoChangeHandler(e)} placeholder="이메일 주소를 입력해 주세요"/>                         
+                                    <span id="message_u_mail" className="input-message">가입시 등록한 이메일을 입력해 주세요.</span>
+                                </div>
+                                
+                                <div className='btn-wrap'>
+                                    <button type="button" onClick={findPWMailBtnClickHandler} className="btn main full">확인</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div className='find-sms'>         
+                            <form id='find-input2' name='findpw_sms_form' className='form'>
+                                <div className='input-wrap'>
+                                    <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요"/>                         
+                                    <span id="message_u_id" className="input-message">가입시 등록한 아이디를 입력해 주세요.</span>
+                                </div>
+                                <div className='input-wrap'>
+                                    <input type="text" name="u_phone" value={uPhone} onChange={(e) => userInfoChangeHandler(e)} placeholder="휴대폰 번호를 입력해 주세요"/>                         
+                                    <span id="message_u_mail" className="input-message">가입시 등록한 휴대폰 번호를 입력해 주세요.</span>
+                                </div>
+                                
+                                <div className='btn-wrap'>
+                                    <button type="button" onClick={findPWSmsBtnClickHandler} className="btn main full">확인</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id='find-result'>                                        
+                            <div className='find-wrap'>                            
+                                <div>
+                                    <p id="message_u_mail" className="result-message title">고객님 계정을 찾았습니다.</p>
+                                    <p id="message_u_mail" className="result-message text">임시 &nbsp; 비밀번호로 &nbsp; 로그인 &nbsp; 후 &nbsp; 정보수정에서 &nbsp; 비밀번호를 &nbsp; 변경하실 &nbsp;수&nbsp; 있습니다.</p>                                                
+                                </div>
+                            
+                            </div>                            
+                        </div>            
+                    </div>
                 </div>
-                <div className='find-mail'>         
-                    <form id='find-input' name='findpw_mail_form' className='form'>
-                        <div className='input-wrap'>
-                            <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요"/>                         
-                            <span id="message_u_id" className="input-message">가입시 등록한 아이디를 입력해 주세요.</span>
-                        </div>
-                        <div className='input-wrap'>
-                            <input type="text" name="u_mail" value={uMail} onChange={(e) => userInfoChangeHandler(e)} placeholder="이메일 주소를 입력해 주세요"/>                         
-                            <span id="message_u_mail" className="input-message">가입시 등록한 이메일을 입력해 주세요.</span>
-                        </div>
-                        
-                        <div className='btn-wrap'>
-                            <button type="button" onClick={findPWMailBtnClickHandler} className="btn main full">확인</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div className='find-sms'>         
-                    <form id='find-input2' name='findpw_sms_form' className='form'>
-                        <div className='input-wrap'>
-                            <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} placeholder="아이디를 입력해 주세요"/>                         
-                            <span id="message_u_id" className="input-message">가입시 등록한 아이디를 입력해 주세요.</span>
-                        </div>
-                        <div className='input-wrap'>
-                            <input type="text" name="u_phone" value={uPhone} onChange={(e) => userInfoChangeHandler(e)} placeholder="휴대폰 번호를 입력해 주세요"/>                         
-                            <span id="message_u_mail" className="input-message">가입시 등록한 휴대폰 번호를 입력해 주세요.</span>
-                        </div>
-                        
-                        <div className='btn-wrap'>
-                            <button type="button" onClick={findPWSmsBtnClickHandler} className="btn main full">확인</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div id='find-result'>                                        
-                    <div className='find-wrap'>                            
-                        <div>
-                            <p id="message_u_mail" className="result-message title">고객님 계정을 찾았습니다.</p>
-                            <p id="message_u_mail" className="result-message text">임시 &nbsp; 비밀번호로 &nbsp; 로그인 &nbsp; 후 &nbsp; 정보수정에서 &nbsp; 비밀번호를 &nbsp; 변경하실 &nbsp;수&nbsp; 있습니다.</p>                                                
-                        </div>
-                    
-                    </div>                            
-                </div>            
-             
-       
             </div>
-        </div>
-    </div>
-
-  );
+        </>
+    );
 }
 export default FindPW;

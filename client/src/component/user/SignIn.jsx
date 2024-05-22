@@ -68,7 +68,7 @@ const SignIn = () => {
     }
     
     
-    const signinBtnClickHandler = async () => {
+    const signinBtnClickHandler = () => {
         console.log('signinBtnClickHandler()');
 
         let form = document.signin_form;
@@ -83,58 +83,61 @@ const SignIn = () => {
         
         } else {            
                 
-                let data = {
-                    "u_id": uId,
-                    "u_pw": uPw
-                }                 
-
-                await axios({
-                    url: process.env.REACT_APP_SERVER_URL + `/api/user/signin_confirm`,                
-                    method: 'post',      
-                    data: data,
-                })
-                .then(res => {        
-                    console.log('AXIOS SIGN_IN COMMUNICATION SUCCESS ==> ', res.data);   
-                                                
-                    setIsLoading(false);
-                    
-                    console.log('res.data: ', res.data);      
-                    console.log('message: ', res.data.message);                                                                 
-                    console.log('res.data.result.affectedRows', res.data.result.affectedRows);
-                                                           
-                    if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {                                   
-
-                            let refreshToken = res.data.refreshToken;                                               
-                            let accessToken = res.data.accessToken;
-
-                            setToken('accessToken', accessToken);                     
-                            setToken('refreshToken', refreshToken);                     
-                            setToken('loginedUId', res.data.uId);                     
-                            setToken('loginedUNo', res.data.uNo);                            
-                                                 
-                            alert('로그인에 성공하였습니다.');                        
-                            navigate('/');                        
-                            window.location.reload(true);
-                    }
-
-                    setIsLoading(true); 
-                   
-                })
-                .catch(error => {
-                    console.log('AXIOS SIGN_IN COMMUNICATION ERROR');                                      
-                    
-                })
-                .finally(data => {
-                    console.log('AXIOS SIGN_IN COMMUNICATION FINALLY');                                                     
-                                 
-                });                
+            axios_signin();                        
                                        
-            }   
+        }   
               
            
     }
 
           
+    const axios_signin = async () => {
+        console.log('axios_signin()');
+
+        let data = {
+            "u_id": uId,
+            "u_pw": uPw
+        }                 
+
+        try{
+        const res = await axios.post(            
+            process.env.REACT_APP_SERVER_URL + `/api/user/signin_confirm`,                            
+            data)            
+        
+            console.log('AXIOS SIGN_IN COMMUNICATION SUCCESS ==> ', res.data);   
+                                            
+            setIsLoading(false);
+            
+            if(res.data.message === undefined && res.data.result.affectedRows > 0){
+            console.log('res.data: ', res.data);      
+            console.log('message: ', res.data.message);                                                                 
+            console.log('res.data.result.affectedRows', res.data.result.affectedRows);                                 
+
+                    let refreshToken = res.data.refreshToken;                                               
+                    let accessToken = res.data.accessToken;
+
+                    setToken('accessToken', accessToken);                     
+                    setToken('refreshToken', refreshToken);                     
+                    setToken('loginedUId', res.data.uId);                     
+                    setToken('loginedUNo', res.data.uNo);                            
+                                        
+                    alert('로그인에 성공하였습니다.');                        
+                    navigate('/');                        
+                    window.location.reload(true);
+            } else {
+                alert(res.data.message);
+                setUId(''); setUPw('');
+            }
+            setIsLoading(true); 
+
+        } catch(error){
+
+            console.log('error', error);
+            console.log('error==message', error.data.message);
+            alert(error.data.message);
+        
+        }
+    }
 
 
     return (

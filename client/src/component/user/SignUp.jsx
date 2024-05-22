@@ -25,7 +25,6 @@ const SignUp = () => {
     const [mailFlag, setMailFlag] = useState(false);
     const [phoneFlag, setPhoneFlag] = useState(false);
     const [signupClick, setSignupClick] = useState(false);
-    
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -37,34 +36,26 @@ const SignUp = () => {
     const navigate = useNavigate();
 
     const userInfoChangeHandler = (e) => {
-        console.log('userInfoChangeHandler()');
-
         let input_name = e.target.name;
         let input_value = e.target.value;
 
         if (input_name === "u_id") {
-            idCheck(input_value);                       
+            idCheck(input_value);
             setUId(input_value);
-
         } else if (input_name === "u_pw") {
-            pwCheck(input_value);                       
+            pwCheck(input_value);
             setUPw(input_value)
-
         } else if (input_name === "u_check_pw") {
-            rePwCheck(input_value);            
+            rePwCheck(input_value);
             setUCheckPw(input_value);
-
         } else if (input_name === "u_mail") {
             emailCheck(input_value);
             setUMail(input_value);
-
         } else if (input_name === "u_phone") {
-            phoneCheck(input_value);            
+            phoneCheck(input_value);
             setUPhone(input_value);
-
         } else if (input_name === "u_profile") {
             setUProfile(input_value);
-
         } else if (input_name === "u_second_address") {
             setUSeconAddr(input_value);
         }
@@ -74,18 +65,17 @@ const SignUp = () => {
         // 아이디 검증: 5~20 영어 소문자와 숫자 조합으로 구성되어야 함
         let regex = new RegExp();
         regex = /^(?=.*[a-z])(?=.*[0-9]).{5,20}$/;
-        
+
         if (regex.test(input_value)) {
             $('#message_u_id').css('display', 'none');
 
-            if(!isMemberFlag){
+            if (!isMemberFlag) {
                 $('#message_u_id_is').css('display', 'block');
                 return input_value;
             } else {
-                $('#message_u_id_is').css('display', 'none');    
+                $('#message_u_id_is').css('display', 'none');
                 return true;
             }
-            
         } else {
             $('#message_u_id').css('display', 'block');
             return '';
@@ -93,14 +83,12 @@ const SignUp = () => {
     }
 
     const isMemberCheck = () => {
-    
-        if(!isMemberFlag){
+        if (!isMemberFlag) {
             $('#message_u_id_is').css('display', 'block');
-            return false;            
-            
-        } else if(isMemberFlag) {
+            return false;
+        } else if (isMemberFlag) {
             $('#message_u_id_is').css('display', 'none');
-            return true;    
+            return true;
         }
     }
 
@@ -119,7 +107,6 @@ const SignUp = () => {
             return '';
         }
     }
-
 
     const rePwCheck = (input_value) => {
         // 비밀번호 일치 검증        
@@ -167,74 +154,59 @@ const SignUp = () => {
     }
 
     const pwViewClickHandler = () => {
-        console.log('pwViewClickHandler()');
         $('#view').css('display', 'block');
         $('#hide').css('display', 'none');
         $('.pw-view-icon input[name="u_pw"]').prop('type', 'text');
-
     }
 
     const pwHideClickHandler = () => {
-        console.log('pwViewClickHandler()');
         $('#view').css('display', 'none');
         $('#hide').css('display', 'block');
         $('.pw-view-icon input[name="u_pw"]').prop('type', 'password');
-
-
     }
 
     const isMemberClickHandler = async () => {
-        console.log('isMemberClickHandler()');
         setIsLoading(true);
+
         let data = {
             'u_id': uId
         }
 
         await axios(
             {
-            url: process.env.REACT_APP_SERVER_URL + `/api/user/isMember_confirm`,
-            method: 'post',
-            data: data,
-        })
+                url: process.env.REACT_APP_SERVER_URL + `/api/user/isMember_confirm`,
+                method: 'post',
+                data: data,
+            })
             .then(res => {
-                console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION SUCCESS ==> ', res.data);
-                console.log('res.data: ', res.data);
-                console.log(res.data.isMember);
-                setIsLoading(false);                
+                setIsLoading(false);
                 if (res.data.isMember === false) {
                     setIsMemberFlag(true);
-                    $('#message_u_id_is').css('display', 'none');                      
+                    $('#message_u_id_is').css('display', 'none');
 
                     alert('사용 가능한 아이디입니다.');
-                } else if(res.data.isMember === true){
+                } else if (res.data.isMember === true) {
                     setIsMemberFlag(false);
                     setUId('');
                     alert('사용 불가능한 아이디입니다.');
-                } else if(res.data.isMember === null) {
+                } else if (res.data.isMember === null) {
                     setIsMemberFlag(false);
                     setUId('');
                     alert('아이디를 입력해 주세요.');
-                } else if(res.data.pass === false){
+                } else if (res.data.pass === false) {
                     setIsMemberFlag(false);
                     setUId('');
                     alert('유효한 아이디를 입력해 주세요.');
                 }
-
             })
             .catch(error => {
-                console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION ERROR');
             })
             .finally(data => {
-                console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION FINALLY');
                 setIsLoading(true);
             });
-
     }
 
     const searchAddrClickHandler = () => {
-        console.log('searchAddrClickHandler()');
-
-
         new window.daum.Postcode({
             oncomplete: (data) => {
                 let extraRoadAddr = '';
@@ -253,56 +225,42 @@ const SignUp = () => {
     }
 
     const initSignupClick = () => {
-        console.log('initSignupClick()');
-       
         let button = document.querySelector("#signupBtn");
-            console.log('button', button);
-            button.disabled = true;
-            button.style.cursor = 'default';
-            button.style.backgroundColor = '#d3dfce';            
+        button.disabled = true;
+        button.style.cursor = 'default';
+        button.style.backgroundColor = '#d3dfce';
 
-        console.log('flag===========', isMemberFlag && pwFlag && rPwFlag && mailFlag && phoneFlag);
-        if(isMemberFlag && pwFlag && rPwFlag && mailFlag && phoneFlag){
+        if (isMemberFlag && pwFlag && rPwFlag && mailFlag && phoneFlag) {
             button.disabled = false;
             button.style.cursor = 'pointer';
-            button.style.backgroundColor = '#5f963a';            
+            button.style.backgroundColor = '#5f963a';
         }
-
     }
 
     const signupBtnClickHandler = () => {
-        console.log('signupBtnClickHandler()');
         setIsLoading(true);
         let form = document.signup_form;
 
         if (uId === '') {
             alert('아이디를 입력해 주세요');
-            form.u_id.focus();                        
-
-        } else if (uPw === ''){
+            form.u_id.focus();
+        } else if (uPw === '') {
             alert('비밀번호를 입력해 주세요');
-            form.u_pw.focus();                                
-
+            form.u_pw.focus();
         } else if (uCheckPw === '') {
             alert('비밀번호를 한번 더 입력해 주세요');
-            form.u_check_pw.focus();                       
-        
+            form.u_check_pw.focus();
         } else if (uMail === '') {
             alert('이메일을 입력해 주세요');
-            form.u_mail.focus();            
+            form.u_mail.focus();
             setUMail('');
-
         } else if (uPhone === '') {
             alert('휴대폰 번호를 입력해 주세요');
-            form.u_phone.focus();            
+            form.u_phone.focus();
             setUPhone('');
-
         } else {
-
             let u_profiles = $('input[name="u_profile"]');
-            console.log('u_profiles: ', u_profiles);
             let files = u_profiles[0].files;
-            console.log('files: ', files);
 
             let formData = new FormData();
             formData.append("u_id", uId);
@@ -320,27 +278,18 @@ const SignUp = () => {
                 data: formData,
             })
                 .then(res => {
-                    console.log('res: ', res);
-                    console.log('res.data: ', res.data);
-                    console.log(res.data.result.affectedRows);
                     setIsLoading(false);
                     if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {
-                        console.log('AXIOS SIGN_UP COMMUNICATION SUCCESS ==> ', res.data);
-
                         alert('회원가입에 성공하였습니다.');
                         navigate('/');
-
                     }
                 })
                 .catch(error => {
-
                     alert('회원가입에 실패하였습니다.');
                 })
                 .finally(data => {
-                    console.log('AXIOS SIGN_UP COMMUNICATION FINALLY');
                     setIsLoading(true);
                 });
-
 
             setUId(''); setUPw(''); setUCheckPw(''); setUMail(''); setUPhone('');
             setUZipCode(''); setUFirstAddr(''); setUSeconAddr(''); setUProfile('');
@@ -350,12 +299,11 @@ const SignUp = () => {
     return (
         <>
             {isLoading ? null : <Loading />}
-            <div className='content-wrap'>
 
+            <div className='content-wrap'>
                 <h2 className='title'>회원가입</h2>
 
                 <div className='content'>
-
                     <div className='signup-wrap'>
                         <form name="signup_form" className='form'>
                             <p className='signup-hint'>* 필수항목</p>
@@ -422,7 +370,6 @@ const SignUp = () => {
                                 <button type="button" onClick={signupBtnClickHandler} id='signupBtn' className="btn main full">회원가입</button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>

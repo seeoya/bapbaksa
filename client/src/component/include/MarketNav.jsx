@@ -9,9 +9,7 @@ const MarketNav = () => {
     const [loginedID, setLoginedID] = useState('');
 
     useEffect(() => {
-
         let loginedUId = getToken('loginedUId');
-        console.log('loginedUIdString', loginedUId);
 
         if (loginedUId !== null) {
             setLoginedID(loginedUId);

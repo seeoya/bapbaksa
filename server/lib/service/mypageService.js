@@ -52,7 +52,6 @@ const mypageService = {
                 if (error) {
                     res.json({ status: 400 });
                 } else {
-                    console.log("2222", result);
                     res.json(result);
                 }
             }
@@ -62,8 +61,6 @@ const mypageService = {
         let u_no = parseInt(req.body.u_no);
         let rf_no = parseInt(req.body.rf_no);
 
-        console.log(u_no, rf_no);
-
         DB.query(
             "DELETE FROM TBL_LIKE_RECIPE WHERE u_no = ? AND r_no = ?",
             [u_no, rf_no],
@@ -71,7 +68,6 @@ const mypageService = {
                 if (error) {
                     res.json({ status: 400 });
                 } else {
-                    console.log("3333", result);
                     res.json(result);
                 }
             }

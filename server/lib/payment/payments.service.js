@@ -19,7 +19,6 @@ async function confirmPayment(dataParam) {
         },
     });
     const data = await response.json();
-    console.log(data);
 
     return data;
 }

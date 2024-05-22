@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from 'apexcharts';
 import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import { setTitle } from "../../util/setTitle";
 import Loading from "../include/Loading";
 
@@ -31,14 +31,11 @@ const AdminChart = () => {
         if (monthDate && curCtegoryDate && lastCtegoryDate) {
             createMonthChart();
             createCategoryChart();
-            console.log('monthDate  : ', monthDate);
-            console.log('curCtegoryDate  : ', curCtegoryDate);
-            console.log('lastCtegoryDate  : ', lastCtegoryDate);
         }
     }, [monthDate, curCtegoryDate, lastCtegoryDate]);
 
     const createMonthChart = () => {
-        if(!monthChartRef.current) return;
+        if (!monthChartRef.current) return;
 
         let options = {
             series: [{
@@ -109,7 +106,7 @@ const AdminChart = () => {
     }
 
     const createCategoryChart = () => {
-        if(!categoryChartRef.current) return;
+        if (!categoryChartRef.current) return;
 
         let options = {
             series: [{

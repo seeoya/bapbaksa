@@ -10,9 +10,6 @@ const commonService = {
                     console.log("error", error);
                     res.json({ status: 400 });
                 } else {
-                    console.log(result);
-                    console.log(result.u_status);
-
                     res.json(result);
                 }
             }
@@ -27,8 +24,6 @@ const commonService = {
                     console.log("error", error);
                     res.json({ status: 400 });
                 } else {
-                    console.log(result);
-
                     res.json(result);
                 }
             }

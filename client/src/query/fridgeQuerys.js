@@ -3,15 +3,12 @@ import axios from "axios";
 import { getToken } from "../storage/loginedToken";
 
 export const AllFridgeQuery = () => {
-    console.log("모든 냉장고 재료 query");
-
     return useQuery({
         queryKey: ["all_fridge"],
         queryFn: async () => {
             return await axios
                 .get(process.env.REACT_APP_REST_SERVER_URL + "/refrigeator")
                 .then((data) => {
-                    console.log("all", data.data);
                     return data.data;
                 });
         },
@@ -22,8 +19,6 @@ export const AllFridgeQuery = () => {
 };
 
 export const MyFridgeQuery = () => {
-    console.log("내 냉장고 query");
-
     return useQuery({
         queryKey: ["fridge"],
         queryFn: async () => {
@@ -44,7 +39,6 @@ export const MyFridgeQuery = () => {
 };
 
 export const AddMyFridgeQuery = () => {
-    console.log("내 냉장고 추가");
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -67,7 +61,6 @@ export const AddMyFridgeQuery = () => {
 };
 
 export const DeleteMyFridgeQuery = () => {
-    console.log("내 냉장고 제거");
     const queryClient = useQueryClient();
 
     return useMutation({

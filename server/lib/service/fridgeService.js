@@ -21,7 +21,6 @@ const fridgeService = {
     add_my_fridge: (req, res) => {
         let data = req.body.data;
 
-        console.log("111111", data);
         DB.query(
             "INSERT INTO TBL_FRIDGE(u_no, ig_no) VALUES(?, ?)",
             [data.u_no, data.rf_no],
@@ -30,7 +29,6 @@ const fridgeService = {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
-                    console.log(result);
                     res.json({ status: 200 });
                 }
             }
@@ -46,7 +44,6 @@ const fridgeService = {
                     console.log("error", error);
                     return { status: 400 };
                 } else {
-                    console.log(result);
                     res.json({ status: 200 });
                 }
             }

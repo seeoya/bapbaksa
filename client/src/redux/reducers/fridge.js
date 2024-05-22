@@ -1,7 +1,6 @@
 export const fridge = (state = {}, action) => {
     switch (action.type) {
         case "view_state":
-            console.log({ ...state });
             return { ...state, name: "가나다" };
 
         case "load_all_fridge":
@@ -25,7 +24,6 @@ export const fridge = (state = {}, action) => {
 
         case "error":
         default:
-            console.log("REDUCER ACTION ERROR");
             return { ...state };
     }
 };

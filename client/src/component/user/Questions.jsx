@@ -42,17 +42,13 @@ const Questions = () => {
     const navigate = useNavigate();
 
     const loginCheck = () => {
-
         if (u_no === null) {
             alert('로그인이 필요한 서비스입니다.');
             navigate('/user/signin')
         }
-
     }
 
     const questionChangeHandler = (e) => {
-        console.log('questionChangeHandler()');
-
         let input_name = e.target.name;
         let input_value = e.target.value;
 
@@ -66,8 +62,8 @@ const Questions = () => {
     }
 
     const questionClickBtnHandler = async () => {
-        console.log('questionClickBtnHandler()');
         let form = document.question_form;
+
         if (quesTitle === '') {
             alert('문의 제목을 입력해 주세요');
             form.ques_title.focus();
@@ -93,17 +89,19 @@ const Questions = () => {
             }).catch(error => {
                 alert('문의 등록에 실패하였습니다.');
             }).finally(data => {
-                console.log('AXIOS QUESTION_REGIST COMMUNICATION FINALLY');
             });
+
             setQuesTitle(''); setOId(''); setQuesDetail('');
         }
     }
 
     const getOrderNo = async () => {
         setIsLoading(true);
+
         let data = {
             "u_id": uId,
         }
+
         await axios({
             url: process.env.REACT_APP_SERVER_URL + "/api/user/order_no",
             method: 'post',
@@ -119,9 +117,11 @@ const Questions = () => {
 
     const loadMyQuestion = async () => {
         setIsLoading(true);
+
         let data = {
             "u_id": uId,
         }
+
         await axios({
             url: process.env.REACT_APP_SERVER_URL + "/api/user/load_question",
             method: 'post',
@@ -137,6 +137,7 @@ const Questions = () => {
 
     const titleClickHandler = (question) => {
         setIsModalOpen(true);
+
         if (selectedQuestion && selectedQuestion.ques_no === question.ques_no) {
             setIsQuestionNo(question.ques_no);
             setSelectedQuestion(null);
@@ -147,11 +148,12 @@ const Questions = () => {
 
     const deleteQuestion = async (question) => {
         setIsLoading(true);
+
         let data = {
             "u_id": uId,
             "ques_no": question.ques_no,
         }
-        console.log("deleteQuestion data : ", data);
+
         await axios({
             url: process.env.REACT_APP_SERVER_URL + "/api/user/delete_question",
             method: 'delete',
@@ -168,9 +170,11 @@ const Questions = () => {
     return (
         <>
             {isLoading ? <Loading /> : null}
+
             <div className="content-wrap">
                 <div className="question-wrap">
                     <h2 className="title">1:1 문의</h2>
+
                     <form name="question_form" className="qusetion-form" method="post">
                         <div className="question-input-wrap">
                             <input type="text" name="ques_title" value={quesTitle} onChange={(e) => { questionChangeHandler(e) }} placeholder="제목을 입력해주세요" className="input" />
@@ -198,7 +202,8 @@ const Questions = () => {
                                 <div>답변상태</div>
                                 <div>삭제</div>
                             </div>
-                            {loadQuest.length > 0 ? (
+
+                            {loadQuest && loadQuest.length > 0 ? (
                                 loadQuest.map((question) => (
                                     <div key={question.ques_no}>
                                         <div className="question-answer-form-detail">

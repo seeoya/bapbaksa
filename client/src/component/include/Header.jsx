@@ -12,14 +12,11 @@ const Header = () => {
     const [isLogined, setIsLogined] = useState(false);
 
     useEffect(() => {
-
         let loginedUId = getToken('loginedUId');
-        console.log('loginedUIdString', loginedUId);
 
         if (loginedUId !== null) {
             setIsLogined(true);
         }
-
     }, [isLogined]);
 
     const recipeSearchChangeEvent = (e) => {
@@ -63,7 +60,6 @@ const Header = () => {
                                 </>
                             )
                         }
-
                     </div>
                 </div>
             </div>

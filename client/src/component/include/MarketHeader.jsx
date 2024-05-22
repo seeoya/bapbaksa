@@ -12,12 +12,10 @@ const MarketHeader = () => {
 
     useEffect(() => {
         let loginedUId = getToken('loginedUId');
-        console.log('loginedUIdString', loginedUId);
 
         if (loginedUId !== null) {
             setIsLogined(true);
         }
-
     }, [isLogined]);
 
     const searchBtnClickEvent = (e) => {
@@ -48,20 +46,18 @@ const MarketHeader = () => {
 
                 <div className="user-menu">
                     <div className="nav">
-                        {isLogined ? (
-                            <>
-                                <Link to="/admin/qna" className="link">고객문의</Link>
-                                <Link to="/user/modify" className="link">정보수정</Link>
-                                <Link to="/user/signout" className="link">로그아웃</Link>
-                            </>
-                        )
-                            :
-                            (
+                        {
+                            isLogined ?
+                                <>
+                                    <Link to="/admin/qna" className="link">고객문의</Link>
+                                    <Link to="/user/modify" className="link">정보수정</Link>
+                                    <Link to="/user/signout" className="link">로그아웃</Link>
+                                </>
+                                :
                                 <>
                                     <Link to="/user/signup" className="link">회원가입</Link>
                                     <Link to="/user/signin" className="link">로그인</Link>
                                 </>
-                            )
                         }
                     </div>
                 </div>

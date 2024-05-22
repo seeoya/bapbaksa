@@ -38,8 +38,6 @@ const Payment = () => {
     const location = useLocation();
 
     useEffect(() => {
-        console.log("💨💨💨💨", location.state.goToPay);
-
         if (location.state && location.state.goToPay) {
             let tmp = {};
             for (let i = 0; i < location.state.goToPay.length; i++) {
@@ -48,10 +46,6 @@ const Payment = () => {
             setCount(tmp);
         }
     }, [location.state]);
-
-    useEffect(() => {
-        console.log("💘💘💘💘💘", payInfo);
-    }, [payInfo])
 
     useEffect(() => {
         loginCheck();
@@ -67,14 +61,6 @@ const Payment = () => {
         axios_getUserInfo();
         setTitle('결제창');
     }, []);
-
-    useEffect(() => {
-        if (location.state && location.state.goToPay) {
-            console.log("비정상", location.state.goToPay);
-        } else {
-            console.log('없다 아직');
-        }
-    }, [location]);
 
     useEffect(() => {
         initTotalPay()

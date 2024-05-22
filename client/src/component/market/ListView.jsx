@@ -2,10 +2,10 @@ import ApexCharts from 'apexcharts';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';
-import { NewProductQuery } from '../../query/productQuerys';
 
 const ListView = () => {
     const { no } = useParams();
@@ -30,7 +30,7 @@ const ListView = () => {
 
     useEffect(() => {
         defaultQuantityInt();
-    },[quantityInt])
+    }, [quantityInt])
 
     useEffect(() => {
         setTitle(viewData?.PROD_NAME);
@@ -47,8 +47,6 @@ const ListView = () => {
     }, [newProductList, itemPCode, itemPsCode])
 
     useEffect(() => {
-        console.log("item: ", item);
-
         axiox_getChartData();
         setPaymentInfo();
         getStock();
@@ -62,7 +60,7 @@ const ListView = () => {
 
     const defaultQuantityInt = () => {
 
-        if(quantityInt <= 0) {
+        if (quantityInt <= 0) {
             alert('최소 주문은 1개입니다.');
             setQuantityInt(1);
         };

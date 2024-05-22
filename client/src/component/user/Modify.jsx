@@ -36,19 +36,15 @@ const Modify = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        let loginedUId = getToken('loginedUId');
-        let uProfile = getToken('uProfile');
+        let loginedUId = getToken('loginedUId');       
 
         if (loginedUId === null) {
             setIsLoading(false);
             alert('로그인이 필요한 서비스입니다.');
             navigate('/user/signin');    
-        } else if (uProfile !== null) {
-            setUProfile(uProfile);
-            setIsProfile(true);
         }
 
-    }, [uId, uProfile, isProfile]);   
+    }, [isLoading]);   
 
     useEffect(() => {
 
@@ -95,6 +91,7 @@ const Modify = () => {
                     setUFirstAddr(res.data.user.u_first_address);
                     setUSeconAddr(res.data.user.u_second_address);
                     setUProfileImg(res.data.user.pi_name);
+                    setIsProfile(true);
                 }
             })
             .catch(error => {
@@ -337,7 +334,7 @@ const Modify = () => {
                                 <div className='input-wrap' id='profile'>
                                     <div className="profile-img">
                                     {isProfile ? <>                                       
-                                        <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="profile" />
+                                        <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfileImg}`} alt="profile" />
                                         </>
                                         :
                                         <>

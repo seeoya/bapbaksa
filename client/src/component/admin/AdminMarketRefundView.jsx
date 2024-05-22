@@ -38,14 +38,6 @@ const AdminMarketRefundView = () => {
         setTitle('환불 상세 내역');
     }, [no, isLoading]);
 
-    useEffect(() => {     
-        if(oSNo === 2){
-            setBtnFlag(true);
-        }
-        initBtn();
-    
-    }, [setOSNo]);
-
 
     const initOrder = async () => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_refund_order", {
@@ -66,7 +58,8 @@ const AdminMarketRefundView = () => {
                 setORegDate(order.o_reg_date);
                 setOId(order.o_id);            
                 setUNo(order.u_no);               
-                setOSNo(order.o_s_no);            
+                setOSNo(order.o_s_no);   
+                    if(order.o_s_no === 2) setBtnFlag(true);         
                 setOCount(order.o_count);
                 setOPrice(order.o_price);
                 setOFinalPrice(order.o_final_price);            
@@ -115,32 +108,7 @@ const AdminMarketRefundView = () => {
             });
     } 
        
-    const initBtn = () => {
-        console.log('initBtn()');
-       
-        let refundBtn = document.querySelector("#refundBtn");
-        let rejectBtn = document.querySelector("#rejectdBtn");            
-
-        if(btnFlag){
-            refundBtn.disabled = false;
-            refundBtn.style.cursor = 'pointer';
-            refundBtn.style.backgroundColor = '#5f963a';      
-            rejectBtn.disabled = false;
-            rejectBtn.style.cursor = 'pointer';
-            rejectBtn.style.backgroundColor = '#5f963a';      
-        } else {
-            refundBtn.disabled = true;
-            refundBtn.style.cursor = 'default';
-            refundBtn.style.backgroundColor = '#d3dfce';         
-            rejectBtn.disabled = true;
-            rejectBtn.style.cursor = 'default';
-            rejectBtn.style.backgroundColor = '#d3dfce';            
-        }
-
-    }
-
-    
-    
+   
     const refundRejectClick = async (e) => {
         console.log('refundRejectClick()');
         
@@ -246,10 +214,10 @@ const AdminMarketRefundView = () => {
                     : 
                     <><tr><td>구매 상세 내역이 없습니다.</td></tr></>}
                 </table>                   )}
-                {orderFlag && prodFlag ? 
+                {orderFlag && prodFlag && btnFlag ? 
                     <div className='btn-wrap'>
-                        <button type='button' id='refundBtn' className='btn sub half' onClick={(e) => refundApproveClick(order)}>환불 승인</button>
-                        <button type='button' id='rejectBtn' className='btn sub half' onClick={(e) => refundRejectClick(no)}>승인 불가</button>                        
+                        <button type='button' className='btn sub half' onClick={(e) => refundApproveClick(order)}>환불 승인</button>
+                        <button type='button' className='btn sub half' onClick={(e) => refundRejectClick(no)}>승인 불가</button>                        
                     </div>            
                     : <></>}
                         

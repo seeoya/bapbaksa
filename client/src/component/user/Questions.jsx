@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
-import { useNavigate } from "react-router-dom";
 import Loading from "../include/Loading";
 
 axios.defaults.withCredentials = true;
@@ -43,10 +43,10 @@ const Questions = () => {
 
     const loginCheck = () => {
 
-        if(u_no === null) {
+        if (u_no === null) {
             alert('로그인이 필요한 서비스입니다.');
             navigate('/user/signin')
-        } 
+        }
 
     }
 
@@ -112,7 +112,7 @@ const Questions = () => {
             setLoadQrderNo(data.data);
         }).catch((error) => {
             return { type: "error", error }
-        }).finally(( )=>{
+        }).finally(() => {
             setIsLoading(false);
         })
     }
@@ -130,7 +130,7 @@ const Questions = () => {
             setLoadQuest(data.data);
         }).catch((error) => {
             return { type: "error", error }
-        }).finally(( )=>{
+        }).finally(() => {
             setIsLoading(false);
         })
     }
@@ -156,11 +156,11 @@ const Questions = () => {
             url: process.env.REACT_APP_SERVER_URL + "/api/user/delete_question",
             method: 'delete',
             data: data,
-        }).then((data) => { 
+        }).then((data) => {
             setLoadQuest(data.data);
         }).catch((error) => {
             return { type: "error", error }
-        }).finally(( )=>{
+        }).finally(() => {
             setIsLoading(false);
         })
     }
@@ -173,15 +173,15 @@ const Questions = () => {
                     <h2 className="title">1:1 문의</h2>
                     <form name="question_form" className="qusetion-form" method="post">
                         <div className="question-input-wrap">
-                            <input type="text" name="ques_title" value={quesTitle} onChange={(e) => { questionChangeHandler(e) }} placeholder="제목을 입력해주세요" />
-                            <select name="o_id" value={oId} onChange={(e) => questionChangeHandler(e)}>
+                            <input type="text" name="ques_title" value={quesTitle} onChange={(e) => { questionChangeHandler(e) }} placeholder="제목을 입력해주세요" className="input" />
+                            <select name="o_id" value={oId} onChange={(e) => questionChangeHandler(e)} className="input">
                                 <option>주문번호 선택</option> {/* DB에서 값을 받은 뒤 map 돌려서 사용 */}
                                 {loadQrderNo.length > 0 ? (loadQrderNo.map((order) => (
                                     <option key={order.O_ID} value={order.O_ID}>{order.O_ID}</option>
                                 ))) : (<option>주문 목록이 없습니다.</option>)}
                             </select>
-                            <textarea name="ques_detail" value={quesDetail} onChange={(e) => { questionChangeHandler(e) }} placeholder="문의 내용을 입력해주세요" ></textarea>
-                            <button type="button" onClick={questionClickBtnHandler} className="btn">문의 작성</button>
+                            <textarea name="ques_detail" value={quesDetail} onChange={(e) => { questionChangeHandler(e) }} placeholder="문의 내용을 입력해주세요" className="input" ></textarea>
+                            <button type="button" onClick={questionClickBtnHandler} className="btn sub">문의 작성</button>
                         </div>
                     </form>
 

@@ -554,6 +554,17 @@ const product = {
                 res.json(null);
             });
 
+    },
+    deleteCartProdInfo: (req,res) => {
+        let data = req.body.pCode;
+        DB.query(`SELECT PROD_CODE,PROD_SPCS_CODE FROM PRODUCT WHERE PROD_NO IN (${data})`, (error,result) => {
+            if(error) {
+                console.log(error);
+                res.json(null);
+            } else {
+                res.json(result);
+            }
+        })
     }
 }
 // 10퍼센트 이상 더 싼 물품을 찾을 때 : 현재가격 / 전달 가격 * 100

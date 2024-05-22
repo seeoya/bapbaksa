@@ -56,7 +56,9 @@ const ShoppingCart = () => {
             });
     };
 
-    const handleCount = (type, index) => {
+    const handleCount = (e, index) => {
+        let target = e.target;
+        let type = target.dataset.type;
         const updatedCartItems = [...cartItems];
         if (type === "plus") {
             updatedCartItems[index].mc_count++;
@@ -64,14 +66,23 @@ const ShoppingCart = () => {
             updatedCartItems[index].mc_count--;
         }
         setCartItems(updatedCartItems);
+        axios_cart_count_change(target.dataset.pCode, target.dataset.psCode, updatedCartItems[index].mc_count);
         setPaymentInfo();
     };
 
     const handleInputChange = (event, index) => {
+        let target = event.target;
         const updatedCartItems = [...cartItems];
         const value = parseInt(event.target.value);
-        updatedCartItems[index].mc_count = isNaN(value) ? 1 : value;
+
+        if (isNaN(value) || value <= 0) {
+            updatedCartItems[index].mc_count = 1;
+        } else {
+            updatedCartItems[index].mc_count = value;
+        }
+
         setCartItems(updatedCartItems);
+        axios_cart_count_change(target.dataset.pCode, target.dataset.psCode, updatedCartItems[index].mc_count);
         setPaymentInfo();
     };
 
@@ -97,7 +108,6 @@ const ShoppingCart = () => {
     const setPaymentInfo = () => {
         let items = [];
         const checkedItems = cartItems.filter(item => item.isSelected && stockList[item.PROD_CODE][item.PROD_SPCS_CODE] > 0);
-        console.log("💘💘💘", checkedItems);
         checkedItems.map(item => {
             items.push({
                 'PROD_NO': item.PROD_NO,
@@ -141,6 +151,26 @@ const ShoppingCart = () => {
         }
         setIsLoading(false);
     }
+
+    const axios_cart_count_change = async (pCode, psCode, count) => {
+        
+        console.log("💘💘💘", pCode, psCode, count);
+        try {
+            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/cartUpdateCount", {
+                'u_no': u_no,
+                'p_code': pCode,
+                'ps_code': psCode,
+                'mc_count' : count
+            })
+            console.log("성공", response.data);
+            setTemp((temp) => !temp);
+        } catch (error) {
+            console.log(error)
+        }
+        setIsLoading(false);
+    };
+
+
 
     async function axios_getCartInfo(u_no) {
         setIsLoading(true);
@@ -199,13 +229,15 @@ const ShoppingCart = () => {
                                         </div>
                                         <div>
                                             <div className="ingredient-middle-wrap">
-                                                <input type="button" onClick={() => handleCount("minus", index)} value="-" />
+                                                <input type="button" data-p-code={item.PROD_CODE} data-ps-code={item.PROD_SPCS_CODE} data-type="minus" onClick={(e) => handleCount(e, index)} value="-" />
                                                 <input
                                                     type="number"
                                                     value={item.mc_count}
+                                                    data-p-code={item.PROD_CODE}
+                                                    data-ps-code={item.PROD_SPCS_CODE}
                                                     onChange={(event) => handleInputChange(event, index)}
                                                 />
-                                                <input type="button" onClick={() => handleCount("plus", index)} value="+" />
+                                                <input type="button" data-p-code={item.PROD_CODE} data-ps-code={item.PROD_SPCS_CODE} data-type="plus" onClick={(e) => handleCount(e, index)} value="+" />
                                             </div>
                                         </div>
                                         <div>

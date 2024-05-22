@@ -189,7 +189,8 @@ const PaymentHistory = () => {
                                                         <span>가격: {item.o_final_price.toLocaleString()}원</span>
                                                     </div>
                                                     <div className="ingredient-cart-btn">
-                                                        {item.o_s_no === 0 || item.o_s_no === 6 ? <button onClick={() => refundProduct(item.p_no, item.o_id)}>환불 요청</button> : null}
+                                                        {item.o_s_no === 1 || item.o_s_no === 6 ? <button onClick={() => acceptPayment(item.p_no, item.o_id)}>구매 확정</button> : ''}
+                                                        {item.o_s_no === 6 ? <button onClick={() => refundProduct(item.p_no, item.o_id)}>환불 요청</button> : null}
                                                         <p>주문 상태: {item.o_s_name}</p>
                                                     </div>
                                                 </div>
@@ -198,7 +199,7 @@ const PaymentHistory = () => {
                                     </div>
 
                                     <div className="ingredient-cart-btn">
-                                        {firstItem.o_s_no === 0 || firstItem.o_s_no === 1 || firstItem.o_s_no === 6 ? <button onClick={() => acceptPayment(firstItem.p_no, firstItem.o_id)}>구매 확정</button> : ''}
+                                        
                                         {firstItem.o_s_no === 0 ? <button onClick={() => cancelPayment(firstItem.p_no, firstItem.o_id)}>구매 취소</button> : ''}
                                         <Link to={`/market/payment_detail/${firstItem.o_id}`}>
                                             상세 보기

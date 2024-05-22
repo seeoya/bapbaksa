@@ -87,6 +87,11 @@ router.get('/compareprice', (req, res) => {
 router.post('/axios_get_product', (req,res) => {
     console.log('/product/axios_get_product');
     product.axiosGetProduct(req,res);
+});
+
+router.post('/delete_cart_prod_info', (req,res) => {
+    console.log('delete_cart_prod_info');
+    product.deleteCartProdInfo(req,res);
 })
 
 module.exports = router;

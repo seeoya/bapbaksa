@@ -103,9 +103,9 @@ const adminService = {
                                         if (error) {
                                             res.json({ message: "회원탈퇴 처리 실패" });
                                         } else {
-                                            // fs.rmSync(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}`, { recursive: true, force: true },
+                                            //fs.rmSync(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`, { recursive: true, force: true },
                                             fs.rmSync(
-                                                `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`,
+                                                `/home/ubuntu/user/upload/profile_imgs/${post.u_id}`,
                                                 { recursive: true, force: true },
                                                 (error) => {}
                                             );

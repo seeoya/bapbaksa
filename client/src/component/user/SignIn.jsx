@@ -93,10 +93,11 @@ const SignIn = () => {
                 setToken('refreshToken', refreshToken);
                 setToken('loginedUId', res.data.uId);
                 setToken('loginedUNo', res.data.uNo);
+                setToken('uProfile', res.data.uProfile);
 
                 alert('로그인에 성공하였습니다.');
                 navigate('/');
-                window.location.reload(true);
+                // window.location.reload(true);
             } else {
                 alert(res.data.message);
                 setUId(''); setUPw('');

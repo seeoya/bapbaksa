@@ -15,6 +15,8 @@ const { sendMailForID, sendMailForPW } = require("../utils/mail");
 const { sendSmsForID, sendSmsForPW } = require("../utils/sms");
 require("dotenv").config();
 
+const EC2_SERVER_URL = process.env.EC2_SERVER_URL;
+
 const GOOGLE_WEB_CLIENT_ID = process.env.GOOGLE_WEB_CLIENT_ID;
 const GOOGLE_WEB_CLIENT_SECRET = process.env.GOOGLE_WEB_CLIENT_SECRET;
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
@@ -177,9 +179,9 @@ const userService = {
         db.query(sql, state, (error, result) => {
             if (error) {
                 if (req.file !== undefined) {
+                    //fs.unlink(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
                     fs.unlink(
-                        `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
-                        //fs.unlink(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
+                        `/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
                         (error) => {}
                     );
                 }
@@ -221,6 +223,7 @@ const userService = {
                                         result,
                                         uId: post.u_id,
                                         uNo: user[0].u_no,
+                                        uProfile: user[0].pi_name,
                                         accessToken,
                                         refreshToken,
                                     });
@@ -300,9 +303,9 @@ const userService = {
                 db.query(sql, state, (error, result) => {
                     if (error) {
                         if (req.file !== undefined) {
+                            //fs.unlink(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
                             fs.unlink(
-                                `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
-                                //                    fs.unlink(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
+                                `/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
                                 (error) => {}
                             );
                         }
@@ -398,9 +401,9 @@ const userService = {
                                         if (error) {
                                             res.json({ message: "회원탈퇴 처리 실패" });
                                         } else {
-                                            // fs.rmSync(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}`, { recursive: true, force: true },
+                                            //fs.rmSync(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`, { recursive: true, force: true },
                                             fs.rmSync(
-                                                `C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`,
+                                                `/home/ubuntu/user/upload/profile_imgs/${post.u_id}`,
                                                 { recursive: true, force: true },
                                                 (error) => {}
                                             );
@@ -508,7 +511,6 @@ const userService = {
     },
     delete_question: (req, res) => {
         let params = req.body;
-
         db.query(
             `DELETE FROM TBL_USER_QUESTIONS WHERE QUES_NO = ? AND U_ID = ?`,
             [params.ques_no, params.u_id],
@@ -534,7 +536,8 @@ const userService = {
     google_callback: async (req, res) => {
         const GOOGLEID = GOOGLE_WEB_CLIENT_ID;
         const GOOGLESECRET = GOOGLE_WEB_CLIENT_SECRET;
-        const GOOGLE_REDIRECT_URI = "http://localhost:3000/auth/google/callback";
+        //const GOOGLE_REDIRECT_URI = 'http://localhost:3000/auth/google/callback';
+        const GOOGLE_REDIRECT_URI = EC2_SERVER_URL + "/auth/google/callback";
 
         let post = req.body;
         let code = post.code;
@@ -637,7 +640,8 @@ const userService = {
 
     kakao_callback: async (req, res) => {
         const kakaoid = KAKAO_WEB_CLIENT_ID;
-        const KAKAO_REDIRECT_URI = `http://localhost:3000/oauth/kakao/callback`;
+        // const KAKAO_REDIRECT_URI = `http://localhost:3000/oauth/kakao/callback`;
+        const KAKAO_REDIRECT_URI = EC2_SERVER_URL + `/oauth/kakao/callback`;
 
         let post = req.body;
         let code = post.code;
@@ -729,7 +733,8 @@ const userService = {
         const naverid = NAVER_WEB_CLIENT_ID;
         const naversecret = NAVER_WEB_CLIENT_SECRET;
 
-        const NAVER_REDIRECT_URI = `http://localhost:3000/oauth/naver/callback`;
+        //const NAVER_REDIRECT_URI = `http://localhost:3000/oauth/naver/callback`;
+        const NAVER_REDIRECT_URI = EC2_SERVER_URL + `/oauth/naver/callback`;
 
         let post = req.body;
         let code = post.code;

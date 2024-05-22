@@ -34,15 +34,15 @@ const Delete = () => {
             })
                 .then(res => {
                     if (res.data !== null && res.data.result.affectedRows > 0) {
-                        alert('회원탈퇴에 성공하였습니다.');
 
                         removeToken('accessToken');
                         removeToken('refreshToken');
                         removeToken('loginedUId');
                         removeToken('loginedUNo');
 
+                        alert('회원탈퇴에 성공하였습니다.');
                         navigate('/');
-                        window.location.reload('/');
+                        //   window.location.reload('/');
                     }
                 })
                 .catch(error => {

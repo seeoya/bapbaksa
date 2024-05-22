@@ -61,7 +61,7 @@ const MyFridge = () => {
 
                                     <div className='ingre-list'>
                                         {
-                                            myFridgeState ?
+                                            myFridgeState && myFridgeState.length > 0 ?
                                                 myFridgeState.map((el, idx) => {
                                                     return <button type='button' data-index={allFridgeList[el].RF_NO} key={allFridgeList[el].RF_NO} className='btn main' onClick={() => deleteIngreBtnEvent(allFridgeList[el].RF_NO)}>
                                                         <img src={allFridgeList[el].RF_IMG ? "/imgs/product/" + allFridgeList[el].RF_IMG : "/imgs/recipe/recipe_default.png"} alt={allFridgeList[el].RF_NAME} />

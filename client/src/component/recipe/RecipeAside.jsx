@@ -89,12 +89,12 @@ const RecipeAside = () => {
                             ?
                             <>
                                 <FontAwesomeIcon icon="fa-solid fa-chevron-left" />
-                                <span class="blind">내 냉장고 닫기</span>
+                                <span class="blind">나의 냉장고 닫기</span>
                             </>
                             :
                             <>
                                 <FontAwesomeIcon icon="fa-solid fa-chevron-right" />
-                                <span class="blind">내 냉장고 열기</span>
+                                <span class="blind">나의 냉장고 열기</span>
                             </>
                     }
                 </button>
@@ -120,7 +120,7 @@ const RecipeAside = () => {
                             <FontAwesomeIcon icon="fa-solid fa-square-up-right" />
                         </div>
 
-                        <div className='item-title'>내 냉장고로</div>
+                        <div className='item-title'>나의 냉장고로</div>
                     </Link>
 
                 </div>

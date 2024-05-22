@@ -13,7 +13,7 @@ const LikeRecipe = () => {
 
     useEffect(() => {
         loadMyLikeRecipe();
-        setTitle('좋아요 한 레시피');
+        setTitle('좋아하는 레시피');
     }, []);
 
 
@@ -36,7 +36,7 @@ const LikeRecipe = () => {
             {isLoading ? <Loading /> : null}
 
             <div id='like_recipe' className='content-wrap'>
-                <h2 className='title'>좋아요 한 레시피</h2>
+                <h2 className='title'>좋아하는 레시피</h2>
 
                 <div className='content'>
                     {
@@ -71,7 +71,7 @@ const LikeRecipe = () => {
                                 </Link >
                             })
                             :
-                            <div className='empty'>좋아요 한 레시피가 없습니다.</div>
+                            <div className='empty'>좋아하는 레시피가 없습니다.</div>
                     }
                 </div>
             </div>

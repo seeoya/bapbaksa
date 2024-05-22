@@ -30,12 +30,22 @@ const AdminMarketRefundView = () => {
     const [prodFlag, setProdFlag] = useState(false);
     const [order, setOrder] = useState({});
     const [prod, setProd] = useState({});
+    const [btnFlag, setBtnFlag] = useState(false);
     
 
     useEffect(() => {     
         initOrder();
         setTitle('환불 상세 내역');
     }, [no, isLoading]);
+
+    useEffect(() => {     
+        if(oSNo === 2){
+            setBtnFlag(true);
+        }
+        initBtn();
+    
+    }, [setOSNo]);
+
 
     const initOrder = async () => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_refund_order", {
@@ -105,7 +115,30 @@ const AdminMarketRefundView = () => {
             });
     } 
        
-    
+    const initBtn = () => {
+        console.log('initBtn()');
+       
+        let refundBtn = document.querySelector("#refundBtn");
+        let rejectBtn = document.querySelector("#rejectdBtn");            
+
+        if(btnFlag){
+            refundBtn.disabled = false;
+            refundBtn.style.cursor = 'pointer';
+            refundBtn.style.backgroundColor = '#5f963a';      
+            rejectBtn.disabled = false;
+            rejectBtn.style.cursor = 'pointer';
+            rejectBtn.style.backgroundColor = '#5f963a';      
+        } else {
+            refundBtn.disabled = true;
+            refundBtn.style.cursor = 'default';
+            refundBtn.style.backgroundColor = '#d3dfce';         
+            rejectBtn.disabled = true;
+            rejectBtn.style.cursor = 'default';
+            rejectBtn.style.backgroundColor = '#d3dfce';            
+        }
+
+    }
+
     
     
     const refundRejectClick = async (e) => {
@@ -215,8 +248,8 @@ const AdminMarketRefundView = () => {
                 </table>                   )}
                 {orderFlag && prodFlag ? 
                     <div className='btn-wrap'>
-                        <button type='button' className='btn sub half' onClick={(e) => refundApproveClick(order)}>환불 승인</button>
-                        <button type='button' className='btn sub half' onClick={(e) => refundRejectClick(no)}>승인 불가</button>                        
+                        <button type='button' id='refundBtn' className='btn sub half' onClick={(e) => refundApproveClick(order)}>환불 승인</button>
+                        <button type='button' id='rejectBtn' className='btn sub half' onClick={(e) => refundRejectClick(no)}>승인 불가</button>                        
                     </div>            
                     : <></>}
                         

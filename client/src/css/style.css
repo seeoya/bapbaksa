@@ -629,7 +629,6 @@ nav .user-info img {
     grid-column-start: 1;
     grid-column-end: 4;
     height: 480px;
-    margin-top: -40px;
 }
 
 .container .recipe-grid .swiper-container .my-swiper {

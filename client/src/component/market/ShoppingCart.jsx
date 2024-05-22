@@ -60,13 +60,18 @@ const ShoppingCart = () => {
         let target = e.target;
         let type = target.dataset.type;
         const updatedCartItems = [...cartItems];
+
+        let defCount = updatedCartItems[index].mc_count;
+
         if (type === "plus") {
             updatedCartItems[index].mc_count++;
         } else if (type === "minus" && updatedCartItems[index].mc_count > 1) {
             updatedCartItems[index].mc_count--;
         }
         setCartItems(updatedCartItems);
-        axios_cart_count_change(target.dataset.pCode, target.dataset.psCode, updatedCartItems[index].mc_count);
+        if (defCount != updatedCartItems[index].mc_count) {
+            axios_cart_count_change(target.dataset.pCode, target.dataset.psCode, updatedCartItems[index].mc_count);
+        }
         setPaymentInfo();
     };
 
@@ -75,6 +80,8 @@ const ShoppingCart = () => {
         const updatedCartItems = [...cartItems];
         const value = parseInt(event.target.value);
 
+        let defCount = updatedCartItems[index].mc_count;
+
         if (isNaN(value) || value <= 0) {
             updatedCartItems[index].mc_count = 1;
         } else {
@@ -82,7 +89,9 @@ const ShoppingCart = () => {
         }
 
         setCartItems(updatedCartItems);
-        axios_cart_count_change(target.dataset.pCode, target.dataset.psCode, updatedCartItems[index].mc_count);
+        if (defCount != updatedCartItems[index].mc_count) {
+            axios_cart_count_change(target.dataset.pCode, target.dataset.psCode, updatedCartItems[index].mc_count);
+        }
         setPaymentInfo();
     };
 
@@ -153,14 +162,14 @@ const ShoppingCart = () => {
     }
 
     const axios_cart_count_change = async (pCode, psCode, count) => {
-        
+
         console.log("💘💘💘", pCode, psCode, count);
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/cartUpdateCount", {
                 'u_no': u_no,
                 'p_code': pCode,
                 'ps_code': psCode,
-                'mc_count' : count
+                'mc_count': count
             })
             console.log("성공", response.data);
             setTemp((temp) => !temp);

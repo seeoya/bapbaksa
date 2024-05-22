@@ -88,20 +88,20 @@ const adminService = {
 
                 DB.query(sql, state, (error, result) => {
                     if (error) {
-                        res.json({ message: "회원정보 삭제 에러!" });
+                        res.json(error);
                     } else {
                         DB.query(
-                            `SELECT * FROM  TBL_USER_PROFILE_IMG WHERE u_no = ?`,
+                            `delete FROM TBL_USER_PROFILE_IMG WHERE u_no = ?`,
                             [post.u_no],
-                            (error, user) => {
-                                if (user.length > 0) {
-                                    let sql = `DELETE p, f, r, c FROM TBL_USER_PROFILE_IMG p, TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
-                                            WHERE p.u_no = ? AND f.u_no = ? AND r.u_no = ? AND c.u_no = ?`;
-                                    let state = [post.u_no, post.u_no, post.u_no, post.u_no];
+                            (error, result) => {
+                                if (result.affectedRows > 0) {
+                                    let sql = `DELETE f, r, c from TBL_FRIDGE f left JOIN TBL_LIKE_RECIPE r ON f.u_no = r.u_no 
+                                    left JOIN  TBL_MARKET_CART c ON f.u_no = c.u_no WHERE f.u_no = ?`;
+                                    let state = [post.u_no];
 
                                     DB.query(sql, state, (error, result) => {
                                         if (error) {
-                                            res.json({ message: "회원탈퇴 처리 실패" });
+                                            res.json(error);
                                         } else {
                                             //fs.rmSync(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`, { recursive: true, force: true },
                                             fs.rmSync(
@@ -110,19 +110,19 @@ const adminService = {
                                                 (error) => {}
                                             );
 
-                                            res.json({ result, message: "회원탈퇴 처리 성공" });
+                                            res.json({delete: true});
                                         }
                                     });
                                 } else {
-                                    let sql = `DELETE FROM f, r, c USING TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
-                                        WHERE f.u_no = r.u_no = c.u_no = ?`;
+                                    let sql = `DELETE f, r, c from TBL_FRIDGE f LEFT JOIN TBL_LIKE_RECIPE r ON f.u_no = r.u_no 
+                                                LEFT JOIN  TBL_MARKET_CART c ON f.u_no = c.u_no WHERE f.u_no = ?`;
                                     let state = [post.u_no];
 
                                     DB.query(sql, state, (error, result) => {
                                         if (error) {
-                                            res.json({ message: "회원탈퇴 처리 실패" });
+                                            res.json(error);
                                         } else {
-                                            res.json({ result, message: "회원탈퇴 처리 성공" });
+                                            res.json({delete: true});
                                         }
                                     });
                                 }

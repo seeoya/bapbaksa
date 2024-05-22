@@ -100,7 +100,7 @@ const Market = () => {
                                         <SwiperSlide key={ingre.PROD_CODE}>
                                             <div className='random-ingre-info'>
                                                 <Link to={`/market/view/${ingre.PROD_CODE}_${ingre.PROD_SPCS_CODE}`}>
-                                                    <img src={`/imgs/product/${ingre.PROD_IMG}`} alt={ingre.PROD_NAME} />
+                                                    <img src={`/imgs/product/${ingre.PROD_IMG}`} alt={ingre.PROD_NAME}  draggable="false"/>
                                                     <div className='random-ingre-detail'>
                                                         <h3>{ingre.PROD_NAME}({ingre.PROD_SPCS_NAME})</h3> {/* ${} 대신 {} */}
                                                         <p>{ingre.PROD_AVRG_PRCE.toLocaleString()} 원</p>
@@ -137,16 +137,13 @@ const Market = () => {
                         >
                             <div className='banner'>
                                 <SwiperSlide>
-                                    <img src='/imgs/banner/market/openEvent.png' />
+                                    <img src='/imgs/banner/market/openEvent.png' draggable="false" />
                                 </SwiperSlide>
                                 <SwiperSlide>
-                                    <img src='/imgs/banner/market/bomEonabom.png' />
+                                    <img src='/imgs/banner/market/bomEonabom.png' draggable="false" />
                                 </SwiperSlide>
                                 <SwiperSlide>
-                                    <img src='/imgs/banner/market/lemonlimecheung.png' />
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <img src='/imgs/banner/market/test.png' />
+                                    <img src='/imgs/banner/market/lemonlimecheung.png' draggable="false" />
                                 </SwiperSlide>
                             </div>
                         </Swiper>
@@ -188,7 +185,7 @@ const Market = () => {
                                         <div className='random-ingre-info'>
                                             <Link to={`/market/view/${ingre.PROD_CODE}_${ingre.PROD_SPCS_CODE}`}>
                                                 <div className='img-container'>
-                                                    <img src={`/imgs/product/${ingre.PROD_IMG}`} alt={ingre.PROD_NAME} />
+                                                    <img src={`/imgs/product/${ingre.PROD_IMG}`} alt={ingre.PROD_NAME} draggable="false" />
                                                 </div>
                                                 <div className='random-ingre-detail'>
                                                     <h3>{ingre.PROD_NAME}({ingre.PROD_SPCS_NAME})</h3> {/* ${} 대신 {} */}

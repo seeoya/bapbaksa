@@ -52,15 +52,14 @@ const Delete = () => {
                   
                         console.log('AXIOS USER_DELETE COMMUNICATION SUCCESS ==> ', res.data);                    
                             
-                        alert('회원탈퇴에 성공하였습니다.');                        
-
                         removeToken('accessToken');
                         removeToken('refreshToken');
                         removeToken('loginedUId');
-                        removeToken('loginedUNo');    
-                      
+                        removeToken('loginedUNo');                          
+                        
+                        alert('회원탈퇴에 성공하였습니다.');                                               
                         navigate('/');
-                        window.location.reload('/');
+                     //   window.location.reload('/');
                         
             
                    } 

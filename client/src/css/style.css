@@ -563,6 +563,22 @@ nav .user-info img {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 400px;
+}
+
+.container .recipe-grid .menu-wrap h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
+    width: 100%;
+    padding: 20px 0 5px 10px;
+}
+
+.container .recipe-grid .menu-wrap .menu .line {
+    height: 0; width: 100%;
+    margin: 20px 0 20px 0;
+    border-bottom: 2px dashed #d0cfcf;
 }
 
 .container .recipe-grid .menu {
@@ -571,6 +587,15 @@ nav .user-info img {
     align-items: center;
     justify-content: center;
     width: 100%;
+    height: 400px;
+}
+
+.container .recipe-grid .menu .nav-link {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
 }
 
 .container .recipe-grid .menu a {
@@ -602,7 +627,7 @@ nav .user-info img {
 .container .recipe-grid .swiper-container {
     grid-column-start: 1;
     grid-column-end: 4;
-    height: 600px;
+    height: 480px;
     margin-top: -40px;
 }
 
@@ -631,7 +656,7 @@ nav .user-info img {
 }
 
 .container .recipe-grid .recommend-container .today-recommend {
-    width: 600px;
+    width: 600px; height: 400px;
     padding: 10px;
 }
 

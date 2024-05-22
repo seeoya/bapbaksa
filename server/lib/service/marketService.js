@@ -6,12 +6,12 @@ const marketService = {
     goToMarketCart: (req, res) => {
         let post = req.body;
         console.log("회원 번호 = ", post.U_NO);
-        console.log("상품 번호 = ", post.I_NO);
+        console.log("상품 번호 = ", post.P_CODE, post.PS_CODE);
         console.log("상품 갯수 = ", post.MC_COUNT);
 
         DB.query(
-            `SELECT * FROM TBL_MARKET_CART WHERE u_no = ? AND i_no = ?`,
-            [post.U_NO, post.I_NO],
+            `SELECT * FROM TBL_MARKET_CART WHERE u_no = ? AND p_code = ? AND ps_code = ?`,
+            [post.U_NO, post.P_CODE, post.PS_CODE],
             (error, result) => {
                 if (error) {
                     console.log(error);
@@ -20,8 +20,8 @@ const marketService = {
                     if (result.length > 0) {
                         let updatedCount = result[0].mc_count + post.MC_COUNT;
                         DB.query(
-                            `UPDATE TBL_MARKET_CART SET mc_count = ? WHERE u_no = ? AND i_no = ?`,
-                            [updatedCount, post.U_NO, post.I_NO],
+                            `UPDATE TBL_MARKET_CART SET mc_count = ? WHERE u_no = ? AND p_code = ? AND ps_code = ?`,
+                            [updatedCount, post.U_NO, post.P_CODE, post.PS_CODE],
                             (updateError, updateResult) => {
                                 if (updateError) {
                                     console.log(updateError);
@@ -34,8 +34,8 @@ const marketService = {
                         );
                     } else {
                         DB.query(
-                            `INSERT INTO TBL_MARKET_CART(u_no, i_no, mc_count) VALUES (?, ?, ?)`,
-                            [post.U_NO, post.I_NO, post.MC_COUNT],
+                            `INSERT INTO TBL_MARKET_CART(u_no, p_code, ps_code, mc_count) VALUES (?, ?, ?, ?)`,
+                            [post.U_NO, post.P_CODE, post.PS_CODE, post.MC_COUNT],
                             (insertError, insertResult) => {
                                 if (insertError) {
                                     console.log(insertError);
@@ -53,6 +53,9 @@ const marketService = {
     },
     getMarketCart: async (req, res) => {
         let post = req.body;
+
+        console.log(post);
+
         try {
             const cartItems = await new Promise((resolve, reject) => {
                 DB.query(
@@ -179,7 +182,9 @@ const marketService = {
                     try {
                         const pNo = orders.map((item) => item.p_no);
                         const prodInfo = await axios_get_product(pNo);
+
                         let tmp = {};
+
                         orders.map((order, index) => {
                             if (!tmp[order.o_id]) {
                                 tmp[order.o_id] = {};
@@ -207,8 +212,8 @@ const marketService = {
                 return res.json(null);
             } else {
                 try {
-                    const productIds = [...new Set(orders.map((order) => order.p_no))];
-                    const productInfoResults = await axios_getProductInfo(productIds);
+                    const pNo = orders.map((item) => item.p_no);
+                    const productInfoResults = await axios_getProductInfo(pNo);
 
                     const groupedOrders = orders.reduce((acc, order) => {
                         if (!acc[order.o_id]) {
@@ -314,7 +319,7 @@ const marketService = {
                             const pNo = info.map((item) => item.p_no); // [ 283, 289, 293 ] 이렇게 들어옴
                             const pNoString = pNo.join(','); //283,289,293 이렇게 들어옴
                             DB.query(
-                                `DELETE FROM TBL_MARKET_CART WHERE U_NO = ? AND I_NO IN (${pNoString})`,
+                                `DELETE FROM TBL_MARKET_CART WHERE U_NO = ? AND P_CODE IN (${pNoString})`,
                                 [post.u_no],
                                 (error, result) => {
                                     if (error) {
@@ -340,6 +345,7 @@ async function axios_getCartInfo(i_no) {
         const response = await axios.post("http://localhost:3002/product/getProduct", {
             I_NO: i_no,
         });
+        console.log("🤍🤍🤍🤍", response.data);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -357,10 +363,10 @@ async function axios_getProductInfo(p_no) {
     }
 }
 
-async function axios_get_product(p_no) {
+async function axios_get_product(pNo) {
     try {
         const response = await axios.post("http://localhost:3002/product/axios_get_product", {
-            P_NO: p_no,
+            pNo
         });
         return response.data;
     } catch (error) {

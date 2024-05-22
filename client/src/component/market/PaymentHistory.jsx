@@ -203,7 +203,7 @@ const PaymentHistory = () => {
                                         <Link to={`/market/payment_detail/${firstItem.o_id}`}>
                                             상세 보기
                                         </Link>
-                                        <p>총 가격: {Object.values(orderInfo[order]).reduce((total, item) => total + item.o_final_price, 0).toLocaleString()}원</p>
+                                        <p>총 가격: {(Object.values(orderInfo[order]).reduce((total, item) => total + item.o_final_price, 0) + 3000).toLocaleString()}원</p>
                                     </div>
 
                                 </div>

@@ -4,18 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
 import Loading from "../include/Loading";
+import { NewProductQuery } from "../../query/productQuerys";
 
 const ShoppingCart = () => {
-
+    const { data: newProductList } = NewProductQuery();
+    const [cartItems, setCartItems] = useState([]);
     const [cartInfo, setCartInfo] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const [temp, setTemp] = useState(false);
     const [goToPay, setGoToPay] = useState([]);
     const u_no = getToken('loginedUNo');
     const [stockList, setStockList] = useState({});
-
     const [isLoading, setIsLoading] = useState(true);
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,15 +26,25 @@ const ShoppingCart = () => {
     }, []);
 
     useEffect(() => {
+        if (newProductList && cartInfo) {
+            let tmp = [];
+            cartInfo.map((el) => {
+                newProductList.map((item) => {
+                    if (el.p_code === item.PROD_CODE && el.ps_code === item.PROD_SPCS_CODE) {
+                        tmp.push({ ...el, ...item });
+                    }
+                });
+            });
+            setCartItems(tmp);
+        }
+    }, [newProductList, cartInfo]);
+
+    useEffect(() => {
         axios_getCartInfo(u_no);
     }, [temp]);
 
     useEffect(() => {
-        console.log("❤❤❤❤❤", cartInfo);
-    }, [cartInfo])
-
-    useEffect(() => {
-        setPaymentInfo()
+        setPaymentInfo();
     }, [selectAll]);
 
     const getStock = async () => {
@@ -44,62 +54,61 @@ const ShoppingCart = () => {
             }).catch((err) => {
                 return { type: "error" };
             });
-    }
+    };
 
     const handleCount = (type, index) => {
-        const updatedCartInfo = [...cartInfo];
+        const updatedCartItems = [...cartItems];
         if (type === "plus") {
-            updatedCartInfo[index].mc_count++;
-        } else if (type === "minus" && updatedCartInfo[index].mc_count > 1) {
-            updatedCartInfo[index].mc_count--;
+            updatedCartItems[index].mc_count++;
+        } else if (type === "minus" && updatedCartItems[index].mc_count > 1) {
+            updatedCartItems[index].mc_count--;
         }
-        setCartInfo(updatedCartInfo);
+        setCartItems(updatedCartItems);
         setPaymentInfo();
     };
 
     const handleInputChange = (event, index) => {
-        const updatedCartInfo = [...cartInfo];
+        const updatedCartItems = [...cartItems];
         const value = parseInt(event.target.value);
-        updatedCartInfo[index].mc_count = isNaN(value) ? 1 : value;
-        setCartInfo(updatedCartInfo);
+        updatedCartItems[index].mc_count = isNaN(value) ? 1 : value;
+        setCartItems(updatedCartItems);
         setPaymentInfo();
     };
 
     const handleSelectAll = () => {
         setSelectAll(!selectAll);
-        const updatedCartInfo = cartInfo.map(item => {
+        const updatedCartItems = cartItems.map(item => {
             return {
                 ...item,
                 isSelected: !selectAll
             };
         });
-        setCartInfo(updatedCartInfo);
+        setCartItems(updatedCartItems);
         setPaymentInfo();
     };
 
     const handleItemSelect = (index) => {
-        const updatedCartInfo = [...cartInfo];
-        updatedCartInfo[index].isSelected = !updatedCartInfo[index].isSelected;
-        setCartInfo(updatedCartInfo);
+        const updatedCartItems = [...cartItems];
+        updatedCartItems[index].isSelected = !updatedCartItems[index].isSelected;
+        setCartItems(updatedCartItems);
         setPaymentInfo();
     };
 
     const setPaymentInfo = () => {
         let items = [];
-        const checkedItems = cartInfo.filter(item => item.isSelected && stockList[item.i_no][item.productInfo.PROD_SPCS_CODE] > 0);
+        const checkedItems = cartItems.filter(item => item.isSelected && stockList[item.PROD_CODE][item.PROD_SPCS_CODE] > 0);
+        console.log("💘💘💘", checkedItems);
         checkedItems.map(item => {
             items.push({
-                'I_NO': item.i_no,
-                'PROD_SPCS_CODE': item.productInfo.PROD_SPCS_CODE,
-                'MC_COUNT': item.mc_count,
-                'PROD_YMD': item.productInfo.PROD_YMD
+                'PROD_NO': item.PROD_NO,
+                'MC_COUNT': item.mc_count
             });
         });
         setGoToPay(items);
-    }
+    };
 
-    const handleCheckout = () => {
-        const checkedItems = cartInfo.filter(item => item.isSelected);
+    const deleteCart = () => {
+        const checkedItems = cartItems.filter(item => item.isSelected);
         if (checkedItems.length === 0) {
             alert('선택된 항목이 없습니다.');
             return;
@@ -109,47 +118,26 @@ const ShoppingCart = () => {
         axios_deleteCart(mcNos);
     };
 
-    // const handlePayment = () => {
-    //     const checkedItems = cartInfo.filter(item => item.isSelected);
-
-    //     if (checkedItems.length === 0) {
-    //         alert('선택된 항목이 없습니다.');
-    //         return;
-    //     }
-
-    //     let items = [];
-    //     checkedItems.map(item => {
-    //         items.push({
-    //             'I_NO': item.i_no,
-    //             'MC_COUNT': item.mc_count
-    //         });
-    //     });
-
-    //     setGoToPay(items);
-    // };
-
     const loginCheck = () => {
-
         if (u_no === null) {
             alert('로그인이 필요한 서비스입니다.');
-            navigate('/user/signin')
+            navigate('/user/signin');
         }
-
-    }
+    };
 
     async function axios_deleteCart(mcNos) {
         setIsLoading(true);
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/deleteCart", {
                 'MC_NO': mcNos,
-            })
+            });
             if (response.data != null) {
                 setTemp((temp) => !temp);
             } else {
                 alert('삭제 실패');
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
         setIsLoading(false);
     }
@@ -159,135 +147,98 @@ const ShoppingCart = () => {
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/getMarketCart", {
                 'U_NO': u_no,
-            })
+            });
             console.log("장바구니 가져오기 성공", response.data);
             setCartInfo(response.data);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
         setIsLoading(false);
     }
 
-    // const getStock = async () => {
-    //     await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
-    //         params: {
-    //             p_code: num, // PROD_CODE
-    //             ps_code: code // PROD_ISBN_CODE
-    //         }
-    //     }).then((data) => {
-
-    //         setStock(data.data);
-    //         return data.data;
-    //     }).catch((err) => {
-    //         return { type: "error" };
-    //     });
-    // }
-
     return (
         <>
             {isLoading ? <Loading /> : null}
+
             <div id="shopping_cart_wrap" className='content-wrap'>
-            <h2 className='title'>장바구니</h2>
-
-            {/* {Object.keys(goToPay).map(item => {
-                return <div>{goToPay[item].I_NO}</div>
-            })} */}
-
-            {cartInfo.length > 0 ? (
-                <div>
-                    <div className="all-select-btn">
-                        <input id="selectAllCheckbox" type="checkbox" checked={selectAll} onChange={handleSelectAll} />
-                        <label htmlFor="selectAllCheckbox">전체 선택</label>
-                    </div>
-                    <div className='content ingredient-cart-wrap'>
-                        {cartInfo.map((item, index) => (
-                            <div key={index} className='ingredient-view-wrap'>
-                                <div className="ingredient-img-wrap">
-
-                                    {
-                                        stockList[item.i_no][item.productInfo.PROD_SPCS_CODE] > 0 ?
+                <h2 className='title'>장바구니</h2>
+                {cartItems && cartItems.length > 0 ? (
+                    <div>
+                        <div className="all-select-btn">
+                            <input id="selectAllCheckbox" type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                            <label htmlFor="selectAllCheckbox">전체 선택</label>
+                        </div>
+                        <div className='content ingredient-cart-wrap'>
+                            {cartItems.map((item, index) => (
+                                <div key={index} className='ingredient-view-wrap'>
+                                    <div className="ingredient-img-wrap">
+                                        {stockList[item.PROD_CODE][item.PROD_SPCS_CODE] > 0 ?
                                             <span className="cart-checkbox-warp">
-                                            <input
-                                                type="checkbox"
-                                                checked={item.isSelected}
-                                                onChange={() => handleItemSelect(index)}
-                                            />
-                                            </span>
-                                            : <span className="cart-checkbox-warp">
-
-                                            </span>
-                                    }
-
-                                    <Link to={`/market/view/${item.i_no}_${item.productInfo.PROD_SPCS_CODE}`}>
-                                        <img className="ingredient-img" src={`/imgs/product/${item.productInfo.PROD_IMG}`} alt="ingredient" />
-                                    </Link>
-                                    <Link to={`/market/view/${item.i_no}_${item.productInfo.PROD_SPCS_CODE}`}>
-                                        <div className="ingredient-title-wrap">
-                                            <span className="ingredient-title">{item.productInfo.PROD_NAME}</span>
-                                            <span className="ingredient-sub-title">{item.productInfo.PROD_SPCS_NAME}</span>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={item.isSelected}
+                                                    onChange={() => handleItemSelect(index)}
+                                                />
+                                            </span> : <span className="cart-checkbox-warp"></span>}
+                                        <Link to={`/market/view/${item.PROD_CODE}_${item.PROD_SPCS_CODE}`}>
+                                            <img className="ingredient-img" src={`/imgs/product/${item.PROD_IMG}`} alt="ingredient" />
+                                        </Link>
+                                        <Link to={`/market/view/${item.PROD_CODE}_${item.PROD_SPCS_CODE}`}>
+                                            <div className="ingredient-title-wrap">
+                                                <span className="ingredient-title">{item.PROD_NAME}</span>
+                                                <span className="ingredient-sub-title">{item.PROD_SPCS_NAME}</span>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                    {stockList[item.PROD_CODE][item.PROD_SPCS_CODE] > 0 ? <>
+                                        <div className="ingredient-info-wrap">
+                                            <div className="ingredient-top-wrap">
+                                                <span className="ingredient-unit">{item.DSBN_STEP_ACTO_WT + item.DSBN_STEP_ACTO_UNIT_NM}</span>
+                                                <span className="ingredient-price">{item.PROD_AVRG_PRCE.toLocaleString()}원</span>
+                                            </div>
                                         </div>
-                                    </Link>
+                                        <div>
+                                            <div className="ingredient-middle-wrap">
+                                                <input type="button" onClick={() => handleCount("minus", index)} value="-" />
+                                                <input
+                                                    type="number"
+                                                    value={item.mc_count}
+                                                    onChange={(event) => handleInputChange(event, index)}
+                                                />
+                                                <input type="button" onClick={() => handleCount("plus", index)} value="+" />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="ingredient-bottom-wrap">
+                                                <span className="ingredient-info">총액 : </span>
+                                                <span className="ingredient-price">{(item.PROD_AVRG_PRCE * item.mc_count).toLocaleString()}원</span>
+                                            </div>
+                                        </div>
+                                    </> : <div className="sold-out-wrap">품절 상품입니다.</div>}
                                 </div>
-                                {
-
-                                    stockList[item.i_no][item.productInfo.PROD_SPCS_CODE] > 0 ?
-                                        <>
-                                            <div className="ingredient-info-wrap">
-                                                <div className="ingredient-top-wrap">
-                                                    <span className="ingredient-unit">{item.productInfo.DSBN_STEP_ACTO_WT + item.productInfo.DSBN_STEP_ACTO_UNIT_NM}</span>
-                                                    <span className="ingredient-price">{item.productInfo.PROD_AVRG_PRCE.toLocaleString()}원</span>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div className="ingredient-middle-wrap">
-                                                    <input type="button" onClick={() => handleCount("minus", index)} value="-" />
-                                                    <input
-                                                        type="number"
-                                                        value={item.mc_count}
-                                                        onChange={(event) => handleInputChange(event, index)}
-                                                    />
-                                                    <input type="button" onClick={() => handleCount("plus", index)} value="+" />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div className="ingredient-bottom-wrap">
-                                                    <span className="ingredient-info">총액 : </span>
-                                                    <span className="ingredient-price">{(item.productInfo.PROD_AVRG_PRCE * item.mc_count).toLocaleString()}원</span>
-                                                </div>
-                                            </div>
-                                        </>
-                                        : <div className="sold-out-wrap">품절 상품입니다.</div>
-                                }
+                            ))}
+                            <div className="cart-payment-btn">
+                                <button type="button" className='go-cart-btn' onClick={deleteCart}>선택 삭제</button>
+                                {goToPay.length > 0 ? (
+                                    <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn main btn'>
+                                        선택 결제
+                                    </Link>
+                                ) : <button>선택 결제</button>}
                             </div>
-                        ))}
-                        <div className="cart-payment-btn">
-                            <button type="button" className='go-cart-btn' onClick={handleCheckout}>선택 삭제</button>
-                            {goToPay.length > 0 ? (
-                                <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn main btn'>
-                                    선택 결제
-                                </Link>
-                            ) :
-                                <button>선택 결제</button>
-                            }
                         </div>
                     </div>
-                </div>
-            ) : (
-                <div id="cart-no-item" className="content-wrap">
-                    <div className="content">
-
-                        <div className="error-content">
-                            <p>장바구니에 담긴 상품이 없습니다.</p>
+                ) : (
+                    <div id="cart-no-item" className="content-wrap">
+                        <div className="content">
+                            <div className="error-content">
+                                <p>장바구니에 담긴 상품이 없습니다.</p>
+                            </div>
                         </div>
-
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
         </>
-        
     );
-}
-
+};
 
 export default ShoppingCart;

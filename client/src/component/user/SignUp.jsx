@@ -32,7 +32,7 @@ const SignUp = () => {
     useEffect(() => {
         setTitle('회원가입');
         initSignupClick();
-    }, [isMemberFlag, pwFlag, rPwFlag, mailFlag, phoneFlag]);
+    }, [uId, isMemberFlag, pwFlag, rPwFlag, mailFlag, phoneFlag]);
 
     const navigate = useNavigate();
 
@@ -43,8 +43,11 @@ const SignUp = () => {
         let input_value = e.target.value;
 
         if (input_name === "u_id") {
+            if(input_value !== uId){
+               setIsMemberFlag(false);
+            }
             idCheck(input_value);                       
-            setUId(input_value);
+            setUId(input_value);                   
 
         } else if (input_name === "u_pw") {
             pwCheck(input_value);                       
@@ -112,6 +115,7 @@ const SignUp = () => {
         if (regex.test(input_value) === true) {
             $('#message_u_pw').css('display', 'none');
             setPwFlag(true);
+            setRPwFlag(false);
             return input_value;
         } else {
             $('#message_u_pw').css('display', 'block');

@@ -97,7 +97,7 @@ const SignIn = () => {
 
                 alert('로그인에 성공하였습니다.');
                 navigate('/');
-                // window.location.reload(true);
+                window.location.reload(true);
             } else {
                 alert(res.data.message);
                 setUId(''); setUPw('');

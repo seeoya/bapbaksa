@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -195,6 +196,10 @@ const Payment = () => {
         navigate(-1);
     }
 
+    const modalClose = () => {
+        setIsPayment(false);
+    }
+
     return (
         <>
             {isLoading ? <Loading /> : null}
@@ -202,6 +207,7 @@ const Payment = () => {
                 isPayment ?
                     <div id='modal' className='modal payment' >
                         <div className="modal-wrap">
+                            <button type='button' className='modal-close' onClick={modalClose}><FontAwesomeIcon icon="fa-solid fa-xmark" /></button>
                             <CheckoutPage p_no={p_no} o_count={o_count} totalPay={totalPay} orderNo={orderNo} newProductList={newProductList} />
                         </div>
                     </div>

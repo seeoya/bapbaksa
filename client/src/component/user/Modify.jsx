@@ -29,20 +29,22 @@ const Modify = () => {
     const [rPwFlag, setRPwFlag] = useState(false);
     const [mailFlag, setMailFlag] = useState(true);
     const [phoneFlag, setPhoneFlag] = useState(true);
+    const [isProfile, setIsProfile] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        let loginedUId = getToken('loginedUId');
+        let loginedUId = getToken('loginedUId');       
 
         if (loginedUId === null) {
             setIsLoading(false);
             alert('로그인이 필요한 서비스입니다.');
-            navigate('/user/signin');
+            navigate('/user/signin');    
         }
-    }, []);
+
+    }, [isLoading]);   
 
     useEffect(() => {
 
@@ -89,6 +91,7 @@ const Modify = () => {
                     setUFirstAddr(res.data.user.u_first_address);
                     setUSeconAddr(res.data.user.u_second_address);
                     setUProfileImg(res.data.user.pi_name);
+                    setIsProfile(true);
                 }
             })
             .catch(error => {
@@ -330,8 +333,14 @@ const Modify = () => {
 
                                 <div className='input-wrap' id='profile'>
                                     <div className="profile-img">
-                                        <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />
-                                        {/* <img src="/imgs/logo/logo.png" alt="밥박사" /> */}
+                                    {isProfile ? <>                                       
+                                        <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfileImg}`} alt="profile" />
+                                        </>
+                                        :
+                                        <>
+                                        <img src="/imgs/logo/logo.png" alt="마이페이지" />
+                                        </>}
+
                                     </div>
                                     <div>
                                         <span id="icon_u_profile" className="input-icon"></span>

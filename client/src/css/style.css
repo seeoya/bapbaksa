@@ -627,7 +627,7 @@ nav .user-info img {
 .container .recipe-grid .swiper-container {
     grid-column-start: 1;
     grid-column-end: 4;
-    height: 600px;
+    height: 480px;
     margin-top: -40px;
 }
 

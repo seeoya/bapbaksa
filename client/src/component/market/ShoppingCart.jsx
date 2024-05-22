@@ -5,6 +5,7 @@ import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
 import Loading from "../include/Loading";
 import { NewProductQuery } from "../../query/productQuerys";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ShoppingCart = () => {
     const { data: newProductList } = NewProductQuery();
@@ -238,15 +239,20 @@ const ShoppingCart = () => {
                                         </div>
                                         <div>
                                             <div className="ingredient-middle-wrap">
-                                                <input type="button" data-p-code={item.PROD_CODE} data-ps-code={item.PROD_SPCS_CODE} data-type="minus" onClick={(e) => handleCount(e, index)} value="-" />
+                                                <button type="button" className="btn highlight minus-btn" data-p-code={item.PROD_CODE} data-ps-code={item.PROD_SPCS_CODE} data-type="minus" onClick={(e) => handleCount(e, index)} value="-" >
+                                                    <FontAwesomeIcon icon="fa-solid fa-minus" />
+                                                </button>
                                                 <input
                                                     type="number"
+                                                    className="input"
                                                     value={item.mc_count}
                                                     data-p-code={item.PROD_CODE}
                                                     data-ps-code={item.PROD_SPCS_CODE}
                                                     onChange={(event) => handleInputChange(event, index)}
                                                 />
-                                                <input type="button" data-p-code={item.PROD_CODE} data-ps-code={item.PROD_SPCS_CODE} data-type="plus" onClick={(e) => handleCount(e, index)} value="+" />
+                                                <button type="button" className="btn highlight plus-btn" data-p-code={item.PROD_CODE} data-ps-code={item.PROD_SPCS_CODE} data-type="plus" onClick={(e) => handleCount(e, index)} value="+" >
+                                                    <FontAwesomeIcon icon="fa-solid fa-plus" />
+                                                </button>
                                             </div>
                                         </div>
                                         <div>

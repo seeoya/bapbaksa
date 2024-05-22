@@ -179,15 +179,15 @@ const PaymentHistory = () => {
                                                         </div>
                                                     </Link>
 
-                                                    <div>
-                                                        <span>수량: {item.o_count}개</span><br />
-                                                    </div>
-                                                    <div>
-                                                        <span>단위: {item.DSBN_STEP_ACTO_WT}{item.DSBN_STEP_ACTO_UNIT_NM}</span>
-                                                    </div>
-                                                    <div>
-                                                        <span>가격: {item.o_final_price.toLocaleString()}원</span>
-                                                    </div>
+                                                    
+                                                        <span className="ingredient-count-kg">수량: {item.o_count}개</span><br />
+                                                    
+                                                    
+                                                        <span className="ingredient-count-kg">단위: {item.DSBN_STEP_ACTO_WT}{item.DSBN_STEP_ACTO_UNIT_NM}</span>
+                                                    
+                                                    
+                                                        <span className="ingredient-price">가격: {item.o_final_price.toLocaleString()}원</span>
+                                                    
                                                     <div className="ingredient-cart-btn">
                                                         {item.o_s_no === 1 || item.o_s_no === 6 ? <button onClick={() => acceptPayment(item.p_no, item.o_id)}>구매 확정</button> : ''}
                                                         {item.o_s_no === 6 ? <button onClick={() => refundProduct(item.p_no, item.o_id)}>환불 요청</button> : null}

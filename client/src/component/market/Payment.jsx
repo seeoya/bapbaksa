@@ -223,17 +223,21 @@ const Payment = () => {
 
                                 return (
                                     <div className="flex-item" key={idx}>
-                                        <Link to={`/market/view/${info.PROD_CODE}_${info.PROD_SPCS_CODE}`}>
-                                            <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} />
-                                            <span className="ingredient-title">{info.PROD_NAME}<br />{info.PROD_SPCS_NAME}</span>
-                                        </Link>
-                                        <span className="ingredient-unit">
-                                            {info.DSBN_STEP_ACTO_WT}
-                                            {info.DSBN_STEP_ACTO_UNIT_NM}
-                                        </span>
-                                        <span className="ingredient-unit">{Number(info.PROD_AVRG_PRCE).toLocaleString()}원</span>
-                                        <span className="ingredient-unit">{count[info.PROD_NO]}</span>
-                                        <span className="ingredient-price">{itemPrice.toLocaleString()}원</span>
+                                        <div>
+                                            <Link className='ingredient-info-img-name' to={`/market/view/${info.PROD_CODE}_${info.PROD_SPCS_CODE}`}>
+                                                <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} />
+                                                <span className="ingredient-title">{info.PROD_NAME}</span>
+                                            </Link>
+                                        </div>
+                                        <div className='ingredient-info-payment'>
+                                            <span className="ingredient-unit">
+                                                {info.DSBN_STEP_ACTO_WT}
+                                                {info.DSBN_STEP_ACTO_UNIT_NM}
+                                            </span>
+                                            <span className="ingredient-unit">{Number(info.PROD_AVRG_PRCE).toLocaleString()}원</span>
+                                            <span className="ingredient-unit">{count[info.PROD_NO]}개</span>
+                                            <span className="ingredient-price">{itemPrice.toLocaleString()}원</span>
+                                        </div>
                                     </div>
                                 );
                             })

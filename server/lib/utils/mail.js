@@ -1,9 +1,10 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
+const EC2_SERVER_URL = process.env.EC2_SERVER_URL;
 const { NODEMAILER_USER, NODEMAILER_SECRET } = process.env;
-const logoUrl = "http://localhost:3000/imgs/logo/logo.png";
-const signinUrl = "http://localhost:3000/user/signin";
+const logoUrl = EC2_SERVER_URL + "/imgs/logo/logo.png";
+const signinUrl = EC2_SERVER_URL + "/user/signin";
 
 
 const transPorter = nodemailer.createTransport({

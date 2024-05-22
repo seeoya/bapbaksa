@@ -386,8 +386,8 @@ const Modify = () => {
                             <div className='input-wrap' id='profile'>
                                 <div className="profile-img">
 
-                                    {/*<img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />*/}
-                                    <img src="/imgs/logo/logo.png" alt="밥박사" />
+                                    <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />
+                                    {/* <img src="/imgs/logo/logo.png" alt="밥박사" /> */}
 
                                 </div>
                                 <div>

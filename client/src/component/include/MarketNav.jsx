@@ -49,8 +49,8 @@ const MarketNav = () => {
                                         <div className="user-info">
                                             <span> {loginedID} </span>
                                             <span> 님 </span>
-                                            <img src="/imgs/logo/logo.png" alt="마이페이지" />
-                                            {/*<img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />*/}
+                                            {/* <img src="/imgs/logo/logo.png" alt="마이페이지" /> */}
+                                            <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />
                                         </div>
                                     </Link>
                                 </div>

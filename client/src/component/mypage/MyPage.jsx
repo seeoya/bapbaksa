@@ -17,7 +17,7 @@ const MyPage = () => {
             </Link>
             <Link to={"/mypage/myfridge"} className='btn sub'>
                 <FontAwesomeIcon icon="fa-solid fa-carrot" />
-                <span>내 냉장고</span>
+                <span>나의 냉장고</span>
             </Link>
             <Link to={"/market/pay-history"} className='btn highlight'>
                 <FontAwesomeIcon icon="fa-solid fa-receipt" />

@@ -35,7 +35,7 @@ const Nav = () => {
                     <div className="sub">
                         <Link to="/mypage/myfridge" className="link">
                             <FontAwesomeIcon icon="fa-solid fa-carrot" />
-                            <span>내 냉장고</span></Link>
+                            <span>나의 냉장고</span></Link>
                         <Link to="/mypage/like" className="link">
                             <FontAwesomeIcon icon="fa-solid fa-bookmark" />
                             <span>좋아하는 레시피</span></Link>

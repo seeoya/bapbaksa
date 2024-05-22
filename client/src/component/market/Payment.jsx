@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -195,6 +196,10 @@ const Payment = () => {
         navigate(-1);
     }
 
+    const modalClose = () => {
+        setIsPayment(false);
+    }
+
     return (
         <>
             {isLoading ? <Loading /> : null}
@@ -202,6 +207,7 @@ const Payment = () => {
                 isPayment ?
                     <div id='modal' className='modal payment' >
                         <div className="modal-wrap">
+                            <button type='button' className='modal-close' onClick={modalClose}><FontAwesomeIcon icon="fa-solid fa-xmark" /></button>
                             <CheckoutPage p_no={p_no} o_count={o_count} totalPay={totalPay} orderNo={orderNo} newProductList={newProductList} />
                         </div>
                     </div>
@@ -217,17 +223,21 @@ const Payment = () => {
 
                                 return (
                                     <div className="flex-item" key={idx}>
-                                        <Link to={`/market/view/${info.PROD_CODE}_${info.PROD_SPCS_CODE}`}>
-                                            <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} />
-                                            <span className="ingredient-title">{info.PROD_NAME}<br />{info.PROD_SPCS_NAME}</span>
-                                        </Link>
-                                        <span className="ingredient-unit">
-                                            {info.DSBN_STEP_ACTO_WT}
-                                            {info.DSBN_STEP_ACTO_UNIT_NM}
-                                        </span>
-                                        <span className="ingredient-unit">{Number(info.PROD_AVRG_PRCE).toLocaleString()}원</span>
-                                        <span className="ingredient-unit">{count[info.PROD_NO]}</span>
-                                        <span className="ingredient-price">{itemPrice.toLocaleString()}원</span>
+                                        <div>
+                                            <Link className='ingredient-info-img-name' to={`/market/view/${info.PROD_CODE}_${info.PROD_SPCS_CODE}`}>
+                                                <img className="ingredient-img" src={`/imgs/product/${info.PROD_IMG}`} />
+                                                <span className="ingredient-title">{info.PROD_NAME}</span>
+                                            </Link>
+                                        </div>
+                                        <div className='ingredient-info-payment'>
+                                            <span className="ingredient-unit">
+                                                {info.DSBN_STEP_ACTO_WT}
+                                                {info.DSBN_STEP_ACTO_UNIT_NM}
+                                            </span>
+                                            <span className="ingredient-unit">{Number(info.PROD_AVRG_PRCE).toLocaleString()}원</span>
+                                            <span className="ingredient-unit">{count[info.PROD_NO]}개</span>
+                                            <span className="ingredient-price">{itemPrice.toLocaleString()}원</span>
+                                        </div>
                                     </div>
                                 );
                             })

@@ -53,15 +53,19 @@ const PaymentDetail = () => {
                                     return (
                                         <div key={idx}>
                                             <h3>주문 번호: {o_id}</h3>
+                                            <div className='payment-detail-flex'>
+                                                <div>
                                             {orders.map((order, orderIdx) => {
                                                 const { o_count, productInfo, p_no } = order;
                                                 const { PROD_AVRG_PRCE, PROD_SPCS_CODE, PROD_IMG, PROD_NAME, DSBN_STEP_ACTO_WT, DSBN_STEP_ACTO_UNIT_NM } = productInfo[0];
                                                 const itemPrice = PROD_AVRG_PRCE * o_count;
                                                 totalPay += itemPrice;
-
+                                                
                                                 return (
-                                                    <div className="flex-item" key={orderIdx}>
-                                                        <Link to={`/market/view/${p_no}_${PROD_SPCS_CODE}`}>
+                                                
+                                                <div className='payment-product-wrap'>
+                                                    <div className="flex-items" key={orderIdx}>
+                                                        <Link className='payment-detail-img-title' to={`/market/view/${p_no}_${PROD_SPCS_CODE}`}>
                                                             <img className="ingredient-img" src={`/imgs/product/${PROD_IMG}`} alt="ingredient" />
                                                             <span className="ingredient-title">{PROD_NAME}</span>
                                                         </Link>
@@ -73,8 +77,11 @@ const PaymentDetail = () => {
                                                         <span className="ingredient-price">{itemPrice.toLocaleString()}원</span>
                                                         <span className="ingredient-title">배송상태 : {order.o_s_name}</span>
                                                     </div>
+                                                </div>
                                                 );
+                                                
                                             })}
+                                            </div>
                                             <div className="payment-price-wrap">
                                                 <div className="payment-member-info">
                                                     <span className="ingredient-title">아이디 : {u_id}</span>
@@ -89,6 +96,7 @@ const PaymentDetail = () => {
                                                     </Link>
                                                 </div>
                                             </div>
+                                        </div>
                                         </div>
                                     );
                                 })

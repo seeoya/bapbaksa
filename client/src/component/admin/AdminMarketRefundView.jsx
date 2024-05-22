@@ -30,12 +30,14 @@ const AdminMarketRefundView = () => {
     const [prodFlag, setProdFlag] = useState(false);
     const [order, setOrder] = useState({});
     const [prod, setProd] = useState({});
+    const [btnFlag, setBtnFlag] = useState(false);
     
 
     useEffect(() => {     
         initOrder();
         setTitle('환불 상세 내역');
     }, [no, isLoading]);
+
 
     const initOrder = async () => {
         await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_refund_order", {
@@ -56,7 +58,8 @@ const AdminMarketRefundView = () => {
                 setORegDate(order.o_reg_date);
                 setOId(order.o_id);            
                 setUNo(order.u_no);               
-                setOSNo(order.o_s_no);            
+                setOSNo(order.o_s_no);   
+                    if(order.o_s_no === 2) setBtnFlag(true);         
                 setOCount(order.o_count);
                 setOPrice(order.o_price);
                 setOFinalPrice(order.o_final_price);            
@@ -105,9 +108,7 @@ const AdminMarketRefundView = () => {
             });
     } 
        
-    
-    
-    
+   
     const refundRejectClick = async (e) => {
         console.log('refundRejectClick()');
         
@@ -213,7 +214,7 @@ const AdminMarketRefundView = () => {
                     : 
                     <><tr><td>구매 상세 내역이 없습니다.</td></tr></>}
                 </table>                   )}
-                {orderFlag && prodFlag ? 
+                {orderFlag && prodFlag && btnFlag ? 
                     <div className='btn-wrap'>
                         <button type='button' className='btn sub half' onClick={(e) => refundApproveClick(order)}>환불 승인</button>
                         <button type='button' className='btn sub half' onClick={(e) => refundRejectClick(no)}>승인 불가</button>                        

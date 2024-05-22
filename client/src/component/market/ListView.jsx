@@ -29,6 +29,10 @@ const ListView = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        defaultQuantityInt();
+    },[quantityInt])
+
+    useEffect(() => {
         setTitle(viewData?.PROD_NAME);
     }, []);
 
@@ -55,6 +59,15 @@ const ListView = () => {
             createChart();
         }
     }, [item.PROD_NAME, chartData, viewData]);
+
+    const defaultQuantityInt = () => {
+
+        if(quantityInt <= 0) {
+            alert('최소 주문은 1개입니다.');
+            setQuantityInt(1);
+        };
+
+    }
 
     const createChart = () => {
         if (!chartRef.current) return;

@@ -123,7 +123,7 @@ const RecipeListFilter = (props) => {
         <div className='recipe-filter cb-box'>
             <div className='default-filter'>
                 <div>
-                    <div className='filter-title'>내 냉장고 재료</div>
+                    <div className='filter-title'>나의 냉장고 재료</div>
                     <div className='filter-wrap fridge-ingre'>
                         {
                             myFridgeState && myFridgeState.length > 0 ?

@@ -143,7 +143,7 @@ const RecipeView = () => {
 
                                             <div>
                                                 <div className='info-title'>난이도</div>
-                                                <div>{recipe.RECP_DIFFICULT}</div>
+                                                <div>{recipe.RECP_DIFFICULT == "초보환영" ? "★" : recipe.RECP_DIFFICULT == "보통" ? "★★" : "★★★"}</div>
                                             </div>
                                         </div>
 

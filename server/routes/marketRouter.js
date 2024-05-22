@@ -66,6 +66,11 @@ router.post("/insertTossPayment", (req, res) => {
     marketService.insertTossPayment(req, res);
 })
 
+router.post("/cartUpdateCount", (req,res) => {
+    console.log("/cartUpdateCount");
+    marketService.cartUpdateCount(req,res);
+})
+
 
 // router.get("/allProduct", (req,res) => {
 //     console.log("[server] marketRouter getAllProduct!");

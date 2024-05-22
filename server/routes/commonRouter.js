@@ -7,7 +7,7 @@ router.get("/checkUser", (req, res) => {
 });
 
 router.get("/checkAdmin", (req, res) => {
-    if (req.query.u_no != 0 || req.query.u_id != "admin") {
+    if (req.query.u_no != 1 || req.query.u_id != "admin") {
         res.json({ status: 400 });
     } else {
         checkAdmin(req, res);

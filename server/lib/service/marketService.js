@@ -258,10 +258,12 @@ const marketService = {
         );
     },
     acceptOrder: (req, res) => {
+        let p_no = Number(req.body.acceptInfo.p_no);
         let o_id = Number(req.body.acceptInfo.o_id);
+        console.log("🧡🧡🧡",p_no,o_id);
         DB.query(
-            `UPDATE TBL_ORDER SET O_S_NO = 5 WHERE O_ID = ?`,
-            [o_id],
+            `UPDATE TBL_ORDER SET O_S_NO = 5 WHERE P_NO = ? AND O_ID = ?`,
+            [p_no, o_id],
             (error, result) => {
                 if (error) {
                     console.log(error);
@@ -306,38 +308,63 @@ const marketService = {
 
     deleteCart: (req, res) => {
         let post = req.body
+        console.log("💝💝💝", post);
         DB.query(`SELECT * FROM TBL_ORDER WHERE O_ID = ?`, [post.p_no], (error, info) => {
             if (error) {
                 console.log(error);
             } else {
                 const oId = info.map((item) => item.o_id);
                 DB.query(
-                    `UPDATE TBL_ORDER SET O_S_NO = 0, PM_NO = ? WHERE O_ID = ?`, [post.pm_no, oId[0]], (error, result) => {
+                    `UPDATE TBL_ORDER SET O_S_NO = 0, PM_NO = ? WHERE O_ID = ?`, [post.pm_no, oId[0]], async (error, result) => {
                         if (error) {
                             console.log(error)
                         } else {
                             const pNo = info.map((item) => item.p_no); // [ 283, 289, 293 ] 이렇게 들어옴
                             const pNoString = pNo.join(','); //283,289,293 이렇게 들어옴
-                            DB.query(
-                                `DELETE FROM TBL_MARKET_CART WHERE U_NO = ? AND P_CODE IN (${pNoString})`,
-                                [post.u_no],
-                                (error, result) => {
-                                    if (error) {
-                                        console.log(error);
-                                        res.json(null);
-                                    } else {
-                                        res.json(result);
-                                    }
+                            const prodDate = await axios_getProdCodeForDeleteCart(pNoString);
+
+                            const conditions = prodDate.map(item => `(U_NO = ${post.u_no} AND P_CODE = ${item.PROD_CODE} AND PS_CODE = ${item.PROD_SPCS_CODE})`).join(' OR ');
+
+                            if (conditions.length === 0) {
+                                res.json({ message: "No products to delete" });
+                                return;
+                            }
+
+                            const query = `DELETE FROM TBL_MARKET_CART WHERE ${conditions}`;
+
+                            DB.query(query, (error, result) => {
+                                if (error) {
+                                    console.log(error);
+                                    res.json(null);
+                                } else {
+                                    console.log("💟💟💟성공", result);
+                                    res.json(result);
                                 }
-                            );
+                            });
                         }
                     }
                 )
             }
         })
-
     },
+    cartUpdateCount: (req,res) => {
+        let data = req.body;
+        console.log("💘💘💘",data);
+        console.log("💘💘💘",data.mc_count);
+        DB.query(`UPDATE TBL_MARKET_CART SET MC_COUNT = ? WHERE U_NO = ? AND P_CODE = ? AND PS_CODE = ?`,
+            [data.mc_count, data.u_no, data.p_code, data.ps_code],
+            (error,result) => {
+                if(error) {
+                    console.log(error);
+                    res.json(null);
+                } else {
+                    console.log("성공💛");
+                    res.json(result);
+                }
+            }
+        )
 
+    }
 };
 
 async function axios_getCartInfo(i_no) {
@@ -345,7 +372,6 @@ async function axios_getCartInfo(i_no) {
         const response = await axios.post("http://localhost:3002/product/getProduct", {
             I_NO: i_no,
         });
-        console.log("🤍🤍🤍🤍", response.data);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -367,6 +393,17 @@ async function axios_get_product(pNo) {
     try {
         const response = await axios.post("http://localhost:3002/product/axios_get_product", {
             pNo
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function axios_getProdCodeForDeleteCart(pCode) {
+    try {
+        const response = await axios.post("http://localhost:3002/product/delete_cart_prod_info", {
+            pCode
         });
         return response.data;
     } catch (error) {

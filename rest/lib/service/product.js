@@ -17,10 +17,10 @@ const product = {
     //     });
     // },
 
-    getAllProduct: (req,res) => {
+    getAllProduct: (req, res) => {
         DB.query(`SELECT * FROM PRODUCT`,
-            (error,result) => {
-                if(error) {
+            (error, result) => {
+                if (error) {
                     console.log(error);
                     res.json(null);
                 } else {
@@ -38,8 +38,8 @@ const product = {
                     res.json(null);
                 } else {
                     DB.query(`SELECT * FROM PRODUCT WHERE PROD_YMD = ?`,
-                        [data[0].PROD_YMD], (error,prod) => {
-                            if(error) {
+                        [data[0].PROD_YMD], (error, prod) => {
+                            if (error) {
                                 console.log(error);
                                 res.json(null);
                             } else {
@@ -339,7 +339,7 @@ const product = {
         console.log("123", req.body.I_NO);
         let i_no = req.body.I_NO;
         DB.query(
-            `SELECT PROD_YMD, PROD_NO, PROD_SPCS_CODE, PROD_IMG, PROD_NAME, PROD_SPCS_NAME, PROD_AVRG_PRCE, DSBN_STEP_ACTO_WT, DSBN_STEP_ACTO_UNIT_NM FROM PRODUCT WHERE PROD_CODE = ?`,
+            `SELECT PROD_YMD, PROD_CODE, PROD_SPCS_CODE, PROD_IMG, PROD_NAME, PROD_SPCS_NAME, PROD_AVRG_PRCE, DSBN_STEP_ACTO_WT, DSBN_STEP_ACTO_UNIT_NM FROM PRODUCT WHERE PROD_NO = ?`,
             [i_no],
             (error, data) => {
                 if (error) {
@@ -358,6 +358,7 @@ const product = {
                             DSBN_STEP_ACTO_WT: data[0].DSBN_STEP_ACTO_WT,
                             DSBN_STEP_ACTO_UNIT_NM: data[0].DSBN_STEP_ACTO_UNIT_NM
                         };
+                        console.log("💟💟💟💟💟", productData);
                         res.json(productData);
                     } else {
                         res.json(null);
@@ -368,48 +369,80 @@ const product = {
     },
     paymentGetProd: (req, res) => {
         let post = req.body;
-    
+        console.log("❤❤❤❤❤💘💘💘💘", post);
+        // ❤❤❤❤❤💘💘💘💘 { PROD_CODE: [ 296, 303 ], PROD_SPCS_CODE: [ 1, 0 ] }
         // 초기 쿼리 문자열
         let query = `SELECT * FROM PRODUCT WHERE `;
-        
+
         // 바인딩 값들을 저장할 배열
         let queryValues = [];
-    
-        if (post.I_NO.length === 1) {
-            // post.I_NO의 길이가 1인 경우
-            query += `PROD_CODE = ? AND PROD_YMD = ? AND PROD_SPCS_CODE = ?`;
-            queryValues.push(post.I_NO[0], post.PROD_YMD, post.PROD_SPCS_CODE);
+
+        if (post.PROD_NO.length === 1) {
+            // post.PROD_CODE의 길이가 1인 경우
+            query += `PROD_NO = ?`;
+            queryValues.push(post.PROD_NO);
         } else {
-            // post.I_NO의 길이가 1보다 큰 경우
-            let conditions = post.I_NO.map((item, index) => {
-                queryValues.push(post.I_NO[index], post.PROD_YMD, post.PROD_SPCS_CODE[index]);
-                return `PROD_CODE = ? AND PROD_YMD = ? AND PROD_SPCS_CODE = ?`;
+            // post.PROD_CODE의 길이가 1보다 큰 경우
+            let conditions = post.PROD_NO.map((item, index) => {
+                queryValues.push(post.PROD_NO[index]);
+                return `PROD_NO = ?`;
             });
             query += conditions.join(" OR ");
         }
-    
+
         // 디버그를 위한 쿼리와 값 출력
         console.log("쿼리:", query);
         console.log("바인딩 값:", queryValues);
-    
+
         // 데이터베이스 쿼리 실행
         DB.query(query, queryValues, (error, result) => {
             if (error) {
                 console.log(error);
                 res.json(null);
             } else {
+                console.log("💘💘💘", result);
                 res.json(result);
             }
         });
     },
-    getProductInfo: async (req, res) => {
-        let p_no = req.body.P_NO;        
+    getProductInfo: (req, res) => {
+        let p_no = req.body.P_NO;
         console.log('🎀🎀', p_no);
+
+        if (Array.isArray(p_no)) {
+            const pNo = p_no.map(() => '?').join(', ');
+            console.log("💘💘💘💘💘", pNo); // 💘💘💘💘💘 ?, ?, ?, ?, ?, ?, ?
+            const sql = `SELECT * FROM PRODUCT WHERE PROD_NO IN (${pNo})`;
+
+            DB.query(sql, p_no, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    res.json(null);
+                } else {
+                    console.log("❤❤❤❤❤💘💘💘💘💘", result);
+                    res.json(result);
+                }
+            });
+        } else {
+            DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, [p_no], (error, result) => {
+                if (error) {
+                    console.log(error);
+                    res.json(null);
+                } else {
+                    res.json(result);
+                }
+            });
+        }
+    },
+
+    getProdName: async (req, res) => {
+        let p_no = req.body.P_NO;
+        console.log('p_no: ', p_no);
 
         if (Array.isArray(p_no)) {
             // p_no가 배열인 경우
             const placeholders = p_no.map(() => '?').join(', ');
-            const sql = `SELECT * FROM PRODUCT WHERE PROD_NO IN (${placeholders})`;
+            const sql = `SELECT PROD_NAME, PROD_SPCS_NAME FROM PRODUCT WHERE PROD_NO IN (${placeholders})`;
 
             await DB.query(sql, p_no, (error, result) => {
                 if (error) {
@@ -420,8 +453,9 @@ const product = {
                 }
             });
         } else {
+
             // p_no가 단일 값인 경우
-            await DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, [p_no], (error, result) => {
+            await DB.query(`SELECT PROD_NAME, PROD_SPCS_NAME FROM PRODUCT WHERE PROD_NO = ?`, [p_no], (error, result) => {
                 if (error) {
                     console.log(error);
                     res.json(null);
@@ -430,74 +464,43 @@ const product = {
                 }
             });
         }
-        },
-
-        getProdName: async (req, res) => {
-            let p_no = req.body.P_NO;        
-            console.log('p_no: ', p_no);
-
-            if (Array.isArray(p_no)) {
-                // p_no가 배열인 경우
-                const placeholders = p_no.map(() => '?').join(', ');
-                const sql = `SELECT PROD_NAME, PROD_SPCS_NAME FROM PRODUCT WHERE PROD_NO IN (${placeholders})`;
-    
-                await DB.query(sql, p_no, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        res.json(null);
-                    } else {
-                        res.json(result);
-                    }
-                });
-            } else {
-    
-                // p_no가 단일 값인 경우
-                await DB.query(`SELECT PROD_NAME, PROD_SPCS_NAME FROM PRODUCT WHERE PROD_NO = ?`, [p_no], (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        res.json(null);
-                    } else {
-                        res.json(result);
-                    }
-                });
-            }
-            },
+    },
     random: (req, res) => {
         console.log("random");
-        let cur_date = ""; 
-        DB.query(`SELECT PROD_YMD FROM PRODUCT GROUP BY PROD_YMD ORDER BY PROD_YMD DESC LIMIT 1`, 
-        (error, date) => {
-            if (error) {
-                res.json(null);
-            } else {
-                cur_date = date[0].PROD_YMD;
-                DB.query(`SELECT * FROM PRODUCT WHERE PROD_YMD = ${cur_date} ORDER BY RAND() LIMIT 10`, 
-                (error, random) => {
-                    if (error) {
-                        res.json(null);
-                    } else {
-                        console.log('random success return json');
-                        res.json(random);
-                    }
-                });
-            }
-        });
-        
+        let cur_date = "";
+        DB.query(`SELECT PROD_YMD FROM PRODUCT GROUP BY PROD_YMD ORDER BY PROD_YMD DESC LIMIT 1`,
+            (error, date) => {
+                if (error) {
+                    res.json(null);
+                } else {
+                    cur_date = date[0].PROD_YMD;
+                    DB.query(`SELECT * FROM PRODUCT WHERE PROD_YMD = ${cur_date} ORDER BY RAND() LIMIT 9`,
+                        (error, random) => {
+                            if (error) {
+                                res.json(null);
+                            } else {
+                                console.log('random success return json');
+                                res.json(random);
+                            }
+                        });
+                }
+            });
+
     },
     compareprice: (req, res) => {
         console.log("compareprice");
         let cur_date = "";
         let last_date = "";
-        DB.query(`SELECT PROD_YMD FROM PRODUCT GROUP BY PROD_YMD ORDER BY PROD_YMD DESC LIMIT 2`, 
-        (error, date) => {
-            if (error) {
-                res.json(null);
-            } else {
-                cur_date = date[0].PROD_YMD;
-                last_date = date[1].PROD_YMD;
-                console.log("cur_date : " ,cur_date);
-                console.log("last_date : ", last_date);
-                DB.query(`
+        DB.query(`SELECT PROD_YMD FROM PRODUCT GROUP BY PROD_YMD ORDER BY PROD_YMD DESC LIMIT 2`,
+            (error, date) => {
+                if (error) {
+                    res.json(null);
+                } else {
+                    cur_date = date[0].PROD_YMD;
+                    last_date = date[1].PROD_YMD;
+                    console.log("cur_date : ", cur_date);
+                    console.log("last_date : ", last_date);
+                    DB.query(`
                 SELECT 
                     * 
                 FROM 
@@ -512,22 +515,26 @@ const product = {
                     cur.PROD_YMD = ${cur_date} 
                     AND cur.PROD_AVRG_PRCE < (las.PROD_AVRG_PRCE * 0.9) ORDER BY RAND()
                 `, (error, cheep) => {
-                    if (error) {
-                        res.json(null);
-                    } else {
-                        res.json(cheep);
-                    }
-                });
-            }
-
-        })
+                        if (error) {
+                            res.json(null);
+                        } else {
+                            res.json(cheep);
+                        }
+                    });
+                }
+            })
     },
     axiosGetProduct: (req, res) => {
-        let pNo = req.body.P_NO;
-    
-        const promises = pNo.map(prodNo => {
+        let pNo = req.body.pNo;
+        console.log("❤❤❤❤❤💘💘💘💘", pNo);
+        // ❤❤❤❤❤💘💘💘💘 [
+        //     1|main  |   292, 287, 152,
+        //     1|main  |   143, 142, 141,
+        //     1|main  |   112, 111, 110
+        //     1|main  | ]
+        const promises = pNo.map((item) => {
             return new Promise((resolve, reject) => {
-                DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, [prodNo], (error, products) => {
+                DB.query(`SELECT * FROM PRODUCT WHERE PROD_NO = ?`, [item], (error, products) => {
                     if (error) {
                         console.log(error);
                         reject(error);
@@ -537,7 +544,6 @@ const product = {
                 });
             });
         });
-    
         Promise.all(promises)
             .then(results => {
                 const mergedResults = results.reduce((acc, curr) => acc.concat(curr), []);
@@ -549,7 +555,6 @@ const product = {
             });
 
     }
-    
 }
 // 10퍼센트 이상 더 싼 물품을 찾을 때 : 현재가격 / 전달 가격 * 100
 module.exports = product;

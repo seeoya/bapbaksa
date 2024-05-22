@@ -6,6 +6,7 @@ import { getToken } from '../../storage/loginedToken';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';
 import { NewProductQuery } from '../../query/productQuerys';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ListView = () => {
     const { no } = useParams();
@@ -53,6 +54,11 @@ const ListView = () => {
         setPaymentInfo();
         getStock();
     }, [item]);
+
+    useEffect(() => {
+        setPaymentInfo();
+        getStock();
+    }, [quantityInt, item]);
 
     useEffect(() => {
         if (item.PROD_NAME && chartData.length > 0) {
@@ -155,9 +161,12 @@ const ListView = () => {
         setQuantityInt(parseInt(e.target.value));
     };
 
+    const goToPaymentLink = async (e) => {
+        await getStock("Payment");
+    };
+
     const setPaymentInfo = () => {
         let items = [];
-
         items.push({
             'PROD_NO': item.PROD_NO,
             'MC_COUNT': quantityInt,
@@ -189,9 +198,18 @@ const ListView = () => {
                 } else {
                     alert('품절된 상품입니다.');
                 }
-
                 setIsLoading(false);
+            } else if (type === "Payment") {
+                if (response.data > 0) {
+                    setQuantityInt(0);
+                    navigate('/market/payment', {
+                        state: { goToPay: goToPay },
+                    });
+                } else {
+                    alert('품절된 상품입니다.');
+                }
             }
+            
         } catch (err) {
             console.log(err);
         }
@@ -256,10 +274,14 @@ const ListView = () => {
                                                     <div>
                                                         재고: {stock}
                                                     </div>
-                                                    <div>
-                                                        <input type="button" onClick={() => handleCount("minus")} value="-" />
+                                                    <div className='product-view-btn'>
+                                                        <button type="button" className='product-count-minus-btn btn highlight' onClick={() => handleCount("minus")} value="-" >
+                                                            <FontAwesomeIcon icon="fa-solid fa-minus" />
+                                                        </button>
                                                         <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
-                                                        <input type="button" onClick={() => handleCount("plus")} value="+" />
+                                                        <button type="button" className='product-count-plus-btn btn highlight' onClick={() => handleCount("plus")} value="+" >
+                                                            <FontAwesomeIcon icon="fa-solid fa-plus" />
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -272,9 +294,9 @@ const ListView = () => {
                                                     <div className='ingredient-bottom-wrap-btn'>
                                                         <button type="button" className='go-cart-btn' onClick={goToMarketCartBtn}>장바구니</button>
                                                         {goToPay.length > 0 ? (
-                                                            <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn main btn'>
+                                                            <button type="button" className='go-payment-btn main btn' onClick={goToPaymentLink}>
                                                                 선택 결제
-                                                            </Link>
+                                                            </button>
                                                         ) :
                                                             <button>선택 결제</button>
                                                         }

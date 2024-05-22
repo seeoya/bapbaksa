@@ -1403,7 +1403,7 @@ footer .util_footer .btn {
     border-radius: 10px;
     padding: 30px 10px;
     width: 630px;
-    height: 230px;
+    height: 270px;
 }
 
 #market_list_view .ingredient-view-wrap {
@@ -1413,6 +1413,10 @@ footer .util_footer .btn {
     width: 1000px;
     justify-content: space-between;
     padding: 20px;
+}
+
+#market_list_view .product-view-btn {
+    display: flex;
 }
 
 #shopping_cart_wrap .ingredient-view-wrap {
@@ -1568,17 +1572,29 @@ footer .util_footer .btn {
     width: 150px;
 }
 
-#market_list_view #result, #shopping_cart_wrap #result {
-    margin: 0 10px;     /* 숫자와 버튼 사이의 간격 조절 */
+#market_list_view button {
+    padding: 5px 10px;
+    cursor: pointer;
+    color: white;
+    font-weight: 500;
 }
 
-#market_list_view button, #shopping_cart_wrap button {
+#market_list_view .product-count-minus-btn {
+    border-radius: 5px 0 0 5px;
+}
+
+#market_list_view .product-count-plus-btn {
+    border-radius: 0 5px 5px 0;
+}
+
+#shopping_cart_wrap button {
     padding: 5px 10px;
     cursor: pointer;
     width: 100px;
     color: white;
     font-weight: 500;
 }
+
 
 #market_list_view .go-cart-btn, #shopping_cart_wrap .go-cart-btn {
     background-color: var(--sub-dark-color);

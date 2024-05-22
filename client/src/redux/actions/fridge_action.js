@@ -33,15 +33,11 @@ export const loadMyFridgeAction = async (uNo) => {
             return { type: "error" };
         });
 
-    console.log("myfridge", list);
-
     return { type: "load_my_fridge", data: list };
 };
 
 export const initIngreDivineAction = (allFridgeList, myFridgeList) => {
     if (allFridgeList && myFridgeList) {
-        console.log("initIngreDivineAction");
-
         let tmpList = [];
         let tmpList2 = Object.keys(myFridgeList).map((el) => {
             return parseInt(el);

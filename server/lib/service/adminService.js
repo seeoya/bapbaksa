@@ -41,7 +41,7 @@ const adminService = {
     },
     modify_user: (req, res) => {
         let userInfo = req.body.data;
-        console.log(userInfo);
+
         DB.query(
             "UPDATE TBL_USER SET u_mail =?, u_phone = ?, u_zip_code = ?, u_first_address = ?, u_second_address = ?, u_status = ?, u_mod_date = NOW() WHERE u_no = ?",
             [
@@ -58,7 +58,6 @@ const adminService = {
                     console.log("error", error);
                     res.json({ status: 400 });
                 } else {
-                    console.log(result);
                     res.json(result);
                 }
             }
@@ -67,28 +66,20 @@ const adminService = {
     delete_user: (req, res) => {
         let post = req.body;
 
-        console.log("post:", post);
-        console.log("post.u_id: ", post.u_id);
-        console.log("post.u_no: ", post.u_no);
-
-        
         if (req.headers.authorization) {
-            const accessToken = req.headers.authorization.split(' ')[1];
+            const accessToken = req.headers.authorization.split(" ")[1];
 
             const verified = tokenUtils.verify(accessToken);
 
-            console.log("verified: ", verified);
-
             if (verified.ok) {
-
                 let now = new Date();
                 let year = now.getFullYear();
-                let month = now.getMonth() +1;
-                    month = "00" + month.toString();                    
+                let month = now.getMonth() + 1;
+                month = "00" + month.toString();
                 let date = now.getDate();
-                    date = "00" + date.toString();
+                date = "00" + date.toString();
 
-                now = `${year}${month.slice(-2)}${date.slice(-2)}`;                
+                now = `${year}${month.slice(-2)}${date.slice(-2)}`;
 
                 let sql = `UPDATE TBL_USER SET u_id = ?, u_mail = ?, u_phone = ?, u_google_id = ?, u_kakao_id = ?, 
                             u_naver_id = ?, u_status = ?, u_zip_code = ?, u_first_address= ?, u_second_address = ?,
@@ -103,25 +94,22 @@ const adminService = {
                             `SELECT * FROM  TBL_USER_PROFILE_IMG WHERE u_no = ?`,
                             [post.u_no],
                             (error, user) => {
-                                
                                 if (user.length > 0) {
                                     let sql = `DELETE p, f, r, c FROM TBL_USER_PROFILE_IMG p, TBL_FRIDGE f, TBL_LIKE_RECIPE r, TBL_MARKET_CART c 
                                             WHERE p.u_no = ? AND f.u_no = ? AND r.u_no = ? AND c.u_no = ?`;
                                     let state = [post.u_no, post.u_no, post.u_no, post.u_no];
 
                                     DB.query(sql, state, (error, result) => {
-                                        console.log("🎆", result);
-
                                         if (error) {
                                             res.json({ message: "회원탈퇴 처리 실패" });
                                         } else {
-
-                                            // fs.rmSync(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}`, { recursive: true, force: true },                                        
-                                            fs.rmSync(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`, { recursive: true, force: true },
+                                            //fs.rmSync(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}`, { recursive: true, force: true },
+                                            fs.rmSync(
+                                                `/home/ubuntu/user/upload/profile_imgs/${post.u_id}`,
+                                                { recursive: true, force: true },
                                                 (error) => {}
                                             );
 
-                                            console.log(`${post.u_id} directory deleted!`);
                                             res.json({ result, message: "회원탈퇴 처리 성공" });
                                         }
                                     });
@@ -131,8 +119,6 @@ const adminService = {
                                     let state = [post.u_no];
 
                                     DB.query(sql, state, (error, result) => {
-                                        console.log("👓", result);
-
                                         if (error) {
                                             res.json({ message: "회원탈퇴 처리 실패" });
                                         } else {
@@ -147,12 +133,9 @@ const adminService = {
             } else {
                 res.status(401).send({ message: verified.message });
             }
-
         } else {
             res.json({ message: "No accessToken!" });
         }
-
-                    
     },
     get_all_question: (req, res) => {
         DB.query(`SELECT * FROM TBL_USER_QUESTIONS ORDER BY QUES_NO DESC`, (error, quests) => {
@@ -172,7 +155,6 @@ const adminService = {
                 if (error) {
                     res.json(null);
                 } else {
-                    console.log(quests);
                     res.json(quests);
                 }
             }
@@ -180,11 +162,8 @@ const adminService = {
     },
 
     answer_question: (req, res) => {
-        console.log("answer_question");
         let params = req.body;
-        console.log("params.params : ", params.params);
-        console.log("params.params : ", params.params.ques_answer);
-        console.log("params.params : ", params.params.ques_no);
+
         DB.query(
             `UPDATE TBL_USER_QUESTIONS SET QUES_ANSWER = ?, QUES_STATE = 1, QUES_ANSWER_DATE = NOW() WHERE QUES_NO = ?`,
             [params.params.ques_answer, params.params.ques_no],
@@ -198,14 +177,10 @@ const adminService = {
         );
     },
     get_order: (req, res) => {
-        console.log("get_order()");
-
         DB.query(
             `SELECT * FROM TBL_ORDER o JOIN TBL_PAYMENT p ON o.pm_no = p.pm_no WHERE o.o_id = ?`,
             [req.query.o_id],
             async (error, orders) => {
-                console.log("🎃🎃", orders[0]);
-                console.log("🎃🎃", orders[1]);
                 if (error) {
                     console.log("error", error);
                     return { status: 400 };
@@ -213,8 +188,9 @@ const adminService = {
                     try {
                         const pNo = orders.map((item) => item.p_no);
                         const prodInfo = await axios_getProdName(pNo);
-                        console.log("🎃", prodInfo);
+
                         let tmp = {};
+
                         orders.map((order, index) => {
                             if (!tmp[order.o_id]) {
                                 tmp[order.o_id] = {};
@@ -225,10 +201,8 @@ const adminService = {
                                 ...prodInfo[index],
                             };
                         });
-                        console.log("tmp:", tmp);
                         res.json(tmp);
                     } catch (error) {
-                        console.log(error);
                         res.json(null);
                     }
                 }
@@ -241,7 +215,6 @@ const adminService = {
             [],
             (error, result) => {
                 if (error) {
-                    console.log("error", error);
                     return { status: 400 };
                 } else {
                     let tmpList = {};
@@ -263,15 +236,12 @@ const adminService = {
             [req.query.o_no],
             async (error, refund) => {
                 if (error) {
-                    console.log("error", error);
                     return { status: 400 };
                 } else {
                     try {
                         const pNo = refund[0].p_no;
-                        console.log("pNo: ", pNo);
 
                         const prodInfo = await axios_getProdName(pNo);
-                        console.log("🎃", prodInfo);
 
                         res.json({ refund: refund[0], prod: prodInfo[0] });
                     } catch (error) {
@@ -333,9 +303,6 @@ const adminService = {
         let query = req.body.params;
         let o_no = query.o_no;
         let o_s_no = query.o_s_no;
-
-        console.log("o_s_no", o_s_no);
-        console.log("o_no", o_no);
 
         DB.query(
             `UPDATE TBL_ORDER SET o_s_no = ?, o_mod_date = now() WHERE o_no = ?`,
@@ -432,8 +399,6 @@ const adminService = {
         let ps_code = req.body.ps_code;
         let ps_count = req.body.ps_count;
 
-        console.log(p_code, ps_code, ps_count);
-
         DB.query(
             "SELECT * FROM TBL_PROD_STOCK WHERE p_code = ? AND ps_code = ?",
             [p_code, ps_code],
@@ -477,13 +442,11 @@ const adminService = {
     },
 
     monthChart: (req, res) => {
-        console.log("monthChart");
         let data = [];
         let currentDate = new Date();
         let year = currentDate.getFullYear();
         let month = currentDate.getMonth() - 3;
         let formattedDate = `${year}-${String(month).padStart(2, "0")}`;
-        console.log("formattedDate : ", formattedDate);
 
         DB.query(
             `SELECT SUM(O_FINAL_PRICE) AS total_final_price, DATE_FORMAT(O_REG_DATE, '%Y-%m') AS formatted_date FROM TBL_ORDER WHERE YEAR(O_REG_DATE) = YEAR(CURDATE() - INTERVAL 4 MONTH) AND MONTH(O_REG_DATE) = MONTH(CURDATE() - INTERVAL 4 MONTH) AND O_S_NO = 5 GROUP BY formatted_date`,
@@ -590,9 +553,8 @@ const adminService = {
         );
     },
     curCategoryChart: (req, res) => {
-        console.log('categoryChart');
-
-        DB.query(`
+        DB.query(
+            `
                 SELECT 
                     '탄수화물' AS P_NO,
                     SUM(CASE WHEN P.PROD_CODE >= 100 AND P.PROD_CODE < 200 THEN O.o_final_price ELSE 0 END) AS total_final_price
@@ -690,23 +652,23 @@ const adminService = {
                     O.o_s_no = 5 
                     AND YEAR(O.o_reg_date) = YEAR(CURDATE())
                     AND MONTH(O.o_reg_date) = MONTH(CURDATE())
-        `, 
-        (error, curCtg) => {
-            if (error) {
-                res.json(null);
-            } else {
-                const categories = curCtg.map(result => ({
-                    P_NO: result.P_NO,
-                    total_final_price: result.total_final_price || 0
-                }));
-                res.json(categories);
+        `,
+            (error, curCtg) => {
+                if (error) {
+                    res.json(null);
+                } else {
+                    const categories = curCtg.map((result) => ({
+                        P_NO: result.P_NO,
+                        total_final_price: result.total_final_price || 0,
+                    }));
+                    res.json(categories);
+                }
             }
-        });
+        );
     },
     lastCategoryChart: (req, res) => {
-        console.log('lastCategoryChart');
-
-        DB.query(`
+        DB.query(
+            `
                 SELECT 
                     '탄수화물' AS P_NO,
                     SUM(CASE WHEN P.PROD_CODE >= 100 AND P.PROD_CODE < 200 THEN O.o_final_price ELSE 0 END) AS total_final_price
@@ -804,18 +766,19 @@ const adminService = {
                     O.o_s_no = 5
                     AND YEAR(O.o_reg_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
                     AND MONTH(O.o_reg_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
-        `, 
-        (error, lastCtg) => {
-            if (error) {
-                res.json(null);
-            } else { 
-                const categories = lastCtg.map(result => ({
-                    P_NO: result.P_NO,
-                    total_final_price: result.total_final_price || 0
-                }));
-                res.json(categories);
+        `,
+            (error, lastCtg) => {
+                if (error) {
+                    res.json(null);
+                } else {
+                    const categories = lastCtg.map((result) => ({
+                        P_NO: result.P_NO,
+                        total_final_price: result.total_final_price || 0,
+                    }));
+                    res.json(categories);
+                }
             }
-        });
+        );
     },
 };
 

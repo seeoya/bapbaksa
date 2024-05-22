@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { getToken } from "../../storage/loginedToken";
 import axios from 'axios';
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
 import Loading from "../include/Loading";
 
@@ -100,9 +100,8 @@ const PaymentHistory = () => {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/refundOrder", {
                 'refundInfo': refundInfo
             })
-            console.log("성공", response.data);
             setTemp((temp) => !temp);
-            alert('주문 상태 바꾸기 성공');
+            alert('환불 신청이 완료되었습니다.');
         } catch (error) {
             console.log(error)
         }
@@ -115,9 +114,8 @@ const PaymentHistory = () => {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/acceptOrder", {
                 'acceptInfo': acceptInfo
             })
-            console.log("성공", response.data);
             setTemp((temp) => !temp);
-            alert('구매 확정 바꾸기 성공');
+            alert('구매 확정되었습니다.');
         } catch (error) {
             console.log(error)
         }
@@ -129,9 +127,8 @@ const PaymentHistory = () => {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/cancelOrder", {
                 'cancelInfo': cancelInfo
             })
-            console.log("성공", response.data);
             setTemp((temp) => !temp);
-            alert('구매 취소 바꾸기 성공');
+            alert('구매 취소에 성공했습니다.');
         } catch (error) {
             console.log(error)
         }
@@ -141,8 +138,10 @@ const PaymentHistory = () => {
     return (
         <>
             {isLoading ? <Loading /> : null}
+
             <div className='content-wrap' id="payment_history_wrap">
                 <h2 className='title'>결제 내역</h2>
+
                 <div id="payment_total_wrap">
                     <div className='content ingredient-cart-wrap'>
                         {Object.keys(orderInfo).length > 0 ? (
@@ -191,7 +190,7 @@ const PaymentHistory = () => {
                                                     </div>
                                                 );
                                             })}
-                                        </div>
+                                        </div >
 
                                         <div className="ingredient-cart-btn">
                                             {firstItem.o_s_no === 0 ? (
@@ -210,10 +209,11 @@ const PaymentHistory = () => {
                                 </div>
                             </div>
                         )}
-                    </div>
-                </div>
-            </div>
+                    </div >
+                </div >
+            </div >
         </>
     );
-};
+}
+
 export default PaymentHistory;

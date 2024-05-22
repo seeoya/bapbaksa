@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { setToken } from '../../storage/loginedToken';
-import $, { error } from 'jquery';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';
 
@@ -31,23 +30,17 @@ const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&cl
 const SignIn = () => {
 
     const [uId, setUId] = useState('');
-    const [uPw, setUPw] = useState('');    
-    
+    const [uPw, setUPw] = useState('');
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const navigate = useNavigate(); 
-    
+    const navigate = useNavigate();
 
     useEffect(() => {
         setTitle('로그인');
     }, [setUId, setUPw, setIsLoading]);
 
     const userInfoChangeHandler = (e) => {
-        console.log('userInfoChangeHandler()');
-        console.log('google_id===>', googleid);
-        console.log('google_url===>', googleURL);
-
         let input_name = e.target.name;
         let input_value = e.target.value;
 
@@ -56,141 +49,111 @@ const SignIn = () => {
 
         } else if (input_name === "u_pw") {
             setUPw(input_value);
-        } 
+        }
     }
 
     const activeEnter = (e) => {
-        console.log('activeEnter()');
-
-        if(e.key === 'Enter') {
+        if (e.key === 'Enter') {
             signinBtnClickHandler();
         }
     }
-    
-    
-    const signinBtnClickHandler = () => {
-        console.log('signinBtnClickHandler()');
 
+    const signinBtnClickHandler = () => {
         let form = document.signin_form;
 
         if (uId === '') {
             alert('아이디를 입력해 주세요');
             form.u_id.focus();
-
         } else if (uPw === '') {
             alert('비밀번호를 입력해 주세요');
             form.u_pw.focus();
-        
-        } else {            
-                
-            axios_signin();                        
-                                       
-        }   
-              
-           
+        } else {
+            axios_signin();
+        }
     }
 
-          
     const axios_signin = async () => {
-        console.log('axios_signin()');
-
         let data = {
             "u_id": uId,
             "u_pw": uPw
-        }                 
+        }
 
-        try{
-        const res = await axios.post(            
-            process.env.REACT_APP_SERVER_URL + `/api/user/signin_confirm`,                            
-            data)            
-        
-            console.log('AXIOS SIGN_IN COMMUNICATION SUCCESS ==> ', res.data);   
-                                            
+        try {
+            const res = await axios.post(
+                process.env.REACT_APP_SERVER_URL + `/api/user/signin_confirm`,
+                data)
+
             setIsLoading(false);
-            
-            if(res.data.message === undefined && res.data.result.affectedRows > 0){
-            console.log('res.data: ', res.data);      
-            console.log('message: ', res.data.message);                                                                 
-            console.log('res.data.result.affectedRows', res.data.result.affectedRows);                                 
 
-                    let refreshToken = res.data.refreshToken;                                               
-                    let accessToken = res.data.accessToken;
+            if (res.data.message === undefined && res.data.result.affectedRows > 0) {
+                let refreshToken = res.data.refreshToken;
+                let accessToken = res.data.accessToken;
 
-                    setToken('accessToken', accessToken);                     
-                    setToken('refreshToken', refreshToken);                     
-                    setToken('loginedUId', res.data.uId);                     
-                    setToken('loginedUNo', res.data.uNo);                            
-                                        
-                    alert('로그인에 성공하였습니다.');                        
-                    navigate('/');                        
-                    window.location.reload(true);
+                setToken('accessToken', accessToken);
+                setToken('refreshToken', refreshToken);
+                setToken('loginedUId', res.data.uId);
+                setToken('loginedUNo', res.data.uNo);
+                setToken('uProfile', res.data.uProfile);
+
+                alert('로그인에 성공하였습니다.');
+                navigate('/');
+                window.location.reload(true);
             } else {
                 alert(res.data.message);
                 setUId(''); setUPw('');
             }
-            setIsLoading(true); 
-
-        } catch(error){
-
-            console.log('error', error);
-            console.log('error==message', error.data.message);
+            setIsLoading(true);
+        } catch (error) {
             alert(error.data.message);
-        
         }
     }
-
 
     return (
         <>
             {isLoading ? null : <Loading />}
-            <div className='content-wrap'>
 
+            <div className='content-wrap'>
                 <h2 className='title'>로그인</h2>
 
                 <div className='content'>
-                    <div className='signin-wrap'>            
+                    <div className='signin-wrap'>
                         <form name="signin_form" className='form'>
-                            <div className='input-wrap'>                    
-                                <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="아이디를 입력해 주세요"/>    
-                        
-                            </div>
                             <div className='input-wrap'>
-                                <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="비밀번호를 입력해 주세요"/>    
-                                
+                                <input type="text" name="u_id" value={uId} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="아이디를 입력해 주세요" />
                             </div>
+
+                            <div className='input-wrap'>
+                                <input type="password" name="u_pw" value={uPw} onChange={(e) => userInfoChangeHandler(e)} onKeyDown={(e) => activeEnter(e)} placeholder="비밀번호를 입력해 주세요" />
+                            </div>
+
                             <div className='btn-wrap'>
                                 <button type="button" onClick={signinBtnClickHandler} className="btn main full">로그인</button>
                             </div>
 
                             <div className='login-find'>
-                        
                                 <Link to="/user/findid" className='find-id'>아이디 찾기</Link>
                                 <span>|</span>
                                 <Link to="/user/findpw" className='find-pw'>비밀번호 찾기</Link>
-                                
                             </div>
 
                             <div className='login-link'>
-                        
                                 <Link to={googleURL}>
-                                <img src="/imgs/logo/login/web_neutral_sq_SU@1x.png" className='google-link' alt=''/>                                                  
+                                    <img src="/imgs/logo/login/web_neutral_sq_SU@1x.png" className='google-link' alt='' />
                                 </Link>
 
                                 <Link to={kakaoURL}>
-                                <img src="/imgs/logo/login/kakao_login_medium_narrow.png" className='kakao-link' alt=''/>                         
+                                    <img src="/imgs/logo/login/kakao_login_medium_narrow.png" className='kakao-link' alt='' />
                                 </Link>
 
-                                <Link to={naverURL}>                         
-                                <img src="/imgs/logo/login/btnG_완성형.png" className='naver-link' alt='' />
-                                </Link>                         
+                                <Link to={naverURL}>
+                                    <img src="/imgs/logo/login/btnG_완성형.png" className='naver-link' alt='' />
+                                </Link>
                             </div>
-
-                        </form>                
+                        </form>
                     </div>
                 </div>
             </div>
         </>
-        
     );
 };
 

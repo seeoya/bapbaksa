@@ -1,11 +1,11 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { NewProductQuery } from "../../query/productQuerys";
 import { getToken } from "../../storage/loginedToken";
 import { setTitle } from "../../util/setTitle";
 import Loading from "../include/Loading";
-import { NewProductQuery } from "../../query/productQuerys";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ShoppingCart = () => {
     const { data: newProductList } = NewProductQuery();
@@ -163,8 +163,6 @@ const ShoppingCart = () => {
     }
 
     const axios_cart_count_change = async (pCode, psCode, count) => {
-
-        console.log("💘💘💘", pCode, psCode, count);
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/cartUpdateCount", {
                 'u_no': u_no,
@@ -172,7 +170,6 @@ const ShoppingCart = () => {
                 'ps_code': psCode,
                 'mc_count': count
             })
-            console.log("성공", response.data);
             setTemp((temp) => !temp);
         } catch (error) {
             console.log(error)
@@ -184,11 +181,11 @@ const ShoppingCart = () => {
 
     async function axios_getCartInfo(u_no) {
         setIsLoading(true);
+
         try {
             const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/getMarketCart", {
                 'U_NO': u_no,
             });
-            console.log("장바구니 가져오기 성공", response.data);
             setCartInfo(response.data);
         } catch (error) {
             console.log(error);

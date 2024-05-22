@@ -2,8 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export const AllProductQuery = () => {
-    console.log("재료 query");
-
     return useQuery({
         queryKey: ["all_product"],
         queryFn: async () => {
@@ -20,8 +18,6 @@ export const AllProductQuery = () => {
 };
 
 export const NewProductQuery = () => {
-    console.log("최신 재료 query");
-
     return useQuery({
         queryKey: ["new_product"],
         queryFn: async () => {

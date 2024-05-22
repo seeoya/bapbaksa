@@ -2,8 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export const AllRecipeQuery = () => {
-    console.log("레시피 query");
-
     return useQuery({
         queryKey: ["all_recipe"],
         queryFn: async () => {
@@ -14,7 +12,6 @@ export const AllRecipeQuery = () => {
                     },
                 })
                 .then((data) => {
-                    console.log("all---", data.data);
                     return data.data;
                 });
         },

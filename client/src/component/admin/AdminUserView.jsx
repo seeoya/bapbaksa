@@ -28,7 +28,6 @@ const AdminUserView = () => {
     }, []);
 
     useEffect(() => {
-        console.log(no);
         initUser();
     }, [no]);
 
@@ -56,7 +55,6 @@ const AdminUserView = () => {
             setIsLoading(false);
         });
     }
-
 
     const userInfoChangeHandler = (e) => {
         let input_name = e.target.name;
@@ -129,8 +127,7 @@ const AdminUserView = () => {
     }
 
     const deleteBtnClickEvent = async () => {
-        if (window.confirm('회원탈퇴하시겠습니까?')) {            
-            
+        if (window.confirm('회원탈퇴하시겠습니까?')) {
             setIsLoading(true);
 
             let accessToken = getToken('accessToken');
@@ -139,15 +136,12 @@ const AdminUserView = () => {
                     "u_id": uId,
                     "u_no": uNo
                 },
-                headers: {Authorization : `Bearer ${accessToken}`,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
                 },
-                
-            }).then(res => {               
-                    
-                    console.log("del-res", res.data.result.affectedRows);
-                    alert('회원탈퇴에 성공했습니다.');
-                    navigate(-1);
-
+            }).then(res => {
+                alert('회원탈퇴에 성공했습니다.');
+                navigate(-1);
             }).catch(error => {
                 alert('회원탈퇴에 실패했습니다.');
             }).finally(() => {
@@ -223,7 +217,6 @@ const AdminUserView = () => {
                     <div className='input-wrap btn-wrap'>
                         <button type='button' className='btn main full' onClick={(e) => modifyBtnClickEvent()}>수정</button>
                     </div>
-
                 </div>
                 : <div className='content'>회원 정보가 없습니다.</div>}
         </>

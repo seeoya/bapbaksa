@@ -8,8 +8,8 @@ router.get("/", (req, res) => {
     switch (params.type) {
         case "list":
             recipe.getAllRecipe(req, res);
-            // recipe.loadList(req,res);
             break;
+
         case "view":
             recipe.getSelectRecipeProgress(req, res);
             break;
@@ -17,17 +17,14 @@ router.get("/", (req, res) => {
 });
 
 router.get("/category", (req, res) => {
-    console.log("/category");
     recipe.getCategoryList(req, res);
 });
 
 router.get("/region", (req, res) => {
-    console.log("/region");
     recipe.getRegionList(req, res);
 });
 
 router.get("/random", (req, res) => {
-    console.log("/random");
     recipe.getRandomRecipe(req, res);
 });
 

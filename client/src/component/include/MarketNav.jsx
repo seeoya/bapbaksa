@@ -38,7 +38,7 @@ const MarketNav = () => {
                             <span>장바구니</span></Link>
                         <Link to="/market/pay-history" className="link">
                             <FontAwesomeIcon icon="fa-solid fa-receipt" />
-                            <span>결제 내역</span></Link>
+                            <span>구매 내역</span></Link>
                     </div>
 
                     {

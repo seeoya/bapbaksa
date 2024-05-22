@@ -25,8 +25,12 @@ const Modify = () => {
     const [uFirstAddr, setUFirstAddr] = useState('');
     const [uSecondAddr, setUSeconAddr] = useState('');
     const [accessToken, setAccessToken] = useState('');
+    const [pwFlag, setPwFlag] = useState(false);
+    const [rPwFlag, setRPwFlag] = useState(false);
+    const [mailFlag, setMailFlag] = useState(true);
+    const [phoneFlag, setPhoneFlag] = useState(true);
 
-    const [isLoading, setIsLoading] = useState(false);    
+    const [isLoading, setIsLoading] = useState(true);    
 
     const navigate = useNavigate();
 
@@ -46,9 +50,13 @@ const Modify = () => {
        
         setTitle('정보수정');
         setUser();
-        modifyForm();        
+        modifyForm();           
 
-    }, [accessToken]);   
+    }, [accessToken]);
+    
+    useEffect(() => {
+        initModifyClick();
+    }, [pwFlag, rPwFlag, mailFlag, phoneFlag]);
 
 
     const setUser = async () => {
@@ -143,53 +151,65 @@ const Modify = () => {
         }
     }
 
-    function pwCheck(input_value) {
+    const pwCheck = (input_value) => {
         // 비밀번호 검증: 8~20자, 영문 대소문자, 숫자, 특수 문자 1개 이상 포함되어야 함
         let regex = new RegExp();
-        regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
+        regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$!@$!%#?&]).{8,20}$/;
 
-        if (regex.test(input_value)) {
+        if (regex.test(input_value) === true) {
             $('#message_u_pw').css('display', 'none');
+            setPwFlag(true);
             return input_value;
         } else {
             $('#message_u_pw').css('display', 'block');
+            setPwFlag(false);
+            return '';
         }
     }
 
 
-    function rePwCheck(input_value) {
+    const rePwCheck = (input_value) => {
         // 비밀번호 일치 검증        
         if (input_value === uPw) {
             $('#message_u_check_pw').css('display', 'none');
+            setRPwFlag(true);
             return input_value;
         } else {
             $('#message_u_check_pw').css('display', 'block');
+            setRPwFlag(false);
+            return '';
         }
     }
 
-    function emailCheck(input_value) {
+    const emailCheck = (input_value) => {
         // 이메일 검증: 
         let regex = new RegExp();
-        regex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
         if (regex.test(input_value)) {
             $('#message_u_mail').css('display', 'none');
+            setMailFlag(true);
             return input_value;
         } else {
             $('#message_u_mail').css('display', 'block');
+            setMailFlag(false);
+            return '';
         }
     }
 
-    function phoneCheck(input_value) {
+    const phoneCheck = (input_value) => {
         // 전화번호 검증: 
         let regex = new RegExp();
         regex = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
 
         if (regex.test(input_value)) {
             $('#message_u_phone').css('display', 'none');
+            setPhoneFlag(true);
             return input_value;
         } else {
             $('#message_u_phone').css('display', 'block');
+            setPhoneFlag(false);
+            return '';
         }
     }
 
@@ -211,6 +231,23 @@ const Modify = () => {
                 setUFirstAddr(data.roadAddress + ` (${extraRoadAddr})`);
             }
         }).open();
+    }
+
+    const initModifyClick = () => {
+        console.log('initModifyClick()');
+       
+        let button = document.querySelector("#modifyBtn");
+            console.log('button', button);
+            button.disabled = true;
+            button.style.cursor = 'default';
+            button.style.backgroundColor = '#d3dfce';            
+        
+        if(pwFlag && rPwFlag && mailFlag && phoneFlag){
+            button.disabled = false;
+            button.style.cursor = 'pointer';
+            button.style.backgroundColor = '#5f963a';            
+        }
+
     }
 
     const modifyBtnClickHandler = () => {
@@ -362,7 +399,7 @@ const Modify = () => {
                             </div>
 
                             <div className='btn-wrap'>
-                                <button type="button" onClick={modifyBtnClickHandler} className="btn main full">정보수정</button>
+                                <button type="button" onClick={modifyBtnClickHandler} id="modifyBtn" className="btn main full">정보수정</button>
                                 <Link to='/user/delete' className="btn sub full" >회원탈퇴</Link>
                             </div>
                         </form>

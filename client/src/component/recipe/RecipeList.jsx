@@ -59,6 +59,7 @@ const RecipeList = () => {
         setIsFilterLoading(true);
         filterRecipe();
         setRecipeListViewCount(20);
+        setIsFilterLoading(false);
     }, [activeIngreList, activeRegionList, activeCateList, activeDifficultList, sortState, filterInclude, recipeSearch]);
 
     useEffect(() => {

@@ -63,13 +63,13 @@ const Main = () => {
                     >
                         <div className='banner'>
                             <SwiperSlide>
-                                <img src='/imgs/banner/recipe/main.png'  draggable="false"/>
+                                <img src='/imgs/banner/recipe/main.png' draggable="false" />
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img src='/imgs/banner/recipe/bapbaksaEvent.png'  draggable="false"/>
+                                <img src='/imgs/banner/recipe/bapbaksaEvent.png' draggable="false" />
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img src='/imgs/banner/recipe/bapdoduk.png'  draggable="false"/>
+                                <img src='/imgs/banner/recipe/bapdoduk.png' draggable="false" />
                             </SwiperSlide>
                         </div>
                     </Swiper>
@@ -90,12 +90,12 @@ const Main = () => {
                                 modules={[Autoplay]}
                                 className="my-swiper"
                             >
-                                {randomRecipe.length > 0 ? (
+                                {randomRecipe && randomRecipe.length > 0 ? (
                                     randomRecipe.map((recipe) => (
                                         <SwiperSlide key={recipe.RECP_CODE}>
                                             <div className='random-recipe-info'>
                                                 <Link to={`/recipe/view/${recipe.RECP_CODE}`}>
-                                                    <img src={recipe.RECP_MAIN_IMG} alt={recipe.RECP_NAME}  draggable="false"/>
+                                                    <img src={recipe.RECP_MAIN_IMG} alt={recipe.RECP_NAME} draggable="false" />
                                                     <div className='random-recipe-detail'>
                                                         <h3>{recipe.RECP_NAME}</h3>
                                                         <p>{recipe.RECP_INTRO}</p>
@@ -120,8 +120,8 @@ const Main = () => {
                         <div className='nav-link'>
                             <Link to={'/market'} className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-store" /><div className='banner'>마켓으로 이동</div></Link>
                             <Link to={'/recipe/list'} className='btn main'><FontAwesomeIcon className='icon' icon="fa-solid fa-bowl-rice" /><div className='banner'>레시피 보러가기</div></Link>
-                            <a href='https://www.youtube.com/@paik_jongwon'target="_blank" rel="noopener noreferrer"className='btn main'><FontAwesomeIcon className='icon' icon="fa-brands fa-youtube" /><div className='banner'>더 많은 레시피 보러가기</div></a>
-                            <a href='https://www.youtube.com/@1mincook'target="_blank" rel="noopener noreferrer"className='btn main'><FontAwesomeIcon className='icon' icon="fa-brands fa-youtube" /><div className='banner'>더 많은 레시피 보러가기</div></a>
+                            <a href='https://www.youtube.com/@paik_jongwon' target="_blank" rel="noopener noreferrer" className='btn main'><FontAwesomeIcon className='icon' icon="fa-brands fa-youtube" /><div className='banner'>더 많은 레시피 보러가기</div></a>
+                            <a href='https://www.youtube.com/@1mincook' target="_blank" rel="noopener noreferrer" className='btn main'><FontAwesomeIcon className='icon' icon="fa-brands fa-youtube" /><div className='banner'>더 많은 레시피 보러가기</div></a>
                         </div>
                     </div>
                 </div>

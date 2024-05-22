@@ -130,19 +130,24 @@ const AdminUserView = () => {
 
     const deleteBtnClickEvent = async () => {
         if (window.confirm('회원탈퇴하시겠습니까?')) {            
-
+            
             setIsLoading(true);
+
+            let accessToken = getToken('accessToken');
             await axios.delete(process.env.REACT_APP_SERVER_URL + `/admin/user`, {
                 data: {
                     "u_id": uId,
                     "u_no": uNo
                 },
+                headers: {Authorization : `Bearer ${accessToken}`,
+                },
                 
-            }).then(res => {
-                if (res.data !== null && res.data.result.affectedRows > 0) {
+            }).then(res => {               
+                    
+                    console.log("del-res", res.data.result.affectedRows);
                     alert('회원탈퇴에 성공했습니다.');
                     navigate(-1);
-                }
+
             }).catch(error => {
                 alert('회원탈퇴에 실패했습니다.');
             }).finally(() => {

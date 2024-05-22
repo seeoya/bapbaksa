@@ -43,18 +43,34 @@ const userService = {
         let post = req.body;
         console.log('post:', post);
 
-        db.query(`SELECT * FROM TBL_USER WHERE u_id = ?`,
-            [post.u_id], (error, user) => {
-                console.log('user', user);
+        if(post.u_id !== ''){
 
-                if (user.length > 0) {
-                    res.json({ isMember: true });
-                } else {
-                    res.json({ isMember: false });
-                }
+            let regex = new RegExp();
+            regex = /^(?=.*[a-z])(?=.*[0-9]).{5,20}$/;
+            let pass = regex.test(post.u_id);
+            console.log('++++++', pass);
 
-            });
+            if(pass) {
 
+                db.query(`SELECT * FROM TBL_USER WHERE u_id = ?`,
+                    [post.u_id], (error, user) => {
+                        console.log('user', user);
+
+                        if (user.length > 0) {
+                            res.json({ isMember: true });
+                        } else {
+                            res.json({ isMember: false });
+                        }
+
+                    });
+
+            } else {
+                res.json({ pass: false });
+            }
+
+        } else {
+            res.json({ isMember: null });
+        }
     },
 
     findid_confirm: (req, res) => {
@@ -256,22 +272,19 @@ const userService = {
 
         db.query(`SELECT * FROM TBL_USER WHERE u_id = ?`,
             [post.u_id], (error, user) => {
+                
+                if (user[0] !== undefined && user[0].u_id === post.u_id) {                         
 
-                if (error) {
-
-                } else {
-
-                    console.log('user=====', user);
-
-                    if (user !== undefined) {
+                    console.log('user[0]=id', user[0].u_id === post.u_id);
+                    
+                    if(user[0].u_status === 1 || user[0].u_status === 999) {                                                 
 
                         if (bcrypt.compareSync(post.u_pw, user[0].u_pw)) {
-                            
-
+            
                             let accessToken = tokenUtils.makeToken({ id: post.u_id });
-                            console.log("accessToken:", accessToken);
+                                    console.log("accessToken:", accessToken);
                             let refreshToken = tokenUtils.makeRefreshToken();
-                            console.log("refreshToken:", refreshToken);
+                                    console.log("refreshToken:", refreshToken);
 
                             db.query(`UPDATE TBL_USER SET u_refresh_token= ? WHERE u_id = ?`,
                                 [refreshToken, post.u_id], (error, result) => {
@@ -291,13 +304,15 @@ const userService = {
 
                         }
 
-                    } else {
+                    } else if (user[0].u_status === 2){
 
-                        return res.json({ message: '아이디가 일치하지 않습니다.' });
+                        return res.json({ message: '계정 정지된 회원입니다. 관리자에게 문의해 주세요.' });
 
                     }
-
-                }
+                    
+                } else {
+                    return res.json({ message: '아이디가 일치하지 않습니다.' });
+                }              
 
             });
 
@@ -458,7 +473,14 @@ const userService = {
             if (verified.ok) {
 
                 let now = new Date();
-                now = now.toLocaleString();
+                let year = now.getFullYear();
+                let month = now.getMonth() +1;
+                    month = "00" + month.toString();                    
+                let date = now.getDate();
+                    date = "00" + date.toString();
+
+                now = `${year}${month.slice(-2)}${date.slice(-2)}`;                
+
                 console.log('🎗🎗', post.u_id + now);
 
                 let sql = `UPDATE TBL_USER SET u_id = ?, u_mail = ?, u_phone = ?, u_google_id = ?, u_kakao_id = ?, 

@@ -20,12 +20,19 @@ const SignUp = () => {
     const [uFirstAddr, setUFirstAddr] = useState('');
     const [uSecondAddr, setUSeconAddr] = useState('');
     const [isMemberFlag, setIsMemberFlag] = useState(false);
+    const [pwFlag, setPwFlag] = useState(false);
+    const [rPwFlag, setRPwFlag] = useState(false);
+    const [mailFlag, setMailFlag] = useState(false);
+    const [phoneFlag, setPhoneFlag] = useState(false);
+    const [signupClick, setSignupClick] = useState(false);
+    
 
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setTitle('회원가입');
-    }, []);
+        initSignupClick();
+    }, [isMemberFlag, pwFlag, rPwFlag, mailFlag, phoneFlag]);
 
     const navigate = useNavigate();
 
@@ -36,15 +43,15 @@ const SignUp = () => {
         let input_value = e.target.value;
 
         if (input_name === "u_id") {
-            idCheck(input_value);
+            idCheck(input_value);                       
             setUId(input_value);
 
         } else if (input_name === "u_pw") {
-            pwCheck(input_value);
-            setUPw(input_value);
+            pwCheck(input_value);                       
+            setUPw(input_value)
 
         } else if (input_name === "u_check_pw") {
-            rePwCheck(input_value);
+            rePwCheck(input_value);            
             setUCheckPw(input_value);
 
         } else if (input_name === "u_mail") {
@@ -52,7 +59,7 @@ const SignUp = () => {
             setUMail(input_value);
 
         } else if (input_name === "u_phone") {
-            phoneCheck(input_value);
+            phoneCheck(input_value);            
             setUPhone(input_value);
 
         } else if (input_name === "u_profile") {
@@ -63,66 +70,99 @@ const SignUp = () => {
         }
     }
 
-    function idCheck(input_value) {
-        // 아이디 검증: 영어 소문자와 숫자로만 구성되어야 함
+    const idCheck = (input_value) => {
+        // 아이디 검증: 5~20 영어 소문자와 숫자 조합으로 구성되어야 함
         let regex = new RegExp();
-        regex = /^[a-z0-9]{5,19}$/g;
-
+        regex = /^(?=.*[a-z])(?=.*[0-9]).{5,20}$/;
+        
         if (regex.test(input_value)) {
             $('#message_u_id').css('display', 'none');
-            return input_value;
+
+            if(!isMemberFlag){
+                $('#message_u_id_is').css('display', 'block');
+                return input_value;
+            } else {
+                $('#message_u_id_is').css('display', 'none');    
+                return true;
+            }
+            
         } else {
             $('#message_u_id').css('display', 'block');
+            return '';
         }
     }
 
-    function pwCheck(input_value) {
+    const isMemberCheck = () => {
+    
+        if(!isMemberFlag){
+            $('#message_u_id_is').css('display', 'block');
+            return false;            
+            
+        } else if(isMemberFlag) {
+            $('#message_u_id_is').css('display', 'none');
+            return true;    
+        }
+    }
+
+    const pwCheck = (input_value) => {
         // 비밀번호 검증: 8~20자, 영문 대소문자, 숫자, 특수 문자 1개 이상 포함되어야 함
         let regex = new RegExp();
-        regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
+        regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$!@$!%#?&]).{8,20}$/;
 
-        if (regex.test(input_value)) {
+        if (regex.test(input_value) === true) {
             $('#message_u_pw').css('display', 'none');
+            setPwFlag(true);
             return input_value;
         } else {
             $('#message_u_pw').css('display', 'block');
+            setPwFlag(false);
+            return '';
         }
     }
 
 
-    function rePwCheck(input_value) {
+    const rePwCheck = (input_value) => {
         // 비밀번호 일치 검증        
         if (input_value === uPw) {
             $('#message_u_check_pw').css('display', 'none');
+            setRPwFlag(true);
             return input_value;
         } else {
             $('#message_u_check_pw').css('display', 'block');
+            setRPwFlag(false);
+            return '';
         }
     }
 
-    function emailCheck(input_value) {
+    const emailCheck = (input_value) => {
         // 이메일 검증: 
         let regex = new RegExp();
-        regex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
         if (regex.test(input_value)) {
             $('#message_u_mail').css('display', 'none');
+            setMailFlag(true);
             return input_value;
         } else {
             $('#message_u_mail').css('display', 'block');
+            setMailFlag(false);
+            return '';
         }
     }
 
-    function phoneCheck(input_value) {
+    const phoneCheck = (input_value) => {
         // 전화번호 검증: 
         let regex = new RegExp();
         regex = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
 
         if (regex.test(input_value)) {
             $('#message_u_phone').css('display', 'none');
+            setPhoneFlag(true);
             return input_value;
         } else {
             $('#message_u_phone').css('display', 'block');
+            setPhoneFlag(false);
+            return '';
         }
     }
 
@@ -160,14 +200,26 @@ const SignUp = () => {
                 console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION SUCCESS ==> ', res.data);
                 console.log('res.data: ', res.data);
                 console.log(res.data.isMember);
-                setIsLoading(false);
-                if (res.data.isMember !== true) {
+                setIsLoading(false);                
+                if (res.data.isMember === false) {
                     setIsMemberFlag(true);
+                    $('#message_u_id_is').css('display', 'none');                      
+
                     alert('사용 가능한 아이디입니다.');
-                } else {
+                } else if(res.data.isMember === true){
                     setIsMemberFlag(false);
+                    setUId('');
                     alert('사용 불가능한 아이디입니다.');
+                } else if(res.data.isMember === null) {
+                    setIsMemberFlag(false);
+                    setUId('');
+                    alert('아이디를 입력해 주세요.');
+                } else if(res.data.pass === false){
+                    setIsMemberFlag(false);
+                    setUId('');
+                    alert('유효한 아이디를 입력해 주세요.');
                 }
+
             })
             .catch(error => {
                 console.log('AXIOS SIGN_UP ISMEMBER COMMUNICATION ERROR');
@@ -200,34 +252,50 @@ const SignUp = () => {
         }).open();
     }
 
-    const signupBtnClickHandler = async () => {
+    const initSignupClick = () => {
+        console.log('initSignupClick()');
+       
+        let button = document.querySelector("#signupBtn");
+            console.log('button', button);
+            button.disabled = true;
+            button.style.cursor = 'default';
+            button.style.backgroundColor = '#d3dfce';            
+
+        console.log('flag===========', isMemberFlag && pwFlag && rPwFlag && mailFlag && phoneFlag);
+        if(isMemberFlag && pwFlag && rPwFlag && mailFlag && phoneFlag){
+            button.disabled = false;
+            button.style.cursor = 'pointer';
+            button.style.backgroundColor = '#5f963a';            
+        }
+
+    }
+
+    const signupBtnClickHandler = () => {
         console.log('signupBtnClickHandler()');
         setIsLoading(true);
         let form = document.signup_form;
 
         if (uId === '') {
             alert('아이디를 입력해 주세요');
-            form.u_id.focus();
+            form.u_id.focus();                        
 
-        } else if (isMemberFlag === false) {
-            alert('아이디 중복체크를 해주세요');
-            form.u_id.focus();
-
-        } else if (uPw === '') {
+        } else if (uPw === ''){
             alert('비밀번호를 입력해 주세요');
-            form.u_pw.focus();
+            form.u_pw.focus();                                
 
         } else if (uCheckPw === '') {
             alert('비밀번호를 한번 더 입력해 주세요');
-            form.u_check_pw.focus();
-
+            form.u_check_pw.focus();                       
+        
         } else if (uMail === '') {
             alert('이메일을 입력해 주세요');
-            form.u_mail.focus();
+            form.u_mail.focus();            
+            setUMail('');
 
         } else if (uPhone === '') {
             alert('휴대폰 번호를 입력해 주세요');
-            form.u_phone.focus();
+            form.u_phone.focus();            
+            setUPhone('');
 
         } else {
 
@@ -246,7 +314,7 @@ const SignUp = () => {
             formData.append("u_second_address", uSecondAddr);
             formData.append("u_profile_img", files[0]);
 
-            await axios({
+            axios({
                 url: process.env.REACT_APP_SERVER_URL + `/api/user/signup_confirm`,
                 method: 'post',
                 data: formData,
@@ -297,7 +365,8 @@ const SignUp = () => {
                                     <button type="button" className="btn sub" onClick={isMemberClickHandler}>중복확인</button>
                                 </div>
 
-                                <span id="message_u_id" className="input-message">아이디는 6 ~ 20자,&nbsp;&nbsp;영문과 숫자를 조합해야 합니다.</span>
+                                <span id="message_u_id" className="input-message">아이디는 5 ~ 20자,&nbsp;&nbsp;영문과 숫자를 조합해야 합니다.</span>
+                                <span id="message_u_id_is" className="input-message">아이디 중복확인을 해주세요.</span>
                             </div>
 
                             <div className='input-wrap'>
@@ -306,7 +375,7 @@ const SignUp = () => {
                                     <button id="hide" type="button" className="btn pw-icon" onClick={pwViewClickHandler}><FontAwesomeIcon icon="fa-regular fa-eye-slash" /></button>
                                     <button id="view" type="button" className="btn pw-icon" onClick={pwHideClickHandler}><FontAwesomeIcon icon="fa-regular fa-eye" /></button>
                                 </div>
-                                <span id="message_u_pw" className="input-message">비밀번호는 8 ~ 20자,&nbsp;&nbsp;영문과 숫자, 특수문자를 1개 이상 포함해야 합니다.</span>
+                                <span id="message_u_pw" className="input-message">비밀번호는 8~20자,&nbsp;&nbsp;영문, 숫자, 특수문자($!@$!%#?&) 1개 이상 포함해야 합니다.</span>
                             </div>
 
                             <div className='input-wrap'>
@@ -350,7 +419,7 @@ const SignUp = () => {
                             </div>
 
                             <div className='btn-wrap'>
-                                <button type="button" onClick={signupBtnClickHandler} className="btn main full">회원가입</button>
+                                <button type="button" onClick={signupBtnClickHandler} id='signupBtn' className="btn main full">회원가입</button>
                             </div>
                         </form>
 

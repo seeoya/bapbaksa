@@ -25,7 +25,7 @@ const FindPW = () => {
         let input_value = e.target.value;
 
         if (input_name === "u_id") {            
-            idCheck(input_value);
+            
             setUId(input_value);
 
         } else if (input_name === "u_mail") {
@@ -38,18 +38,6 @@ const FindPW = () => {
         }
     }
 
-    function idCheck(input_value) {
-        // 아이디 검증: 영어 소문자와 숫자로만 구성되어야 함
-        let regex = new RegExp();
-        regex = /^[a-z0-9]{5,19}$/g;        
-
-        if(regex.test(input_value)) {
-            $('#message_u_id').css('display', 'none');
-           return input_value;
-        }else {            
-            $('#message_u_id').css('display', 'block');
-        }        
-    }
      
     function emailCheck(input_value) {
         // 이메일 검증: 
@@ -171,7 +159,7 @@ const FindPW = () => {
                     $('#find-input').css('display', 'none');
                     $('#find-input2').css('display', 'none');
                     $('#find-result').css('display', 'block');
-                    alert('가입하신 이메일로 임시 비밀번호가 발송되었습니다.');               
+                    alert('가입하신 휴대폰 번호로 임시 비밀번호가 발송되었습니다.');               
                 }
             })
             .catch(error => {           

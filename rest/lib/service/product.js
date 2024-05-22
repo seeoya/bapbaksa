@@ -522,7 +522,6 @@ const product = {
                         }
                     });
                 }
-
             })
     },
     axiosGetProduct: (req, res) => {

@@ -94,7 +94,7 @@ const AdminUserQuestions = () => {
                 <h3>문의 답변</h3>
                 <textarea name="ques_answer" id='ques_answer' defaultValue={quesAnswer} onChange={(e) => questionAnswerChangeHandler(e)} placeholder="문의 답변을 입력해주세요" ></textarea>
                 <Link to={"/admin/user/question/"}>
-                    <button type="button" onClick={questionClickBtnHandler} className="btn main">문의 작성</button>
+                    <button type="button" onClick={questionClickBtnHandler} className="btn main">답변 작성</button>
                 </Link>
             </div>
         </div>

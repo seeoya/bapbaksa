@@ -80,7 +80,8 @@ DROP TABLE IF EXISTS TBL_MARKET_CART;
 CREATE TABLE TBL_MARKET_CART (
     mc_no			INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     u_no			INT	NOT NULL,
-    i_no			INT	NOT NULL,
+    p_code			INT	NOT NULL,
+    ps_code			INT	NOT NULL,
     mc_count		INT	DEFAULT 1,
     mc_reg_date		TIMESTAMP DEFAULT NOW(),
     mc_mod_date		TIMESTAMP DEFAULT NOW()

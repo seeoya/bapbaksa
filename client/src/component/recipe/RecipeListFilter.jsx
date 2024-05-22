@@ -120,7 +120,7 @@ const RecipeListFilter = (props) => {
     }
 
     return (
-        <div className='recipe-filter'>
+        <div className='recipe-filter cb-box'>
             <div className='default-filter'>
                 <div>
                     <div className='filter-title'>내 냉장고 재료</div>
@@ -208,7 +208,7 @@ const RecipeListFilter = (props) => {
 
                 <div>
                     <div>총 {filteredRecipeCount} 건</div>
-                    <button type='button' onClick={resetRecipeEvent}>선택 옵션 되돌리기 <FontAwesomeIcon icon="fa-solid fa-rotate-left" /></button>
+                    <button type='button' className='btn main' onClick={resetRecipeEvent}>선택 옵션 되돌리기 <FontAwesomeIcon icon="fa-solid fa-rotate-left" /></button>
 
                 </div>
             </div>

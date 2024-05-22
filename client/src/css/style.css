@@ -97,6 +97,13 @@
     text-align: right;
 }
 
+button:has(i), button:has(svg), a:has(i), a:has(svg) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
 .btn-wrap {
     display: flex;
     margin-top: 10px;
@@ -206,6 +213,19 @@
     width: 100% !important;
 }
 
+.c-box {
+    padding: 20px;
+    border: 1px solid var(--gray-middle-color) !important;
+    background-color: #fff !important;
+    box-shadow: 1px 1px 3px 0px var(--gray-middle-color);
+}
+
+.cb-box, .c-box:hover {
+    padding: 15px;
+    border: 1px solid #f9fbf7 !important;
+    background-color: #f8faf0 !important;
+}
+
 /* 레이아웃 */
 .wrap {
     width: 100%;
@@ -263,6 +283,7 @@ header .user-menu .nav {
 header .user-menu .nav .link {
     padding: 3px 5px;
     font-size: 1.3rem;
+    min-width: fit-content;
 }
 
 header .logo {
@@ -287,28 +308,28 @@ header .logo img {
 
 header .header-menu .search {
     display: flex;
+    position: relative;
     gap: 10px;
     width: 100%;
+    height: 50px;
+    transition: all ease 0.3s;
 }
 
 header .header-menu .search input {
-    width: 500px;
+    width: 600px;
+    padding-right: 90px;
+    transition: all ease 0.3s;
 }
 
 header .header-menu .search .btn {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 60px;
-    height: 40px;
-}
-
-header .header-menu .search .btn {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 40px;
+    position: absolute;
+    right: 0;
+    width: 80px;
+    height: 100%;
+    transition: all ease 0.3s;
 }
 
 header, .header-wrap, header .logo {
@@ -327,13 +348,47 @@ header, .header-wrap, header .logo {
     height: 50px;
 }
 
-#market-header-wrap .btn.sub {
+.scrolled header .header-wrap .search {
+    height: 40px;
+}
+
+/*레시피 헤더*/
+#recipe-header, #main-category-wrap {
+    color: var(--main-dark-color);
+}
+
+#recipe-header .search input {
+    border: 2px solid var(--main-color);
+    border-radius: 100px;
+}
+
+#recipe-header .search .btn {
     background-color: var(--main-color);
+    border-radius: 100px;
     color: #fff;
 }
 
-#market-header-wrap .btn.sub:hover {
-    background-color: var(--main-light-color);
+/* 마켓 헤더*/
+#market-header, #market-nav {
+    background-color: #ffdac4;
+    border: 0;
+    box-shadow: none;
+}
+
+#market-header, #market-category-wrap {
+    color: #000;
+}
+
+#market-header-wrap .search input {
+    border: 2px solid transparent;
+}
+
+#market-header-wrap .search .btn {
+    border: 2px solid transparent;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    color: #fff;
 }
 
 nav {
@@ -344,7 +399,7 @@ nav {
     width: 100%;
     z-index: 30;
     border-bottom: 2px solid var(--gray-green-color);
-    box-shadow: 0px 3px 0px 0px var(--gray-light-color);
+    box-shadow: 0px 2px 3px rgba(211, 223, 206, 0.7);
     transition: all ease 0.3s;
     background-color: #fff;
 }
@@ -359,9 +414,18 @@ nav .category-wrap {
 
 nav .link {
     padding: 10px 15px;
+    min-width: fit-content;
     font-size: 1.6rem !important;
     font-weight: 500;
     transition: all ease 0.3s;
+}
+
+#main-category-wrap .link:hover {
+    color: var(--sub-light-color);
+}
+
+#market-category-wrap .link:hover {
+    color: var(--highlight-dark-color);
 }
 
 nav .user-mypage-link .user-info {
@@ -373,9 +437,6 @@ nav .user-mypage-link .user-info {
     font-size: 1.4rem;
     gap: 5px;
     transition: all ease 0.3s;
-}
-
-nav .user-info span {
 }
 
 nav .user-info img {
@@ -406,100 +467,42 @@ nav .user-info img {
 }
 
 .scrolled nav .user-info img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
+}
+
+#market-container {
+    width: 100%;
+    background-color: #f5f5ec;
 }
 
 .category-wrap .header-category {
     width: 100%;
     display: flex;
     justify-content: right;
-    padding-left: 20px;
     gap: 10px;
 }
 
-#main-category-wrap .header-category .recipe {
+.header-category .main {
     display: flex;
-    width: 80%;
+    width: 100%;
     justify-content: start;
     align-items: center;
     gap: 5px;
 }
 
-#main-category-wrap .header-category .market {
+.header-category .sub {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 250px;
+}
+
+.header-category .user-mypage-link {
     display: flex;
     align-items: center;
     justify-content: end;
     width: 200px;
-}
-
-#main-category-wrap .header-category .user-mypage-link {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    width: 200px;
-}
-
-#market-category-wrap .header-category .market {
-    display: flex;
-    width: 80%;
-    justify-content: start;
-    align-items: center;
-    gap: 5px;
-}
-
-#market-category-wrap .header-category .recipe {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    width: 200px;
-}
-
-#market-category-wrap .header-category .user-mypage-link {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    width: 200px;
-}
-
-.category-wrap .header-category {
-    background: none;
-    color: var(--main-dark-color);
-}
-
-.category-wrap .header-category .market .link {
-    background: none;
-    color: var(--main-dark-color);
-}
-
-.category-wrap .header-category .recipe .link {
-    background: none;
-}
-
-.category-wrap .header-category .recipe .link:hover {
-    color: var(--sub-dark-color);
-}
-
-.category-wrap .header-category .market .link:hover {
-    color: var(--main-light-color);
-}
-
-.category-wrap .header-category .market .link_market {
-    background: none;
-    color: var(--main-dark-color);
-}
-
-.category-wrap .header-category .recipe .link_recipe {
-    background: none;
-    color: var(--sub-dark-color);
-}
-
-.category-wrap .header-category .recipe .link_recipe:hover {
-    color: var(--sub-light-color);
-}
-
-.category-wrap .header-category .market .link_market:hover {
-    color: var(--main-light-color);
 }
 
 /* 페이지 */
@@ -508,19 +511,19 @@ nav .user-info img {
     top: 0px;
     width: 100%;
     margin: 0 auto;
-    padding: 200px 20px 50px;
+    padding: 200px 20px 150px;
     min-height: 90vh;
     max-width: 1000px;
 }
 
 .content-wrap {
     flex-direction: column;
-    gap: 30px;
+    gap: 50px;
 }
 
 .content-wrap h2.title {
     text-align: center;
-    font-size: 3rem;
+    font-size: 3.2rem;
 }
 
 .content-wrap h3.title {
@@ -558,6 +561,24 @@ nav .user-info img {
     grid-row-start: 2;
     grid-row-end: 3;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+}
+
+.container .recipe-grid .menu-wrap h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
+    width: 100%;
+    padding: 20px 0 5px 10px;
+}
+
+.container .recipe-grid .menu-wrap .menu .line {
+    height: 0; width: 100%;
+    margin: 20px 0 20px 0;
+    border-bottom: 2px dashed #d0cfcf;
 }
 
 .container .recipe-grid .menu {
@@ -565,6 +586,16 @@ nav .user-info img {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 400px;
+}
+
+.container .recipe-grid .menu .nav-link {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
 }
 
 .container .recipe-grid .menu a {
@@ -585,12 +616,10 @@ nav .user-info img {
     flex-direction: row;
     text-shadow: -1px 0px #a8a8a8, 0px 1px #a8a8a8, 1px 0px #a8a8a8, 0px -1px #a8a8a8;
     font-size: 1.3em;
-    font-weight: bolder;
-    padding-left: 10px;
+    font-weight: 500;
 }
 
 .container .recipe-grid .menu a .icon {
-    padding-left: 10px;
     font-size: 28px;
 }
 
@@ -598,7 +627,8 @@ nav .user-info img {
 .container .recipe-grid .swiper-container {
     grid-column-start: 1;
     grid-column-end: 4;
-    height: 300px;
+    height: 480px;
+    margin-top: -40px;
 }
 
 .container .recipe-grid .swiper-container .my-swiper {
@@ -622,29 +652,27 @@ nav .user-info img {
     grid-column-end: 3;
     grid-row-start: 2;
     grid-row-end: 3;
-    height: 400px;
-    max-width: 600px;
+    width: 600px;
 }
 
 .container .recipe-grid .recommend-container .today-recommend {
-    width: 600px;
-    height: 500px;
+    width: 600px; height: 400px;
     padding: 10px;
 }
 
 .container .recipe-grid .recommend-container .today-recommend h2 {
     padding: 10px 0 5px 10px;
-    font-size: 2em;
+    font-size: 2.5em;
     text-align: center;
 }
 
 .container .recipe-grid .recommend-container .today-recommend h3 {
-    font-size: 1.4em;
+    font-size: 2.0em;
 }
 
 .container .recipe-grid .recommend-container .today-recommend .line {
     height: 0;
-    width: 610px;
+    width: 100%;
     margin: 20px 0 40px 0;
     border-bottom: 2px dashed #d0cfcf;
 }
@@ -666,29 +694,27 @@ nav .user-info img {
 }
 
 .random-recipe-info {
-    width: 600px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
 .random-recipe-info a {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
 }
 
 .random-recipe-detail {
-    justify-content: center;
-    align-items: center;
+    margin-left: 20px;
+}
+
+.random-recipe-detail .detail-title {
+    font-size: 2em;
 }
 
 .random-recipe-detail p {
+    margin-top: 10px;
+    font-size: 1.1em;
     max-width: 450px;
     word-break: keep-all;
-    text-align: center;
 }
 
 .random-recipe-info img {
@@ -722,7 +748,17 @@ nav .user-info img {
 }
 
 .random-ingre-detail {
+    margin-top: 10px;
     text-align: center;
+}
+
+.random-ingre-detail h3 {
+    font-size: 1.3em;
+}
+
+.random-ingre-detail p {
+    margin-top: 10px;
+    font-size: 1.3em;
 }
 
 /* market grid start */
@@ -758,7 +794,7 @@ nav .user-info img {
     grid-row-start: 3;
     grid-row-end: 4;
     height: 400px;
-    max-width: 900px;
+    max-width: 100%;
 }
 
 .container .market-grid .swiper-container .my-swiper {
@@ -779,20 +815,30 @@ nav .user-info img {
 
 /* market 1st swiper start */
 .container .market-grid .cheep-container .cheep-recommend {
-    width: 960px;
+    width: 100%;
     height: auto;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .container .market-grid .cheep-container .cheep-recommend h2 {
     padding: 10px 0 5px 10px;
+    display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2em;
+    font-size: 2.5em;
 }
 
 .container .market-grid .cheep-container .cheep-recommend h3 {
-    font-size: 1.2em;
+    font-size: 1.3em;
+}
+
+.container .market-grid .cheep-container .cheep-recommend p {
+    margin-top: 10px;
+    font-size: 1.3em;
 }
 
 .container .market-grid .cheep-container .cheep-recommend .line {
@@ -802,8 +848,14 @@ nav .user-info img {
     border-bottom: 2px dashed #d0cfcf;
 }
 
-.container .market-grid .cheep-container .today-recommend .today-recommend-swiper {
+.cheep-recommend-swiper {
+    width: 100%;
+}
+
+.market-grid .cheep-container .today-recommend .today-recommend-swiper {
     height: 500px;
+    display: flex;
+    flex-direction: row;
 }
 
 .container .market-grid .cheep-container .today-recommend .today-recommend-swiper .my-swiper {
@@ -1101,7 +1153,7 @@ nav .user-info img {
 /* 푸터 */
 footer {
     width: 100%;
-    background-color: var(--gray-light-color);
+    background-color: var(--gray-color);
     position: relative;
     bottom: 0;
 }
@@ -1203,6 +1255,8 @@ footer .util_footer {
 
 footer .util_footer .btn {
     width: 100%;
+    background-color: #444;
+    color: #fff;
 }
 
 /* 스타일가이드 */
@@ -1235,7 +1289,6 @@ footer .util_footer .btn {
 
 #style_guide .main .box.light {
     background-color: var(--main-light-color);
-    color: #3c6300;
 }
 
 #style_guide .main .box.dark {
@@ -1284,7 +1337,16 @@ footer .util_footer .btn {
 
 #style_guide .gray .box.light {
     background-color: var(--gray-light-color);
-    color: #3c6300;
+    color: #000;
+}
+
+#style_guide .gray .box.middle {
+    background-color: var(--gray-middle-color);
+    color: #000;
+}
+
+#style_guide .gray .box.deep {
+    background-color: var(--gray-deep-color);
 }
 
 #style_guide .gray .box.dark {
@@ -2133,7 +2195,6 @@ footer .util_footer .btn {
     align-items: start;
     padding: 20px;
     width: 100%;
-    background-color: #eee;
     gap: 10px;
 }
 
@@ -2144,7 +2205,6 @@ footer .util_footer .btn {
     align-items: start;
     padding: 20px;
     width: 100%;
-    background-color: #eee;
     gap: 10px;
 }
 
@@ -2197,7 +2257,7 @@ footer .util_footer .btn {
     width: calc(50% - 5px);
     background-color: var(--main-light-color);
     word-break: keep-all;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
 }
 
 #recipe .filter-wrap.region .btn, #recipe .filter-wrap.difficult .btn {
@@ -2274,23 +2334,36 @@ footer .util_footer .btn {
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 30px;
+    gap: 80px;
 }
 
 #recipe .recipe-view > div {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 }
 
 #recipe .recipe-view .recipe-title {
-    font-size: 2rem;
+    font-size: 2.3rem;
+    position: relative;
+    padding-left: 30px;
+}
+
+#recipe .recipe-view .recipe-title::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 20px;
+    height: 0;
+    border-top: 3px solid #282828;
 }
 
 #recipe .recipe-view .recipe-content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 50px;
 }
 
 #recipe .recipe-info {
@@ -2321,22 +2394,31 @@ footer .util_footer .btn {
     gap: 40px;
 }
 
+#recipe .recipe-view .recipe-info .recipe-content img {
+    width: 450px;
+    height: 400px;
+    object-fit: cover;
+}
+
 #recipe .btn-more {
     font-size: 1.8rem;
+    margin-top: 50px;
     grid-column: 1/5;
+    height: 50px;
+    border-radius: 200px;
 }
 
 #recipe .recipe-view .recipe-info .info {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     width: 100%;
 }
 
 #recipe .recipe-view .recipe-info .info div {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
 }
 
 #recipe .recipe-view .recipe-info .info .sub {
@@ -2552,17 +2634,34 @@ background-color: var(--highlight-light-color);
     align-items: center;
     width: 100%;
     min-height: 500px;
-    gap: 20px;
+    gap: 30px;
 }
 
 .mypage-list .btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    max-width: 200px;
     height: 300px;
-    font-size: 2rem;
+    gap: 30px;
+    font-size: 2.3rem;
+    border-radius: 50px;
+    box-shadow: 7px 10px 2px -2px rgba(0, 0, 0, 0.1);
+}
+
+.mypage-list .btn svg {
+    width: 100px;
+    height: 100px;
 }
 
 .recipe-item img {
     width: 200px;
+}
+
+.signup-wrap .form {
+    width: 450px;
 }
 
 .signup-wrap .input-wrap .pw-view-icon {

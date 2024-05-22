@@ -2,7 +2,6 @@ import ApexCharts from 'apexcharts';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { NewProductQuery } from '../../query/productQuerys';
 import { getToken } from '../../storage/loginedToken';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';

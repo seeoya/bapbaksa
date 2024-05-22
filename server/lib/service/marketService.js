@@ -368,9 +368,12 @@ const marketService = {
 
 async function axios_getCartInfo(i_no) {
     try {
-        const response = await axios.post("http://localhost:3002/product/getProduct", {
-            I_NO: i_no,
-        });
+        const response = await axios.post(
+            process.env.REACT_APP_REST_SERVER_URL + "/product/getProduct",
+            {
+                I_NO: i_no,
+            }
+        );
         return response.data;
     } catch (error) {
         console.log(error);
@@ -379,9 +382,12 @@ async function axios_getCartInfo(i_no) {
 
 async function axios_getProductInfo(p_no) {
     try {
-        const response = await axios.post("http://localhost:3002/product/getProductInfo", {
-            P_NO: p_no,
-        });
+        const response = await axios.post(
+            process.env.REACT_APP_REST_SERVER_URL + "/product/getProductInfo",
+            {
+                P_NO: p_no,
+            }
+        );
         return response.data;
     } catch (error) {
         console.log(error);
@@ -390,9 +396,12 @@ async function axios_getProductInfo(p_no) {
 
 async function axios_get_product(pNo) {
     try {
-        const response = await axios.post("http://localhost:3002/product/axios_get_product", {
-            pNo,
-        });
+        const response = await axios.post(
+            process.env.REACT_APP_REST_SERVER_URL + "/product/axios_get_product",
+            {
+                pNo,
+            }
+        );
         return response.data;
     } catch (error) {
         console.log(error);
@@ -401,9 +410,12 @@ async function axios_get_product(pNo) {
 
 async function axios_getProdCodeForDeleteCart(pCode) {
     try {
-        const response = await axios.post("http://localhost:3002/product/delete_cart_prod_info", {
-            pCode,
-        });
+        const response = await axios.post(
+            process.env.REACT_APP_REST_SERVER_URL + "/product/delete_cart_prod_info",
+            {
+                pCode,
+            }
+        );
         return response.data;
     } catch (error) {
         console.log(error);

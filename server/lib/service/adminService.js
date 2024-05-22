@@ -784,9 +784,12 @@ const adminService = {
 
 async function axios_getProdName(p_no) {
     try {
-        const response = await axios.post("http://localhost:3002/product/getProdName", {
-            P_NO: p_no,
-        });
+        const response = await axios.post(
+            process.env.REACT_APP_REST_SERVER_URL + "/product/getProdName",
+            {
+                P_NO: p_no,
+            }
+        );
         return response.data;
     } catch (error) {
         console.log(error);

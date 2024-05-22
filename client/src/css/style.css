@@ -793,7 +793,7 @@ nav .user-info img {
     grid-column-end: 3;
     grid-row-start: 3;
     grid-row-end: 4;
-    height: 400px;
+    height: 300px;
     max-width: 100%;
 }
 
@@ -873,7 +873,11 @@ nav .user-info img {
 .container .market-grid .cheep-container {
     grid-column-start: 1;
     grid-column-end: 3;
-    height: 380px;
+    height: 350px;
+}
+
+.container .market-grid .cheep-container:nth-child(3) {
+    margin-top: -70px;
 }
 
 .container .market-grid .cheep-container h2 {
@@ -886,7 +890,7 @@ nav .user-info img {
 
 .container .market-grid .cheep-container .line {
     height: 0;
-    width: 940px;
+    width: 960px;
     margin: 20px 0 40px 0;
     border-bottom: 2px dashed #d0cfcf;
 }

@@ -7,17 +7,21 @@ import { getToken } from "../../storage/loginedToken";
 const MarketNav = () => {
 
     const [loginedID, setLoginedID] = useState('');
+    const [uProfile, setUProfile] = useState('');
+    const [isProfile, setIsProfile] = useState(false);
 
     useEffect(() => {
-
         let loginedUId = getToken('loginedUId');
+        let uProfile = getToken('uProfile');
         console.log('loginedUIdString', loginedUId);
 
         if (loginedUId !== null) {
             setLoginedID(loginedUId);
+        } else if(uProfile !== null) {            
+            setUProfile(uProfile);
+            setIsProfile(true);
         }
-
-    }, [loginedID]);
+    }, [loginedID, uProfile, isProfile]);
 
     return (
         <nav id="market-nav">
@@ -49,8 +53,13 @@ const MarketNav = () => {
                                         <div className="user-info">
                                             <span> {loginedID} </span>
                                             <span> 님 </span>
-                                            {/* <img src="/imgs/logo/logo.png" alt="마이페이지" /> */}
-                                            <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfile}`} alt="" />
+                                            {isProfile ? <>                                       
+                                            <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${loginedID}/${uProfile}`} alt="profile" />
+                                            </>
+                                            :
+                                            <>
+                                            <img src="/imgs/logo/logo.png" alt="마이페이지" />
+                                            </>}
                                         </div>
                                     </Link>
                                 </div>

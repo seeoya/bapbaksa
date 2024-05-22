@@ -291,7 +291,7 @@ const userService = {
                                 [refreshToken, post.u_id], (error, result) => {
 
                                     if (result.affectedRows > 0) {
-                                        return res.json({ result, uId: post.u_id, uNo: user[0].u_no, accessToken, refreshToken });
+                                        return res.json({ result, uId: post.u_id, uNo: user[0].u_no, uProfile:user[0].pi_name, accessToken, refreshToken });
 
                                     } else {
                                         return res.json({ result, message: 'DB 에러! 관리자에게 문의하세요.' });

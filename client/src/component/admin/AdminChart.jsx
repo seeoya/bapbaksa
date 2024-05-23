@@ -87,6 +87,11 @@ const AdminChart = () => {
                 type: "gradient",
                 gradient: { gradientToColors: ["orange"], stops: [0, 100] },
             },
+            plotOptions: {
+                bar: {
+                    distributed: true
+                }
+            },
             colors: ['#99C2A2', '#C5EDAC', '#66C7F4'],
         };
         if (monthChartRef.current.chart) {
@@ -116,8 +121,7 @@ const AdminChart = () => {
             {
                 name: "전달 매출",
                 data: lastCtegoryDate.map(data => data.y)
-            }
-            ],
+            }],
             chart: {
                 height: 450,
                 width: 600,
@@ -163,7 +167,7 @@ const AdminChart = () => {
                 type: "gradient",
                 gradient: { gradientToColors: ["orange"], stops: [0, 100] },
             },
-            colors: ["red"]
+            colors: ["#FF5733", "#8fc769"], // 첫 번째 시리즈는 빨간색, 두 번째 시리즈는 초록색
         };
         if (categoryChartRef.current.chart) {
             categoryChartRef.current.chart.updateOptions(options);

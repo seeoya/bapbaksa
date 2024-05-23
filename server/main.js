@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static('/home/ubuntu/user/upload/profile_imgs/'));
 
 app.get("/", (req, res) => {
     res.send("SERVICE SERVER 3001");

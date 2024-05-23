@@ -104,7 +104,7 @@ const SignIn = () => {
             }
             setIsLoading(true);
         } catch (error) {
-            alert(error.data.message);
+            alert('로그인에 실패하였습니다.');
         }
     }
 

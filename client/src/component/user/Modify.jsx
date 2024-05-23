@@ -95,9 +95,7 @@ const Modify = () => {
                 }
             })
             .catch(error => {
-                if (error.response.data.message !== undefined) {
-                    getRefreshToken();
-                }
+                
             })
             .finally(data => {
                 setIsLoading(true);
@@ -109,15 +107,19 @@ const Modify = () => {
         let input_value = e.target.value;
 
         if (input_name === "u_pw") {
+            setPwFlag(false);
             pwCheck(input_value);
             setUPw(input_value);
         } else if (input_name === "u_check_pw") {
+            setRPwFlag(false);
             rePwCheck(input_value);
             setUCheckPw(input_value);
         } else if (input_name === "u_mail") {
+            setMailFlag(false);
             emailCheck(input_value);
             setUMail(input_value);
         } else if (input_name === "u_phone") {
+            setPhoneFlag(false);
             phoneCheck(input_value);
             setUPhone(input_value);
         } else if (input_name === "u_profile") {
@@ -223,7 +225,7 @@ const Modify = () => {
         }
     }
 
-    const modifyBtnClickHandler = () => {
+    const modifyBtnClickHandler = async () => {
         let form = document.modify_form;
 
         if (uPw === '') {
@@ -239,6 +241,13 @@ const Modify = () => {
             alert('휴대폰 번호를 입력해 주세요');
             form.u_phone.focus();
         } else {
+        
+            await axios_modify();
+        }
+    }
+
+        const axios_modify = async () => {
+
             let u_profiles = $('input[name="u_profile"]');
             let files = u_profiles[0].files;
 
@@ -251,38 +260,37 @@ const Modify = () => {
             formData.append("u_zip_code", uZipcode);
             formData.append("u_first_address", uFirstAddr);
             formData.append("u_second_address", uSecondAddr);
-            formData.append("u_profile_img", files[0]);
-
-            axios({
-                url: process.env.REACT_APP_SERVER_URL + `/api/user/modify_confirm`,            
+            formData.append("u_profile_img", files[0]);           
+            
+            await axios({
+                url: process.env.REACT_APP_SERVER_URL + `/api/user/modify_confirm`,
                 method: 'put',
-                data: formData,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }).then(res => {
+                data: formData,                  
+                headers:{Authorization: `Bearer ${accessToken}`},
+                }).then(res => {                                       
+
                 setIsLoading(false);
-                if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {
+
+                console.log(res.data);        
+                if (res.data.modify === true) {
                     
                     alert('정보수정에 성공하였습니다.');
-                    setToken('uProfile', res.data.uProfile);
-                    console.log('======',res.data.uProfile);
-                    console.log('++++++++',getToken('uProfile'));
-                    
+                    setToken('uProfile', res.data.uProfile);                                       
                     navigate('/');
                 }
             })
-                .catch(error => {
+            .catch(error => {
                     alert('정보수정에 실패하였습니다.');
-                })
-                .finally(data => {
+            })
+            .finally(data => {
                     setIsLoading(true);
-                });
+            });                 
 
-            setUPw('');
-            setUCheckPw('');
+                setUPw('');
+                setUCheckPw('');
+        
         }
-    }
+    
 
     return (
         <>

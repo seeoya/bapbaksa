@@ -277,7 +277,7 @@ const userService = {
 
     modify_confirm: (req, res) => {
         let post = req.body;
-
+      
         if (req.headers.authorization) {
             const accessToken = req.headers.authorization.split(" ")[1];
             const verified = tokenUtils.verify(accessToken);
@@ -303,12 +303,12 @@ const userService = {
                 db.query(sql, state, (error, result) => {
                     if (error) {
                         if (req.file !== undefined) {
-                            fs.unlink(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
+                            fs.unlink(`C:\\project\\node\\bapbaksa\\client\\public\\imgs\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
                            // fs.unlink(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
                                 (error) => {}
                             );
                         }
-                        res.json({ result, message: "정보수정 실패!" });
+                        res.json({ result, modify: false});
                     } else {
                         if (req.file !== undefined) {
                             db.query(
@@ -321,12 +321,14 @@ const userService = {
                                             [req.file.filename, post.u_no],
                                             (error, result) => {
                                                 if (result.affectedRows > 0) {
-                                                    res.json({ result, message: "정보수정 성공!", uProfile:req.file.filename});
+                                                    fs.unlink(`C:\\project\\node\\bapbaksa\\client\\public\\imgs\\upload\\profile_imgs\\${post.u_id}\\${user[0].pi_name}`,
+                                                    // fs.unlink(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
+                                                         (error) => {}
+                                                     );
+
+                                                    res.json({ result, modify: true, uProfile:req.file.filename});
                                                 } else {
-                                                    res.json({
-                                                        result,
-                                                        message: "프로파일 수정 실패!",
-                                                    });
+                                                    res.json({result, modifyFile: false});
                                                 }
                                             }
                                         );
@@ -336,11 +338,11 @@ const userService = {
                                             [req.file.filename, post.u_no],
                                             (error, result) => {
                                                 if (result.affectedRows > 0) {
-                                                    res.json({ result, message: "정보수정 성공!" });
+                                                    res.json({ result, modify: true });
                                                 } else {
                                                     res.json({
                                                         result,
-                                                        message: "프로파일 수정 실패!",
+                                                        modify: false,
                                                     });
                                                 }
                                             }
@@ -349,7 +351,7 @@ const userService = {
                                 }
                             );
                         } else {
-                            res.json({ result, message: "정보수정 성공!" });
+                            res.json({ result, modify: true });
                         }
                     }
                 });

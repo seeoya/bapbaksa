@@ -11,9 +11,12 @@ const googleid = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const kakaoid = process.env.REACT_APP_KAKAO_CLIENT_ID;
 const naverid = process.env.REACT_APP_NAVER_CLIENT_ID;
 
-const googleRedirect = `http%3A//localhost:3000/auth/google/callback`;
-const kakaoRedirect = `http://localhost:3000/oauth/kakao/callback`;
-const naverRedirect = `http://localhost:3000/oauth/naver/callback`;
+const googleRedirect = `http://54.253.228.81:3000/auth/google/callback`;
+const kakaoRedirect = `http://54.253.228.81:3000/oauth/kakao/callback`;
+const naverRedirect = `http://54.253.228.81:3000/oauth/naver/callback`;
+// const googleRedirect = `http%3A//localhost:3000/auth/google/callback`;
+// const kakaoRedirect = `http://localhost:3000/oauth/kakao/callback`;
+// const naverRedirect = `http://localhost:3000/oauth/naver/callback`;
 
 
 //구글 로그인 요청 주소

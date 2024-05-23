@@ -680,8 +680,8 @@ const adminService = {
                     O.p_no = P.PROD_NO
                 WHERE 
                     O.o_s_no = 5
-                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
-                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
                 UNION ALL
                 SELECT 
                     '채소' AS P_NO,
@@ -694,8 +694,8 @@ const adminService = {
                     O.p_no = P.PROD_NO
                 WHERE 
                     O.o_s_no = 5
-                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
-                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
                 UNION ALL
                 SELECT 
                     '과일' AS P_NO,
@@ -708,8 +708,8 @@ const adminService = {
                     O.p_no = P.PROD_NO
                 WHERE 
                     O.o_s_no = 5
-                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
-                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
                 UNION ALL
                 SELECT 
                     '육류' AS P_NO,
@@ -722,8 +722,8 @@ const adminService = {
                     O.p_no = P.PROD_NO
                 WHERE 
                     O.o_s_no = 5
-                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
-                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
                 UNION ALL
                 SELECT 
                     '어패류' AS P_NO,
@@ -736,8 +736,8 @@ const adminService = {
                     O.p_no = P.PROD_NO
                 WHERE 
                     O.o_s_no = 5
-                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
-                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
                 UNION ALL
                 SELECT 
                     '가공 육류' AS P_NO,
@@ -750,8 +750,8 @@ const adminService = {
                     O.p_no = P.PROD_NO
                 WHERE 
                     O.o_s_no = 5
-                    AND YEAR(O.o_reg_date) = YEAR(CURDATE())
-                    AND MONTH(O.o_reg_date) = MONTH(CURDATE())
+                    AND YEAR(O.o_reg_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+                    AND MONTH(O.o_reg_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
                 UNION ALL
                 SELECT 
                     '가공 식품' AS P_NO,

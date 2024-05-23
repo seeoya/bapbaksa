@@ -16,10 +16,12 @@ const MarketNav = () => {
 
         if (loginedUId !== null) {
             setLoginedID(loginedUId);
-        } else if (uProfile !== null) {
+            if(uProfile !== null){
             setUProfile(uProfile);
             setIsProfile(true);
+            }
         }
+
     }, [loginedID, uProfile, isProfile]);
 
     return (
@@ -53,11 +55,11 @@ const MarketNav = () => {
                                             <span> {loginedID} </span>
                                             <span> 님 </span>
                                             {isProfile ? <>
-                                                <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${loginedID}/${uProfile}`} alt="profile" />
-                                            </>
+                                                <img src={`/imgs/upload/profile_imgs/${loginedID}/${uProfile}`} alt="profile" />
+                                                </>
                                                 :
                                                 <>
-                                                    <img src="/imgs/logo/logo.png" alt="마이페이지" />
+                                                    <img src="/imgs/logo/market_logo.png" alt="마이페이지" />
                                                 </>}
                                         </div>
                                     </Link>

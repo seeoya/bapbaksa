@@ -14,10 +14,12 @@ const Nav = () => {
 
         if (loginedUId !== null) {
             setLoginedID(loginedUId);
-        } else if (uProfile !== null) {
+            if(uProfile !== null){
             setUProfile(uProfile);
             setIsProfile(true);
+            }
         }
+
     }, [loginedID, uProfile, isProfile]);
 
     return (
@@ -53,7 +55,8 @@ const Nav = () => {
                                             <span> {loginedID} </span>
                                             <span> 님 </span>
                                             {isProfile ? <>
-                                                <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${loginedID}/${uProfile}`} alt="profile" />
+                                                {/* <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${loginedID}/${uProfile}`} alt="profile" /> */}
+                                                <img src={`/imgs/upload/profile_imgs/${loginedID}/${uProfile}`} alt="profile" />
                                             </>
                                                 :
                                                 <>

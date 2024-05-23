@@ -3,7 +3,7 @@ import axios from 'axios';
 import $ from 'jquery';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getToken } from '../../storage/loginedToken';
+import { getToken, setToken } from '../../storage/loginedToken';
 import { getRefreshToken } from '../../util/refreshToken';
 import { setTitle } from '../../util/setTitle';
 import Loading from '../include/Loading';
@@ -254,7 +254,7 @@ const Modify = () => {
             formData.append("u_profile_img", files[0]);
 
             axios({
-                url: process.env.REACT_APP_SERVER_URL + `/api/user/modify_confirm`,
+                url: process.env.REACT_APP_SERVER_URL + `/api/user/modify_confirm`,            
                 method: 'put',
                 data: formData,
                 headers: {
@@ -263,8 +263,12 @@ const Modify = () => {
             }).then(res => {
                 setIsLoading(false);
                 if (res.data !== null && Number(parseInt(res.data.result.affectedRows)) > 0) {
-                    setIsLoading(true);
+                    
                     alert('정보수정에 성공하였습니다.');
+                    setToken('uProfile', res.data.uProfile);
+                    console.log('======',res.data.uProfile);
+                    console.log('++++++++',getToken('uProfile'));
+                    
                     navigate('/');
                 }
             })
@@ -334,7 +338,9 @@ const Modify = () => {
                                 <div className='input-wrap' id='profile'>
                                     <div className="profile-img">
                                     {isProfile ? <>                                       
-                                        <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfileImg}`} alt="profile" />
+                                        {/* <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${uId}/${uProfileImg}`} alt="profile" /> */}
+                                        <img src={`/imgs/upload/profile_imgs/${uId}/${uProfileImg}`} alt="" />
+
                                         </>
                                         :
                                         <>

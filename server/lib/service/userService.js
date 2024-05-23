@@ -179,9 +179,9 @@ const userService = {
         db.query(sql, state, (error, result) => {
             if (error) {
                 if (req.file !== undefined) {
-                    //fs.unlink(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
-                    fs.unlink(
-                        `/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
+                    fs.unlink(`C:\\project\\node\\bapbaksa\\client\\public\\imgs\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
+                    // fs.unlink(
+                    //     `/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
                         (error) => {}
                     );
                 }
@@ -303,9 +303,8 @@ const userService = {
                 db.query(sql, state, (error, result) => {
                     if (error) {
                         if (req.file !== undefined) {
-                            //fs.unlink(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
-                            fs.unlink(
-                                `/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
+                            fs.unlink(`C:\\bapbaksa\\upload\\profile_imgs\\${post.u_id}\\${req.file.filename}`,
+                           // fs.unlink(`/home/ubuntu/user/upload/profile_imgs/${post.u_id}/${req.file.filename}`,
                                 (error) => {}
                             );
                         }
@@ -322,7 +321,7 @@ const userService = {
                                             [req.file.filename, post.u_no],
                                             (error, result) => {
                                                 if (result.affectedRows > 0) {
-                                                    res.json({ result, message: "정보수정 성공!" });
+                                                    res.json({ result, message: "정보수정 성공!", uProfile:req.file.filename});
                                                 } else {
                                                     res.json({
                                                         result,

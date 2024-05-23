@@ -15,7 +15,7 @@ const { sendMailForID, sendMailForPW } = require("../utils/mail");
 const { sendSmsForID, sendSmsForPW } = require("../utils/sms");
 require("dotenv").config();
 
-const EC2_SERVER_URL = process.env.EC2_SERVER_URL;
+const EC2_SERVER_URL = "http://54.253.228.81:3000";
 
 const GOOGLE_WEB_CLIENT_ID = process.env.GOOGLE_WEB_CLIENT_ID;
 const GOOGLE_WEB_CLIENT_SECRET = process.env.GOOGLE_WEB_CLIENT_SECRET;
@@ -391,7 +391,7 @@ const userService = {
                         db.query(
                             `delete FROM TBL_USER_PROFILE_IMG WHERE u_no = ?`,
                             [post.u_no],
-                            (error, result) => {                                
+                            (error, result) => {
                                 if (result.affectedRows > 0) {
                                     let sql = `DELETE f, r, c from TBL_FRIDGE f left JOIN TBL_LIKE_RECIPE r ON f.u_no = r.u_no 
                                     left JOIN  TBL_MARKET_CART c ON f.u_no = c.u_no WHERE f.u_no = ?`;
@@ -408,7 +408,7 @@ const userService = {
                                                 (error) => {}
                                             );
 
-                                            res.json({delete: true});
+                                            res.json({ delete: true });
                                         }
                                     });
                                 } else {
@@ -420,7 +420,7 @@ const userService = {
                                         if (error) {
                                             res.json(error);
                                         } else {
-                                            res.json({delete: true});
+                                            res.json({ delete: true });
                                         }
                                     });
                                 }
@@ -641,7 +641,7 @@ const userService = {
     kakao_callback: async (req, res) => {
         const kakaoid = KAKAO_WEB_CLIENT_ID;
         // const KAKAO_REDIRECT_URI = `http://localhost:3000/oauth/kakao/callback`;
-        const KAKAO_REDIRECT_URI = EC2_SERVER_URL + `/oauth/kakao/callback`;
+        const KAKAO_REDIRECT_URI = "http://54.253.228.81:3000" + `/oauth/kakao/callback`;
 
         let post = req.body;
         let code = post.code;
@@ -734,7 +734,7 @@ const userService = {
         const naversecret = NAVER_WEB_CLIENT_SECRET;
 
         //const NAVER_REDIRECT_URI = `http://localhost:3000/oauth/naver/callback`;
-        const NAVER_REDIRECT_URI = EC2_SERVER_URL + `/oauth/naver/callback`;
+        const NAVER_REDIRECT_URI = "http://54.253.228.81:3000" + `/oauth/naver/callback`;
 
         let post = req.body;
         let code = post.code;

@@ -11,13 +11,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static('/home/ubuntu/user/upload/profile_imgs/'));
+app.use(express.static("/home/ubuntu/user/upload/profile_imgs/"));
 
 app.get("/", (req, res) => {
     res.send("SERVICE SERVER 3001");
 });
 
-let origin_addr = ["http://54.253.228.81:3000", "http://52.62.249.221:3002"];
+let origin_addr = [
+    "http://54.253.228.81:3000",
+    "http://52.62.249.221:3002",
+    "https://oauth2.googleapis.com/token",
+    "https://kauth.kakao.com/oauth/token",
+];
+
 if (os.version().includes("Windows")) {
     origin_addr = [
         "http://localhost:3000",

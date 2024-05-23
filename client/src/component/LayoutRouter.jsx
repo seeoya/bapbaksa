@@ -7,30 +7,48 @@ import Home from './Home';
 import MainLayout from './MainLayout';
 import MartketMainLayout from './MarketMainLayout';
 import StyleGuide from './StyleGuide';
+import AdminChart from './admin/AdminChart';
 import AdminMain from './admin/AdminMain';
 import AdminMarket from './admin/AdminMarket';
 import AdminMarketRefund from './admin/AdminMarketRefund';
+import AdminMarketRefundView from './admin/AdminMarketRefundView';
+import AdminMarketStock from './admin/AdminMarketStock';
 import AdminMarketView from './admin/AdminMarketView';
 import AdminUser from './admin/AdminUser';
+import AdminUserQuestions from './admin/AdminUserQuestions';
+import AdminUserQuestionsWrite from './admin/AdminUserQuestionsWrite';
 import AdminUserView from './admin/AdminUserView';
 import ListView from './market/ListView';
+import Market from './market/Market';
 import MartketLayout from './market/MarketLayout';
 import MarketList from './market/MarketList';
-import Market from './market/Market';
 import Payment from './market/Payment';
-import PaymentHistory from './market/PaymentHistory';
 import PaymentDetail from './market/PaymentDetail';
+import PaymentHistory from './market/PaymentHistory';
 import ShoppingCart from './market/ShoppingCart';
+import LikeRecipe from './mypage/LikeRecipe';
+import MyPage from './mypage/MyPage';
+import { CheckoutPage } from './payment/Checkout';
+import { FailPage } from './payment/Fail';
+import { SuccessPage } from './payment/Success';
 import MyFridge from './recipe/MyFridge';
 import RecipeLayout from './recipe/RecipeLayout';
 import RecipeList from './recipe/RecipeList';
 import RecipeView from './recipe/RecipeView';
 import Delete from './user/Delete';
+import FindID from './user/FindID';
+import FindPW from './user/FindPW';
+import Google from './user/Google';
+import Kakao from './user/Kakao';
 import Modify from './user/Modify';
+import Naver from './user/Naver';
+import Questions from './user/Questions';
 import SignIn from './user/SignIn';
 import SignOut from './user/SignOut';
 import SignUp from './user/SignUp';
 import UserLayout from './user/UserLayout';
+
+
 
 const LayoutRouter = () => {
 
@@ -38,16 +56,25 @@ const LayoutRouter = () => {
         <Routes>
             <Route element={<MainLayout />}>
                 <Route path="/" element={<Home />} />
+                <Route path="/auth/google/callback" element={<Google />}></Route>
+                <Route path="/oauth/kakao/callback" element={<Kakao />}></Route>
+                <Route path="/oauth/naver/callback" element={<Naver />}></Route>
+                <Route path="question" element={<Questions />}></Route>
+
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="signup" element={<SignUp />}></Route>
                     <Route path="signin" element={<SignIn />}></Route>
+                    <Route path="findid" element={<FindID />}></Route>
+                    <Route path="findpw" element={<FindPW />}></Route>
                     <Route path="modify" element={<Modify />}></Route>
                     <Route path="signout" element={<SignOut />}></Route>
                     <Route path="delete" element={<Delete />}></Route>
                 </Route>
 
                 <Route path="/mypage" element={<Outlet />}>
+                    <Route path="" element={<MyPage />}></Route>
                     <Route path="myfridge" element={<MyFridge />}></Route>
+                    <Route path="like" element={<LikeRecipe />}></Route>
                 </Route>
 
                 <Route path="/recipe" element={<RecipeLayout />}>
@@ -73,6 +100,12 @@ const LayoutRouter = () => {
                     <Route path="pay-history" element={<PaymentHistory />}></Route>
                     <Route path="payment_detail/:oId" element={<PaymentDetail />}></Route>
                 </Route>
+
+                <Route path="/sandbox" element={<MartketLayout />}>
+                    <Route path="" element={<CheckoutPage />}></Route>
+                    <Route path="success" element={<SuccessPage />}></Route>
+                    <Route path="fail" element={<FailPage />}></Route>
+                </Route>
             </Route>
 
             <Route path="/admin" element={<AdminLayout />}>
@@ -81,14 +114,20 @@ const LayoutRouter = () => {
                 <Route path="user" element={<Outlet />}>
                     <Route path="" element={<AdminUser />}></Route>
                     <Route path=":no" element={<AdminUserView />}></Route>
+                    <Route path="question" element={<Outlet />}>
+                        <Route path="" element={<AdminUserQuestions />}></Route>
+                        <Route path=":no" element={<AdminUserQuestionsWrite />}></Route>
+                    </Route>
                 </Route>
 
                 <Route path="market" element={<Outlet />}>
                     <Route path="" element={<AdminMarket />}></Route>
-                    <Route path=":no" element={<AdminMarketView />}></Route>
+                    <Route path=":id" element={<AdminMarketView />}></Route>
                     <Route path="refund" element={<AdminMarketRefund />}></Route>
+                    <Route path="refund/:no" element={<AdminMarketRefundView />}></Route>
+                    <Route path="chart" element={<AdminChart />}></Route>
+                    <Route path="stock" element={<AdminMarketStock />}></Route>
                 </Route>
-
             </Route>
         </Routes>
     );

@@ -10,8 +10,10 @@ const MarketMainLayout = () => {
         <>
             <MarketHeader />
             <MarketNav />
-            <div className="container">
-                <Outlet />
+            <div id="market-container">
+                <div className="container" >
+                    <Outlet />
+                </div>
             </div>
             <Footer />
             <ScrollMoveBtn />

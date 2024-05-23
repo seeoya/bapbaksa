@@ -1,31 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-
-export const marketReducer = (state = {}, action) => {
-
+export const market = (state = {}, action) => {
     switch (action.type) {
-
-        case 'SELECT_PROD':
-
+        case "SELECT_PROD":
             return {
-                ...state, selectData : action.data
+                ...state,
+                selectData: action.data,
             };
 
-            case 'GET_TWELVE_PRODUCT':
-                return {
-                    ...state,
-                    ProdData: Array.isArray(state.ProdData)
-                    ? [...state.ProdData, ...action.data]
-                    : [...action.data]
-                };
-        default:
+        case "market_search_change":
+            return { ...state, search: action.data };
 
+        default:
             return state;
     }
-
-
-}
-
-
+};

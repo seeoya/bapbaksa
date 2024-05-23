@@ -12,14 +12,11 @@ const Header = () => {
     const [isLogined, setIsLogined] = useState(false);
 
     useEffect(() => {
-
         let loginedUId = getToken('loginedUId');
-        console.log('loginedUIdString', loginedUId);
 
         if (loginedUId !== null) {
             setIsLogined(true);
         }
-
     }, [isLogined]);
 
     const recipeSearchChangeEvent = (e) => {
@@ -31,7 +28,7 @@ const Header = () => {
     }
 
     return (
-        <header>
+        <header id="recipe-header">
             <div className="header-wrap">
                 <div className="header-menu">
                     <div className="logo">
@@ -50,7 +47,7 @@ const Header = () => {
                     <div className="nav">
                         {isLogined ? (
                             <>
-                                <Link to="/admin/qna" className="link">고객문의</Link>
+                                <Link to="/question" className="link">고객문의</Link>
                                 <Link to="/user/modify" className="link">정보수정</Link>
                                 <Link to="/user/signout" className="link">로그아웃</Link>
                             </>
@@ -63,7 +60,6 @@ const Header = () => {
                                 </>
                             )
                         }
-
                     </div>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -15,9 +16,18 @@ const RecipeAside = () => {
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
 
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         initMyFridge();
+    }, []);
+
+    useEffect(() => {
+        if (document.getElementById("recipe_aside").classList.contains("close")) {
+            setIsOpen(false)
+        } else {
+            setIsOpen(true)
+        }
     }, []);
 
     useEffect(() => {
@@ -25,7 +35,6 @@ const RecipeAside = () => {
     }, [windowX, windowY, startX, startY]);
 
     const initMyFridge = async () => {
-        // #TODO 로그인한 회원 u_no로 변경
         let uNo = getToken('loginedUNo');
 
         if (uNo) {
@@ -34,16 +43,7 @@ const RecipeAside = () => {
     }
 
     const fridgeBtnClickEvent = () => {
-        let fridgeBtn = document.getElementById("fridge_btn");
-        let recipeAside = document.getElementById("recipe_aside");
-
-        if (recipeAside.classList.contains("close")) {
-            fridgeBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i><span class="blind">내 냉장고 닫기</span>';
-        } else {
-            fridgeBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i><span class="blind">내 냉장고 열기</span>';
-        }
-
-        recipeAside.classList.toggle("close");
+        setIsOpen(prev => !prev);
     }
 
     const dragEvent = () => {
@@ -79,17 +79,27 @@ const RecipeAside = () => {
     }
 
     return (
-        <aside id="recipe_aside" style={{ top: `${windowY}px`, left: `${windowX}px` }}>
+        <aside id="recipe_aside" style={{ top: `${windowY}px`, left: `${windowX}px` }} className={isOpen ? "" : "close"}>
             <div id='fridge'>
                 <h2 className='title'>나의 냉장고</h2>
 
                 <button type='button' id='fridge_btn' className='btn main' onClick={fridgeBtnClickEvent}>
-                    <i class="fa-solid fa-chevron-left"></i>
-                    <span className='blind'>내 냉장고 닫기</span>
+                    {
+                        isOpen
+                            ?
+                            <>
+                                <FontAwesomeIcon icon="fa-solid fa-chevron-left" />
+                                <span class="blind">나의 냉장고 닫기</span>
+                            </>
+                            :
+                            <>
+                                <FontAwesomeIcon icon="fa-solid fa-chevron-right" />
+                                <span class="blind">나의 냉장고 열기</span>
+                            </>
+                    }
                 </button>
 
                 <div className='fridge-content'>
-
                     {
                         allFridgeList && myFridgeList ?
                             myFridgeList.map((el, idx) => {
@@ -107,10 +117,10 @@ const RecipeAside = () => {
 
                     <Link to={"/mypage/myFridge"} className='fridge-item link'>
                         <div className='item-img'>
-                            <i className="fa-solid fa-square-up-right"></i>
+                            <FontAwesomeIcon icon="fa-solid fa-square-up-right" />
                         </div>
 
-                        <div className='item-title'>내 냉장고로</div>
+                        <div className='item-title'>나의 냉장고로</div>
                     </Link>
 
                 </div>

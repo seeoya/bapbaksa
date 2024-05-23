@@ -2,35 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { getToken } from "../storage/loginedToken";
 
-export const RecipeQuery = () => {
-    console.log("레시피 query");
-
-    // return useQuery({
-    //     queryKey: ["all_fridge"],
-    //     queryFn: async () => {
-    //         return await axios
-    //             .get(process.env.REACT_APP_REST_SERVER_URL + "/refrigeator")
-    //             .then((data) => {
-    //                 console.log("all", data.data);
-    //                 return data.data;
-    //             });
-    //     },
-    //     staleTime: Infinity,
-    //     gcTime: 1000 * 60 * 30,
-    //     refetchInterval: 1000 * 60 * 30,
-    // });
-};
-
 export const AllFridgeQuery = () => {
-    console.log("모든 냉장고 재료 query");
-
     return useQuery({
         queryKey: ["all_fridge"],
         queryFn: async () => {
             return await axios
                 .get(process.env.REACT_APP_REST_SERVER_URL + "/refrigeator")
                 .then((data) => {
-                    console.log("all", data.data);
                     return data.data;
                 });
         },
@@ -41,8 +19,6 @@ export const AllFridgeQuery = () => {
 };
 
 export const MyFridgeQuery = () => {
-    console.log("내 냉장고 query");
-
     return useQuery({
         queryKey: ["fridge"],
         queryFn: async () => {
@@ -57,13 +33,12 @@ export const MyFridgeQuery = () => {
                 });
         },
         staleTime: 0,
-        gcTime: 1000 * 5,
+        gcTime: 1000 * 30,
         refetchInterval: 1000 * 30,
     });
 };
 
 export const AddMyFridgeQuery = () => {
-    console.log("내 냉장고 추가");
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -86,7 +61,6 @@ export const AddMyFridgeQuery = () => {
 };
 
 export const DeleteMyFridgeQuery = () => {
-    console.log("내 냉장고 제거");
     const queryClient = useQueryClient();
 
     return useMutation({

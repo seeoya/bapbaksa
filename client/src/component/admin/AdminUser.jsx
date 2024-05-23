@@ -1,54 +1,68 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
 
 const AdminUser = () => {
 
     const [userList, setUserList] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         initUsers();
+        setTitle('회원 목록');
     }, []);
 
     const initUsers = async () => {
-        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/get_user", {
+        setIsLoading(true);
+        await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/user", {
             params: {
             }
         }).then((data) => {
-            console.log(data.data);
             setUserList(data.data);
         }).catch((err) => {
             return { type: "error" };
+        }).finally(() => {
+            setIsLoading(false);
         });
     }
 
     return (
         <>
+            {isLoading ? <Loading /> : null}
+
             <div className='title'>회원 목록</div>
 
             <div className='content'>
                 <table>
                     <tr>
-                        <th>번호</th>
-                        <th>아이디</th>
-                        <th>이메일</th>
-                        <th>전화번호</th>
-                        <th>상태</th>
-                        <th>가입일</th>
-                        <th>수정</th>
+                        <th className='u_no'>번호</th>
+                        <th className='u_id'>아이디</th>
+                        <th className='u_mail'>이메일</th>
+                        <th className='u_phone'>전화번호</th>
+                        <th className='u_status'>상태</th>
+                        <th className='u_reg_date'>가입일</th>
+                        <th className='u_more'>상세보기</th>
                     </tr>
 
                     {
                         userList ?
                             Object.keys(userList).map((el) => {
                                 return <tr>
-                                    <td>{userList[el].u_no}</td>
-                                    <td>{userList[el].u_id}</td>
-                                    <td>{userList[el].u_mail}</td>
-                                    <td>{userList[el].u_phone}</td>
-                                    <td>{userList[el].u_status}</td>
-                                    <td>{userList[el].u_reg_date}</td>
-                                    <td>
+                                    <td className='u_no'>{userList[el].u_no}</td>
+                                    <td className='u_id'>{userList[el].u_id}</td>
+                                    <td className='u_mail'>{userList[el].u_mail}</td>
+                                    <td className='u_phone'>{userList[el].u_phone}</td>
+                                    <td className='u_status'>
+                                        {
+                                            userList[el].u_status == 0 ? "탈퇴" :
+                                                userList[el].u_status == 1 ? "활동" :
+                                                    userList[el].u_status == 2 ? "정지" : "관리자"
+                                        }
+                                    </td>
+                                    <td className='u_reg_date'>{userList[el].u_reg_date.substr(0, 10)}</td>
+                                    <td className='u_more'>
                                         <Link to={"/admin/user/" + userList[el].u_no}>상세보기</Link>
                                     </td>
                                 </tr>

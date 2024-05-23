@@ -1,63 +1,69 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { searchMarket } from "../../redux/actions/market";
 import { getToken } from "../../storage/loginedToken";
 
 const MarketHeader = () => {
 
     const [isLogined, setIsLogined] = useState(false);
-    
-    useEffect(() => {
-     
-        let loginedUId = getToken('loginedUId');
-        console.log('loginedUIdString', loginedUId);
+    const [searchVal, setSearchVal] = useState('');
+    const dispatch = useDispatch();
 
-        if(loginedUId !== null) {
+    useEffect(() => {
+        let loginedUId = getToken('loginedUId');
+
+        if (loginedUId !== null) {
             setIsLogined(true);
         }
-
     }, [isLogined]);
 
+    const searchBtnClickEvent = (e) => {
+        document.getElementById("market_search").value = ""
+    }
 
-  return (
-    <header>
-    <div id="market-header-wrap" className="header-wrap">
-        <div className="header-menu">
-            <div className="logo">
-                <Link to="/" className="link">
-                    <img src="/imgs/logo/logo.png" alt="밥박사" />
-                </Link>
-            </div>
+    const marketSearchChangeEvent = (e) => {
+        dispatch(searchMarket(e.target.value))
+    }
 
-            <div className="search">
-                <form action="" name="search_form" method="get">
-                    <input type="search" name="search" className="input" placeholder="검색어를 입력하세요." />
-                    <button type="submit" className="btn sub">검색</button>
-                </form>
-            </div>
-        </div>
+    return (
+        <header id="market-header">
+            <div id="market-header-wrap" className="header-wrap">
+                <div className="header-menu">
+                    <div className="logo">
+                        <Link to="/" className="link">
+                            <img src="/imgs/logo/market_logo.png" alt="밥박사" />
+                        </Link>
+                    </div>
 
-        <div className="user-menu">
-            <div className="nav">
-            { isLogined ? (
-                            <>
-                            <Link to="/admin/qna" className="link">고객문의</Link>
-                            <Link to="/user/modify" className="link">정보수정</Link>
-                            <Link to="/user/signout" className="link">로그아웃</Link>
-                            </>
-                        )
-                            :
-                        (
-                            <>
-                            <Link to="/user/signup" className="link">회원가입</Link>
-                            <Link to="/user/signin" className="link">로그인</Link>
-                            </>
-                        )
+                    <div className="search">
+                        <input id="market_search" type="search" name="search" className="input" placeholder="검색어를 입력하세요." onChange={(e) => marketSearchChangeEvent(e)} />
+                        <Link to={`/market/list`} state={{ searchVal: searchVal }} onClick={searchBtnClickEvent} className="btn highlight">
+                            검색
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="user-menu">
+                    <div className="nav">
+                        {
+                            isLogined ?
+                                <>
+                                    <Link to="/admin/qna" className="link">고객문의</Link>
+                                    <Link to="/user/modify" className="link">정보수정</Link>
+                                    <Link to="/user/signout" className="link">로그아웃</Link>
+                                </>
+                                :
+                                <>
+                                    <Link to="/user/signup" className="link">회원가입</Link>
+                                    <Link to="/user/signin" className="link">로그인</Link>
+                                </>
                         }
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</header>
-);
+        </header>
+    );
 };
 
 export default MarketHeader;

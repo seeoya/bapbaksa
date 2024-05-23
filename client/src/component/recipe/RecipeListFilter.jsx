@@ -1,26 +1,37 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AllFridgeQuery, MyFridgeQuery } from '../../query/fridgeQuerys';
 import { searchRecipe } from '../../redux/actions/recipe_action';
 
 const RecipeListFilter = (props) => {
-    let { myFridgeState, notMyFridgeState,
+    let {
         activeIngreList, activeRegionList, activeCateList, activeDifficultList,
         setActiveIngreList, setActiveRegionList, setActiveCateList, setActiveDifficultList,
-        setSortState, filterInclude, setFilterInclude,
-        setMoreBtnState, recipeCount } = props;
+        setSortState, filterInclude, setFilterInclude, filteredRecipeCount, setIsFilterLoading } = props;
 
     const dispatch = useDispatch();
 
-    const allFridgeList = useSelector((state) => state.fridge.allFridge);
+    // 재료
+    const { data: myFridgeList, isLoading: myFridgeIsLoading, isError: myFridgeIsError } = MyFridgeQuery();
+    const { data: allFridgeList, isLoading: allFridgeIsLoading, isError: allFridgeIsError } = AllFridgeQuery();
+    const myFridgeState = useSelector((state) => state.fridge.myFridgeState);
+    const notMyFridgeState = useSelector((state) => state.fridge.notMyFridgeState);
 
     const [regionList, setRegionList] = useState({});
     const [categoryList, setCategoryList] = useState({});
 
     useEffect(() => {
+        setIsFilterLoading(true);
         initCategoryList();
     }, []);
 
+    useEffect(() => {
+        if (regionList && categoryList) {
+            setIsFilterLoading(false);
+        }
+    }, [regionList, categoryList]);
     const initCategoryList = async () => {
         // category
         await axios
@@ -94,26 +105,25 @@ const RecipeListFilter = (props) => {
 
     const sortChangeEvent = () => {
         let sortFilter = document.getElementById("sort_filter").value;
-        console.log(sortFilter);
         setSortState(sortFilter);
     }
 
     const resetRecipeEvent = () => {
-        setActiveIngreList([]);
         setActiveRegionList([]);
         setActiveCateList([]);
         setActiveDifficultList([]);
-        setSortState("old");
-        setMoreBtnState(true);
         dispatch(searchRecipe(""));
         document.getElementById("recipe_search").value = "";
+        setActiveIngreList([]);
+        setFilterInclude(0);
+        setSortState("old");
     }
 
     return (
-        <div className='recipe-filter'>
+        <div className='recipe-filter cb-box'>
             <div className='default-filter'>
                 <div>
-                    <div className='filter-title'>내 냉장고 재료</div>
+                    <div className='filter-title'>나의 냉장고 재료</div>
                     <div className='filter-wrap fridge-ingre'>
                         {
                             myFridgeState && myFridgeState.length > 0 ?
@@ -166,7 +176,11 @@ const RecipeListFilter = (props) => {
                     <div className='filter-wrap difficult'>
                         {
                             ["초보환영", "보통", "어려움"].map((el, idx) => {
-                                return <button type='button' data-idx={el} key={idx} className={activeDifficultList.includes(el) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el)} >{el}</button>
+                                return <button type='button' data-idx={el} key={idx} className={activeDifficultList.includes(el) ? "btn difficult on" : 'btn difficult'} onClick={() => difficultBtnActiveEvent(el)} >
+                                    {
+                                        el == "초보환영" ? "★" : el == "보통" ? "★★" : "★★★"
+                                    }
+                                </button>
                             })
                         }
                     </div>
@@ -182,17 +196,19 @@ const RecipeListFilter = (props) => {
                         <label htmlFor="food_include_1">재료 전부 포함</label>
                     </div>
 
-                    <select id="sort_filter" onChange={sortChangeEvent}>
-                        <option value="old" defaultValue>오래된 순</option>
-                        <option value="new">최신순</option>
+                    <select id="sort_filter" onChange={sortChangeEvent} className='input'>
+                        <option value="old" defaultValue>번호 낮은 순</option>
+                        <option value="new">번호 높은 순</option>
                         <option value="lesstime">조리시간 짧은 순</option>
-                        <option value="moretime">조리시간 긴 순</option>
+                        <option value="moretime">조리시간 긴순</option>
+                        <option value="rowkal">칼로리 낮은 순(인분당)</option>
+                        <option value="hightkal">칼로리 높은 순(인분당)</option>
                     </select>
                 </div>
 
                 <div>
-                    <div>총 {recipeCount} 건</div>
-                    <button type='button' onClick={resetRecipeEvent}>되돌리기</button>
+                    <div>총 {filteredRecipeCount} 건</div>
+                    <button type='button' className='btn main' onClick={resetRecipeEvent}>선택 옵션 되돌리기 <FontAwesomeIcon icon="fa-solid fa-rotate-left" /></button>
 
                 </div>
             </div>

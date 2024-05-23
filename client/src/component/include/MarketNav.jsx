@@ -1,19 +1,70 @@
-import React from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getToken } from "../../storage/loginedToken";
+
 
 const MarketNav = () => {
+
+    const [loginedID, setLoginedID] = useState('');
+    const [uProfile, setUProfile] = useState('');
+    const [isProfile, setIsProfile] = useState(false);
+
+    useEffect(() => {
+        let loginedUId = getToken('loginedUId');
+        let uProfile = getToken('uProfile');
+
+        if (loginedUId !== null) {
+            setLoginedID(loginedUId);
+        } else if (uProfile !== null) {
+            setUProfile(uProfile);
+            setIsProfile(true);
+        }
+    }, [loginedID, uProfile, isProfile]);
+
     return (
-    <nav>            
+        <nav id="market-nav">
             <div id="market-category-wrap" className="category-wrap">
-                <div className="header-category">            
-                    <div className="market">                        
-                        <Link to="/market/list" className="link">리스트 가기</Link>
-                        <Link to="/market/cart" className="link">장바구니 가기</Link>
-                        <Link to="/market/pay-history" className="link">결제 내역 가기</Link>
+                <div className="header-category">
+                    <div className="main">
+                        <Link to="/market/list" className="link">
+                            <FontAwesomeIcon icon="fa-solid fa-store" />
+                            <span>상품 모두보기</span></Link>
+                        <Link to="/" className="link link_recipe">
+                            <FontAwesomeIcon icon="fa-solid fa-bowl-food" />
+                            <span>레시피 보러가기</span></Link>
                     </div>
-                    <div className="recipe">
-                        <Link to="/" className="link_recipe">레시피&nbsp;&nbsp;가기</Link>
+
+                    <div className="sub">
+                        <Link to="/market/cart" className="link">
+                            <FontAwesomeIcon icon="fa-solid fa-cart-shopping" />
+                            <span>장바구니</span></Link>
+                        <Link to="/market/pay-history" className="link">
+                            <FontAwesomeIcon icon="fa-solid fa-receipt" />
+                            <span>구매 내역</span></Link>
                     </div>
+
+                    {
+                        loginedID !== '' ?
+                            <>
+                                <div className="user-mypage-link">
+                                    <Link to="/mypage" className="link_mypage" title="마이페이지 바로가기">
+                                        <div className="user-info">
+                                            <span> {loginedID} </span>
+                                            <span> 님 </span>
+                                            {isProfile ? <>
+                                                <img src={process.env.REACT_APP_SERVER_URL + `/home/ubuntu/user/upload/profile_imgs/${loginedID}/${uProfile}`} alt="profile" />
+                                            </>
+                                                :
+                                                <>
+                                                    <img src="/imgs/logo/logo.png" alt="마이페이지" />
+                                                </>}
+                                        </div>
+                                    </Link>
+                                </div>
+                            </>
+                            : null
+                    }
                 </div>
             </div>
         </nav>

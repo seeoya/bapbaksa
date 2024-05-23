@@ -1,44 +1,84 @@
 import ApexCharts from 'apexcharts';
 import axios from 'axios';
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getToken } from '../../storage/loginedToken';
+import { setTitle } from '../../util/setTitle';
+import Loading from '../include/Loading';
+import { NewProductQuery } from '../../query/productQuerys';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ListView = () => {
     const { no } = useParams();
     const [num, code] = no.split('_');
 
-    const [quantityInt, setQuantityInt] = useState(0);
-    const [prodInfo, setProdInfo] = useState({});
+    const { data: newProductList, isLoading: newProductIsLoading, isError: newProductIsError } = NewProductQuery();
+    const [itemPCode, itemPsCode] = no.split('_');
+    const [item, setItem] = useState({});
+
+
+    const [quantityInt, setQuantityInt] = useState(1);
     const [chartData, setChartData] = useState([]);
     const [viewData, setViewData] = useState([]);
     const [goToPay, setGoToPay] = useState([]);
+
+    const [stock, setStock] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(true);
+
     const chartRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        setPaymentInfo()
-    },[quantityInt]);
+        defaultQuantityInt();
+    }, [quantityInt])
 
     useEffect(() => {
-        axios_getProdInfo();
-    }, [no, code]);
+        setTitle(viewData?.PROD_NAME);
+    }, []);
+
+    useEffect(() => {
+        if (newProductList) {
+            newProductList.map((el) => {
+                if (el.PROD_CODE == parseInt(itemPCode) && el.PROD_SPCS_CODE == parseInt(itemPsCode)) {
+                    setItem(el);
+                }
+            })
+        }
+    }, [newProductList, itemPCode, itemPsCode])
 
     useEffect(() => {
         axiox_getChartData();
-    }, [prodInfo]);
+        setPaymentInfo();
+        getStock();
+    }, [item]);
 
     useEffect(() => {
-        if (prodInfo?.PROD_NAME && chartData.length > 0) {
+        setPaymentInfo();
+        getStock();
+    }, [quantityInt, item]);
+
+    useEffect(() => {
+        if (item.PROD_NAME && chartData.length > 0) {
             createChart();
         }
-    }, [prodInfo?.PROD_NAME, chartData, viewData]);
+    }, [item.PROD_NAME, chartData, viewData]);
+
+    const defaultQuantityInt = () => {
+
+        if (quantityInt <= 0) {
+            alert('최소 주문은 1개입니다.');
+            setQuantityInt(1);
+        };
+
+    }
 
     const createChart = () => {
         if (!chartRef.current) return;
 
         let options = {
             series: [{
-                name: prodInfo.PROD_NAME,
+                name: item.PROD_NAME,
                 data: chartData.map(data => data.y)
             }],
             chart: {
@@ -69,7 +109,7 @@ const ListView = () => {
                 curve: 'smooth'
             },
             title: {
-                text: prodInfo.PROD_NAME,
+                text: item.PROD_NAME,
                 align: 'left'
             },
             grid: {
@@ -96,7 +136,6 @@ const ListView = () => {
             chartRef.current.chart = chart;
         }
 
-        // 이전 차트가 존재하면 파기
         return () => {
             if (chartRef.current.chart) {
                 chartRef.current.chart.destroy();
@@ -104,15 +143,8 @@ const ListView = () => {
         };
     }
 
-    const goToMarketCartBtn = () => {
-        let u_no = getToken('loginedUNo');
-        let i_no = prodInfo.PROD_NO;
-        let mc_count = quantityInt;
-
-        axios_goToMarketCart(u_no, i_no, mc_count);
-        setQuantityInt(0);
-        window.location.href = "/market/cart";
-
+    const goToMarketCartBtn = async () => {
+        await getStock("MarketCart");
     }
 
     const handleCount = (type) => {
@@ -127,34 +159,65 @@ const ListView = () => {
         setQuantityInt(parseInt(e.target.value));
     };
 
+    const goToPaymentLink = async (e) => {
+        await getStock("Payment");
+    };
+
     const setPaymentInfo = () => {
         let items = [];
-        
-            items.push({
-                'I_NO': num,
-                'MC_COUNT': quantityInt
-            });
-            setGoToPay(items);
+        items.push({
+            'PROD_NO': item.PROD_NO,
+            'MC_COUNT': quantityInt,
+        });
+        setGoToPay(items);
     }
 
-    async function axios_getProdInfo() {
+    const getStock = async (type = "") => {
         try {
-            const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/postSelectedProduct", {
-                'PROD_NO': num,
-                'PROD_SPCS_CODE': code
-            })
+            const response = await axios.get(process.env.REACT_APP_SERVER_URL + "/admin/stock", {
+                params: {
+                    p_code: itemPCode,
+                    ps_code: itemPsCode
+                }
+            });
 
-            setProdInfo(response.data[0]);
-        } catch (error) {
-            console.log(error)
+            setStock(response.data);
+
+            if (type === "MarketCart") {
+                let u_no = getToken('loginedUNo');
+                let p_code = item.PROD_CODE;
+                let ps_code = item.PROD_SPCS_CODE;
+                let mc_count = quantityInt;
+
+                if (response.data > 0) {
+                    await axios_goToMarketCart(u_no, p_code, ps_code, mc_count);
+                    setQuantityInt(0);
+                    navigate("/market/cart");
+                } else {
+                    alert('품절된 상품입니다.');
+                }
+                setIsLoading(false);
+            } else if (type === "Payment") {
+                if (response.data > 0) {
+                    setQuantityInt(0);
+                    navigate('/market/payment', {
+                        state: { goToPay: goToPay },
+                    });
+                } else {
+                    alert('품절된 상품입니다.');
+                }
+            }
+            
+        } catch (err) {
+            console.log(err);
         }
     }
 
     async function axiox_getChartData() {
         try {
             const response = await axios.post(process.env.REACT_APP_REST_SERVER_URL + "/product/getChartData", {
-                'PROD_CODE': prodInfo.PROD_CODE,
-                'PROD_SPCS_CODE': prodInfo.PROD_SPCS_CODE
+                'PROD_CODE': item.PROD_CODE,
+                'PROD_SPCS_CODE': item.PROD_SPCS_CODE
             });
 
             setViewData(response.data[response.data.length - 1]);
@@ -163,78 +226,95 @@ const ListView = () => {
                 y: item.PROD_AVRG_PRCE
             }));
             setChartData(chartInfo);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
     }
 
-    async function axios_goToMarketCart(u_no, i_no, mc_count) {
+    async function axios_goToMarketCart(u_no, p_code, ps_code, mc_count) {
         try {
-
-            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/goToMarketCart", {
+            await axios.post(process.env.REACT_APP_SERVER_URL + "/market/goToMarketCart", {
                 'U_NO': u_no,
-                'I_NO': i_no,
+                'P_CODE': p_code,
+                'PS_CODE': ps_code,
                 'MC_COUNT': mc_count
             })
-            console.log("장바구니 추가 성공(인서트)", response.data.insertResult);
-            console.log("장바구니 추가 성공(업데이트)", response.data.updateResult);
+            setIsLoading(false);
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <div className='content-wrap' id="market_list_view">
-            <h2 className='title'>품목 상세</h2>
-            <div className='content'>
+        <>
+            {isLoading ? <Loading /> : null}
+            <div className='content-wrap' id="market_list_view">
+                <h2 className='title'>품목 상세</h2>
+                <div className='content'>
 
-                {prodInfo ? (
-                    <div className='ingredient-view-wrap'>
-                        <div className="ingredient-img-wrap">
-                            <img className="ingredient-img" src={`/imgs/product/${prodInfo.PROD_IMG}`} alt="ingredient" />
-                        </div>
-                        <div className='market-list-view-info-wrap'>
-                            <div className="ingredient-info-wrap">
-                                <span className="ingredient-title">{viewData?.PROD_NAME}</span>
-                                <div className="ingredient-top-wrap">
-                                    <span className="ingredient-unit">{prodInfo.DSBN_STEP_ACTO_WT}{prodInfo.DSBN_STEP_ACTO_UNIT_NM}</span>
-                                    <span className="ingredient-price">{Number(viewData?.PROD_AVRG_PRCE).toLocaleString()}원</span>
+                    {
+                        item ? (
+                            <div className='ingredient-view-wrap'>
+                                <div className="ingredient-img-wrap">
+                                    <img className="ingredient-img" src={`/imgs/product/${item.PROD_IMG}`} alt="ingredient" />
                                 </div>
-                                <div className="ingredient-middle-wrap">
-                                    <input type="button" onClick={() => handleCount("minus")} value="-" />
-                                    <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
-                                    <input type="button" onClick={() => handleCount("plus")} value="+" />
-                                </div>
-                                <div>
-                                </div>
-                                <div className="ingredient-bottom-wrap">
-                                    <div className="ingredient-bottom-wrap-price">
-                                        <span className="ingredient-info">총액 : </span>
-                                        <span className="ingredient-price">{Number(quantityInt * viewData?.PROD_AVRG_PRCE).toLocaleString()}원</span>
-                                    </div>
-                                    <div className='ingredient-bottom-wrap-btn'>
-                                        <button type="button" className='go-cart-btn' onClick={goToMarketCartBtn}>장바구니</button>
-                                            {goToPay.length > 0 ? (
-                                                <Link to={`/market/payment`} state={{ goToPay: goToPay }} className='go-payment-btn'>
-                                                    선택 결제
-                                                </Link>
-                                            ) : 
-                                            <button>선택 결제</button>
-                                            }
+                                <div className='market-list-view-info-wrap'>
+                                    <div className="ingredient-info-wrap">
+                                        <span className="ingredient-title">{item.PROD_NAME} / {item.PROD_SPCS_NAME}</span>
+                                        <div className="ingredient-top-wrap">
+                                            <span className="ingredient-unit">{item.DSBN_STEP_ACTO_WT}{item.DSBN_STEP_ACTO_UNIT_NM}</span>
+                                            <span className="ingredient-price">{parseInt(item.PROD_AVRG_PRCE).toLocaleString()}원</span>
+                                        </div>
+                                        {
+                                            stock > 0 ? <>
+                                                <div className="ingredient-middle-wrap">
+                                                    <div>
+                                                        재고: {stock}
+                                                    </div>
+                                                    <div className='product-view-btn'>
+                                                        <button type="button" className='product-count-minus-btn btn highlight' onClick={() => handleCount("minus")} value="-" >
+                                                            <FontAwesomeIcon icon="fa-solid fa-minus" />
+                                                        </button>
+                                                        <input type="number" onChange={(e) => quantityValue(e)} value={quantityInt} id="result"></input>
+                                                        <button type="button" className='product-count-plus-btn btn highlight' onClick={() => handleCount("plus")} value="+" >
+                                                            <FontAwesomeIcon icon="fa-solid fa-plus" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                </div>
+                                                <div className="ingredient-bottom-wrap">
+                                                    <div className="ingredient-bottom-wrap-price">
+                                                        <span className="ingredient-info">총액 : </span>
+                                                        <span className="ingredient-price">{parseInt(quantityInt * item.PROD_AVRG_PRCE).toLocaleString()}원</span>
+                                                    </div>
+                                                    <div className='ingredient-bottom-wrap-btn'>
+                                                        <button type="button" className='go-cart-btn' onClick={goToMarketCartBtn}>장바구니</button>
+                                                        {goToPay.length > 0 ? (
+                                                            <button type="button" className='go-payment-btn main btn' onClick={goToPaymentLink}>
+                                                                선택 결제
+                                                            </button>
+                                                        ) :
+                                                            <button>선택 결제</button>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </> : <span>품절</span>
+                                        }
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div>로딩 중...</div>
+                        )}
+                    <div>
+                        <h2 className='title'>품목 시세</h2>
+                        <div id="price-chart-wrap" ref={chartRef}></div>
                     </div>
-                ) : (
-                    <div>로딩 중...</div>
-                )}
-                <div>
-                    <h2 className='title'>품목 시세</h2>
-                    <div id="price-chart-wrap" ref={chartRef}></div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

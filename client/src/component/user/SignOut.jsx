@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import { removeToken } from '../../storage/loginedToken';
 
 
-const SignOut = () => {    
-    
+const SignOut = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,15 +14,11 @@ const SignOut = () => {
     }, [])
 
     const signout = async () => {
-        console.log('signout()');
-  
         removeToken('accessToken');
         removeToken('loginedUId');
-        removeToken('loginedUNo');    
-        
+        removeToken('loginedUNo');
     }
-        
-    
+
     return (
         <>
             <Link to="/" />

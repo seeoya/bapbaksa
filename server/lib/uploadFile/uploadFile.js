@@ -8,7 +8,7 @@ const upload = {
         const upload = multer({
             storage: multer.diskStorage({
                 destination(req, file, done) {
-                    let fileDir = `/home/ubuntu/user/upload/profile_imgs/${req.body.u_id}/`;
+                    let fileDir = `http://54.253.228.81:3000/home/ubuntu/client/public/imgs/upload/profile_imgs/${req.body.u_id}/`;
                     //let fileDir = `C:\\bapbaksa\\upload\\profile_imgs\\${req.body.u_id}\\`;
                     if (!fs.existsSync(fileDir)) {
                         fs.mkdirSync(fileDir, { recursive: true });

@@ -81,17 +81,17 @@ const PaymentHistory = () => {
 
     const axios_getPaymentHistory = async () => {
         let u_no = getToken('loginedUNo');
-        setIsLoading(true);
-        try {
-            const response = await axios.post(process.env.REACT_APP_SERVER_URL + "/market/getPaymentHistory", {
-                'u_no': u_no,
-            })
 
-            setOrderInfo(response.data.orders);
-        } catch (error) {
+        setIsLoading(true);
+        await axios.post(process.env.REACT_APP_SERVER_URL + "/market/getPaymentHistory", {
+            'u_no': u_no,
+        }).then((data) => {
+            setOrderInfo(data.data.orders);
+        }).catch((error) => {
             console.log(error)
-        }
-        setIsLoading(false);
+        }).finally(() => {
+            setIsLoading(false);
+        })
     };
 
     const axios_refund_order = async () => {
@@ -144,11 +144,11 @@ const PaymentHistory = () => {
 
                 <div id="payment_total_wrap">
                     <div className='content ingredient-cart-wrap'>
-                        {Object.keys(orderInfo).length > 0 ? (
-                            Object.keys(orderInfo).map((order) => {
+                        {orderInfo && Object.keys(orderInfo).length > 0 ? (
+                            Object.keys(orderInfo).map((order, idx) => {
                                 const firstItem = orderInfo[order][Object.keys(orderInfo[order])[0]];
                                 return (
-                                    <div key={order}>
+                                    <div key={idx}>
                                         <div className="ingredient-payment-history">
                                             <div>
                                                 <p>주문 번호: {order}</p>
@@ -162,7 +162,7 @@ const PaymentHistory = () => {
                                             {Object.keys(orderInfo[order]).map((prod) => {
                                                 let item = orderInfo[order][prod];
                                                 return (
-                                                    <div key={`${order}_${item.p_no}`} className="payment-history-check">
+                                                    <div key={`${item.PROD_CODE}_${item.PROD_SPCS_CODE}`} className="payment-history-check">
                                                         <Link to={`/market/view/${item.PROD_CODE}_${item.PROD_SPCS_CODE}`}>
                                                             <img className="ingredient-cart-img" src={`/imgs/product/${item.PROD_IMG}`} />
                                                         </Link>

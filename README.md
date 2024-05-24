@@ -6,7 +6,7 @@
 #### 🧨팀 주제 : 웹 API 서버 구축하기
 
 ### 🥧밥박사?
-#####서비스 주제: "스마트 레시피 플랫폼"
+##### 서비스 주제: "스마트 레시피 플랫폼"
 바쁜 현대 사회에서 사람들은 종종 요리할 시간이 부족하거나 어떤 요리를 해야 할지 고민하는 경우가 많습니다. 이러한 상황에서 냉장고 속 식재료를 기반으로 사용자들에게 맞춤형 레시피를 추천하고 마켓을 연동해 손쉬운 구매과정을 제공하여 사용자들에게 시간 절약과 효율적인 식사 계획에 긍정적인 사용 경험을 주기 위해 밥박사가 탄생하였습니다.
 밥박사 서비스는 사용자들이 건강하고 맛있는 음식을 더 쉽게 즐길 수 있도록 돕는 것을 목표로 하며, 바쁜 현대인들의 요리 생활에 편의성을 제공합니다.
 
@@ -35,4 +35,4 @@
 
 * 기획 문서  
 * 구글 스프레드 시트(일정표)
-  https://docs.google.com/spreadsheets/d/1HgSci1m9_hMTfpN8zqt__mEryYgFMzzGV8LCi96oxec/edit?usp=sharing
+  - https://docs.google.com/spreadsheets/d/1HgSci1m9_hMTfpN8zqt__mEryYgFMzzGV8LCi96oxec/edit?usp=sharing

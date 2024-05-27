@@ -32,9 +32,10 @@
 
 #### 참조
 * 시연 영상
+https://youtu.be/-py9VSRxp_s?si=HO7jXQ9wggtvS38x
 
 * 기획 문서
+  https://docs.google.com/document/d/1ZEx1yZGC2lh1s3383c-Ocz_JDYjvjTPENvOmEnxZ1tY/edit?usp=sharing
   
 * 구글 스프레드 시트(일정표)
-
   https://docs.google.com/spreadsheets/d/1HgSci1m9_hMTfpN8zqt__mEryYgFMzzGV8LCi96oxec/edit?usp=sharing

@@ -34,7 +34,7 @@ const ListView = () => {
     }, [quantityInt])
 
     useEffect(() => {
-        setTitle(viewData?.PROD_NAME);
+        
     }, []);
 
     useEffect(() => {
@@ -61,6 +61,7 @@ const ListView = () => {
     useEffect(() => {
         if (item.PROD_NAME && chartData.length > 0) {
             createChart();
+            setTitle(item.PROD_NAME);
         }
     }, [item.PROD_NAME, chartData, viewData]);
 
